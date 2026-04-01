@@ -114,7 +114,15 @@ Il ponte di comando principale. Gestisce le chiamate API verso i modelli AI (Gem
 
 ## 5. DATABASE E MEMORIA
 
-**LEAD_DATABASE:** Google Sheet per la raccolta, qualifica e gestione automatica di tutti i contatti in entrata.
+**FOGLIO MASTER (SICURISSIMO MASTER V1-2026):**
+Google Sheet principale del progetto. Contiene tutti i fogli operativi, il database lead, la knowledge base e i log del sistema.
+Link diretto: https://docs.google.com/spreadsheets/d/1mzF28NNi8orU9HgqTdmKk1csYNCrYPjDtt1q6VBz26M/edit
+
+**CARTELLA DRIVE (ECOSYSTEM-SICURISSIMO):**
+Archivio centrale di tutti i file del progetto: PDF normativi, file .gs, asset visivi e documentazione.
+Link diretto: https://drive.google.com/drive/folders/1aUOkuD8j7QSUM3ElJhSgpVMqUgULp-HR
+
+**LEAD_DATABASE:** Foglio Google (scheda nel Master) per la raccolta, qualifica e gestione automatica di tutti i contatti in entrata.
 
 **KNOWLEDGE_BASE:** Memoria permanente del progetto. Contiene il contesto del brand, le normative aggiornate, le FAQ e le risposte ottimizzate di Nicolas. E il CLAUDE.md vivente del sistema.
 
