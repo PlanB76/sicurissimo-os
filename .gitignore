@@ -1,4 +1,10 @@
 
+# Documenti personali e fiscali — mai nel repo pubblico
+*.pdf
+*.zip
+Ricevuta_*
+Ricevute_*
+
 # Live site — file da non committare mai
 live/.env
 live/.env.local
