@@ -1,0 +1,70 @@
+<!-- ============================================================
+  81PLUS — WIDGET CHAT AI
+  Graziano, Web2, chiede nome poi email, crea il lead e manda la mail di benvenuto.
+  Graziella, Web3, chat libera. Incolla prima di </body>.
+============================================================ -->
+<style>
+#gz-fab{position:fixed;right:20px;bottom:20px;z-index:900;width:58px;height:58px;border-radius:50%;background:#E8501A;border:none;cursor:pointer;box-shadow:0 8px 28px rgba(232,80,26,.5);font-size:26px;color:#fff;animation:gzp 2.4s infinite}
+@keyframes gzp{0%{box-shadow:0 0 0 0 rgba(232,80,26,.6)}70%{box-shadow:0 0 0 14px rgba(232,80,26,0)}100%{box-shadow:0 0 0 0 rgba(232,80,26,0)}}
+#gz-panel{position:fixed;right:20px;bottom:88px;z-index:901;width:360px;max-width:calc(100vw - 32px);height:520px;max-height:calc(100vh - 120px);background:#141414;border:1px solid #2a2a36;border-radius:16px;display:none;flex-direction:column;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.6);font-family:'Manrope',sans-serif}
+#gz-panel.open{display:flex}
+.gz-head{background:#0A0A0F;border-bottom:1px solid #2a2a36;padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.gz-who{display:flex;align-items:center;gap:10px}
+.gz-av{width:34px;height:34px;border-radius:50%;background:#E8501A;display:flex;align-items:center;justify-content:center;font-weight:900;color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px}
+.gz-nm{color:#fff;font-weight:700;font-size:14px}.gz-st{color:#1db954;font-size:10px;font-family:'JetBrains Mono',monospace}
+.gz-sw{display:flex;border:1px solid #2a2a36;border-radius:6px;overflow:hidden}
+.gz-sw button{background:transparent;border:none;color:#7a7a88;font-size:10px;padding:5px 8px;cursor:pointer;font-family:'JetBrains Mono',monospace}
+.gz-sw button.on{background:#E8501A;color:#fff}
+.gz-x{background:none;border:none;color:#7a7a88;font-size:20px;cursor:pointer}
+.gz-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px;background:#0f0f15}
+.gz-msg{max-width:82%;padding:10px 13px;border-radius:12px;font-size:13.5px;line-height:1.5}
+.gz-msg.u{align-self:flex-end;background:#E8501A;color:#fff;border-bottom-right-radius:3px}
+.gz-msg.a{align-self:flex-start;background:#1c1c24;color:#e8e8ef;border:1px solid #2a2a36;border-bottom-left-radius:3px;white-space:pre-wrap}
+.gz-foot{padding:12px;border-top:1px solid #2a2a36;display:flex;gap:8px;background:#141414}
+.gz-foot input{flex:1;background:#0A0A0F;border:1px solid #2a2a36;border-radius:8px;color:#fff;padding:11px 13px;font-size:14px;outline:none;font-family:'Manrope',sans-serif}
+.gz-foot input:focus{border-color:#E8501A}
+.gz-send{background:#E8501A;border:none;color:#fff;width:42px;border-radius:8px;cursor:pointer;font-size:17px}
+</style>
+<button id="gz-fab" onclick="gzToggle()" aria-label="Chat">💬</button>
+<div id="gz-panel">
+  <div class="gz-head">
+    <div class="gz-who"><div class="gz-av" id="gz-av">G</div><div><div class="gz-nm" id="gz-nm">Graziano</div><div class="gz-st">● online</div></div></div>
+    <div style="display:flex;align-items:center;gap:8px">
+      <div class="gz-sw"><button class="on" id="gz-b2" onclick="gzSet('graziano',this)">Web2</button><button id="gz-b3" onclick="gzSet('graziella',this)">Web3</button></div>
+      <button class="gz-x" onclick="gzToggle()">×</button>
+    </div>
+  </div>
+  <div class="gz-body" id="gz-body"></div>
+  <div class="gz-foot"><input id="gz-in" placeholder="Scrivi qui..." onkeydown="if(event.key==='Enter')gzSend()"><button class="gz-send" onclick="gzSend()">➤</button></div>
+</div>
+<script>
+const GZ={agente:'graziano',storia:[],lang:(document.documentElement.getAttribute('data-lang')||'it'),fase:'ask_name',nome:'',email:''};
+function gzEn(){return GZ.lang==='en'}
+function gzToggle(){const p=document.getElementById('gz-panel');p.classList.toggle('open');if(p.classList.contains('open')&&GZ.storia.length===0&&!document.getElementById('gz-body').children.length)gzWelcome();}
+function gzSet(a,el){GZ.agente=a;GZ.storia=[];GZ.nome='';GZ.email='';document.getElementById('gz-body').innerHTML='';
+  document.querySelectorAll('.gz-sw button').forEach(b=>b.classList.remove('on'));el.classList.add('on');
+  const nm=a==='graziella'?'Graziella':'Graziano';document.getElementById('gz-nm').textContent=nm;document.getElementById('gz-av').textContent=nm[0];gzWelcome();}
+function gzAdd(role,txt){const b=document.getElementById('gz-body');const d=document.createElement('div');d.className='gz-msg '+(role==='u'?'u':'a');d.textContent=txt;b.appendChild(d);b.scrollTop=b.scrollHeight;return d;}
+function gzWelcome(){
+  if(GZ.agente==='graziella'){GZ.fase='free';gzAdd('a',gzEn()?'Hi, I am Graziella, the Web3 desk. Ask me about your 81+ Wallet, seals, assets and the 81X token.':'Ciao, sono Graziella, lo sportello Web3. Chiedimi del Portafoglio 81+, sigilli, asset e token 81X.');return;}
+  GZ.fase='ask_name';gzAdd('a',gzEn()?'Hi, I am Graziano. What is your name?':'Ciao, sono Graziano. Come ti chiami?');
+}
+function gzValidEmail(e){return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)}
+async function gzSend(){
+  const i=document.getElementById('gz-in');const t=i.value.trim();if(!t)return;i.value='';gzAdd('u',t);
+  // INTAKE GRAZIANO, nome poi email
+  if(GZ.agente==='graziano'&&GZ.fase==='ask_name'){GZ.nome=t;GZ.fase='ask_email';
+    gzAdd('a',gzEn()?('Nice to meet you '+t+'. To help you best I need your email.'):('Bene '+t+', per aiutarti al meglio mi serve la tua email.'));return;}
+  if(GZ.agente==='graziano'&&GZ.fase==='ask_email'){
+    if(!gzValidEmail(t)){gzAdd('a',gzEn()?'I need a valid email.':'Mi serve una email valida.');return;}
+    GZ.email=t;GZ.fase='free';const wait=gzAdd('a','…');
+    try{const r=await fetch('/core81/api/lead.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome:GZ.nome,email:GZ.email,lingua:GZ.lang})});await r.json();}catch(e){}
+    wait.textContent=gzEn()?('Perfect '+GZ.nome+', I sent a welcome email to '+GZ.email+'. Meanwhile, ask me anything.'):('Perfetto '+GZ.nome+', ti ho mandato una mail di benvenuto a '+GZ.email+'. Intanto chiedimi pure quello che vuoi.');
+    return;}
+  // CHAT LIBERA
+  GZ.storia.push({role:'user',content:t});const wait=gzAdd('a','…');
+  try{const r=await fetch('/core81/api/chat.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({agente:GZ.agente,lingua:GZ.lang,messaggi:GZ.storia})});
+    const d=await r.json();wait.textContent=d.ok?d.risposta:(d.error||'Riprova tra poco.');if(d.ok)GZ.storia.push({role:'assistant',content:d.risposta});
+  }catch(e){wait.textContent=gzEn()?'Connection error.':'Errore di connessione. Riprova.';}
+}
+</script>

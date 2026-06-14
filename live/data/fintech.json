@@ -1,0 +1,26 @@
+{
+ "nota": "Servizi esterni in convenzione referral. Compila i link quando li hai, senza link la card resta nascosta. Nessuna custodia di fondi nell ecosistema.",
+ "servizi": [
+  {
+   "id": "revolut",
+   "nome": "Revolut",
+   "cosa": "Conto e carta, anche business",
+   "soglia_pv": 500,
+   "link": ""
+  },
+  {
+   "id": "curve",
+   "nome": "Curve",
+   "cosa": "Una carta che unisce le tue carte",
+   "soglia_pv": 1000,
+   "link": ""
+  },
+  {
+   "id": "bybit",
+   "nome": "Bybit",
+   "cosa": "Exchange cripto con carta",
+   "soglia_pv": 2500,
+   "link": ""
+  }
+ ]
+}

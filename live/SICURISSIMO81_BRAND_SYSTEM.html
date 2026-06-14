@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SICURISSIMO81+ — Brand Identity System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --black:#0A0A0F;
+  --panel:#141414;
+  --white:#FFFFFF;
+  --orange-dark:#E8501A;   /* su fondo scuro */
+  --orange-light:#FB6B00;  /* su fondo chiaro */
+  --gold:#C9A227;
+  --gold-deep:#9E7E1C;
+  --gray-dark:#2A2A2E;
+  --gray-mid:#6B6B70;
+  --gray-light:#E6E3DC;
+  --line:#26262B;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+  background:var(--black);
+  color:var(--white);
+  font-family:'Sora',sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+.sheet{max-width:1280px;margin:0 auto;padding:0 40px 120px}
+
+/* ===== OS HEADER ===== */
+.os-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:18px 0;border-bottom:1px solid var(--line);
+  font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;
+  color:var(--gray-mid);text-transform:uppercase;
+}
+.os-bar .live{color:var(--orange-dark)}
+.hero{padding:90px 0 70px;border-bottom:1px solid var(--line)}
+.hero .sys{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.3em;color:var(--orange-dark);text-transform:uppercase;margin-bottom:24px}
+.hero h1{font-family:'Anton',sans-serif;font-size:clamp(56px,9vw,120px);line-height:.95;text-transform:uppercase;letter-spacing:.01em}
+.hero h1 .o{color:var(--orange-dark)}
+.hero h1 .g{color:var(--gold)}
+.hero p{margin-top:28px;max-width:560px;color:var(--gray-mid);font-size:15px;line-height:1.7}
+.layers{display:flex;gap:0;margin-top:48px;border:1px solid var(--line)}
+.layers div{flex:1;padding:18px 22px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--line)}
+.layers div:last-child{border-right:0}
+.layers b{display:block;font-size:13px;margin-bottom:6px;letter-spacing:.18em}
+.layers .l1 b{color:var(--white)}
+.layers .l2 b{color:var(--orange-dark)}
+.layers .l3 b{color:var(--gold)}
+.layers span{color:var(--gray-mid)}
+
+/* ===== SECTION SCAFFOLD ===== */
+.module{padding:80px 0 0}
+.module-head{display:flex;align-items:baseline;justify-content:space-between;border-bottom:1px solid var(--line);padding-bottom:18px;margin-bottom:36px}
+.module-head h2{font-family:'Anton',sans-serif;font-size:34px;text-transform:uppercase;letter-spacing:.02em}
+.module-head .tag{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;color:var(--gray-mid);text-transform:uppercase}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid2{display:grid;grid-template-columns:repeat(2,1fr);gap:24px}
+.cell{border:1px solid var(--line);position:relative}
+.cell .canvas{display:flex;align-items:center;justify-content:center;min-height:300px;padding:36px}
+.cell .meta{border-top:1px solid var(--line);padding:14px 18px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--gray-mid)}
+.cell .meta b{color:var(--white);font-weight:500}
+.bg-white{background:var(--white)}
+.bg-white .meta{border-top:1px solid #DDD;background:var(--black)}
+.bg-black{background:var(--black)}
+.bg-panel{background:var(--panel)}
+
+/* watermark cells taller */
+.wm .canvas{min-height:340px;padding:0;overflow:hidden}
+.wm svg{display:block;width:100%;height:340px}
+
+/* color system */
+.swatches{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--line)}
+.sw{height:140px;display:flex;flex-direction:column;justify-content:flex-end;padding:14px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;text-transform:uppercase;border-right:1px solid var(--line)}
+.sw:last-child{border-right:0}
+.sw b{display:block;font-size:11px;margin-bottom:2px}
+.footer{margin-top:100px;border-top:1px solid var(--line);padding-top:24px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.16em;color:var(--gray-mid);text-transform:uppercase}
+@media(max-width:900px){
+  .grid,.grid2{grid-template-columns:1fr}
+  .swatches{grid-template-columns:repeat(3,1fr)}
+  .layers{flex-direction:column}
+  .layers div{border-right:0;border-bottom:1px solid var(--line)}
+  .sheet{padding:0 20px 80px}
+}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+  <div class="os-bar">
+    <span>SICURISSIMO81+ / BRAND OS / V1.0</span>
+    <span><span class="live">●</span>&nbsp;SYSTEM ACTIVE</span>
+    <span>SIC-0000001</span>
+  </div>
+
+  <header class="hero">
+    <div class="sys">IDENTITY OPERATING SYSTEM</div>
+    <h1>SICURI<span class="o">SSIMO</span><br>81<span class="o">+</span> <span class="g">ELITE</span></h1>
+    <p>Un sistema di identità a tre livelli. La fiducia regge tutto, il sistema fa progredire, lo scudo certifica l'autorità. Ogni elemento vive su una griglia geometrica rigida, vettoriale piatto, zero ombre, zero gradienti.</p>
+    <div class="layers">
+      <div class="l1"><b>SICURISSIMO</b><span>TRUST / SECURITY LAYER</span></div>
+      <div class="l2"><b>81+</b><span>SYSTEM / PROGRESSION LAYER</span></div>
+      <div class="l3"><b>ELITE SHIELD</b><span>AUTHORITY / HIGH-SECURITY LAYER</span></div>
+    </div>
+  </header>
+
+  <!-- ================= COLOR SYSTEM ================= -->
+  <section class="module">
+    <div class="module-head"><h2>00 / Color System</h2><div class="tag">BASE + TIER</div></div>
+    <div class="swatches">
+      <div class="sw" style="background:#0A0A0F;color:#fff"><b>BLACK</b>#0A0A0F</div>
+      <div class="sw" style="background:#FFFFFF;color:#0A0A0F"><b>WHITE</b>#FFFFFF</div>
+      <div class="sw" style="background:#E8501A;color:#0A0A0F"><b>ORANGE</b>#E8501A</div>
+      <div class="sw" style="background:#8C6239;color:#fff"><b>BRONZE / ENTRY</b>#8C6239</div>
+      <div class="sw" style="background:#B9BCC2;color:#0A0A0F"><b>SILVER / PRO</b>#B9BCC2</div>
+      <div class="sw" style="background:#C9A227;color:#0A0A0F"><b>GOLD / ELITE</b>#C9A227</div>
+    </div>
+  </section>
+
+  <!-- ================= 1. SICURISSIMO ================= -->
+  <section class="module">
+    <div class="module-head"><h2>01 / Sicurissimo Logo System</h2><div class="tag">TRUST LAYER · 3 VERSIONI</div></div>
+    <div class="grid">
+
+      <!-- A) WHITE BG -->
+      <div class="cell bg-white">
+        <div class="canvas">
+          <svg viewBox="0 0 360 96" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sicurissimo, fondo bianco">
+            <rect x="4" y="8" width="176" height="80" fill="#FFFFFF" stroke="#FB6B00" stroke-width="4"/>
+            <text x="92" y="64" text-anchor="middle" font-family="Anton" font-size="42" fill="#FB6B00" letter-spacing="2">SICURI</text>
+            <rect x="180" y="8" width="176" height="80" fill="#FB6B00"/>
+            <text x="268" y="64" text-anchor="middle" font-family="Anton" font-size="42" fill="#FFFFFF" letter-spacing="2">SSIMO</text>
+          </svg>
+        </div>
+        <div class="meta"><b>A / WHITE BG</b><span>SPLIT BLOCK</span></div>
+      </div>
+
+      <!-- B) BLACK BG -->
+      <div class="cell bg-black">
+        <div class="canvas">
+          <svg viewBox="0 0 360 96" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sicurissimo, fondo nero">
+            <rect x="4" y="8" width="176" height="80" fill="#0A0A0F" stroke="#E8501A" stroke-width="4"/>
+            <text x="92" y="64" text-anchor="middle" font-family="Anton" font-size="42" fill="#FFFFFF" letter-spacing="2">SICURI</text>
+            <rect x="180" y="8" width="176" height="80" fill="#E8501A"/>
+            <text x="268" y="64" text-anchor="middle" font-family="Anton" font-size="42" fill="#0A0A0F" letter-spacing="2">SSIMO</text>
+          </svg>
+        </div>
+        <div class="meta"><b>B / BLACK BG</b><span>INVERTED HC</span></div>
+      </div>
+
+      <!-- C) PREMIUM MINIMAL -->
+      <div class="cell bg-panel">
+        <div class="canvas">
+          <svg viewBox="0 0 360 96" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Sicurissimo, versione premium">
+            <rect x="14" y="14" width="332" height="68" fill="none" stroke="#3A3A40" stroke-width="1"/>
+            <text x="180" y="58" text-anchor="middle" font-family="Anton" font-size="26" fill="#FFFFFF" letter-spacing="12">SICURI<tspan fill="#E8501A">SSIMO</tspan></text>
+            <rect x="160" y="70" width="40" height="3" fill="#E8501A"/>
+          </svg>
+        </div>
+        <div class="meta"><b>C / PREMIUM</b><span>LUXURY OS</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 2. 81+ ================= -->
+  <section class="module">
+    <div class="module-head"><h2>02 / 81+ Logo System</h2><div class="tag">SYSTEM LAYER · 3 VERSIONI</div></div>
+    <div class="grid">
+
+      <!-- A) WHITE BG -->
+      <div class="cell bg-white">
+        <div class="canvas">
+          <svg viewBox="0 0 200 110" width="62%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="81 piu, fondo bianco">
+            <rect x="10" y="10" width="90" height="90" fill="#FFFFFF" stroke="#FB6B00" stroke-width="5"/>
+            <text x="55" y="76" text-anchor="middle" font-family="Anton" font-size="52" fill="#FB6B00">81</text>
+            <rect x="100" y="10" width="90" height="90" fill="#FB6B00"/>
+            <text x="145" y="79" text-anchor="middle" font-family="Anton" font-size="60" fill="#FFFFFF">+</text>
+          </svg>
+        </div>
+        <div class="meta"><b>A / WHITE BG</b><span>DUAL SQUARE</span></div>
+      </div>
+
+      <!-- B) BLACK BG -->
+      <div class="cell bg-black">
+        <div class="canvas">
+          <svg viewBox="0 0 200 110" width="62%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="81 piu, fondo nero">
+            <rect x="10" y="10" width="90" height="90" fill="#0A0A0F" stroke="#E8501A" stroke-width="5"/>
+            <text x="55" y="76" text-anchor="middle" font-family="Anton" font-size="52" fill="#FFFFFF">81</text>
+            <rect x="100" y="10" width="90" height="90" fill="#E8501A"/>
+            <text x="145" y="79" text-anchor="middle" font-family="Anton" font-size="60" fill="#0A0A0F">+</text>
+          </svg>
+        </div>
+        <div class="meta"><b>B / BLACK BG</b><span>UI OPTIMIZED</span></div>
+      </div>
+
+      <!-- C) PREMIUM -->
+      <div class="cell bg-panel">
+        <div class="canvas">
+          <svg viewBox="0 0 200 110" width="62%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="81 piu, versione premium">
+            <rect x="40" y="15" width="120" height="80" fill="none" stroke="#3A3A40" stroke-width="1"/>
+            <text x="92" y="72" text-anchor="middle" font-family="Anton" font-size="40" fill="#FFFFFF" letter-spacing="6">81</text>
+            <text x="134" y="72" text-anchor="middle" font-family="Anton" font-size="40" fill="#E8501A">+</text>
+            <rect x="88" y="80" width="24" height="3" fill="#E8501A"/>
+          </svg>
+        </div>
+        <div class="meta"><b>C / PREMIUM</b><span>GEOMETRIC MINIMAL</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 3. ELITE SHIELD ================= -->
+  <section class="module">
+    <div class="module-head"><h2>03 / Elite 81+ Shield</h2><div class="tag">AUTHORITY LAYER · GOLD</div></div>
+    <div class="grid">
+
+      <!-- BLACK BG GOLD DOMINANT -->
+      <div class="cell bg-black">
+        <div class="canvas">
+          <svg viewBox="0 0 160 190" width="42%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scudo Elite oro su nero">
+            <path d="M80 8 L150 30 V100 C150 142 118 168 80 182 C42 168 10 142 10 100 V30 Z" fill="#C9A227"/>
+            <path d="M80 24 L136 42 V100 C136 132 112 152 80 164 C48 152 24 132 24 100 V42 Z" fill="#0A0A0F"/>
+            <text x="80" y="112" text-anchor="middle" font-family="Anton" font-size="46" fill="#C9A227">81+</text>
+            <rect x="62" y="124" width="36" height="3" fill="#C9A227"/>
+          </svg>
+        </div>
+        <div class="meta"><b>GOLD / BLACK</b><span>AUTHORITY</span></div>
+      </div>
+
+      <!-- WHITE BG -->
+      <div class="cell bg-white">
+        <div class="canvas">
+          <svg viewBox="0 0 160 190" width="42%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scudo Elite su bianco">
+            <path d="M80 8 L150 30 V100 C150 142 118 168 80 182 C42 168 10 142 10 100 V30 Z" fill="#0A0A0F"/>
+            <path d="M80 24 L136 42 V100 C136 132 112 152 80 164 C48 152 24 132 24 100 V42 Z" fill="#C9A227"/>
+            <text x="80" y="112" text-anchor="middle" font-family="Anton" font-size="46" fill="#0A0A0F">81+</text>
+            <rect x="62" y="124" width="36" height="3" fill="#0A0A0F"/>
+          </svg>
+        </div>
+        <div class="meta"><b>GOLD / WHITE</b><span>HIGH CONTRAST</span></div>
+      </div>
+
+      <!-- MINIMAL BADGE -->
+      <div class="cell bg-panel">
+        <div class="canvas">
+          <svg viewBox="0 0 160 190" width="42%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Scudo Elite minimal">
+            <path d="M80 8 L150 30 V100 C150 142 118 168 80 182 C42 168 10 142 10 100 V30 Z" fill="none" stroke="#C9A227" stroke-width="3"/>
+            <text x="80" y="108" text-anchor="middle" font-family="Anton" font-size="40" fill="#C9A227" letter-spacing="2">81+</text>
+            <text x="80" y="138" text-anchor="middle" font-family="JetBrains Mono" font-size="10" fill="#9E7E1C" letter-spacing="4">ELITE</text>
+          </svg>
+        </div>
+        <div class="meta"><b>MINIMAL BADGE</b><span>OUTLINE</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 4. MASTER LOGO ================= -->
+  <section class="module">
+    <div class="module-head"><h2>04 / Sicurissimo81+ Master Logo</h2><div class="tag">SISTEMA UNIFICATO</div></div>
+    <div class="grid2">
+
+      <!-- HORIZONTAL BLACK -->
+      <div class="cell bg-black">
+        <div class="canvas">
+          <svg viewBox="0 0 520 120" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Master logo orizzontale su nero">
+            <path d="M50 12 L92 26 V66 C92 92 72 106 50 114 C28 106 8 92 8 66 V26 Z" fill="#C9A227"/>
+            <path d="M50 22 L82 33 V66 C82 85 67 96 50 103 C33 96 18 85 18 66 V33 Z" fill="#0A0A0F"/>
+            <text x="50" y="74" text-anchor="middle" font-family="Anton" font-size="26" fill="#C9A227">81+</text>
+            <rect x="112" y="30" width="178" height="58" fill="#0A0A0F" stroke="#E8501A" stroke-width="3"/>
+            <text x="201" y="71" text-anchor="middle" font-family="Anton" font-size="30" fill="#FFFFFF" letter-spacing="1">SICURI</text>
+            <rect x="290" y="30" width="178" height="58" fill="#E8501A"/>
+            <text x="379" y="71" text-anchor="middle" font-family="Anton" font-size="30" fill="#0A0A0F" letter-spacing="1">SSIMO</text>
+            <text x="479" y="71" text-anchor="start" font-family="Anton" font-size="30" fill="#C9A227">81+</text>
+          </svg>
+        </div>
+        <div class="meta"><b>HORIZONTAL / BLACK</b><span>SHIELD + TRUST + SYSTEM</span></div>
+      </div>
+
+      <!-- HORIZONTAL WHITE -->
+      <div class="cell bg-white">
+        <div class="canvas">
+          <svg viewBox="0 0 520 120" width="100%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Master logo orizzontale su bianco">
+            <path d="M50 12 L92 26 V66 C92 92 72 106 50 114 C28 106 8 92 8 66 V26 Z" fill="#0A0A0F"/>
+            <path d="M50 22 L82 33 V66 C82 85 67 96 50 103 C33 96 18 85 18 66 V33 Z" fill="#C9A227"/>
+            <text x="50" y="74" text-anchor="middle" font-family="Anton" font-size="26" fill="#0A0A0F">81+</text>
+            <rect x="112" y="30" width="178" height="58" fill="#FFFFFF" stroke="#FB6B00" stroke-width="3"/>
+            <text x="201" y="71" text-anchor="middle" font-family="Anton" font-size="30" fill="#FB6B00" letter-spacing="1">SICURI</text>
+            <rect x="290" y="30" width="178" height="58" fill="#FB6B00"/>
+            <text x="379" y="71" text-anchor="middle" font-family="Anton" font-size="30" fill="#FFFFFF" letter-spacing="1">SSIMO</text>
+            <text x="479" y="71" text-anchor="start" font-family="Anton" font-size="30" fill="#0A0A0F">81+</text>
+          </svg>
+        </div>
+        <div class="meta"><b>HORIZONTAL / WHITE</b><span>SHIELD + TRUST + SYSTEM</span></div>
+      </div>
+
+      <!-- STACKED BLACK -->
+      <div class="cell bg-black">
+        <div class="canvas">
+          <svg viewBox="0 0 360 260" width="60%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Master logo verticale su nero">
+            <path d="M180 6 L222 20 V58 C222 84 202 98 180 106 C158 98 138 84 138 58 V20 Z" fill="#C9A227"/>
+            <path d="M180 16 L212 27 V58 C212 77 197 88 180 95 C163 88 148 77 148 58 V27 Z" fill="#0A0A0F"/>
+            <text x="180" y="68" text-anchor="middle" font-family="Anton" font-size="24" fill="#C9A227">81+</text>
+            <rect x="22" y="126" width="158" height="56" fill="#0A0A0F" stroke="#E8501A" stroke-width="3"/>
+            <text x="101" y="166" text-anchor="middle" font-family="Anton" font-size="28" fill="#FFFFFF" letter-spacing="1">SICURI</text>
+            <rect x="180" y="126" width="158" height="56" fill="#E8501A"/>
+            <text x="259" y="166" text-anchor="middle" font-family="Anton" font-size="28" fill="#0A0A0F" letter-spacing="1">SSIMO</text>
+            <text x="180" y="232" text-anchor="middle" font-family="Anton" font-size="30" fill="#C9A227" letter-spacing="6">81+</text>
+          </svg>
+        </div>
+        <div class="meta"><b>STACKED / BLACK</b><span>VERTICAL HIERARCHY</span></div>
+      </div>
+
+      <!-- STACKED WHITE -->
+      <div class="cell bg-white">
+        <div class="canvas">
+          <svg viewBox="0 0 360 260" width="60%" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Master logo verticale su bianco">
+            <path d="M180 6 L222 20 V58 C222 84 202 98 180 106 C158 98 138 84 138 58 V20 Z" fill="#0A0A0F"/>
+            <path d="M180 16 L212 27 V58 C212 77 197 88 180 95 C163 88 148 77 148 58 V27 Z" fill="#C9A227"/>
+            <text x="180" y="68" text-anchor="middle" font-family="Anton" font-size="24" fill="#0A0A0F">81+</text>
+            <rect x="22" y="126" width="158" height="56" fill="#FFFFFF" stroke="#FB6B00" stroke-width="3"/>
+            <text x="101" y="166" text-anchor="middle" font-family="Anton" font-size="28" fill="#FB6B00" letter-spacing="1">SICURI</text>
+            <rect x="180" y="126" width="158" height="56" fill="#FB6B00"/>
+            <text x="259" y="166" text-anchor="middle" font-family="Anton" font-size="28" fill="#FFFFFF" letter-spacing="1">SSIMO</text>
+            <text x="180" y="232" text-anchor="middle" font-family="Anton" font-size="30" fill="#0A0A0F" letter-spacing="6">81+</text>
+          </svg>
+        </div>
+        <div class="meta"><b>STACKED / WHITE</b><span>VERTICAL HIERARCHY</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ================= 5. WATERMARK PATTERNS ================= -->
+  <section class="module">
+    <div class="module-head"><h2>05 / Luxury Security Watermark</h2><div class="tag">PATTERN 45° · 3 VARIANTI</div></div>
+
+        <div class="grid">
+
+      <!-- BLACK LUXURY -->
+      <div class="cell wm bg-black">
+        <div class="canvas">
+          <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pattern watermark black luxury">
+            <defs>
+              <pattern id="pBlack" width="160" height="220" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="160" height="220" fill="#0A0A0F"/>
+                <text x="20" y="42" font-family="Anton" font-size="30" letter-spacing="2" fill="#C9A227">81+</text>
+                <path d="M110 18 L130 25 V44 C130 56 121 63 110 67 C99 63 90 56 90 44 V25 Z" fill="none" stroke="#3A3A40" stroke-width="2.5"/>
+                <rect x="24" y="64" width="14" height="14" fill="#E8501A"/>
+                <rect x="44" y="64" width="14" height="14" fill="none" stroke="#3A3A40" stroke-width="2"/>
+                <rect x="104" y="88" width="40" height="4" fill="#E8501A"/>
+                <text x="20" y="124" font-family="JetBrains Mono" font-size="11" letter-spacing="3" fill="#3A3A40">SIC-OS</text>
+                <path d="M40 152 L60 159 V178 C60 190 51 197 40 201 C29 197 20 190 20 178 V159 Z" fill="none" stroke="#3A3A40" stroke-width="2.5"/>
+                <text x="92" y="170" font-family="Anton" font-size="30" letter-spacing="2" fill="#3A3A40">81+</text>
+                <rect x="96" y="184" width="14" height="14" fill="#C9A227"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#pBlack)"/>
+          </svg>
+        </div>
+        <div class="meta"><b>BLACK LUXURY</b><span>GOLD + GRAY + ORANGE</span></div>
+      </div>
+
+      <!-- WHITE LUXURY -->
+      <div class="cell wm bg-white">
+        <div class="canvas">
+          <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pattern watermark white luxury">
+            <defs>
+              <pattern id="pWhite" width="160" height="220" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="160" height="220" fill="#FFFFFF"/>
+                <text x="20" y="42" font-family="Anton" font-size="30" letter-spacing="2" fill="#C9A227">81+</text>
+                <path d="M110 18 L130 25 V44 C130 56 121 63 110 67 C99 63 90 56 90 44 V25 Z" fill="none" stroke="#D9D6CE" stroke-width="2.5"/>
+                <rect x="24" y="64" width="14" height="14" fill="#C9A227"/>
+                <rect x="44" y="64" width="14" height="14" fill="none" stroke="#D9D6CE" stroke-width="2"/>
+                <rect x="104" y="88" width="40" height="4" fill="#C9A227"/>
+                <text x="20" y="124" font-family="JetBrains Mono" font-size="11" letter-spacing="3" fill="#D9D6CE">SIC-OS</text>
+                <path d="M40 152 L60 159 V178 C60 190 51 197 40 201 C29 197 20 190 20 178 V159 Z" fill="none" stroke="#D9D6CE" stroke-width="2.5"/>
+                <text x="92" y="170" font-family="Anton" font-size="30" letter-spacing="2" fill="#D9D6CE">81+</text>
+                <rect x="96" y="184" width="14" height="14" fill="#C9A227"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#pWhite)"/>
+          </svg>
+        </div>
+        <div class="meta"><b>WHITE LUXURY</b><span>GOLD + LIGHT GRAY</span></div>
+      </div>
+
+      <!-- ELITE AUTHORITY -->
+      <div class="cell wm bg-black">
+        <div class="canvas">
+          <svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Pattern watermark elite authority">
+            <defs>
+              <pattern id="pElite" width="160" height="220" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                <rect width="160" height="220" fill="#0A0A0F"/>
+                <text x="20" y="42" font-family="Anton" font-size="30" letter-spacing="2" fill="#C9A227">81+</text>
+                <path d="M110 18 L130 25 V44 C130 56 121 63 110 67 C99 63 90 56 90 44 V25 Z" fill="none" stroke="#9E7E1C" stroke-width="2.5"/>
+                <rect x="24" y="64" width="14" height="14" fill="#C9A227"/>
+                <rect x="44" y="64" width="14" height="14" fill="none" stroke="#9E7E1C" stroke-width="2"/>
+                <rect x="104" y="88" width="40" height="4" fill="#C9A227"/>
+                <text x="20" y="124" font-family="JetBrains Mono" font-size="11" letter-spacing="3" fill="#9E7E1C">SIC-OS</text>
+                <path d="M40 152 L60 159 V178 C60 190 51 197 40 201 C29 197 20 190 20 178 V159 Z" fill="none" stroke="#9E7E1C" stroke-width="2.5"/>
+                <text x="92" y="170" font-family="Anton" font-size="30" letter-spacing="2" fill="#9E7E1C">81+</text>
+                <rect x="96" y="184" width="14" height="14" fill="#C9A227"/>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#pElite)"/>
+          </svg>
+        </div>
+        <div class="meta"><b>ELITE AUTHORITY</b><span>FULL FLAT GOLD</span></div>
+      </div>
+
+    </div>
+  </section>
+
+  <div class="footer">
+    <span>SICURISSIMO81+ BRAND OS / FLAT VECTOR / GRID LOCKED</span>
+    <span>ANTON · SORA · JETBRAINS MONO</span>
+  </div>
+
+</div>
+</body>
+</html>

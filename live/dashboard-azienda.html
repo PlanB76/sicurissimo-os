@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Azienda 81+</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#ff7a45;--od:rgba(232,80,26,.12);--bg:#07070c;--n:#0e0e16;--n2:#14141e;--n3:#1b1b27;--b:#24242f;--b2:#2e2e3c;--w:#f4f4f8;--g:#a8a8b8;--g2:#6a6a7a;--green:#1db954;--red:#e74c3c;--usdt:#26a17b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--w);font-size:14px}
+.app{display:flex;min-height:100vh}
+.side{width:240px;background:var(--n);border-right:1px solid var(--b);position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;z-index:50}
+.side-logo{padding:18px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:10px}
+.lg{display:inline-flex;font-family:'Anton';font-size:18px;border-radius:5px;overflow:hidden}
+.la{background:var(--o);color:#fff;padding:3px 8px 1px}.lb{background:#fff;color:#07070c;padding:3px 8px 1px}
+.side-sub{font-family:'JetBrains Mono';font-size:8px;color:var(--o);letter-spacing:2px;margin-top:3px}
+.side-nav{flex:1;overflow-y:auto;padding:12px 0}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 20px;color:var(--g);cursor:pointer;font-size:13px;font-weight:600;border-left:2.5px solid transparent}
+.nav-item:hover{color:var(--w);background:var(--od)}
+.nav-item.active{color:var(--o);background:var(--od);border-left-color:var(--o)}
+.nav-item .ic{font-size:15px;width:18px;text-align:center}
+.side-foot{padding:14px 20px;border-top:1px solid var(--b);font-family:'JetBrains Mono';font-size:9px;color:var(--g2)}
+.main{flex:1;margin-left:240px}
+.topbar{height:60px;background:rgba(14,14,22,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:40}
+.tb-title{font-family:'Anton';font-size:19px}.tb-right{display:flex;align-items:center;gap:14px}
+.badge{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono';font-size:10px;color:var(--green);background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.3);padding:5px 11px;border-radius:20px}
+.badge .d{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.content{padding:26px}
+.panel{display:none}.panel.active{display:block}
+.page-head{margin-bottom:22px}.page-head h1{font-family:'Anton';font-size:28px}.page-head p{color:var(--g);font-size:13px;margin-top:4px}
+.grid{display:grid;gap:16px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--n2);border:1px solid var(--b);border-radius:14px;padding:20px}
+.kpi-ic{width:38px;height:38px;border-radius:10px;background:var(--od);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.kpi-v{font-family:'Anton';font-size:30px}.kpi-l{color:var(--g2);font-size:12px;font-family:'JetBrains Mono';text-transform:uppercase;letter-spacing:.5px}
+h3{font-size:15px;margin-bottom:6px}
+label{font-size:11px;color:var(--g2);display:block;margin-bottom:5px}
+input,select{width:100%;background:var(--n3);border:1px solid var(--b);border-radius:8px;color:var(--w);padding:11px;font-family:'Sora'}
+.btn{border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Sora'}
+.btn-o{background:var(--o);color:#fff}.btn-u{background:var(--usdt);color:#fff}.btn-g{background:transparent;border:1px solid var(--o);color:var(--o)}
+.addr{font-family:'JetBrains Mono';font-size:11px;color:var(--o);background:var(--n3);padding:9px;border-radius:7px;word-break:break-all;cursor:pointer}
+.hint{font-size:11px;color:var(--g2);margin-top:6px;line-height:1.5}
+@media(max-width:820px){.side{transform:translateX(-100%)}.main{margin-left:0}.g4,.g3,.g2{grid-template-columns:1fr}}
+</style></head>
+<body><div class="app">
+<aside class="side">
+  <div class="side-logo"><span class="lg"><span class="la">81</span><span class="lb">+</span></span><div><div style="font-size:11px;font-weight:700">Azienda</div><div class="side-sub">81PLUS.NET</div></div></div>
+  <nav class="side-nav"><div class="nav-item active" data-p="overview"><span class="ic">A</span> Panoramica</div><div class="nav-item" data-p="conformita"><span class="ic">S</span> Conformita</div><div class="nav-item" data-p="fatturazione"><span class="ic">F</span> Fatturazione</div><div class="nav-item" data-p="portafoglio"><span class="ic">W</span> Portafoglio 81+</div><div style="padding:14px 20px 6px;font-size:9px;letter-spacing:2px;color:#666;text-transform:uppercase;font-family:'JetBrains Mono'">Strumenti 81+</div><div class="nav-item" data-url="gamification.html"><span class="ic">G</span> La mia partita</div><div class="nav-item" data-url="abbonamenti.html"><span class="ic">A</span> Abbonamenti</div><div class="nav-item" data-url="swap.html"><span class="ic">€</span> Carica wallet</div><div class="nav-item" data-url="token81x.html"><span class="ic">X</span> Token 81X</div><div class="nav-item" data-url="pixel_gestione.html"><span class="ic">P</span> I miei PIX81+</div><div class="nav-item" data-url="pix81.html"><span class="ic">M</span> Mappa 3D</div><div class="nav-item" data-url="pix81.html"><span class="ic">M</span> Mappa 2D</div><div class="nav-item" data-url="invita.html"><span class="ic">I</span> Invita</div><div class="nav-item" data-url="crescita.html"><span class="ic">↑</span> Crescita</div><div class="nav-item" data-url="scadenze.html"><span class="ic">S</span> Scadenze</div></nav>
+  <div class="side-foot"><div style="color:var(--o);font-weight:700;font-size:11px">81+</div>SIC ID univoco</div>
+</aside>
+<main class="main">
+  <div class="topbar"><div class="tb-title">Panoramica</div><div class="tb-right"><span class="badge"><span class="d"></span> online</span><img id="av-side" src="" style="width:34px;height:34px;border-radius:50%;border:2px solid var(--o);object-fit:cover;display:none"><span style="font-size:12px" id="tb-nome"></span></div></div>
+  <div class="content"><div class="panel active" id="overview"><div class="page-head"><h1>AZIENDA</h1><p>La tua area riservata 81+.</p></div><div class="grid g4">
+  <div class="card"><div class="kpi-ic">S</div><div class="kpi-v" style="font-size:20px">da valutare</div><div class="kpi-l">Stato conformita</div></div>
+  <div class="card"><div class="kpi-ic">D</div><div class="kpi-v">0</div><div class="kpi-l">Documenti</div></div>
+  <div class="card"><div class="kpi-ic">T</div><div class="kpi-v">0</div><div class="kpi-l">Scadenze vicine</div></div>
+  <div class="card"><div class="kpi-ic">P</div><div class="kpi-v">0</div><div class="kpi-l">Dipendenti</div></div>
+</div></div><div class="panel" id="conformita"><div class="page-head"><h1>CONFORMITA</h1><p>DVR, formazione, scadenze e documenti.</p></div><div class="card"><h3>Conformita aziendale</h3><p style="color:var(--g);font-size:13px">Tutta la sicurezza della tua azienda sotto controllo.</p></div></div><div class="panel" id="fatturazione"><div class="page-head"><h1>FATTURAZIONE</h1><p>Dati fiscali, proforma e fatture.</p></div><div class="card"><h3>Fatturazione elettronica</h3><p style="color:var(--g);font-size:13px">Ragione sociale, P.IVA, PEC e codice destinatario. Le proforma e le fatture dei tuoi acquisti.</p></div></div>
+<div class="panel" id="portafoglio">
+  <div class="page-head"><h1>PORTAFOGLIO 81+</h1><p>Il tuo wallet interno. Deposita, compra USDT, fai swap e collega MetaMask.</p></div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><div class="kpi-ic">D</div><div class="kpi-l">Saldo</div><div class="kpi-v" id="saldo" style="color:var(--o)">EUR 0,00</div></div>
+    <div class="card"><div class="kpi-ic">MM</div><h3>Collega MetaMask</h3><p style="color:var(--g);font-size:13px">Lega il wallet al tuo SIC ID e chiudi il cerchio dell identita.</p>
+      <button class="btn btn-g" style="margin-top:10px" onclick="bindMM()">Collega il wallet</button><div id="mm-msg" class="hint"></div></div>
+  </div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><h3>Deposita cripto</h3><div class="hint" style="margin:6px 0">Indirizzo unico rete BSC. USDT, USDC e Bitcoin BTCB.</div>
+      <div class="addr" id="addr" onclick="copia()">0x3C320B3a0917fF44BF6551CDdee44402AFcF250C</div>
+      <div class="hint">Il Bitcoin lo depositi come BTCB su BSC, convertito in automatico in USDT. Tocca per copiare.</div></div>
+    <div class="card"><h3>Compra USDT con carta</h3><label>Importo in euro</label>
+      <input type="number" id="eur-amt" value="49" min="10" oninput="conv()"><div id="conv-out" class="hint"></div>
+      <button class="btn" style="width:100%;margin-top:8px;background:#0070ba;color:#fff" onclick="alert('PayPal da collegare in fase di messa online.')">PayPal, paga con carta</button></div>
+  </div>
+  <div class="card">
+    <h3>Swap interno verso USDT</h3>
+    <div class="grid g3" style="margin-top:10px">
+      <div><label>Da</label><select id="sw-da" onchange="swPrev()"><option value="BTC">Bitcoin BTCB</option><option value="USDC">USDC</option></select></div>
+      <div><label>Importo</label><input type="number" id="sw-amt" value="0.01" step="any" min="0" oninput="swPrev()"></div>
+      <div><label>Ricevi</label><div style="padding:11px;font-family:'JetBrains Mono';color:var(--usdt);font-weight:700" id="sw-out">...</div></div>
+    </div>
+    <button class="btn btn-u" style="width:100%;margin-top:10px" onclick="swDo()">Converti in USDT</button>
+    <div id="sw-msg" class="hint"></div>
+    <div class="hint">Cambio in tempo reale. La conversione viene presa in carico e confermata sul saldo.</div>
+  </div>
+</div>
+</div>
+</main></div>
+<script>
+document.querySelectorAll('.nav-item').forEach(function(it){it.onclick=function(){
+  var u=it.getAttribute('data-url'); if(u){ location.href=u; return; }
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));it.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  var t=document.getElementById(it.getAttribute('data-p'));if(t)t.classList.add('active');
+  document.querySelector('.tb-title').textContent=it.textContent.trim();
+};});
+
+const DEP_ADDR='0x3C320B3a0917fF44BF6551CDdee44402AFcF250C';
+function copia(){const t=document.getElementById('addr').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);const e=document.getElementById('addr');const o=e.style.color;e.style.color='#1db954';setTimeout(()=>e.style.color=o,800);}
+(async function(){try{const r=await fetch('/core81/api/auth.php?action=me',{credentials:'include'});const d=await r.json();
+ if(d&&d.ok&&d.persona){const s=parseFloat(d.persona.saldo_deposito||0);const el=document.getElementById('saldo');if(el)el.textContent='EUR '+s.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+   const nm=document.getElementById('tb-nome');if(nm)nm.textContent=((d.persona.nome||'')+' '+(d.persona.cognome||'')).trim()||d.persona.username||'';var av=document.getElementById('av-side');if(av&&d.persona.avatar_url){av.src=d.persona.avatar_url;av.style.display='inline-block';}}
+ }catch(e){}})();
+async function conv(){const eur=parseFloat(document.getElementById('eur-amt').value||0);const o=document.getElementById('conv-out');if(eur<=0){o.textContent='';return}try{const r=await fetch('/core81/api/price.php?eur='+eur);const d=await r.json();o.textContent=d.ok&&d.conversione?('circa '+d.conversione.usdt+' USDT'):'cambio non disponibile';}catch(e){o.textContent='cambio non disponibile';}}
+conv();
+let SW=null;fetch('/core81/api/price.php').then(r=>r.json()).then(d=>{if(d.ok){SW=d.rates;swPrev();}}).catch(function(){});
+function swPrev(){const o=document.getElementById('sw-out');if(!o)return;const da=document.getElementById('sw-da').value;const a=parseFloat(document.getElementById('sw-amt').value||0);if(!SW||a<=0){o.textContent='...';return}const ep=da==='BTC'?SW.eur_per_btc:SW.eur_per_usdc;o.textContent=(a*ep/SW.eur_per_usdt).toLocaleString('it-IT',{maximumFractionDigits:2})+' USDT';}
+async function swDo(){const da=document.getElementById('sw-da').value;const a=parseFloat(document.getElementById('sw-amt').value||0);const m=document.getElementById('sw-msg');if(a<=0){m.style.color='#ff9b8f';m.textContent='Importo non valido.';return}m.style.color='#a8a8b8';m.textContent='Invio...';try{const r=await fetch('/core81/api/swap.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({da,importo:a})});const d=await r.json();m.style.color=d.ok?'#1db954':'#ff9b8f';m.textContent=d.ok?d.messaggio:(d.error||'Swap non riuscito.');}catch(e){m.style.color='#ff9b8f';m.textContent='Errore di connessione.';}}
+async function bindMM(){const m=document.getElementById('mm-msg');if(typeof window.ethereum==='undefined'){window.open('https://metamask.io/download/','_blank');return}try{const acc=await window.ethereum.request({method:'eth_requestAccounts'});const w=acc[0].toLowerCase();const nr=await fetch('/core81/api/web3.php?action=nonce',{credentials:'include'});const nd=await nr.json();if(!nd.ok){m.style.color='#ff9b8f';m.textContent=nd.error||'Accedi e riprova.';return}const sig=await window.ethereum.request({method:'personal_sign',params:[nd.message,w]});const vr=await fetch('/core81/api/web3.php?action=link',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({wallet:w,signature:sig,nonce:nd.nonce})});const vd=await vr.json();m.style.color=vd.ok?'#1db954':'#ff9b8f';m.textContent=vd.ok?'Wallet collegato. Cerchio chiuso.':(vd.error||'Firma non valida.');}catch(e){m.style.color='#ff9b8f';m.textContent='Firma annullata.';}}
+</script>
+<script src="lang81.js" defer></script>
+</body></html>

@@ -1,0 +1,61 @@
+{
+  "nota": "Academy a 3 strati. Academy BASE aperto a tutti. Academy VIP si sblocca con PV accumulati. Academy ELITE si sblocca con PV alti dalla gamification. Gli utenti devono partecipare all ecosistema per accedere ai livelli alti.",
+  "strati": [
+    {
+      "id": "base",
+      "nome": "81+ Academy BASE",
+      "partner": "Academy BASE",
+      "livello": 1,
+      "pv_richiesti": 0,
+      "accesso": "Aperto a tutti dalla registrazione",
+      "accredito": "Piattaforma e-learning accreditata Regione Lazio",
+      "descrizione": "Formazione obbligatoria sicurezza sul lavoro, HACCP, privacy. Attestati validi a norma di legge. Disponibile da subito per ogni iscritto.",
+      "colore": "#3FBF6B",
+      "icona": "shield",
+      "url": "api/track.php?to=ac1&src=academy",
+      "cta": "Accedi ora",
+      "categorie": ["Sicurezza lavoratori", "Antincendio", "Primo soccorso", "HACCP", "Privacy GDPR", "RSPP e datori", "RLS e preposti"]
+    },
+    {
+      "id": "vip",
+      "nome": "81+ Academy VIP",
+      "partner": "Academy VIP",
+      "livello": 2,
+      "pv_richiesti": 500,
+      "accesso": "Si sblocca a 500 PV accumulati",
+      "accredito": "Piattaforma accreditata MIM, Ministero dell Istruzione",
+      "descrizione": "Formazione professionale su qualsiasi materia. Informatica, lingue, marketing, business, soft skills. Si sblocca accumulando 500 PV nell ecosistema.",
+      "colore": "#FB6B00",
+      "icona": "star",
+      "url": "api/track.php?to=ac2&src=academy",
+      "cta": "Sblocca con 500 PV",
+      "categorie": ["Informatica", "Lingue straniere", "Grafica e design", "Marketing", "Business e impresa", "Soft skills", "Fotografia e video"]
+    },
+    {
+      "id": "elite",
+      "nome": "81+ Academy ELITE",
+      "partner": "Academy ELITE",
+      "livello": 3,
+      "pv_richiesti": 1500,
+      "accesso": "Si sblocca a 1500 PV dalla gamification",
+      "accredito": "Piattaforma di formazione business e mindset",
+      "descrizione": "Il livello piu alto. Business, crescita personale, strategie avanzate, mindset imprenditoriale. Riservato a chi accumula 1500 PV partecipando attivamente all ecosistema.",
+      "colore": "#E8501A",
+      "icona": "crown",
+      "url": "https://differentacademy.it/?ref=labomobile",
+      "cta": "Sblocca con 1500 PV",
+      "categorie": ["Business avanzato", "Crescita personale", "Mindset imprenditoriale", "Strategie di vendita", "Leadership", "Investimenti e finanza"]
+    }
+  ],
+  "come_guadagnare_pv": [
+    {"azione": "Registrazione", "pv": 100},
+    {"azione": "Completa il profilo", "pv": 50},
+    {"azione": "Fai un audit di compliance", "pv": 80},
+    {"azione": "Completa un corso BASE", "pv": 120},
+    {"azione": "Invita un collega che si registra", "pv": 150},
+    {"azione": "Acquisto nello shop", "pv": 60},
+    {"azione": "Attiva una membership", "pv": 200},
+    {"azione": "Partecipa a un evento", "pv": 100},
+    {"azione": "Completa una missione settimanale", "pv": 90}
+  ]
+}

@@ -1,0 +1,12 @@
+{
+ "nota":"Licenza operativa GENESYS 81+. Si paga per usare strumenti e servizi reali, si guadagna solo da servizi venduti. Prezzi annuali finali, fase genesi, 21 nodi.",
+ "national":{"nome":"GENESYS NATIONAL","prezzo_anno":9900,"prezzo_mese":1200,"posti":1,"ruolo":"coordina i venti nodi regionali, accesso completo, supervisione rete"},
+ "regional":[
+  {"fascia":"Regional 1 a 5","prezzo_anno":4900,"posti":5},
+  {"fascia":"Regional 6 a 10","prezzo_anno":5900,"posti":5},
+  {"fascia":"Regional 11 a 15","prezzo_anno":6900,"posti":5},
+  {"fascia":"Regional 16 a 20","prezzo_anno":7900,"posti":5}
+ ],
+ "include":["dashboard GENESYS e strumenti AI","CRM clienti","motore compliance","catalogo servizi vendibili","formazione partner","supporto onboarding","NFT licenza badge verificabile","diritto operativo col marchio"],
+ "confine":"Il prezzo si paga su binari tracciati col fornitore autorizzato, dopo validazione legale. La licenza non e un investimento finanziario, e un diritto d uso operativo."
+}

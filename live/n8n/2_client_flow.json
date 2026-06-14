@@ -1,0 +1,145 @@
+{
+  "name": "81PLUS — 2 Client Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "paypal-ok",
+        "httpMethod": "POST",
+        "responseMode": "onReceived"
+      },
+      "name": "Webhook PayPal",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "id": "70cd8381-d81b-4203-8845-f0f361884f35"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/membership.php?action=activate",
+        "method": "POST",
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({sic_id:$json.body.custom_id,tier:$json.body.plan,paypal_sub:$json.body.subscription_id}) }}",
+        "options": {}
+      },
+      "name": "Attiva Membership",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        460,
+        300
+      ],
+      "id": "5cc15568-633d-4f30-b6c2-b5226f095684"
+    },
+    {
+      "parameters": {
+        "resource": "contact",
+        "operation": "upsert",
+        "email": "={{ $json.email }}",
+        "additionalFields": {}
+      },
+      "name": "Aggiorna HubSpot Cliente",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 1,
+      "position": [
+        680,
+        200
+      ],
+      "id": "c25ab94c-34dd-4cff-b760-b31d88830b85"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/ai_router.php",
+        "method": "POST",
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({tipo:'compliance',valore:0,prompt:'Prepara la checklist documenti per '+$json.settore}) }}",
+        "options": {}
+      },
+      "name": "Genera Documenti AI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        680,
+        400
+      ],
+      "id": "0ffabc77-fcf7-4ffc-9209-4a0f87bf046e"
+    },
+    {
+      "parameters": {
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({to:[{email:$json.email}],templateId:2}) }}",
+        "options": {}
+      },
+      "name": "Email Onboarding Brevo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        900,
+        400
+      ],
+      "id": "0f594f6b-73e9-4b92-a264-cbb9b567a300"
+    }
+  ],
+  "connections": {
+    "Webhook PayPal": {
+      "main": [
+        [
+          {
+            "node": "Attiva Membership",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Attiva Membership": {
+      "main": [
+        [
+          {
+            "node": "Aggiorna HubSpot Cliente",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Genera Documenti AI",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Genera Documenti AI": {
+      "main": [
+        [
+          {
+            "node": "Email Onboarding Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "f1246f68-a2a6-4d72-a1de-dfad337f6f07",
+  "tags": [
+    "81plus",
+    "sicurissimo"
+  ]
+}

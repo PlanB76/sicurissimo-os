@@ -1,0 +1,68 @@
+{
+ "nota": "Partner di formazione e affiliazione. I link con ref portano la commissione all ecosistema, in trasparenza. White label dove il partner lo consente, affiliazione trasparente dove richiesto dal contratto.",
+ "partner": [
+  {
+   "nome": "eLearning Sicurezza ANFOS",
+   "tipo": "Sicurezza, HACCP, privacy",
+   "accredito": "Regione Lazio",
+   "commissione": "20-50%",
+   "url": "https://corsi.elearningsicurezza.com/pid/2377/",
+   "modo": "white label",
+   "brand": "81+ Academy"
+  },
+  {
+   "nome": "Lezione-online",
+   "tipo": "Qualsiasi materia, VIP",
+   "accredito": "MIM",
+   "commissione": "15%",
+   "url": "https://www.lezione-online.it/?ref=6232899",
+   "modo": "white label",
+   "brand": "81+ Academy VIP"
+  },
+  {
+   "nome": "Udemy",
+   "tipo": "Catalogo globale",
+   "accredito": "piattaforma",
+   "commissione": "affiliazione",
+   "url": "https://www.udemy.com/affiliate",
+   "modo": "affiliazione trasparente",
+   "brand": "partner Udemy"
+  },
+  {
+   "nome": "Domestika",
+   "tipo": "Creativita e digitale",
+   "accredito": "piattaforma",
+   "commissione": "affiliazione",
+   "url": "https://www.domestika.org/it/affiliates",
+   "modo": "affiliazione trasparente",
+   "brand": "partner Domestika"
+  },
+  {
+   "nome": "Different Academy",
+   "tipo": "Business, crescita e mindset, sblocco con PV",
+   "accredito": "piattaforma",
+   "commissione": "affiliazione",
+   "url": "https://differentacademy.it/?ref=labomobile",
+   "modo": "affiliazione trasparente",
+   "brand": "81+ Academy ELITE"
+  },
+  {
+   "nome": "LearnWorlds",
+   "tipo": "Piattaforma corsi",
+   "accredito": "tecnologia",
+   "commissione": "affiliazione",
+   "url": "https://www.learnworlds.com/resources/partners/partner-program/",
+   "modo": "affiliazione trasparente",
+   "brand": "partner LearnWorlds"
+  },
+  {
+   "nome": "LiquidWeb",
+   "tipo": "Hosting e infrastruttura",
+   "accredito": "tecnologia",
+   "commissione": "affiliazione",
+   "url": "https://www.liquidweb.com/partner-programs/hosting-affiliate-program/",
+   "modo": "affiliazione trasparente",
+   "brand": "partner LiquidWeb"
+  }
+ ]
+}

@@ -1,0 +1,283 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · Identità digitale</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>:root{--o:#E8501A;--bg:#070710;--n:#0e0e1a;--b:#23232f;--g:#9aa0b4}*{box-sizing:border-box;margin:0;padding:0}body{background:var(--bg);color:#f3f3f8;font-family:'Sora',sans-serif}
+.wrap{max-width:860px;margin:0 auto;padding:34px 20px}.logo{display:inline-flex;font-family:'Anton';font-size:22px;border-radius:6px;overflow:hidden}.logo .a{background:var(--o);color:#fff;padding:3px 9px 0}.logo .b{background:#fff;color:#07070c;padding:3px 9px 0}
+h1{font-family:'Anton';font-weight:400;font-size:30px;text-transform:uppercase;margin:18px 0 2px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:720px){.grid{grid-template-columns:1fr}}
+.card{background:var(--n);border:1px solid var(--b);border-radius:14px;padding:20px;margin-top:14px}
+.ct{font-family:'JetBrains Mono';font-size:10px;color:var(--g);letter-spacing:1.5px;margin-bottom:10px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px solid var(--b);font-size:13px}.kv span{color:var(--g)}.kv b{font-family:'JetBrains Mono';font-size:12px;word-break:break-all;text-align:right}
+.pv{font-family:'Anton';font-size:38px;color:var(--o)}
+.btn{background:var(--o);color:#fff;border:none;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer;text-decoration:none;display:inline-block;font-family:'Sora';font-size:13px}
+.btn.gh{background:#1c1c28;border:1px solid var(--b)}
+.ref{font-family:'JetBrains Mono';color:#ff7a45;font-size:11.5px;word-break:break-all}
+#qrbox{background:#fff;border-radius:12px;padding:10px;display:inline-block;margin-top:10px}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;background:rgba(232,80,26,.15);color:#ff7a45;font-family:'JetBrains Mono'}
+.ok{background:rgba(29,185,84,.15);color:#1db954}
+#rpmModal{position:fixed;inset:0;background:rgba(3,3,10,.85);z-index:50;display:none;align-items:center;justify-content:center;padding:16px}
+#rpmModal.on{display:flex}#rpmFrame{width:min(900px,96vw);height:min(640px,86vh);border:0;border-radius:14px;background:#111}
+.note{font-size:11px;color:#f3b016;margin-top:8px}
+</style><link rel="stylesheet" href="theme81.css">
+<meta name="robots" content="noindex,nofollow">
+</head><body><div class="wrap">
+<a href="index.html" class="logo"><span class="a">81</span><span class="b">+</span></a>
+<h1 id="hi">Identità digitale</h1><div class="ref" id="sic"></div>
+
+<div class="grid">
+ <div class="card"><div class="ct">WALLET LOYALTY PV</div><div class="pv" id="pv">—</div><div style="color:var(--g);font-size:12px">crediti fedelta, non contanti</div></div>
+ <div class="card"><div class="ct">DATI</div><div id="dati"></div></div>
+</div>
+
+<div class="grid">
+ <div class="card"><div class="ct">LINK REFERRAL E QR</div><div class="ref" id="ref">—</div><div id="qrbox"><div id="qr"></div></div>
+  <div style="margin-top:10px"><button class="btn gh" onclick="copia()">Copia link</button></div></div>
+ <div class="card"><div class="ct">I TUOI WALLET INTERNI</div><div id="wl"></div><div class="note">Codici univoci legati al tuo SIC. Operativita euro e cripto sui binari autorizzati.</div></div>
+</div>
+
+<div class="grid">
+ <div class="card"><div class="ct">WALLET BLOCKCHAIN, METAMASK</div>
+  <div id="mmStato" style="font-size:13px;color:var(--g);margin-bottom:10px">non collegato</div>
+  <button class="btn" onclick="bindMM()">Collega MetaMask</button>
+  <div class="note">Il collegamento registra l’indirizzo BSC firmato col tuo SIC. Niente fondi si muovono da qui.</div></div>
+ <div class="card"><div class="ct">AVATAR 3D, READY PLAYER ME</div>
+  <div id="avBox" style="font-size:13px;color:var(--g);margin-bottom:10px">nessun avatar</div>
+  <button class="btn" onclick="openRPM()">Crea o aggiorna avatar</button></div>
+</div>
+
+<div class="card"><div class="ct">RETI COLLEGATE</div>
+ <div id="chains" style="font-size:12px;color:var(--g);margin-bottom:10px">nessuna rete</div>
+ <div style="display:flex;flex-wrap:wrap;gap:7px">
+  <button class="btn gh" onclick="bindChain('BSC')">Collega BSC</button>
+  <button class="btn gh" onclick="bindChain('ETH')">Collega Ethereum</button>
+  <button class="btn gh" onclick="bindBTC()">Aggiungi Bitcoin</button></div>
+ <div class="note">BSC ed Ethereum si verificano con firma. Bitcoin non è firmabile da MetaMask, si registra l’indirizzo, la verifica forte arriva dal provider.</div></div>
+<div class="card"><div class="ct">SWAP CRIPTO, PREVENTIVO LIVE</div>
+ <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:end">
+  <div><label style="font-size:11px;color:var(--g)">Da</label><br><select id="swDa" onchange="quote()" style="background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:9px"><option>BTC</option><option>ETH</option><option>USDT</option></select></div>
+  <div><label style="font-size:11px;color:var(--g)">Importo</label><br><input id="swImp" value="0.01" oninput="quote()" style="width:110px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:9px"></div>
+  <div><label style="font-size:11px;color:var(--g)">A</label><br><select id="swA" onchange="quote()" style="background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:9px"><option>USDT</option><option>PV</option><option>ETH</option><option>BTC</option></select></div>
+ </div>
+ <div id="swOut" style="font-family:JetBrains Mono;font-size:14px;margin-top:12px;color:#ff7a45">,</div>
+ <div id="swPx" style="font-size:11px;color:var(--g);margin-top:4px"></div>
+ <button class="btn" style="margin-top:10px" onclick="creaIntento()">Richiedi lo swap</button>
+ <div class="note">Preventivo al valore di mercato. L esecuzione reale avviene tramite provider autorizzato. Il deposito cripto arriva su un indirizzo generato dal provider, mai dal sito. PV resta credito interno.</div></div>
+<div class="card" id="cOfferta"><div class="ct">COMPLETA E RICEVI 100 PV PIU UN MESE BASIC</div>
+ <div id="offMsg" style="font-size:13px;color:var(--g);margin-bottom:10px">Completa i tuoi dati e ricevi subito altri 1000 PV, più un mese di membership Basic 81+ in regalo.</div>
+ <div class="row" style="display:flex;gap:10px;flex-wrap:wrap">
+  <div style="flex:1;min-width:140px"><label style="font-size:11px;color:var(--g)">Nome</label><input id="pNome" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+  <div style="flex:1;min-width:140px"><label style="font-size:11px;color:var(--g)">Cognome</label><input id="pCognome" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+ </div>
+ <div class="row" style="display:flex;gap:10px;flex-wrap:wrap;margin-top:8px">
+  <div style="flex:1;min-width:140px"><label style="font-size:11px;color:var(--g)">Telefono</label><input id="pTel" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+  <div style="flex:1;min-width:140px"><label style="font-size:11px;color:var(--g)">Codice fiscale</label><input id="pCf" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;text-transform:uppercase"></div>
+ </div>
+ <div id="pRsWrap" style="margin-top:8px;display:none"><label style="font-size:11px;color:var(--g)">Ragione sociale</label><input id="pRs" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+ <button class="btn" style="margin-top:14px" onclick="salvaProfilo()">Salva e ricevi il regalo</button>
+ <div class="note" style="font-size:11px;color:var(--g);margin-top:8px">Il regalo arriva una sola volta, quando tutti i dati sono compilati.</div>
+</div>
+<div class="card" id="cardCompleta"><div class="ct">COMPLETA IL PROFILO, +1000 PV E UN MESE BASIC+</div>
+ <div style="font-size:13px;color:var(--g);margin-bottom:8px">Inserisci tutti i dati e ricevi subito altri 1000 PV più un mese di membership BASIC+ in regalo. Il pacchetto SIC completo si attiva qui.</div>
+ <div style="display:flex;gap:8px;margin-bottom:10px">
+  <button type="button" class="btn gh" id="tpP" onclick="setTipo('persona')" style="flex:1">Persona</button>
+  <button type="button" class="btn gh" id="tpA" onclick="setTipo('azienda')" style="flex:1">Azienda</button></div>
+ <div id="fldP">
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <input id="cpNome" placeholder="Nome" style="flex:1;min-width:120px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+   <input id="cpCognome" placeholder="Cognome" style="flex:1;min-width:120px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+   <input id="cpCf" placeholder="Codice fiscale" style="flex:1;min-width:120px;text-transform:uppercase;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+   <input id="cpNasc" type="date" title="Data di nascita" style="flex:1;min-width:120px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+  <input id="cpInd" placeholder="Indirizzo completo, via, numero, CAP, citta" style="width:100%;margin-top:8px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+ </div>
+ <div id="fldA" style="display:none">
+  <input id="cpRs" placeholder="Ragione sociale" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+   <input id="cpPiva" placeholder="Partita IVA" style="flex:1;min-width:120px;text-transform:uppercase;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+   <input id="cpPec" placeholder="PEC" style="flex:1;min-width:120px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+   <input id="cpSdi" placeholder="Codice SDI, facoltativo" style="flex:1;min-width:100px;text-transform:uppercase;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+   <input id="cpAteco" placeholder="Codice ATECO" style="flex:1;min-width:100px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+   <input id="cpDip" type="number" placeholder="Dipendenti" style="flex:1;min-width:90px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px"></div>
+ </div>
+ <input id="cpTel" placeholder="Telefono" style="width:100%;margin-top:8px;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px">
+ <button class="btn" style="margin-top:12px" onclick="completaProfilo()">Salva e sblocca il premio</button>
+ <div id="cpMsg" style="font-size:13px;color:#1db954;margin-top:10px;min-height:16px"></div></div>
+<div class="card"><div class="ct">VERIFICA IDENTITA KYC</div><div style="font-size:13px;color:var(--g);margin-bottom:10px">Sblocca l operativita completa, in particolare la parte cripto.</div><a class="btn" href="kyc.html">Vai alla verifica KYC</a></div>
+<div class="card"><div class="ct">LA TUA SIC CARD</div><div style="font-size:13px;color:var(--g);margin-bottom:10px">Il tuo badge digitale con QR del link di invito, da stampare o salvare in PDF.</div><a class="btn" href="sic_card.html">Apri la SIC Card</a></div>
+<div class="card"><div class="ct">SICUREZZA DELL ACCESSO</div>
+<div style="font-size:13px;color:var(--g);margin-bottom:10px">Cambia la password e l’email. Per la tua sicurezza la password va reimpostata ogni sei mesi.</div>
+<div style="font-weight:700;font-size:13px;margin-bottom:6px">Cambia password</div>
+<input id="pwOld" type="password" placeholder="Password attuale" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:8px;box-sizing:border-box">
+<input id="pwNew" type="password" placeholder="Nuova password, almeno 8 caratteri" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:8px;box-sizing:border-box">
+<button class="btn" onclick="cambiaPw()">Aggiorna password</button>
+<div id="pwMsg" style="font-size:12px;margin-top:8px;min-height:14px"></div>
+<div style="font-weight:700;font-size:13px;margin:14px 0 6px;border-top:1px solid #23232f;padding-top:12px">Cambia email</div>
+<input id="emNew" type="email" placeholder="Nuova email" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:8px;box-sizing:border-box">
+<input id="emPw" type="password" placeholder="Conferma con la password" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:8px;box-sizing:border-box">
+<button class="btn" onclick="cambiaEmail()">Aggiorna email</button>
+<div id="emMsg" style="font-size:12px;margin-top:8px;min-height:14px"></div>
+<div style="font-weight:700;font-size:13px;margin:14px 0 6px;border-top:1px solid #23232f;padding-top:12px">Doppia verifica, 2FA</div>
+<div style="font-size:12px;color:var(--g);margin-bottom:8px">Con la doppia verifica accesa, a ogni accesso servono password più un codice di sei cifre che arriva alla tua email. Lo scudo in più contro chi ti ruba la password.</div>
+<div id="tfaOff" style="display:none">
+ <button class="btn" onclick="tfaChiedi()">Accendi la doppia verifica</button>
+ <div id="tfaStep" style="display:none;margin-top:8px">
+  <input id="tfaCode" maxlength="6" inputmode="numeric" placeholder="Codice a 6 cifre" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:8px;box-sizing:border-box">
+  <button class="btn" onclick="tfaAttiva()">Conferma il codice e attiva</button>
+ </div>
+</div>
+<div id="tfaOn" style="display:none">
+ <div style="font-size:12px;color:#1db954;margin-bottom:8px">Doppia verifica attiva su questo account.</div>
+ <input id="tfaPw" type="password" placeholder="Password per spegnerla" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:8px;box-sizing:border-box">
+ <button class="btn gh" onclick="tfaSpegni()">Spegni la doppia verifica</button>
+</div>
+<div id="tfaMsg" style="font-size:12px;margin-top:8px;min-height:14px"></div>
+</div>
+<div class="card"><div class="ct">ACCESSO NAZIONALE</div>
+ <div style="font-size:13px;color:var(--g)">SPID e CIE, predisposti. Si attivano con l accreditamento AgID come fornitore di servizi, di norma tramite soggetto aggregatore. <span class="tag">in arrivo</span></div></div>
+
+<div style="margin-top:16px"><a class="btn" href="dashboard.html">Vai alla dashboard</a> <a class="btn gh" href="api/auth.php?action=logout">Esci</a></div>
+
+<div id="rpmModal"><iframe id="rpmFrame" allow="camera *; microphone *"></iframe></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js">
+function cambiaPw(){if(!ME){alert("Accedi");return;}var m=document.getElementById("pwMsg");
+ fetch("api/auth.php?action=cambia_password",{method:"POST",headers:{"Content-Type":"application/json","X-CSRF":ME.csrf},body:JSON.stringify({vecchia:document.getElementById("pwOld").value,nuova:document.getElementById("pwNew").value,_csrf:ME.csrf})})
+ .then(r=>r.json()).then(function(d){m.style.color=d.ok?"#1db954":"#e74c3c";m.textContent=d.msg||d.err;if(d.ok){document.getElementById("pwOld").value="";document.getElementById("pwNew").value="";}}).catch(function(){m.textContent="Errore";});}
+function cambiaEmail(){if(!ME){alert("Accedi");return;}var m=document.getElementById("emMsg");
+ fetch("api/auth.php?action=cambia_email",{method:"POST",headers:{"Content-Type":"application/json","X-CSRF":ME.csrf},body:JSON.stringify({email:document.getElementById("emNew").value,password:document.getElementById("emPw").value,_csrf:ME.csrf})})
+ .then(r=>r.json()).then(function(d){m.style.color=d.ok?"#1db954":"#e74c3c";m.textContent=d.msg||d.err;if(d.ok){document.getElementById("emPw").value="";setTimeout(load,800);}}).catch(function(){m.textContent="Errore";});}
+function tfaUI(stato){document.getElementById("tfaOff").style.display=stato==="email"?"none":"block";document.getElementById("tfaOn").style.display=stato==="email"?"block":"none";}
+function tfaChiedi(){var m=document.getElementById("tfaMsg");
+ fetch("api/auth.php?action=twofa_richiedi",{method:"POST",headers:{"Content-Type":"application/json","X-CSRF":ME.csrf},body:JSON.stringify({_csrf:ME.csrf})})
+ .then(r=>r.json()).then(function(d){m.style.color=d.ok?"#1db954":"#e74c3c";m.textContent=d.msg||d.err;if(d.ok)document.getElementById("tfaStep").style.display="block";}).catch(function(){m.textContent="Errore";});}
+function tfaAttiva(){var m=document.getElementById("tfaMsg");
+ fetch("api/auth.php?action=twofa_attiva",{method:"POST",headers:{"Content-Type":"application/json","X-CSRF":ME.csrf},body:JSON.stringify({code:document.getElementById("tfaCode").value.trim(),_csrf:ME.csrf})})
+ .then(r=>r.json()).then(function(d){m.style.color=d.ok?"#1db954":"#e74c3c";m.textContent=d.ok?"Doppia verifica accesa.":(d.err||"Errore");if(d.ok)tfaUI("email");}).catch(function(){m.textContent="Errore";});}
+function tfaSpegni(){var m=document.getElementById("tfaMsg");
+ fetch("api/auth.php?action=twofa_spegni",{method:"POST",headers:{"Content-Type":"application/json","X-CSRF":ME.csrf},body:JSON.stringify({password:document.getElementById("tfaPw").value,_csrf:ME.csrf})})
+ .then(r=>r.json()).then(function(d){m.style.color=d.ok?"#1db954":"#e74c3c";m.textContent=d.ok?"Doppia verifica spenta.":(d.err||"Errore");if(d.ok)tfaUI("off");}).catch(function(){m.textContent="Errore";});}
+</script>
+<script>
+var ME=null;
+function load(){fetch('api/auth.php?action=me').then(r=>r.json()).then(function(d){
+ if(!d.ok){location.href='login.html';return;} ME=d;
+ document.getElementById('hi').textContent='Ciao '+(d.nome||'');try{fillOfferta(d);}catch(e){}
+ document.getElementById('sic').textContent=d.sic;
+ document.getElementById('pv').textContent=d.pv+' PV';
+ fetch('api/auth.php?action=twofa_stato').then(r=>r.json()).then(function(t){if(t.ok)tfaUI(t.twofa);}).catch(function(){});
+ document.getElementById('ref').textContent=d.ref_link;
+ document.getElementById('qr').innerHTML='';new QRCode(document.getElementById('qr'),{text:d.ref_link,width:132,height:132});
+ document.getElementById('dati').innerHTML=kv('email',d.email)+kv('tipo',d.tipo)+kv('codice fiscale',d.codice_fiscale||'non inserito')+kv('SIC ID',d.sic);
+ document.getElementById('wl').innerHTML=(d.wallets||[]).map(function(w){var nm={PV:'Loyalty PV',EUR:'Euro, checkout provider',SAF:'SAF utility',CRY:'Cripto USDT BEP-20'}[w.tipo]||w.tipo;return kv(nm,w.wallet_code);}).join('')||'<div style="color:var(--g);font-size:12px">wallet in creazione alla prossima registrazione</div>';
+ if(d.eth_address){document.getElementById('mmStato').innerHTML='collegato <span class="tag ok">'+d.eth_address.slice(0,10)+'…'+d.eth_address.slice(-6)+'</span>';}
+ if(d.avatar_url){document.getElementById('avBox').innerHTML='avatar attivo <span class="tag ok">collegato</span><br><span class="ref">'+d.avatar_url+'</span>';}
+}).catch(function(){
+ document.getElementById('hi').textContent='Anteprima identità';document.getElementById('pv').textContent='100 PV';
+ document.getElementById('sic').textContent='SIC-DEMO123';var rl='https://81plus.net/signup.html?ref=SIC-DEMO123';
+ document.getElementById('ref').textContent=rl;new QRCode(document.getElementById('qr'),{text:rl,width:132,height:132});
+ document.getElementById('dati').innerHTML=kv('stato','backend non attivo in anteprima');
+ document.getElementById('wl').innerHTML=kv('Loyalty PV','81W-PV-DEMO123-A1F2')+kv('Euro, checkout provider','81W-EUR-DEMO123-B3C4')+kv('SAF utility','81W-SAF-DEMO123-D5E6')+kv('Cripto USDT BEP-20','81W-CRY-DEMO123-F7A8');
+});}
+function kv(k,v){return '<div class="kv"><span>'+k+'</span><b>'+v+'</b></div>';}
+function copia(){var t=document.getElementById('ref').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);alert('Link copiato');}
+function bindMM(){
+ if(!window.ethereum){alert('MetaMask non trovato. Installa l estensione o usa il browser di MetaMask.');return;}
+ if(!ME){alert('Accedi prima.');return;}
+ ethereum.request({method:'eth_requestAccounts'}).then(function(acc){var addr=acc[0];
+  var msg='Collego questo indirizzo al mio SIC '+ME.sic+' su 81plus.net , '+new Date().toISOString();
+  return ethereum.request({method:'personal_sign',params:[msg,addr]}).then(function(sig){
+   return fetch('api/wallet.php?action=bind_metamask',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify({address:addr,signature:sig,message:msg,_csrf:ME.csrf})});});
+ }).then(function(r){return r.json();}).then(function(d){if(d.ok){load();}else alert(d.err||'Errore');}).catch(function(e){alert('Operazione annullata o non riuscita.');});}
+function openRPM(){document.getElementById('rpmModal').classList.add('on');
+ var f=document.getElementById('rpmFrame');f.src='https://demo.readyplayer.me/avatar?frameApi';}
+window.addEventListener('message',function(ev){
+ var d;try{d=typeof ev.data==='string'?JSON.parse(ev.data):ev.data;}catch(e){return;}
+ if(d&&d.source==='readyplayerme'){
+  if(d.eventName==='v1.frame.ready'){document.getElementById('rpmFrame').contentWindow.postMessage(JSON.stringify({target:'readyplayerme',type:'subscribe',eventName:'v1.**'}),'*');}
+  if(d.eventName==='v1.avatar.exported'){var url=d.data&&d.data.url;document.getElementById('rpmModal').classList.remove('on');
+   if(url&&ME){fetch('api/wallet.php?action=bind_avatar',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify({avatar_url:url,_csrf:ME.csrf})}).then(function(r){return r.json();}).then(function(x){if(x.ok)load();else alert(x.err||'Errore');});}
+  }}});
+document.getElementById('rpmModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('on');});
+
+
+function fillOfferta(d){if(!d)return;
+ if(d.nome)document.getElementById('pNome').value=d.nome;
+ if(d.cognome)document.getElementById('pCognome').value=d.cognome;
+ if(d.tel)document.getElementById('pTel').value=d.tel;
+ if(d.codice_fiscale)document.getElementById('pCf').value=d.codice_fiscale;
+ if(d.tipo==='azienda'){document.getElementById('pRsWrap').style.display='block';if(d.ragione_sociale)document.getElementById('pRs').value=d.ragione_sociale;}
+ var m=document.getElementById('offMsg');
+ if(d.bonus_profilo){m.innerHTML='Regalo già ricevuto. Hai preso 100 PV bonus.'+(d.membership&&d.membership.status==='active'?' Membership Basic attiva fino al '+(d.membership.valid_until||'').slice(0,10)+'.':'');document.getElementById('cOfferta').style.opacity=.7;}
+ else if(d.profilo_completo){m.textContent='Profilo completo. Salva per ricevere il regalo.';}
+}
+function salvaProfilo(){if(!ME){alert('Accedi');return;}
+ var b={nome:pNome.value,cognome:pCognome.value,tel:pTel.value,codice_fiscale:pCf.value,_csrf:ME.csrf};
+ if(document.getElementById('pRsWrap').style.display!=='none')b.ragione_sociale=document.getElementById('pRs').value;
+ fetch('api/auth.php?action=aggiorna_profilo',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify(b)}).then(r=>r.json()).then(function(d){
+  if(!d.ok){alert(d.err||'Errore');return;}
+  if(d.premio){document.getElementById('offMsg').innerHTML='Complimenti. Hai ricevuto 100 PV'+(d.mese_basic?' e un mese di membership Basic 81+':'')+'. Saldo PV '+d.pv+'.';document.getElementById('cOfferta').style.opacity=.7;}
+  else if(d.profilo_completo){document.getElementById('offMsg').textContent='Dati salvati. Il regalo risulta già ricevuto.';}
+  else{document.getElementById('offMsg').textContent='Dati salvati. Mancano ancora dei campi per il regalo.';}
+  load();
+ }).catch(function(){alert('Backend non raggiungibile in anteprima.');});}
+
+function loadChains(){fetch('api/wallet.php?action=chains').then(r=>r.json()).then(function(d){if(d.ok){var e=document.getElementById('chains');e.innerHTML=(d.chains&&d.chains.length)?d.chains.map(function(c){return c.chain+' '+(c.verified?'<span class="tag ok">verificato</span>':'<span class="tag">registrato</span>')+' <span class="ref">'+c.address.slice(0,12)+'…</span>';}).join('<br>'):'nessuna rete';}}).catch(function(){});}
+function bindChain(chain){if(!window.ethereum){alert('MetaMask non trovato');return;}if(!ME){alert('Accedi');return;}
+ ethereum.request({method:'eth_requestAccounts'}).then(function(acc){var addr=acc[0];var msg='Collego '+chain+' al mio SIC '+ME.sic+' su 81plus.net , '+new Date().toISOString();
+  return ethereum.request({method:'personal_sign',params:[msg,addr]}).then(function(sig){return fetch('api/wallet.php?action=bind_chain',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify({chain:chain,address:addr,signature:sig,message:msg,_csrf:ME.csrf})});});
+ }).then(r=>r.json()).then(function(d){if(d.ok){loadChains();}else alert(d.err||'Errore');}).catch(function(){alert('Annullato');});}
+function bindBTC(){if(!ME){alert('Accedi');return;}var addr=prompt('Incolla il tuo indirizzo Bitcoin');if(!addr)return;
+ fetch('api/wallet.php?action=bind_chain',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify({chain:'BTC',address:addr.trim(),_csrf:ME.csrf})}).then(r=>r.json()).then(function(d){if(d.ok)loadChains();else alert(d.err||'Errore');});}
+function quote(){var da=document.getElementById('swDa').value,a=document.getElementById('swA').value,imp=parseFloat(document.getElementById('swImp').value)||0;
+ if(imp<=0){document.getElementById('swOut').textContent=',';return;}
+ fetch('api/swap.php?action=quote',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({da:da,a:a,importo:imp})}).then(r=>r.json()).then(function(d){
+  if(d.ok){document.getElementById('swOut').textContent='ricevi circa '+d.ricevi_stimato+' '+a;document.getElementById('swPx').textContent='valore '+d.valore_usd+' USD , 1 BTC '+(d.prezzi.BTC||0)+' , 1 ETH '+(d.prezzi.ETH||0);window._sw=d;}
+  else document.getElementById('swOut').textContent=d.err||'quotazione non disponibile';}).catch(function(){document.getElementById('swOut').textContent='preventivo non disponibile in anteprima';});}
+function creaIntento(){if(!ME||!window._sw){alert('Fai prima un preventivo da loggato');return;}var d=window._sw;
+ fetch('api/swap.php?action=crea_intento',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify({da:d.da,a:d.a,importo:d.importo,ricevi:d.ricevi_stimato,rate:d.rate,_csrf:ME.csrf})}).then(r=>r.json()).then(function(x){alert(x.ok?('Richiesta registrata. '+x.prossimo_passo):(x.err||'Errore'));});}
+
+var _o=load;load=function(){_o();setTimeout(function(){if(ME){loadChains();quote();}},400);};
+var TIPO='persona';
+function setTipo(t){TIPO=t;document.getElementById('fldP').style.display=t==='persona'?'block':'none';document.getElementById('fldA').style.display=t==='azienda'?'block':'none';
+ document.getElementById('tpP').style.borderColor=t==='persona'?'#E8501A':'#23232f';document.getElementById('tpA').style.borderColor=t==='azienda'?'#E8501A':'#23232f';}
+function completaProfilo(){if(!ME){alert('Accedi');return;}
+ var b={tipo:TIPO,tel:cpTel.value,_csrf:ME.csrf};
+ if(TIPO==='persona'){b.nome=cpNome.value;b.cognome=cpCognome.value;b.codice_fiscale=cpCf.value;b.data_nascita=cpNasc.value;b.indirizzo=cpInd.value;}
+ else{b.ragione_sociale=cpRs.value;b.piva=cpPiva.value;b.pec=cpPec.value;b.sdi=cpSdi.value;b.ateco=cpAteco.value;b.dipendenti=cpDip.value;}
+ fetch('api/auth.php?action=aggiorna_profilo',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify(b)}).then(r=>r.json()).then(function(d){
+  var m=document.getElementById('cpMsg');if(!d.ok){m.style.color='#e74c3c';m.textContent=d.err||'Errore';return;}
+  if(d.premio){m.style.color='#1db954';m.innerHTML='Profilo completo. Hai ricevuto '+d.pv_bonus+' PV'+(d.mese_basic?' e un mese di membership BASIC+ in regalo.':'.')+(d.regalo?' Ecco il tuo regalo, il libro Addio Burocrazia. <a href="'+d.regalo+'" download style="color:#E8501A">Scarica ora</a>':'');if(d.regalo){var w=window.open(d.regalo,'_blank');}setTimeout(function(){location.reload();},4200);}
+  else if(d.profilo_completo){m.style.color='#9aa0b4';m.textContent='Profilo già completo, premio già ricevuto.';}
+  else{m.style.color='#f3b016';m.textContent='Completa nome, cognome, telefono e codice fiscale per il premio.';}}).catch(function(){document.getElementById('cpMsg').textContent='Backend non raggiungibile in anteprima.';});}
+
+var _ol=load;load=function(){_ol();setTimeout(function(){if(window.ME){if(ME.nome)cpNome.value=ME.nome;if(ME.cognome)cpCognome.value=ME.cognome;if(ME.tel)cpTel.value=ME.tel;if(ME.codice_fiscale)cpCf.value=ME.codice_fiscale;if(ME.ragione_sociale){cpRs.value=ME.ragione_sociale;setTipo('azienda');}else{setTipo(ME.tipo==='azienda'?'azienda':'persona');} if(ME.data_nascita)cpNasc.value=ME.data_nascita; if(ME.indirizzo)cpInd.value=ME.indirizzo; if(ME.piva)cpPiva.value=ME.piva; if(ME.pec)cpPec.value=ME.pec; if(ME.sdi)cpSdi.value=ME.sdi; if(ME.ateco)cpAteco.value=ME.ateco; if(ME.dipendenti)cpDip.value=ME.dipendenti; if(ME.bonus_profilo){var cc=document.getElementById('cardCompleta');if(cc)cc.style.display='none';}}},500);};load();
+</script></div><!-- 81+ FOOTER LEGALE -->
+<footer style="background:#070710;border-top:1px solid #23232f;padding:22px 18px;font-family:Sora,Arial,sans-serif;text-align:center">
+ <div style="font-size:11.5px;color:#6b7180;max-width:1000px;margin:0 auto;line-height:1.7">
+  81+ Sicurissimo Global , Labo Tecnic Studio , P.IVA IT01504180298 , Porto Viro (RO) , info@81plus.net<br>
+  <a href="privacy.html" style="color:#9aa0b4;text-decoration:none">Privacy</a> &nbsp;·&nbsp;
+  <a href="cookie.html" style="color:#9aa0b4;text-decoration:none">Cookie</a> &nbsp;·&nbsp;
+  <a href="condizioni.html" style="color:#9aa0b4;text-decoration:none">Condizioni di vendita</a> &nbsp;·&nbsp;
+  <a href="termini.html" style="color:#9aa0b4;text-decoration:none">Termini</a> &nbsp;·&nbsp;
+  <a href="disclaimer.html" style="color:#9aa0b4;text-decoration:none">Disclaimer</a>
+ </div>
+</footer>
+<!-- /81+ FOOTER LEGALE -->
+<!-- 81+ COOKIE BANNER -->
+<div id="ck81" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#0e0e1a;border-top:1px solid #E8501A;padding:16px;font-family:Sora,Arial,sans-serif;display:none">
+ <div style="max-width:1000px;margin:0 auto;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+  <div style="font-size:13px;color:#bcbcc8;flex:1;min-width:240px">Usiamo cookie tecnici per far funzionare il sito e, solo col tuo consenso, cookie di statistica e marketing. Scegli tu. <a href="cookie.html" style="color:#E8501A">Dettagli</a></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <button onclick="ck81set('rifiuta')" style="background:#1c1c28;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px 16px;cursor:pointer;font-family:Sora;font-size:13px">Solo tecnici</button>
+   <button onclick="ck81set('accetta')" style="background:#E8501A;border:none;color:#fff;border-radius:8px;padding:10px 18px;cursor:pointer;font-weight:700;font-family:Sora;font-size:13px">Accetta tutti</button>
+  </div>
+ </div>
+</div>
+<script>
+(function(){try{if(!localStorage.getItem('ck81'))document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('ck81');if(b)b.style.display='block';});}catch(e){var b=document.getElementById('ck81');if(b)b.style.display='block';}})();
+function ck81set(v){try{localStorage.setItem('ck81',v);localStorage.setItem('ck81_ts',new Date().toISOString());}catch(e){}var b=document.getElementById('ck81');if(b)b.style.display='none';}
+</script>
+<!-- /81+ COOKIE BANNER -->
+<script src="theme81.js"></script>
+<script src="lang81.js"></script>
+</body></html>

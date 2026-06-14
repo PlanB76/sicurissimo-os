@@ -1,0 +1,2 @@
+ALTER TABLE welcome_queue ADD COLUMN serie VARCHAR(16) NOT NULL DEFAULT 'nurture';
+ALTER TABLE leads ADD COLUMN consenso_mkt VARCHAR(8) NULL;

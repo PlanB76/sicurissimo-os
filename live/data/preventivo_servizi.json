@@ -1,0 +1,66 @@
+{
+  "nota": "Catalogo servizi per il preventivo dinamico self-service. Organizzato per tema. Il preventivo mostra solo i temi pertinenti al settore ATECO scelto.",
+  "scaglioni_sconto": [
+    {"da": 0, "a": 499, "sconto": 0},
+    {"da": 500, "a": 999, "sconto": 5},
+    {"da": 1000, "a": 1999, "sconto": 10},
+    {"da": 2000, "a": 3499, "sconto": 15},
+    {"da": 3500, "a": 4999, "sconto": 20},
+    {"da": 5000, "a": 7499, "sconto": 25},
+    {"da": 7500, "a": 9999, "sconto": 30},
+    {"da": 10000, "a": 999999, "sconto": 35}
+  ],
+  "temi": {
+    "sicurezza": {
+      "nome": "Sicurezza sul lavoro, D.Lgs 81/08",
+      "icona": "🦺",
+      "servizi": [
+        {"id":"sic-dvr","nome":"Documento Valutazione Rischi DVR","prezzo":390,"tipo":"documento"},
+        {"id":"sic-form-gen","nome":"Formazione generale lavoratori","prezzo":35,"tipo":"corso","perPersona":true},
+        {"id":"sic-form-spec-basso","nome":"Formazione specifica rischio basso","prezzo":45,"tipo":"corso","perPersona":true},
+        {"id":"sic-form-spec-medio","nome":"Formazione specifica rischio medio","prezzo":65,"tipo":"corso","perPersona":true},
+        {"id":"sic-form-spec-alto","nome":"Formazione specifica rischio alto","prezzo":85,"tipo":"corso","perPersona":true},
+        {"id":"sic-rspp","nome":"Corso RSPP Datore di Lavoro","prezzo":290,"tipo":"corso"},
+        {"id":"sic-rls","nome":"Corso RLS Rappresentante Lavoratori","prezzo":250,"tipo":"corso"},
+        {"id":"sic-antinc","nome":"Corso Antincendio","prezzo":120,"tipo":"corso","perPersona":true},
+        {"id":"sic-primo","nome":"Corso Primo Soccorso","prezzo":130,"tipo":"corso","perPersona":true},
+        {"id":"sic-preposto","nome":"Corso Preposto","prezzo":150,"tipo":"corso","perPersona":true}
+      ]
+    },
+    "haccp": {
+      "nome": "HACCP e igiene alimentare",
+      "icona": "🍽️",
+      "servizi": [
+        {"id":"hac-manuale","nome":"Manuale autocontrollo HACCP","prezzo":290,"tipo":"documento"},
+        {"id":"hac-resp","nome":"Corso responsabile industria alimentare","prezzo":90,"tipo":"corso","perPersona":true},
+        {"id":"hac-alim","nome":"Corso addetto che manipola alimenti","prezzo":35,"tipo":"corso","perPersona":true},
+        {"id":"hac-nonalim","nome":"Corso addetto che non manipola alimenti","prezzo":25,"tipo":"corso","perPersona":true},
+        {"id":"hac-rintraccio","nome":"Manuale di rintracciabilità","prezzo":190,"tipo":"documento"},
+        {"id":"hac-legionella","nome":"Manuale autocontrollo legionellosi","prezzo":220,"tipo":"documento"}
+      ]
+    },
+    "privacy": {
+      "nome": "Privacy e GDPR",
+      "icona": "🔒",
+      "servizi": [
+        {"id":"pri-dpo","nome":"Nomina e supporto DPO","prezzo":490,"tipo":"servizio"},
+        {"id":"pri-registro","nome":"Registro dei trattamenti","prezzo":290,"tipo":"documento"},
+        {"id":"pri-informative","nome":"Set informative e consensi","prezzo":190,"tipo":"documento"},
+        {"id":"pri-form-lav","nome":"Corso privacy per lavoratori","prezzo":30,"tipo":"corso","perPersona":true},
+        {"id":"pri-form-resp","nome":"Corso Responsabile e Titolare privacy","prezzo":120,"tipo":"corso"},
+        {"id":"pri-valutazione","nome":"Valutazione impatto DPIA","prezzo":390,"tipo":"documento"}
+      ]
+    }
+  },
+  "temi_per_settore": {
+    "costruzioni":      ["sicurezza","privacy"],
+    "manifattura":      ["sicurezza","privacy"],
+    "alimentare_prod":  ["sicurezza","haccp","privacy"],
+    "horeca":           ["sicurezza","haccp","privacy"],
+    "commercio_alim":   ["sicurezza","haccp","privacy"],
+    "uffici":           ["sicurezza","privacy"],
+    "sanità":           ["sicurezza","haccp","privacy"],
+    "trasporti":        ["sicurezza","privacy"],
+    "agricoltura":      ["sicurezza","privacy"]
+  }
+}

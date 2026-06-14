@@ -1,0 +1,5 @@
+{ "membership":[{"nome":"Basic","prezzo":49},{"nome":"Pro","prezzo":99},{"nome":"Elite","prezzo":149}],
+  "sigilli":[{"nome":"Bronze","prezzo":990},{"nome":"Silver","prezzo":1490},{"nome":"Gold","prezzo":1990}],
+  "network":{"sdk":199,"sdp":[49,99,149,249,399,599,799,999]},
+  "club":[{"nome":"PALLADIUM+","canone":1990},{"nome":"IRIDIUM+","canone":4990},{"nome":"RHODIUM+","canone":9990}],
+  "franchising":[{"nome":"Light","ingresso":4900,"canone":149},{"nome":"Standard","ingresso":9900,"canone":390},{"nome":"Flagship","ingresso":19900,"canone":590}] }

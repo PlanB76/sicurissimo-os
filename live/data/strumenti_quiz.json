@@ -1,0 +1,58 @@
+{
+  "nota": "Tre strumenti di autovalutazione gratuiti, a domande auto-avanzanti, uno per tema. Danno un punteggio e indicazioni, con possibilita di PDF.",
+  "strumenti": [
+    {
+      "id": "sicurezza",
+      "nome": "Check Sicurezza sul lavoro",
+      "icona": "🦺",
+      "colore": "#E8501A",
+      "desc": "Dieci domande sul D.Lgs 81/08. Scopri quanto sei in regola sulla sicurezza.",
+      "domande": [
+        {"t":"Hai il Documento di Valutazione dei Rischi aggiornato?","rif":"art. 28 D.Lgs 81/08","peso":10},
+        {"t":"Hai nominato l'RSPP, Responsabile del Servizio di Prevenzione?","rif":"art. 17 D.Lgs 81/08","peso":9},
+        {"t":"Sono stati designati gli addetti antincendio e primo soccorso?","rif":"art. 18 D.Lgs 81/08","peso":8},
+        {"t":"I lavoratori hanno la formazione generale e specifica?","rif":"art. 37 D.Lgs 81/08","peso":9},
+        {"t":"Fornisci i DPI idonei e ne verifichi l'uso?","rif":"art. 77 D.Lgs 81/08","peso":7},
+        {"t":"E attiva la sorveglianza sanitaria dove richiesta?","rif":"art. 41 D.Lgs 81/08","peso":7},
+        {"t":"Le attrezzature hanno le verifiche periodiche?","rif":"art. 71 D.Lgs 81/08","peso":6},
+        {"t":"Hai il piano di emergenza ed evacuazione?","rif":"D.M. 10/03/1998","peso":6},
+        {"t":"E stato eletto o designato l'RLS?","rif":"art. 47 D.Lgs 81/08","peso":5},
+        {"t":"Tieni aggiornati gli attestati con i corsi di aggiornamento?","rif":"Accordo Stato Regioni","peso":6}
+      ]
+    },
+    {
+      "id": "haccp",
+      "nome": "Check HACCP e igiene",
+      "icona": "🍽️",
+      "colore": "#3FBF6B",
+      "desc": "Otto domande sull'autocontrollo alimentare. Per ristoranti, bar e chi manipola alimenti.",
+      "domande": [
+        {"t":"Hai il Manuale di Autocontrollo HACCP aggiornato?","rif":"Reg. CE 852/2004","peso":10},
+        {"t":"Il personale che manipola alimenti ha l'attestato HACCP?","rif":"Reg. CE 852/2004","peso":9},
+        {"t":"Monitori e registri le temperature di conservazione?","rif":"Reg. CE 852/2004","peso":8},
+        {"t":"Gestisci la rintracciabilita dei prodotti?","rif":"Reg. CE 178/2002","peso":7},
+        {"t":"Hai un piano di pulizia e sanificazione documentato?","rif":"Reg. CE 852/2004","peso":7},
+        {"t":"Applichi le procedure per allergeni e contaminazioni?","rif":"Reg. UE 1169/2011","peso":7},
+        {"t":"Hai una procedura di lotta agli infestanti?","rif":"Reg. CE 852/2004","peso":5},
+        {"t":"Conservi le registrazioni dei controlli per il tempo previsto?","rif":"Reg. CE 852/2004","peso":5}
+      ]
+    },
+    {
+      "id": "privacy",
+      "nome": "Check Privacy e GDPR",
+      "icona": "🔒",
+      "colore": "#4A9FE8",
+      "desc": "Otto domande sul Reg. UE 2016/679. Scopri se tratti i dati a norma.",
+      "domande": [
+        {"t":"Hai il Registro dei Trattamenti dei dati personali?","rif":"art. 30 GDPR","peso":8},
+        {"t":"Hai predisposto le informative per clienti e dipendenti?","rif":"art. 13 GDPR","peso":8},
+        {"t":"Hai adottato misure di sicurezza, anche informatiche?","rif":"art. 32 GDPR","peso":8},
+        {"t":"Hai nominato responsabili e incaricati del trattamento?","rif":"art. 28-29 GDPR","peso":6},
+        {"t":"Hai valutato la necessita del DPO?","rif":"art. 37 GDPR","peso":5},
+        {"t":"Hai una procedura per il data breach?","rif":"art. 33 GDPR","peso":6},
+        {"t":"Raccogli i consensi dove richiesti e li conservi?","rif":"art. 7 GDPR","peso":6},
+        {"t":"Gestisci le richieste di accesso e cancellazione?","rif":"art. 15-17 GDPR","peso":5}
+      ]
+    }
+  ]
+}

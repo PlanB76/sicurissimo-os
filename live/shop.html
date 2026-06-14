@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ Shop · DPI, abbigliamento e gadget della sicurezza</title>
+<meta name="description" content="Lo store dell'ecosistema 81+. DPI con marcatura CE reale, abbigliamento brandizzato, gadget. Paghi in euro o con i tuoi PV.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#FB6B00;--v:#3FBF6B;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.6}
+.w{max-width:1140px;margin:0 auto;padding:0 20px}
+a{color:inherit;text-decoration:none}
+.hero{padding:46px 0 24px;text-align:center}
+.tag{display:inline-block;background:rgba(232,80,26,.12);border:1px solid var(--o);color:var(--o);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;text-transform:uppercase}
+h1{font-family:'Anton';font-size:clamp(32px,6vw,54px);color:#fff;line-height:1.02;margin:14px 0 8px}
+.hero p{font-size:16px;max-width:580px;margin:0 auto;color:var(--mu)}
+.cats{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:26px 0}
+.catbtn{background:var(--c);border:1px solid var(--bd);color:var(--tx);padding:9px 18px;border-radius:30px;font-size:14px;font-weight:600;cursor:pointer;transition:.2s;display:flex;align-items:center;gap:7px}
+.catbtn:hover,.catbtn.on{background:var(--o);border-color:var(--o);color:#fff}
+.griglia{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:18px;padding:10px 0 40px}
+.prod{background:var(--c);border:1px solid var(--bd);border-radius:16px;overflow:hidden;transition:.2s;display:flex;flex-direction:column}
+.prod:hover{transform:translateY(-4px);border-color:var(--o)}
+.prod .img{height:140px;display:flex;align-items:center;justify-content:center;font-size:58px;background:radial-gradient(circle at 50% 40%,rgba(232,80,26,.1),transparent)}
+.prod .body{padding:16px;flex:1;display:flex;flex-direction:column}
+.prod .forn{font-size:10px;font-family:'JetBrains Mono';color:var(--mu);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.prod .nome{font-weight:700;color:#fff;font-size:15px;margin-bottom:5px;line-height:1.3}
+.prod .ce{font-size:11px;color:var(--v);margin-bottom:8px}
+.prod .desc{font-size:12px;color:var(--mu);margin-bottom:12px;flex:1}
+.prod .prezzi{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.prod .eur{font-family:'Anton';font-size:22px;color:#fff}
+.prod .pv{font-size:12px;color:var(--o2);font-weight:700}
+.prod .add{width:100%;background:var(--o);color:#fff;border:none;padding:10px;border-radius:9px;font-weight:700;cursor:pointer;font-size:14px;transition:.2s}
+.prod .add:hover{background:var(--o2)}
+/* carrello */
+.cart-btn{position:fixed;top:14px;right:16px;z-index:100;background:var(--o);color:#fff;border:none;border-radius:12px;padding:10px 16px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 6px 20px rgba(232,80,26,.4)}
+.cart-btn .badge{background:#fff;color:var(--o);border-radius:50%;width:20px;height:20px;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:800}
+.cart-panel{position:fixed;top:0;right:-380px;width:360px;max-width:90vw;height:100%;background:var(--c);border-left:1px solid var(--bd);z-index:101;transition:right .3s;display:flex;flex-direction:column;box-shadow:-10px 0 40px rgba(0,0,0,.5)}
+.cart-panel.on{right:0}
+.cart-head{padding:18px;border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+.cart-head h3{font-family:'Anton';color:#fff;font-size:20px}
+.cart-x{background:none;border:none;color:var(--mu);font-size:24px;cursor:pointer}
+.cart-items{flex:1;overflow-y:auto;padding:12px 18px}
+.ci{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--bd)}
+.ci .ie{font-size:32px}
+.ci .iinfo{flex:1}
+.ci .inome{font-size:13px;color:#fff;font-weight:600}
+.ci .iqta{font-size:12px;color:var(--mu)}
+.ci .irm{background:none;border:none;color:var(--o);cursor:pointer;font-size:12px}
+.cart-foot{padding:18px;border-top:1px solid var(--bd)}
+.cart-tot{display:flex;justify-content:space-between;margin-bottom:6px;font-size:14px}
+.cart-tot .v{font-family:'Anton';color:#fff;font-size:20px}
+.cart-tot.pv .v{color:var(--o2);font-size:16px}
+.cart-pay{width:100%;background:var(--o);color:#fff;border:none;padding:14px;border-radius:11px;font-weight:800;cursor:pointer;font-size:15px;margin-top:10px;font-family:'Anton';letter-spacing:.5px}
+.cart-pay.pv{background:var(--o2);margin-top:8px}
+.cart-empty{text-align:center;color:var(--mu);padding:40px 20px;font-size:14px}
+.nota{font-size:12px;color:var(--mu);text-align:center;max-width:760px;margin:0 auto 30px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<button class="cart-btn" onclick="toggleCart()">🛒 Carrello <span class="badge" id="cbadge">0</span></button>
+
+<div class="w">
+<section class="hero">
+  <span class="tag">81+ Shop</span>
+  <h1>Tutto per la tua sicurezza</h1>
+  <p>DPI con marcatura CE reale, abbigliamento brandizzato, gadget. Paghi in euro o con i tuoi PV.</p>
+</section>
+
+<div class="cats" id="cats"></div>
+<div class="griglia" id="griglia"></div>
+
+<p class="nota">I DPI hanno marcatura CE reale e conformita alle norme indicate. Spedizione diretta dal fornitore in pacco neutro o brandizzato. I prodotti su richiesta sono stampati al momento dell'ordine. I PV sono crediti fedelta interni non convertibili in denaro, li usi per ottenere sconti e acquistare nell'ecosistema.</p>
+</div>
+
+<!-- CARRELLO -->
+<div class="cart-panel" id="cartPanel">
+  <div class="cart-head"><h3>Il tuo carrello</h3><button class="cart-x" onclick="toggleCart()">&times;</button></div>
+  <div class="cart-items" id="cartItems"></div>
+  <div class="cart-foot" id="cartFoot" style="display:none">
+    <div class="cart-tot"><span>Totale euro</span><span class="v" id="totEur">0 €</span></div>
+    <div class="cart-tot pv"><span>Oppure in PV</span><span class="v" id="totPv">0 PV</span></div>
+    <button class="cart-pay" onclick="pagaPaypal()">Paga con carta o PayPal</button>
+    <button class="cart-pay pv" onclick="pagaPv()">Paga con i PV</button>
+  </div>
+</div>
+
+<script>
+let CATALOGO={categorie:[],prodotti:[]}, carrello=[], catAttiva='tutti';
+
+async function caricaCatalogo(){
+  try{
+    const r=await fetch('data/shop_catalogo.json'); CATALOGO=await r.json();
+  }catch(e){ CATALOGO={categorie:[],prodotti:[]}; }
+  renderCats(); renderProd();
+}
+function renderCats(){
+  const el=document.getElementById('cats');
+  let h='<button class="catbtn on" onclick="filtra(\'tutti\',this)">Tutti</button>';
+  CATALOGO.categorie.forEach(c=>{
+    h+=`<button class="catbtn" onclick="filtra('${c.id}',this)">${c.icona} ${c.nome}</button>`;
+  });
+  el.innerHTML=h;
+}
+function filtra(cat,btn){
+  catAttiva=cat;
+  document.querySelectorAll('.catbtn').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on'); renderProd();
+}
+function renderProd(){
+  const el=document.getElementById('griglia');
+  const lista=CATALOGO.prodotti.filter(p=>catAttiva==='tutti'||p.cat===catAttiva);
+  el.innerHTML=lista.map(p=>`
+    <div class="prod">
+      <div class="img">${p.img}</div>
+      <div class="body">
+        <div class="forn">${p.forn}</div>
+        <div class="nome">${p.nome}</div>
+        ${p.ce?`<div class="ce">✓ ${p.ce}</div>`:''}
+        <div class="desc">${p.desc}</div>
+        <div class="prezzi"><span class="eur">${p.prezzo.toFixed(2)} €</span><span class="pv">o ${p.pv} PV</span></div>
+        <button class="add" onclick="addCart('${p.id}')">Aggiungi</button>
+      </div>
+    </div>`).join('');
+}
+function addCart(id){
+  const p=CATALOGO.prodotti.find(x=>x.id===id);
+  const ex=carrello.find(x=>x.id===id);
+  if(ex)ex.qta++; else carrello.push({...p,qta:1});
+  renderCart();
+  document.getElementById('cartPanel').classList.add('on');
+}
+function rmCart(id){ carrello=carrello.filter(x=>x.id!==id); renderCart(); }
+function renderCart(){
+  const n=carrello.reduce((s,x)=>s+x.qta,0);
+  document.getElementById('cbadge').textContent=n;
+  const items=document.getElementById('cartItems'), foot=document.getElementById('cartFoot');
+  if(!carrello.length){ items.innerHTML='<div class="cart-empty">Il carrello è vuoto.<br>Aggiungi qualcosa per iniziare.</div>'; foot.style.display='none'; return; }
+  items.innerHTML=carrello.map(x=>`
+    <div class="ci"><div class="ie">${x.img}</div>
+      <div class="iinfo"><div class="inome">${x.nome}</div><div class="iqta">${x.qta} × ${x.prezzo.toFixed(2)} €</div>
+        <button class="irm" onclick="rmCart('${x.id}')">Rimuovi</button></div></div>`).join('');
+  foot.style.display='block';
+  const tEur=carrello.reduce((s,x)=>s+x.prezzo*x.qta,0);
+  const tPv=carrello.reduce((s,x)=>s+x.pv*x.qta,0);
+  document.getElementById('totEur').textContent=tEur.toFixed(2)+' €';
+  document.getElementById('totPv').textContent=tPv+' PV';
+}
+function toggleCart(){ document.getElementById('cartPanel').classList.toggle('on'); }
+function pagaPaypal(){
+  // invio al backend che crea l'ordine PayPal
+  const tot=carrello.reduce((s,x)=>s+x.prezzo*x.qta,0);
+  fetch('api/shop.php?az=checkout',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({carrello,metodo:'paypal'})})
+    .then(r=>r.json()).then(d=>{
+      if(d.ok&&d.url){ location.href=d.url; }
+      else{ alert("Per completare l'ordine la direzione ti contatta. Totale "+tot.toFixed(2)+" euro."); }
+    }).catch(()=>alert('Checkout non disponibile in anteprima. Totale '+tot.toFixed(2)+' euro.'));
+}
+function pagaPv(){
+  fetch('api/shop.php?az=checkout_pv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({carrello})})
+    .then(r=>r.json()).then(d=>{
+      if(d.ok){ alert('Ordine pagato con '+d.pv_spesi+' PV. Saldo rimanente '+d.pv_saldo+' PV.'); carrello=[]; renderCart(); }
+      else{ alert(d.err||'Accedi e assicurati di avere abbastanza PV.'); }
+    }).catch(()=>alert('Per pagare in PV devi accedere al tuo account.'));
+}
+caricaCatalogo();
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

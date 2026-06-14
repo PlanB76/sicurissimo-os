@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GENESYS 81+ · venti nodi, una regione ciascuno</title>
+<meta name="description" content="I primi venti fondatori dell ecosistema 81+. Una regione ciascuno. Prendi il comando della tua.">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070709;color:#ececf2;font-family:Sora,Arial;min-height:100vh;overflow-x:hidden}
+.hero{max-width:760px;margin:0 auto;padding:50px 18px 10px;text-align:center}
+.eyebrow{color:#E8501A;font-size:11px;letter-spacing:4px;text-transform:uppercase;margin-bottom:16px}
+h1{font-family:Anton,Arial;font-size:clamp(32px,9vw,58px);text-transform:uppercase;line-height:1.02}
+h1 span{color:#E8501A}
+.hero p{color:#9aa0b4;max-width:540px;margin:16px auto 0;line-height:1.8;font-size:15px}
+.cta{display:block;width:fit-content;margin:24px auto 0;background:#E8501A;color:#fff;padding:15px 30px;border-radius:12px;font-weight:700;text-decoration:none;box-shadow:0 8px 30px rgba(232,80,26,.35)}
+.sez{max-width:900px;margin:40px auto;padding:0 18px}
+.sez h2{font-family:Anton,Arial;font-size:clamp(22px,5vw,34px);text-transform:uppercase;text-align:center;margin-bottom:8px}
+.sez .sub{text-align:center;color:#9aa0b4;font-size:14px;margin-bottom:20px}
+.regioni{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.reg{background:#0d0d12;border:1px solid #1d1d26;border-radius:10px;padding:11px 12px;font-size:12px;display:flex;justify-content:space-between;align-items:center}
+.reg.libera{border-color:#1db954}
+.reg .st{font-size:8px;text-transform:uppercase;letter-spacing:1px;color:#1db954}
+.reg.presa{opacity:.45}
+.reg.presa .st{color:#7c8195}
+.docs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.doc{background:#0d0d12;border:1px solid #1d1d26;border-radius:14px;padding:18px;text-decoration:none;color:inherit;transition:border-color .15s}
+.doc:hover{border-color:#E8501A}
+.doc h3{font-family:Anton,Arial;color:#E8501A;font-size:15px;text-transform:uppercase}
+.doc p{font-size:11.5px;color:#9aa0b4;line-height:1.6;margin-top:6px}
+.why{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.wc{background:#101018;border:1px solid #1d1d26;border-radius:14px;padding:18px;text-align:center}
+.wc b{font-family:Anton,Arial;color:#E8501A;font-size:13px;letter-spacing:1px}
+.wc p{font-size:12px;color:#9aa0b4;line-height:1.7;margin-top:8px}
+.note{max-width:760px;margin:30px auto 50px;padding:14px 18px;font-size:11px;color:#7c8195;line-height:1.7;text-align:center;border-top:1px solid #1d1d26}
+</style>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#E8501A">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="81+">
+<script>if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</head>
+<body>
+<div class="hero">
+  <div class="eyebrow">GENESYS · pre lancio riservato</div>
+  <h1>Venti nodi.<br>Una <span>regione</span> ciascuno.</h1>
+  <p>L ecosistema 81+ apre venti posizioni di fondatore, una per regione italiana. Prendi il comando della tua, da primo, con i benefit dei primi.</p>
+  <a class="cta" href="https://wa.me/393388771737">Prenota la chiamata per la tua regione</a>
+</div>
+
+<div class="sez">
+  <div class="why">
+    <div class="wc"><b>PERCHÉ</b><p>Nessuno deve più farsi male per una carta mancante. Mille morti l anno, sette aziende su dieci fuori legge.</p></div>
+    <div class="wc"><b>COME</b><p>Un AI che trasforma la burocrazia in vantaggio, e un economia Web3 che premia chi costruisce.</p></div>
+    <div class="wc"><b>COSA</b><p>Un sistema operativo di compliance con un identità unica, su un mercato obbligato per legge.</p></div>
+  </div>
+</div>
+
+<div class="sez">
+  <h2>Le venti regioni</h2>
+  <div class="sub">Una per fondatore. Quando è presa, è presa. Questa è l unica scarsità, ed è vera.</div>
+  <div class="regioni" id="regioni"></div>
+</div>
+
+
+<div class="sez">
+  <h2>La licenza GENESYS</h2>
+  <div class="sub">Paghi per usare strumenti e servizi reali. Guadagni solo da servizi venduti, mai dalla posizione in rete. Prezzi della genesi, finali.</div>
+  <div id="licenze" class="docs"></div>
+  <div class="note" style="border:0;margin-top:8px">La licenza e un diritto d uso operativo, non un investimento. Si paga su binari tracciati dopo la validazione legale.</div>
+</div>
+<div class="sez">
+  <h2>I documenti fondatori</h2>
+  <div class="sub">Tutto quello che ti serve per decidere, coi numeri e con le cento risposte alle domande più dure.</div>
+  <div class="docs">
+    <a class="doc" href="download/81PLUS_GENESYS_PITCH_20_LEADER.pdf" target="_blank"><h3>Il pitch GENESYS</h3><p>Perché esistiamo, il metodo, l offerta fondatori e le prime sessanta domande.</p></a>
+    <a class="doc" href="download/81PLUS_GENESYS_100_DOMANDE.pdf" target="_blank"><h3>Le 100 domande</h3><p>Le domande più cattive su soldi, cripto, concorrenza e paure, con risposte oneste.</p></a>
+    <a class="doc" href="download/81PLUS_GENESYS_DECK_COMPLETO.pdf" target="_blank"><h3>Il deck completo</h3><p>Tutto l ecosistema coi grafici, mercato, modello licenza, prezzi, break even, roadmap.</p></a>
+    <a class="doc" href="download/81PLUS_GENESYS_BENEFIT_FONDATORI.pdf" target="_blank"><h3>I benefit fondatori</h3><p>Cosa ricevi davvero, vantaggi reali, sconti reali, premi reali.</p></a>
+    <a class="doc" href="download/81PLUS_GENESYS_SCRIPT_CHIAMATE_WEBINAR.pdf" target="_blank"><h3>Script e webinar</h3><p>Per i fondatori, come presentare il progetto dal vivo, parola per parola.</p></a>
+  </div>
+</div>
+
+<div class="note">
+Documento e pagina riservati alla fase fondatori. L ingresso avviene con accordo scritto e su binari tracciati, dopo la validazione legale. Non è una promessa di rendimento. Il valore è nel pacchetto fondatore e nell esclusiva di territorio. I dati di mercato citati sono INAIL, INL e ISTAT.
+</div>
+
+<script>
+var REGIONI=["Abruzzo","Basilicata","Calabria","Campania","Emilia Romagna","Friuli Venezia Giulia","Lazio","Liguria","Lombardia","Marche","Molise","Piemonte","Puglia","Sardegna","Sicilia","Toscana","Trentino Alto Adige","Umbria","Valle d Aosta","Veneto"];
+// stato reale dal server quando pronto, per ora tutte libere, nessun dato finto inventato
+fetch('api/genesys.php?az=regioni').then(function(r){return r.json();}).then(function(d){
+  var prese=(d&&d.ok&&d.prese)?d.prese:[];
+  render(prese);
+}).catch(function(){render([]);});
+function render(prese){
+  document.getElementById('regioni').innerHTML=REGIONI.map(function(r){
+    var presa=prese.indexOf(r)>=0;
+    return '<div class="reg '+(presa?'presa':'libera')+'"><span>'+r+'</span><span class="st">'+(presa?'presa':'libera')+'</span></div>';
+  }).join('');
+}
+fetch('data/genesys_licenze.json').then(function(r){return r.json();}).then(function(L){
+  var html='<a class="doc" style="border-color:#f3b016"><h3 style="color:#f3b016">'+L.national.nome+'</h3><p style="font-size:20px;color:#fff;margin:6px 0">'+L.national.prezzo_anno.toLocaleString('it-IT')+' euro anno</p><p>'+L.national.ruolo+'</p></a>';
+  L.regional.forEach(function(r){ html+='<a class="doc"><h3>'+r.fascia+'</h3><p style="font-size:20px;color:#fff;margin:6px 0">'+r.prezzo_anno.toLocaleString('it-IT')+' euro anno</p><p>'+r.posti+' posti</p></a>'; });
+  var box=document.getElementById('licenze'); if(box) box.innerHTML=html;
+}).catch(function(){});
+</script>
+<script src="assets/chat81.js" data-agente="Mirco AI" data-titolo="81+ Sicurissimo"></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

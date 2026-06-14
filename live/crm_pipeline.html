@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ CRM Pipeline</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#E8501A;--v:#3FBF6B;--r:#ff5a4d;--gi:#ffce4d;--bl:#5a9bff;--bg:#08080B;--c:#15151a;--bd:#252530;--tx:#c8c8d0;--mu:#6e6e7a;--wh:#f0f0f5}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;font-size:13px;padding:20px}
+h1{font-family:'Anton';color:var(--wh);font-size:24px;margin-bottom:16px}
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.kc{background:var(--c);border:1px solid var(--bd);border-radius:11px;padding:14px}
+.kc .lb{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.6px}
+.kc .vl{font-family:'JetBrains Mono';font-size:22px;font-weight:700;margin:4px 0}
+.pipe{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}
+@media(max-width:700px){.pipe{grid-template-columns:1fr 1fr}}
+.col{background:var(--c);border:1px solid var(--bd);border-radius:11px;padding:14px;min-height:200px}
+.col h3{font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.col h3 span{background:var(--bd);border-radius:50%;width:22px;height:22px;display:inline-flex;align-items:center;justify-content:center;font-family:'JetBrains Mono';font-size:10px}
+.lead{background:var(--bg);border:1px solid var(--bd);border-radius:8px;padding:10px;margin-bottom:6px;font-size:11.5px}
+.lead .nm{color:var(--wh);font-weight:600}
+.lead .ch{font-size:10px;color:var(--mu)}
+.lead .act{font-size:10px;color:var(--a);margin-top:3px}
+.pn{background:var(--c);border:1px solid var(--bd);border-radius:11px;padding:16px;margin-bottom:12px}
+.pn h3{color:var(--wh);font-size:12.5px;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th,td{text-align:left;padding:7px 5px;border-bottom:1px solid var(--bd)}
+th{color:var(--mu);font-weight:600;font-size:9.5px;text-transform:uppercase}
+.freddo{color:#5a9bff}.medio{color:#ffce4d}.caldo{color:#E8501A}.cliente{color:#3FBF6B}
+.nota{font-size:10.5px;color:var(--mu);margin-top:12px}
+</style>
+</head>
+<body>
+<h1>CRM Pipeline</h1>
+<div class="kg">
+  <div class="kc"><div class="lb">Lead totali</div><div class="vl" id="k-tot" style="color:var(--wh)">0</div></div>
+  <div class="kc"><div class="lb">Freddi</div><div class="vl freddo" id="k-fred">0</div></div>
+  <div class="kc"><div class="lb">Medi</div><div class="vl medio" id="k-med">0</div></div>
+  <div class="kc"><div class="lb">Caldi</div><div class="vl caldo" id="k-cal">0</div></div>
+  <div class="kc"><div class="lb">Clienti</div><div class="vl cliente" id="k-cli">0</div></div>
+  <div class="kc"><div class="lb">Conv. %</div><div class="vl" id="k-conv" style="color:var(--a)">0%</div></div>
+</div>
+<div class="pipe">
+  <div class="col"><h3 style="color:var(--bl)">Freddo <span id="n-fred">0</span></h3><div id="p-fred"></div></div>
+  <div class="col"><h3 style="color:var(--gi)">Medio <span id="n-med">0</span></h3><div id="p-med"></div></div>
+  <div class="col"><h3 style="color:var(--a)">Caldo <span id="n-cal">0</span></h3><div id="p-cal"></div></div>
+  <div class="col"><h3 style="color:var(--v)">Cliente <span id="n-cli">0</span></h3><div id="p-cli"></div></div>
+</div>
+<div class="pn"><h3>Ultimi lead</h3>
+  <table><thead><tr><th>Nome</th><th>Canale</th><th>Stato</th><th>Interesse</th><th>Ultimo msg</th><th>Azione</th></tr></thead>
+  <tbody id="t-lead"></tbody></table>
+</div>
+<p class="nota">Dati dal CRM MySQL tabella crm_leads. Aggiorna la pagina per i dati in tempo reale. Le azioni suggerite vengono dall'AI nel flusso n8n.</p>
+<script>
+async function carica(){
+  try {
+    const r = await fetch('/api/crm.php?azione=pipeline');
+    const d = await r.json();
+    if(!d.ok) return;
+    const leads = d.leads || [];
+    const stati = {freddo:0,medio:0,caldo:0,cliente:0};
+    leads.forEach(l => { if(stati[l.stato] !== undefined) stati[l.stato]++; });
+    const tot = leads.length;
+    document.getElementById('k-tot').textContent = tot;
+    document.getElementById('k-fred').textContent = stati.freddo;
+    document.getElementById('k-med').textContent = stati.medio;
+    document.getElementById('k-cal').textContent = stati.caldo;
+    document.getElementById('k-cli').textContent = stati.cliente;
+    document.getElementById('k-conv').textContent = tot > 0 ? Math.round(stati.cliente/tot*100)+'%' : '0%';
+    document.getElementById('n-fred').textContent = stati.freddo;
+    document.getElementById('n-med').textContent = stati.medio;
+    document.getElementById('n-cal').textContent = stati.caldo;
+    document.getElementById('n-cli').textContent = stati.cliente;
+    function card(l){ return '<div class="lead"><div class="nm">'+(l.nome||'-')+'</div><div class="ch">'+(l.canale||'-')+' · '+(l.ultimo_messaggio||'').substring(0,40)+'</div><div class="act">'+(l.azione_successiva||'nessuna')+'</div></div>'; }
+    ['freddo','medio','caldo','cliente'].forEach(s => {
+      var id='p-'+s.substring(0,4).replace('clie','cli');
+      var el = document.getElementById(id); if(!el) return;
+      el.innerHTML = leads.filter(l=>l.stato===s).slice(0,8).map(card).join('');
+    });
+    document.getElementById('t-lead').innerHTML = leads.slice(0,20).map(l =>
+      '<tr><td><b>'+(l.nome||'-')+'</b></td><td>'+(l.canale||'-')+'</td><td class="'+l.stato+'">'+l.stato+'</td><td>'+(l.interesse||'-')+'</td><td>'+(l.ultimo_messaggio||'').substring(0,50)+'</td><td style="color:var(--a)">'+(l.azione_successiva||'-')+'</td></tr>'
+    ).join('');
+  } catch(e) {
+    document.getElementById('t-lead').innerHTML = '<tr><td colspan="6" style="color:var(--mu)">CRM non ancora collegato. Importa i flussi n8n e crea la tabella crm_leads.</td></tr>';
+  }
+}
+carica();
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+ "nota":"Fonti RSS o Atom da cui il bot legge le notizie. Verifica gli indirizzi e aggiungi o togli fonti liberamente, il bot accetta qualsiasi feed RSS o Atom. Se un feed non risponde viene saltato senza errori.",
+ "fonti":[
+  {"nome":"PuntoSicuro","url":"https://www.puntosicuro.it/rss.xml","categoria":"Sicurezza"},
+  {"nome":"Garante Privacy","url":"https://www.garanteprivacy.it/rss/news","categoria":"Privacy"},
+  {"nome":"INAIL news","url":"https://www.inail.it/portale/it/inail-comunica/notizie.rss.xml","categoria":"Sicurezza"},
+  {"nome":"Alimenti e sicurezza","url":"https://www.alimenti-salute.it/rss.xml","categoria":"HACCP"}
+ ],
+ "massimo_per_giro":3,
+ "pubblica_automatico":true
+}

@@ -1,0 +1,182 @@
+{
+  "name": "81PLUS — 3 Retention Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "cronExpression",
+              "expression": "0 8 * * *"
+            }
+          ]
+        }
+      },
+      "name": "Cron 08:00",
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "id": "8ca6ff36-f686-482a-8aa8-4d489f1fd152"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/scadenze.php?action=imminenti",
+        "method": "GET",
+        "options": {}
+      },
+      "name": "Leggi Scadenze",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        460,
+        300
+      ],
+      "id": "3d59aaa8-b4bf-408b-8a1e-581d610204aa"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.giorni_rimasti }}",
+              "operation": "smaller",
+              "value2": 30
+            }
+          ]
+        }
+      },
+      "name": "Filtra Sotto 30 giorni",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [
+        680,
+        300
+      ],
+      "id": "7df940b2-976e-4a89-9b3e-85edd8094c87"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/ai_router.php",
+        "method": "POST",
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({tipo:'alert',urgenza_sec:5,prompt:'Scrivi un alert breve per scadenza '+$json.tipo+' tra '+$json.giorni_rimasti+' giorni'}) }}",
+        "options": {}
+      },
+      "name": "Alert AI Groq",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        900,
+        220
+      ],
+      "id": "c09680d6-4c56-43ad-87eb-e2f93862fef2"
+    },
+    {
+      "parameters": {
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({to:[{email:$json.email}],subject:'Scadenza in arrivo',htmlContent:$json.alert}) }}",
+        "options": {}
+      },
+      "name": "Email Alert Brevo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        220
+      ],
+      "id": "a39fe5da-0da3-4fd9-8dc8-8e4ce8768bca"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/upsell.php",
+        "method": "POST",
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({sic_id:$json.sic_id,offerta:'sigilli_smart'}) }}",
+        "options": {}
+      },
+      "name": "Trigger Upsell Sigilli Smart",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        400
+      ],
+      "id": "9385efc1-573c-4d52-a5db-8087f87528b3"
+    }
+  ],
+  "connections": {
+    "Cron 08:00": {
+      "main": [
+        [
+          {
+            "node": "Leggi Scadenze",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Leggi Scadenze": {
+      "main": [
+        [
+          {
+            "node": "Filtra Sotto 30 giorni",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filtra Sotto 30 giorni": {
+      "main": [
+        [
+          {
+            "node": "Alert AI Groq",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Trigger Upsell Sigilli Smart",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Alert AI Groq": {
+      "main": [
+        [
+          {
+            "node": "Email Alert Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "267ef61c-be67-48a9-89f0-300fc0accf95",
+  "tags": [
+    "81plus",
+    "sicurissimo"
+  ]
+}

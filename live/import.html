@@ -1,0 +1,80 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · Import lista clienti, riservato</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>:root{--o:#E8501A}*{box-sizing:border-box;margin:0;padding:0}body{background:#070710;color:#f3f3f8;font-family:'Sora',sans-serif}.wrap{max-width:720px;margin:0 auto;padding:34px 20px}.logo{display:inline-flex;font-family:'Anton';font-size:22px;border-radius:6px;overflow:hidden}.logo .a{background:var(--o);color:#fff;padding:3px 9px 0}.logo .b{background:#fff;color:#07070c;padding:3px 9px 0}h1{font-family:'Anton';font-weight:400;font-size:30px;text-transform:uppercase;margin:16px 0 4px}.lead{color:#9aa0b4;margin:0 0 16px;font-size:14px}.card{background:#0e0e1a;border:1px solid #23232f;border-radius:14px;padding:20px;margin-bottom:14px}label{font-size:12px;color:#9aa0b4;display:block;margin:12px 0 5px}input,textarea{width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:9px;padding:11px;font-family:inherit}textarea{min-height:120px;font-family:JetBrains Mono,monospace;font-size:12px}.row{display:flex;gap:10px}.row>div{flex:1}.btn{background:var(--o);color:#fff;border:none;border-radius:10px;padding:13px;font-weight:700;cursor:pointer;width:100%;margin-top:16px;font-family:'Sora'}.bar{height:10px;background:#14141f;border-radius:6px;overflow:hidden;margin-top:14px}.bar>i{display:block;height:100%;width:0;background:var(--o);transition:width .2s}.log{font-family:JetBrains Mono;font-size:12px;color:#9aa0b4;white-space:pre-wrap;margin-top:12px;max-height:240px;overflow:auto}.note{font-size:11px;color:#f3b016;margin-top:10px}a{color:var(--o)}.warn{background:rgba(231,76,60,.1);border:1px solid rgba(231,76,60,.3);border-radius:10px;padding:12px;font-size:13px;color:#ff9b8f;margin-bottom:14px}</style><link rel="stylesheet" href="theme81.css">
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body><div class="wrap"><a href="index.html" class="logo"><span class="a">81</span><span class="b">+</span></a>
+<h1>Import lista clienti</h1><p class="lead">Pagina riservata alla direzione. Carica i tuoi clienti con base GDPR. Per ognuno crea il codice SIC, regala 100 PV, prepara l’accesso alla dashboard e mette in coda le email a scaglioni.</p>
+<div class="warn">Usa questa pagina solo con clienti tuoi e base GDPR valida. Chi ha consenso marketing entra nel nurturing completo. Chi non ce l ha riceve solo l’email di servizio con il link di attivazione. Le email partono poche al giorno per non bruciare il dominio.</div>
+<div class="card">
+<label>Chiave import, IMPORT_KEY</label><input id="key" type="password" placeholder="incolla la chiave del server">
+<div class="row"><div><label>Il tuo SIC, capostipite della rete</label><input id="owner" placeholder="SIC-XXXXXXX"></div><div><label>Email al giorno, riscaldamento</label><input id="perday" type="number" value="50"></div></div>
+<label>File CSV</label><input id="file" type="file" accept=".csv,text/csv">
+<label>oppure incolla qui il CSV</label>
+<textarea id="csv" placeholder="email,nome,cognome,ragione_sociale,tel,codice_fiscale,consenso
+mario@rossi.it,Mario,Rossi,Rossi Srl,3331112233,RSSMRA80A01H501U,marketing
+luca@bianchi.it,Luca,Bianchi,,,,servizio"></textarea>
+<button class="btn" onclick="vai()">Avvia import a blocchi</button>
+<div class="bar"><i id="bar"></i></div>
+<div class="log" id="log"></div>
+<div class="note">Prima colonna obbligatoria, email. La colonna consenso accetta marketing oppure servizio. Senza consenso, il contatto entra come servizio.</div>
+</div>
+<a href="dashboard.html">Vai alla dashboard</a></div>
+<script>
+var fileText='';
+document.getElementById('file').addEventListener('change',function(e){var f=e.target.files[0];if(!f)return;var r=new FileReader();r.onload=function(){fileText=r.result;document.getElementById('csv').value=r.result.slice(0,4000)+(r.result.length>4000?'\n... ('+r.result.length+' caratteri caricati dal file)':'');};r.readAsText(f);});
+function parseCsv(t){var lines=t.trim().split(/\r?\n/);if(!lines.length)return[];var head=lines[0].split(',').map(function(s){return s.trim().toLowerCase();});var out=[];for(var i=1;i<lines.length;i++){if(!lines[i].trim())continue;var c=lines[i].split(',');var o={};head.forEach(function(h,j){o[h]=(c[j]||'').trim();});if(o.email)out.push(o);}return out;}
+function log(m){var l=document.getElementById('log');l.textContent+=m+'\n';l.scrollTop=l.scrollHeight;}
+function vai(){
+ var key=document.getElementById('key').value.trim();var owner=document.getElementById('owner').value.trim();var perday=parseInt(document.getElementById('perday').value)||50;
+ if(!key){alert('Serve la chiave import');return;}
+ var raw=fileText||document.getElementById('csv').value;
+ var rows=parseCsv(raw);
+ if(!rows.length){alert('Nessun contatto valido nel CSV');return;}
+ log('Contatti letti, '+rows.length);
+ var size=200,i=0,tot={creati:0,già:0,err:0};
+ function blocco(){
+  if(i>=rows.length){log('FINITO. Creati '+tot.creati+', già presenti '+tot.già+', errori '+tot.err+'. Le email partiranno a scaglioni di '+perday+' al giorno.');document.getElementById('bar').style.width='100%';return;}
+  var chunk=rows.slice(i,i+size);
+  fetch('api/import.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({key:key,owner_sic:owner,per_giorno:perday,contatti:chunk})})
+   .then(function(r){return r.json();}).then(function(d){
+    if(!d.ok){log('Errore blocco, '+(d.err||'sconosciuto'));return;}
+    tot.creati+=d.creati;tot.già+=d.gia_presenti;tot.err+=d.errori;
+    i+=size;document.getElementById('bar').style.width=Math.round(i/rows.length*100)+'%';
+    log('Blocco ok, creati '+d.creati+', già presenti '+d.gia_presenti+', errori '+d.errori);
+    setTimeout(blocco,300);
+   }).catch(function(){log('Backend non raggiungibile. Carica su Hostinger e riprova.');});
+ }
+ blocco();
+}
+</script><!-- 81+ FOOTER LEGALE -->
+<footer style="background:#070710;border-top:1px solid #23232f;padding:22px 18px;font-family:Sora,Arial,sans-serif;text-align:center">
+ <div style="font-size:11.5px;color:#6b7180;max-width:1000px;margin:0 auto;line-height:1.7">
+  81+ Sicurissimo Global , Labo Tecnic Studio , P.IVA IT01504180298 , Porto Viro (RO) , info@81plus.net<br>
+  <a href="privacy.html" style="color:#9aa0b4;text-decoration:none">Privacy</a> &nbsp;·&nbsp;
+  <a href="cookie.html" style="color:#9aa0b4;text-decoration:none">Cookie</a> &nbsp;·&nbsp;
+  <a href="condizioni.html" style="color:#9aa0b4;text-decoration:none">Condizioni di vendita</a> &nbsp;·&nbsp;
+  <a href="termini.html" style="color:#9aa0b4;text-decoration:none">Termini</a> &nbsp;·&nbsp;
+  <a href="disclaimer.html" style="color:#9aa0b4;text-decoration:none">Disclaimer</a>
+ </div>
+</footer>
+<!-- /81+ FOOTER LEGALE -->
+<!-- 81+ COOKIE BANNER -->
+<div id="ck81" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#0e0e1a;border-top:1px solid #E8501A;padding:16px;font-family:Sora,Arial,sans-serif;display:none">
+ <div style="max-width:1000px;margin:0 auto;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+  <div style="font-size:13px;color:#bcbcc8;flex:1;min-width:240px">Usiamo cookie tecnici per far funzionare il sito e, solo col tuo consenso, cookie di statistica e marketing. Scegli tu. <a href="cookie.html" style="color:#E8501A">Dettagli</a></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <button onclick="ck81set('rifiuta')" style="background:#1c1c28;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px 16px;cursor:pointer;font-family:Sora;font-size:13px">Solo tecnici</button>
+   <button onclick="ck81set('accetta')" style="background:#E8501A;border:none;color:#fff;border-radius:8px;padding:10px 18px;cursor:pointer;font-weight:700;font-family:Sora;font-size:13px">Accetta tutti</button>
+  </div>
+ </div>
+</div>
+<script>
+(function(){try{if(!localStorage.getItem('ck81'))document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('ck81');if(b)b.style.display='block';});}catch(e){var b=document.getElementById('ck81');if(b)b.style.display='block';}})();
+function ck81set(v){try{localStorage.setItem('ck81',v);localStorage.setItem('ck81_ts',new Date().toISOString());}catch(e){}var b=document.getElementById('ck81');if(b)b.style.display='none';}
+</script>
+<!-- /81+ COOKIE BANNER -->
+<script src="theme81.js"></script>
+<script src="lang81.js"></script>
+</body></html>

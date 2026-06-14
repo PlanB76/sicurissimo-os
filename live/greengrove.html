@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Green81+, la foresta reale dell ecosistema 81+</title>
+<meta name="description" content="Ogni 5.000 PV generati dalla community 81+ piantiamo un albero vero. Guarda la foresta crescere.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--arancio:#E8501A;--verde:#3FBF6B;--fondo:#0A0A0B;--carta:#141417;--bordo:#26262b;--testo:#c4c4cc}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--testo);font-family:'Sora',sans-serif;line-height:1.6}
+.wrap{max-width:1000px;margin:0 auto;padding:48px 20px}
+h1{font-family:'Anton',sans-serif;font-size:clamp(34px,6vw,58px);color:#fff;letter-spacing:.5px}
+h1 span{color:var(--verde)}
+.sotto{margin:14px 0 36px;font-size:18px;max-width:640px}
+.griglia{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:28px}
+.card{background:var(--carta);border:1px solid var(--bordo);border-radius:14px;padding:22px;text-align:center}
+.num{font-family:'Anton',sans-serif;font-size:42px;color:#fff}
+.num.verde{color:var(--verde)}
+.eti{font-size:13px;margin-top:4px}
+.barra-box{background:var(--carta);border:1px solid var(--bordo);border-radius:14px;padding:22px;margin-bottom:28px}
+.barra{height:18px;background:#1d1d22;border-radius:9px;overflow:hidden;margin:12px 0 8px}
+.barra i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--verde),#6fdc97);border-radius:9px;transition:width 1.2s ease}
+.classifica{background:var(--carta);border:1px solid var(--bordo);border-radius:14px;padding:22px;margin-bottom:28px}
+.classifica h2{font-family:'Anton',sans-serif;color:#fff;margin-bottom:12px;font-size:24px}
+.riga{display:flex;justify-content:space-between;padding:9px 4px;border-bottom:1px solid var(--bordo);font-size:15px}
+.riga b{color:#fff;font-weight:600}
+.riga .pv{color:var(--verde)}
+.vuoto{padding:14px 4px;font-size:15px}
+.cta{display:block;text-align:center;background:var(--arancio);color:#fff;font-weight:700;font-size:18px;padding:18px;border-radius:14px;text-decoration:none;margin:8px 0 18px}
+.nota{font-size:12px;color:#8a8a92;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Green<span>81+</span></h1>
+  <p class="sotto">Ogni 5.000 PV generati dalla community 81+ piantiamo un albero vero con Treedom. Qui vedi la foresta crescere, in tempo reale e senza trucchi, contiamo solo gli alberi davvero piantati.</p>
+
+  <div class="griglia">
+    <div class="card"><div class="num verde" id="alberi">0</div><div class="eti">alberi piantati e confermati</div></div>
+    <div class="card"><div class="num" id="co2">0</div><div class="eti">kg di CO2 compensata, stima</div></div>
+    <div class="card"><div class="num" id="attivi">0</div><div class="eti">utenti attivi negli ultimi 30 giorni</div></div>
+    <div class="card"><div class="num" id="pv">0</div><div class="eti">PV totali generati dall ecosistema</div></div>
+  </div>
+
+  <div class="barra-box">
+    <b style="color:#fff">Verso il prossimo albero</b>
+    <div class="barra"><i id="barra"></i></div>
+    <span id="barra-testo">0 su 5.000 PV</span>
+  </div>
+
+  <div class="classifica">
+    <h2>Chi sta facendo crescere la foresta</h2>
+    <div id="lista"><div class="vuoto">La foresta è appena nata. Il primo albero porterà il tuo nome qui sopra.</div></div>
+  </div>
+
+  <a class="cta" href="/signup.html">Crea il tuo SIC ID gratis e fai nascere il prossimo albero</a>
+  <p class="nota">La CO2 indicata è una stima media dichiarata. I PV sono crediti fedeltà interni, non convertibili in denaro. Gli alberi sono piantati tramite Treedom e pubblicati solo dopo conferma.</p>
+</div>
+<script>
+fetch('/api/greengrove.php?azione=stato').then(r=>r.json()).then(d=>{
+  if(!d.ok) return;
+  document.getElementById('alberi').textContent = d.alberi_confermati.toLocaleString('it-IT');
+  document.getElementById('co2').textContent = d.co2_stima_kg.toLocaleString('it-IT');
+  document.getElementById('attivi').textContent = d.utenti_attivi_30gg.toLocaleString('it-IT');
+  document.getElementById('pv').textContent = d.pv_totali.toLocaleString('it-IT');
+  document.getElementById('barra').style.width = d.percentuale_prossimo + '%';
+  document.getElementById('barra-testo').textContent = d.verso_prossimo_albero.toLocaleString('it-IT') + ' su ' + d.pv_per_albero.toLocaleString('it-IT') + ' PV';
+  if(d.classifica && d.classifica.length){
+    document.getElementById('lista').innerHTML = d.classifica.map((u,i)=>
+      '<div class="riga"><b>'+(i+1)+'. '+u.nome+'</b><span class="pv">'+u.pv.toLocaleString('it-IT')+' PV</span></div>'
+    ).join('');
+  }
+}).catch(()=>{});
+</script>
+</body>
+</html>

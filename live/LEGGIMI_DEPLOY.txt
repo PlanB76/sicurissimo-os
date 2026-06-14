@@ -1,0 +1,66 @@
+81+ DEPLOY LIVE, 81plus.net
+============================
+Sito completo, pronto per andare online. 12 giugno 2026.
+
+CONTENUTO
+=========
+69 pagine HTML, sito completo HUB1
+59 endpoint API PHP
+24 librerie src PHP
+18 patch SQL, 42 tabelle totali
+30 file dati JSON
+5 flussi n8n con guida
+Dashboard economia privata da 10 tab integrata nelle dashboard Ammiraglio
+Academy a 3 strati con sblocco PV
+
+DEPLOY IN 5 PASSI
+=================
+
+1. CARICA
+   Scarica questa cartella LIVE.
+   Su Hostinger, vai in public_html di 81plus.net.
+   Carica tutto il contenuto mantenendo le sottocartelle api, src, data, sql, n8n, assets, blog.
+
+2. VARIABILI AMBIENTE
+   Su hPanel, Avanzate, Variabili d ambiente, imposta:
+   ADMIN_KEY, una stringa segreta tua
+   APP_SECRET, stringa lunga casuale, 40 caratteri
+   DB_PASS, la password del tuo database MySQL
+   GROQ_API_KEY, la chiave Groq, gia di test dentro
+   Le altre, quando attivi i servizi: N8N_SECRET, BREVO_API_KEY, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, PAYPAL_WEBHOOK_ID, TELEGRAM_BOT_TOKEN
+
+3. INSTALLA DATABASE, 1 CLICK
+   Apri nel browser: https://81plus.net/installer.php?k=LA_TUA_ADMIN_KEY
+   Crea tutte le 42 tabelle, account admin SIC-0000001, account demo.
+   Testato e funzionante.
+   CANCELLA installer.php dal server quando hai finito.
+
+4. CRON ORARIO
+   Su hPanel, Cron Jobs, ogni ora:
+   https://81plus.net/api/cron.php?k=LA_TUA_ADMIN_KEY
+   Attiva welcome flow, blog bot, scadenze, telegram, AI.
+
+5. N8N, 1 CLICK
+   Apri la cartella n8n e segui INSTALLA_N8N.md.
+   Importa i 5 flussi in n8n, imposta N8N_SECRET, e il ponte e attivo.
+
+ACADEMY A 3 STRATI
+==================
+BASE, ANFOS, aperto a tutti da 0 PV
+VIP, Lezione-online, si sblocca a 500 PV
+ELITE, Different Academy, si sblocca a 1500 PV, ref labomobile
+Il controllo PV e lato server in api/academy.php, non aggirabile.
+Gli utenti devono partecipare all ecosistema per salire di livello.
+
+DASHBOARD ECONOMIA PRIVATA
+==========================
+Si apre da dashboard-admin.html e da plancia_dio.html, bottone verde Economia.
+10 tab: overview, conto economico, cashflow, fatture, tasse, proiezioni, obiettivi, roadmap, lifestyle, import.
+15+ grafici. Dati di esempio, poi colleghi le tue fatture reali dalla tab Import.
+
+SICUREZZA PRIMA DEL LANCIO VERO
+===============================
+Cambia la chiave Groq di test con una di produzione.
+Configura SPF, DKIM, DMARC sul dominio prima di scrivere ai 4000 lead.
+Fai validare privacy, termini e piano compensi da un legale prima di incassare.
+Ruota tutte le chiavi esposte.

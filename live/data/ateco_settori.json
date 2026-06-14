@@ -1,0 +1,464 @@
+{
+ "default": {
+  "label": "Generale",
+  "rischio": "medio",
+  "haccp": false,
+  "colore": "#f3b016",
+  "formazione": "Formazione generale 4 ore più formazione specifica 8 ore per rischio medio.",
+  "adempimenti": [
+   "Nomina RSPP",
+   "Valutazione dei rischi, DVR",
+   "Nomine addetti antincendio e primo soccorso",
+   "Formazione lavoratori",
+   "Sorveglianza sanitaria dove prevista",
+   "Riunione periodica dove prevista"
+  ]
+ },
+ "settori": [
+  {
+   "id": "costruzioni",
+   "label": "Edilizia e costruzioni",
+   "match": [
+    "41",
+    "42",
+    "43"
+   ],
+   "rischio": "alto",
+   "haccp": false,
+   "colore": "#e8501a",
+   "formazione": "Formazione generale 4 ore più specifica 12 ore per rischio alto.",
+   "adempimenti": [
+    "DVR e POS per ogni cantiere",
+    "PIMUS per ponteggi",
+    "DUVRI in caso di appalti",
+    "Nomine RSPP, antincendio, primo soccorso",
+    "Formazione specifica alto rischio",
+    "Sorveglianza sanitaria",
+    "Verifica attrezzature e DPI terza categoria"
+   ]
+  },
+  {
+   "id": "manifattura",
+   "label": "Industria e manifattura",
+   "match": [
+    "10",
+    "11",
+    "13",
+    "14",
+    "15",
+    "16",
+    "17",
+    "18",
+    "20",
+    "21",
+    "22",
+    "23",
+    "24",
+    "25",
+    "26",
+    "27",
+    "28",
+    "29",
+    "30",
+    "31",
+    "32",
+    "33"
+   ],
+   "rischio": "alto",
+   "haccp": false,
+   "colore": "#e8501a",
+   "formazione": "Formazione generale 4 ore più specifica 12 ore per rischio alto.",
+   "adempimenti": [
+    "DVR completo con rischi specifici",
+    "Valutazione rumore, vibrazioni, chimico",
+    "Nomine RSPP e squadre emergenza",
+    "Formazione macchine e attrezzature",
+    "Sorveglianza sanitaria",
+    "Manutenzione e verifica impianti"
+   ]
+  },
+  {
+   "id": "alimentare_prod",
+   "label": "Produzione alimentare",
+   "match": [
+    "10",
+    "11"
+   ],
+   "rischio": "alto",
+   "haccp": true,
+   "colore": "#1db954",
+   "formazione": "Formazione sicurezza alto rischio più formazione HACCP per gli operatori.",
+   "adempimenti": [
+    "DVR completo",
+    "Manuale di autocontrollo HACCP",
+    "Formazione HACCP operatori",
+    "Registri temperature e pulizie",
+    "Tracciabilità e allergeni",
+    "Notifica sanitaria ASL"
+   ]
+  },
+  {
+   "id": "horeca",
+   "label": "Ristorazione, bar e Ho.Re.Ca",
+   "match": [
+    "56",
+    "55"
+   ],
+   "rischio": "medio",
+   "haccp": true,
+   "colore": "#1db954",
+   "formazione": "Formazione generale e specifica rischio medio più formazione HACCP.",
+   "adempimenti": [
+    "DVR",
+    "Manuale di autocontrollo HACCP",
+    "Formazione HACCP per tutti gli operatori",
+    "Registri temperature, pulizie, merci in ingresso",
+    "Gestione allergeni, 14 categorie",
+    "Notifica sanitaria SCIA",
+    "Nomine antincendio e primo soccorso"
+   ]
+  },
+  {
+   "id": "commercio_alim",
+   "label": "Commercio alimentari",
+   "match": [
+    "47.2",
+    "47.11",
+    "46.3"
+   ],
+   "rischio": "basso",
+   "haccp": true,
+   "colore": "#1db954",
+   "formazione": "Formazione generale e specifica rischio basso più formazione HACCP.",
+   "adempimenti": [
+    "DVR",
+    "Manuale di autocontrollo HACCP",
+    "Formazione HACCP addetti",
+    "Registri temperature e pulizie",
+    "Gestione scadenze e tracciabilità",
+    "Notifica sanitaria"
+   ]
+  },
+  {
+   "id": "uffici",
+   "label": "Uffici, servizi e commercio non alimentare",
+   "match": [
+    "62",
+    "63",
+    "64",
+    "65",
+    "66",
+    "68",
+    "69",
+    "70",
+    "71",
+    "72",
+    "73",
+    "74",
+    "77",
+    "78",
+    "79",
+    "82",
+    "47"
+   ],
+   "rischio": "basso",
+   "haccp": false,
+   "colore": "#3aa0ff",
+   "formazione": "Formazione generale 4 ore più specifica 4 ore per rischio basso.",
+   "adempimenti": [
+    "DVR anche in forma standardizzata dove ammesso",
+    "Nomina RSPP, spesso il datore di lavoro",
+    "Nomine antincendio e primo soccorso",
+    "Formazione lavoratori rischio basso",
+    "Valutazione videoterminali",
+    "Sorveglianza sanitaria per i videoterminalisti"
+   ]
+  },
+  {
+   "id": "sanità",
+   "label": "Sanità e assistenza",
+   "match": [
+    "86",
+    "87",
+    "88"
+   ],
+   "rischio": "alto",
+   "haccp": false,
+   "colore": "#e8501a",
+   "formazione": "Formazione generale 4 ore più specifica 12 ore per rischio alto.",
+   "adempimenti": [
+    "DVR con rischio biologico",
+    "Protocollo sanitario",
+    "Nomine e squadre emergenza",
+    "Formazione specifica alto rischio",
+    "Gestione rifiuti sanitari",
+    "Sorveglianza sanitaria"
+   ]
+  },
+  {
+   "id": "trasporti",
+   "label": "Trasporti e logistica",
+   "match": [
+    "49",
+    "50",
+    "51",
+    "52",
+    "53"
+   ],
+   "rischio": "alto",
+   "haccp": false,
+   "colore": "#e8501a",
+   "formazione": "Formazione generale 4 ore più specifica 12 ore per rischio alto.",
+   "adempimenti": [
+    "DVR con rischio movimentazione",
+    "Patentini muletti e mezzi",
+    "Nomine emergenza",
+    "Formazione specifica",
+    "Sorveglianza sanitaria",
+    "Verifica mezzi e attrezzature"
+   ]
+  },
+  {
+   "id": "agricoltura",
+   "label": "Agricoltura",
+   "match": [
+    "01",
+    "02",
+    "03"
+   ],
+   "rischio": "alto",
+   "haccp": false,
+   "colore": "#e8501a",
+   "formazione": "Formazione generale 4 ore più specifica 12 ore per rischio alto.",
+   "adempimenti": [
+    "DVR agricolo",
+    "Patentini macchine agricole",
+    "Rischio chimico fitosanitari",
+    "Nomine emergenza",
+    "Formazione specifica",
+    "Sorveglianza sanitaria"
+   ]
+  }
+ ],
+ "normative_banca": {
+  "sicurezza": [
+   {
+    "id": "dvr",
+    "t": "Hai il Documento di Valutazione dei Rischi (DVR) aggiornato?",
+    "peso": 10,
+    "rif": "art. 17 e 28 D.Lgs 81/08"
+   },
+   {
+    "id": "rspp",
+    "t": "Hai nominato il Responsabile del Servizio di Prevenzione (RSPP)?",
+    "peso": 9,
+    "rif": "art. 17 D.Lgs 81/08"
+   },
+   {
+    "id": "medico",
+    "t": "Hai nominato il Medico Competente dove richiesto?",
+    "peso": 7,
+    "rif": "art. 18 D.Lgs 81/08"
+   },
+   {
+    "id": "rls",
+    "t": "E stato eletto o designato il Rappresentante dei Lavoratori (RLS)?",
+    "peso": 6,
+    "rif": "art. 47 D.Lgs 81/08"
+   },
+   {
+    "id": "emergenze",
+    "t": "Hai designato gli addetti antincendio e primo soccorso?",
+    "peso": 8,
+    "rif": "art. 18 D.Lgs 81/08"
+   },
+   {
+    "id": "dpi",
+    "t": "Fornisci i DPI idonei e ne verifichi l'uso?",
+    "peso": 7,
+    "rif": "art. 77 D.Lgs 81/08"
+   },
+   {
+    "id": "sorveglianza",
+    "t": "E attiva la sorveglianza sanitaria per i lavoratori esposti?",
+    "peso": 6,
+    "rif": "art. 41 D.Lgs 81/08"
+   },
+   {
+    "id": "attrezzature",
+    "t": "Le attrezzature di lavoro hanno le verifiche periodiche?",
+    "peso": 6,
+    "rif": "art. 71 D.Lgs 81/08"
+   }
+  ],
+  "sicurezza_alto": [
+   {
+    "id": "pos",
+    "t": "Per ogni cantiere predisponi il POS, Piano Operativo di Sicurezza?",
+    "peso": 9,
+    "rif": "D.Lgs 81/08 Titolo IV"
+   },
+   {
+    "id": "pimus",
+    "t": "Hai il PIMUS per il montaggio dei ponteggi?",
+    "peso": 8,
+    "rif": "art. 136 D.Lgs 81/08"
+   },
+   {
+    "id": "duvri",
+    "t": "In caso di appalti predisponi il DUVRI?",
+    "peso": 7,
+    "rif": "art. 26 D.Lgs 81/08"
+   },
+   {
+    "id": "chimico",
+    "t": "Hai valutato il rischio chimico e cancerogeno dove presente?",
+    "peso": 7,
+    "rif": "Titolo IX D.Lgs 81/08"
+   }
+  ],
+  "haccp": [
+   {
+    "id": "manuale",
+    "t": "Hai il Manuale di Autocontrollo HACCP aggiornato?",
+    "peso": 10,
+    "rif": "Reg. CE 852/2004"
+   },
+   {
+    "id": "haccp_form",
+    "t": "Il personale che manipola alimenti ha l'attestato HACCP?",
+    "peso": 9,
+    "rif": "Reg. CE 852/2004"
+   },
+   {
+    "id": "tracciabilita",
+    "t": "Gestisci la rintracciabilita dei prodotti alimentari?",
+    "peso": 7,
+    "rif": "Reg. CE 178/2002"
+   },
+   {
+    "id": "temperature",
+    "t": "Monitori e registri le temperature di conservazione?",
+    "peso": 8,
+    "rif": "Reg. CE 852/2004"
+   },
+   {
+    "id": "sanificazione",
+    "t": "Hai un piano di pulizia e sanificazione documentato?",
+    "peso": 6,
+    "rif": "Reg. CE 852/2004"
+   }
+  ],
+  "privacy": [
+   {
+    "id": "registro",
+    "t": "Hai il Registro dei Trattamenti dei dati personali?",
+    "peso": 8,
+    "rif": "art. 30 GDPR"
+   },
+   {
+    "id": "informative",
+    "t": "Hai predisposto le informative privacy per clienti e dipendenti?",
+    "peso": 7,
+    "rif": "art. 13 GDPR"
+   },
+   {
+    "id": "dpo",
+    "t": "Hai valutato la necessita del DPO, Responsabile Protezione Dati?",
+    "peso": 5,
+    "rif": "art. 37 GDPR"
+   },
+   {
+    "id": "misure",
+    "t": "Hai adottato misure di sicurezza per i dati, anche informatiche?",
+    "peso": 7,
+    "rif": "art. 32 GDPR"
+   },
+   {
+    "id": "databreach",
+    "t": "Hai una procedura per la gestione del data breach?",
+    "peso": 6,
+    "rif": "art. 33 GDPR"
+   },
+   {
+    "id": "nomine_priv",
+    "t": "Hai nominato gli incaricati e i responsabili del trattamento?",
+    "peso": 5,
+    "rif": "art. 28 e 29 GDPR"
+   }
+  ],
+  "formazione": [
+   {
+    "id": "form_gen",
+    "t": "I lavoratori hanno la formazione generale e specifica sulla sicurezza?",
+    "peso": 9,
+    "rif": "Accordo Stato Regioni"
+   },
+   {
+    "id": "form_agg",
+    "t": "Tieni aggiornata la formazione con i corsi di aggiornamento?",
+    "peso": 7,
+    "rif": "Accordo Stato Regioni"
+   },
+   {
+    "id": "form_preposti",
+    "t": "Preposti e dirigenti hanno la formazione specifica del ruolo?",
+    "peso": 7,
+    "rif": "art. 37 D.Lgs 81/08"
+   },
+   {
+    "id": "form_datore",
+    "t": "Il datore di lavoro RSPP ha completato il suo percorso formativo?",
+    "peso": 6,
+    "rif": "Accordo Stato Regioni 2025"
+   },
+   {
+    "id": "addestramento",
+    "t": "Hai documentato l'addestramento all'uso di attrezzature specifiche?",
+    "peso": 6,
+    "rif": "art. 73 D.Lgs 81/08"
+   }
+  ],
+  "gestione": [
+   {
+    "id": "emergenza_piano",
+    "t": "Hai il piano di emergenza ed evacuazione aggiornato?",
+    "peso": 7,
+    "rif": "D.M. 10/03/1998"
+   },
+   {
+    "id": "prove",
+    "t": "Effettui le prove di evacuazione periodiche?",
+    "peso": 5,
+    "rif": "D.M. 10/03/1998"
+   },
+   {
+    "id": "infortuni",
+    "t": "Tieni il registro infortuni e gestisci le segnalazioni?",
+    "peso": 5,
+    "rif": "D.Lgs 81/08"
+   },
+   {
+    "id": "cartellonistica",
+    "t": "Hai la segnaletica di sicurezza dove necessaria?",
+    "peso": 4,
+    "rif": "Titolo V D.Lgs 81/08"
+   }
+  ]
+ },
+ "regole": {
+  "nota": "Per ogni settore si mostrano i temi pertinenti. Sicurezza, formazione, gestione e privacy sempre. HACCP solo se alimentare. Sicurezza_alto solo se rischio alto.",
+  "sempre": [
+   "sicurezza",
+   "privacy",
+   "formazione",
+   "gestione"
+  ],
+  "se_haccp": [
+   "haccp"
+  ],
+  "se_rischio_alto": [
+   "sicurezza_alto"
+  ]
+ }
+}

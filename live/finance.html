@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plancia Economica Globale, direzione 81+</title>
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<style>
+:root{--a:#E8501A;--a2:#FB6B00;--v:#3FBF6B;--r:#ff5a4d;--gi:#ffce4d;--bl:#5a9bff;--vi:#c45aff;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;font-size:14px}
+.wrap{max-width:1280px;margin:0 auto;padding:24px 18px 80px}
+h1{font-family:'Anton';color:#fff;font-size:28px}
+h1 b{color:var(--a)}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:18px 0 12px;border-bottom:1px solid var(--bd);padding-bottom:12px}
+.tab{background:var(--c);border:1px solid var(--bd);color:var(--tx);border-radius:10px;padding:9px 15px;cursor:pointer;font-size:13px;font-weight:600}
+.tab.on{background:var(--a);color:#fff;border-color:var(--a)}
+.sez{display:none}.sez.on{display:block}
+.kpiïdisplay:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.card{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:16px}
+.card .lab{font-size:11px;color:var(--mu);text-transform:uppercase;letter-spacing:.8px}
+.card .val{font-family:'JetBrains Mono';font-size:22px;font-weight:700;margin-top:5px}
+.card .sub{font-size:11px;color:var(--mu);margin-top:3px}
+.e{color:var(--v)} .u{color:var(--r)} .s{color:#fff} .o{color:var(--a)}
+.note{font-size:11px;color:var(--mu);margin-top:8px;line-height:1.5}
+.privato{font-size:11px;color:var(--mu);border:1px solid var(--bd);border-radius:20px;padding:4px 12px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Plancia Economica <b>Globale</b></h1>
+  <span class="privato">Riservata alla direzione</span>
+  <div class="tabs">
+    <div class="tab on" onclick="vai('pan',this)">Panoramica</div>
+    <div class="tab" onclick="vai('conto',this)">Conto</div>
+    <div class="tab" onclick="vai('flussi',this)">Flussi</div>
+    <div class="tab" onclick="vai('ric',this)">Ricorrenti</div>
+    <div class="tab" onclick="vai('soglie',this)">Soglie</div>
+    <div class="tab" onclick="vai('prev',this)">Previsioni</div>
+    <div class="tab" onclick="vai('vita',this)">Ruota vita</div>
+    <div class="tab" onclick="vai('maslow',this)">Maslow</div>
+    <div class="tab" onclick="vai('ponte',this)">Ponte 81+</div>
+    <div class="tab" onclick="vai('mov',this)">Movimenti</div>
+  </div>
+  <div class="sez on" id="s-pan"><div class="kpi">
+    <div class="card"><div class="lab">Entrate</div><div class="val e" id="k-e">0</div></div>
+    <div class="card"><div class="lab">Uscite</div><div class="val u" id="k-u">0</div></div>
+    <div class="card"><div class="lab">Saldo netto</div><div class="val s" id="k-s">0</div></div>
+    <div class="card"><div class="lab">EBITDA</div><div class="val o" id="k-eb">0</div></div>
+    <div class="card"><div class="lab">Runway</div><div class="val s" id="k-rw">0</div></div>
+  </div><div class="note">Dati da finance_data.php. Importa gli estratti conto per vedere i numeri.</div></div>
+  <div class="sez" id="s-conto"><div class="note">Tab conto economico.</div></div>
+  <div class="sez" id="s-flussi"><div class="note">Tab flussi.</div></div>
+  <div class="sez" id="s-ric"><div class="note">Tab ricorrenti.</div></div>
+  <div class="sez" id="s-soglie"><div class="note">Tab soglie.</div></div>
+  <div class="sez" id="s-prev"><div class="note">Tab previsioni.</div></div>
+  <div class="sez" id="s-vita"><div class="note">Tab ruota della vita.</div></div>
+  <div class="sez" id="s-maslow"><div class="note">Tab Maslow.</div></div>
+  <div class="sez" id="s-ponte"><div class="note">Tab ponte 81+.</div></div>
+  <div class="sez" id="s-mov"><div class="note">Tab movimenti.</div></div>
+</div>
+<script>
+function vai(id, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.sez').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-'+id).classList.add('on');
+}
+async function boot(){
+  try{
+    const r=await fetch('/api/finance_data.php?azione=globale');
+    if(r.ok){ const d=await r.json(); if(d.ok){
+      const e=n=>'â‚¬'+Number(n||0).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+      document.getElementById('k-e').textContent=e(d.totali.entrate);
+      document.getElementById('k-u').textContent=e(d.totali.uscite);
+      document.getElementById('k-s').textContent=e(d.totali.saldo);
+      document.getElementById('k-eb').textContent=e(d.ebitda?.ebitda_gestionale||0);
+      document.getElementById('k-rw').textContent=(d.soglie?.runway_mesi||'-')+' mesi';
+    }}
+  }catch(e){ document.getElementById('s-pan').innerHTML+='<div class="note">Importa gli estratti conto per attivare la plancia.</div>'; }
+}
+boot();
+</script>
+</body>
+</html>

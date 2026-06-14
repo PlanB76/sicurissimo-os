@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Scadenziario · 81+</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070709;color:#ececf2;font-family:Sora,Arial,sans-serif;min-height:100vh;padding-bottom:90px}
+header{padding:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;border-bottom:1px solid #17171f;position:sticky;top:0;background:#070709ee;z-index:5}
+header h1{font-family:Anton,Arial;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:#E8501A}
+.btn{background:#E8501A;color:#fff;border:0;padding:12px 16px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:Sora;text-decoration:none;display:inline-block}
+.btn.ghost{background:#16161e;border:1px solid #2a2a35;color:#cfd2dd}
+.btn.mini{padding:8px 12px;font-size:12px}
+main{max-width:760px;margin:0 auto;padding:14px}
+.banda{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch}
+.banda .btn{white-space:nowrap}
+.scad{background:#0d0d12;border:1px solid #1d1d26;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;gap:12px;align-items:center}
+.scad .pall{min-width:54px;text-align:center}
+.scad .pall .g{font-family:Anton,Arial;font-size:22px;line-height:1}
+.scad .pall .l{font-size:9.5px;color:#8b90a3;text-transform:uppercase}
+.scad .corpo{flex:1;min-width:0}
+.scad .tit{font-weight:700;font-size:14.5px}
+.scad .sub{font-size:11.5px;color:#9aa0b4;margin-top:2px}
+.tag{display:inline-block;font-size:9.5px;padding:2px 8px;border-radius:20px;border:1px solid #2a2a35;color:#9aa0b4;text-transform:uppercase;margin-right:6px}
+.rossa .g{color:#e24b4a}.gialla .g{color:#ffb38a}.verde .g{color:#1db954}
+.azioniS{display:flex;flex-direction:column;gap:6px}
+#vuoto{color:#9aa0b4;font-size:13.5px;line-height:1.8;background:#0d0d12;border:1px dashed #2a2a35;border-radius:14px;padding:18px}
+#fab{position:fixed;right:16px;bottom:16px;width:58px;height:58px;border-radius:50%;background:#E8501A;color:#fff;border:0;font-size:30px;font-weight:700;cursor:pointer;box-shadow:0 6px 18px rgba(232,80,26,.45);z-index:6}
+dialog{background:#0f0f15;color:#ececf2;border:1px solid #E8501A;border-radius:16px;padding:18px;width:min(94vw,460px);font-family:Sora}
+dialog::backdrop{background:rgba(0,0,0,.7)}
+label{display:block;font-size:11.5px;color:#aeb3c4;margin:10px 0 4px}
+input,select,textarea{width:100%;background:#101016;border:1px solid #2a2a35;color:#ececf2;padding:12px;border-radius:10px;font-size:15px;font-family:Sora}
+.due{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+h2{font-family:Anton,Arial;font-size:17px;color:#E8501A;text-transform:uppercase}
+#calBox{background:#0d0d12;border:1px solid #1d1d26;border-radius:14px;padding:14px;margin:14px 0;font-size:12px;color:#bcbcc8;line-height:1.8}
+#feedUrl{font-family:JetBrains Mono,monospace;font-size:10.5px;word-break:break-all;color:#ffb38a;background:#101016;border:1px solid #2a2a35;border-radius:8px;padding:8px;margin:6px 0}
+@media print{
+ body{background:#fff;color:#000;padding:0}
+ header,#fab,.banda,#calBox,.azioniS,dialog{display:none!important}
+ .scad{border:1px solid #999;break-inside:avoid;background:#fff}
+ .scad .tit{color:#000}.scad .sub,.tag{color:#444;border-color:#999}
+ .rossa .g,.gialla .g,.verde .g{color:#000}
+}
+</style>
+</head>
+<body>
+<header>
+  <h1>Scadenziario</h1>
+  <span style="margin-left:auto"></span>
+  <button class="btn ghost mini" onclick="window.print()">Stampa</button>
+  <a class="btn ghost mini" href="dashboard.html">Dashboard</a>
+</header>
+<main>
+  <div class="banda">
+    <button class="btn mini" onclick="preset('auto')">+ Suggerimenti per il mio ATECO</button>
+    <button class="btn ghost mini" onclick="preset('edile')">Edilizia</button>
+    <button class="btn ghost mini" onclick="preset('alimentare')">Alimentare</button>
+    <button class="btn ghost mini" onclick="preset('officina')">Officina</button>
+    <button class="btn ghost mini" onclick="preset('trasporti')">Trasporti</button>
+    <button class="btn ghost mini" onclick="preset('ufficio')">Ufficio</button>
+  </div>
+  <div id="calBox">
+    <b style="color:#E8501A">Il tuo calendario, sempre sincronizzato.</b><br>
+    Su <b>Google Calendar</b>, Altri calendari, più, Da URL, incolla l'indirizzo qui sotto e gli eventi si aggiornano da soli. Su <b>iPhone e Mac</b>, Calendario, Aggiungi calendario in abbonamento, stesso indirizzo. Vale per Android, Windows e Apple.
+    <div id="feedUrl">accedi per generare il tuo indirizzo personale</div>
+    <button class="btn ghost mini" onclick="copiaFeed()">Copia indirizzo</button>
+    <a class="btn ghost mini" id="lnkIcs" href="#" download>Scarica file ICS</a>
+    <button class="btn ghost mini" onclick="scadPdf()">Scarica scadenziario PDF</button>
+  </div>
+  <div id="lista"><div id="vuoto">Carico le tue scadenze...</div></div>
+</main>
+<button id="fab" onclick="nuova()" aria-label="Aggiungi scadenza">+</button>
+<dialog id="dlg">
+  <h2 id="dlgTit">Nuova scadenza</h2>
+  <label>Cosa scade</label><input id="fTit" placeholder="es. revisione furgone, polizza RC, corso antincendio">
+  <div class="due">
+    <div><label>Prossima scadenza</label><input id="fData" type="date"></div>
+    <div><label>Si ripete ogni</label><select id="fMesi">
+      <option value="1">mese</option><option value="3">3 mesi</option><option value="4">4 mesi</option><option value="6">6 mesi</option>
+      <option value="12" selected>anno</option><option value="24">2 anni</option><option value="36">3 anni</option><option value="60">5 anni</option>
+    </select></div>
+  </div>
+  <div class="due">
+    <div><label>Categoria</label><select id="fCat">
+      <option>attrezzature</option><option>veicoli</option><option>formazione</option><option>assicurazioni</option>
+      <option>sanitaria</option><option>haccp</option><option>privacy</option><option>documenti</option><option>emergenze</option><option>ambiente</option><option>altro</option>
+    </select></div>
+    <div><label>Note</label><input id="fNote" placeholder="facoltative"></div>
+  </div>
+  <input type="hidden" id="fId">
+  <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap">
+    <button class="btn" onclick="salva()">Salva</button>
+    <button class="btn ghost" onclick="document.getElementById('dlg').close()">Chiudi</button>
+  </div>
+</dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+var OCC=[],FEED='';
+function carica(){
+  fetch('api/scadenze.php?az=lista').then(function(r){return r.json();}).then(function(d){
+    if(!d.ok){document.getElementById('vuoto').innerHTML='Accedi dalla <a href="login.html" style="color:#E8501A">dashboard</a> per usare lo scadenziario.';return;}
+    OCC=d.occorrenze; FEED=d.feed;
+    document.getElementById('feedUrl').textContent=FEED;
+    document.getElementById('lnkIcs').href=FEED;
+    disegna();
+  }).catch(function(){document.getElementById('vuoto').textContent='Backend non raggiungibile in anteprima.';});
+}
+function disegna(){
+  var L=document.getElementById('lista');
+  if(!OCC.length){L.innerHTML='<div id="vuoto"><b style="color:#ececf2">Lo scadenziario è vuoto.</b><br>Tocca il bottone arancio per i suggerimenti del tuo settore ATECO, sono cadenze tipiche da adattare alle tue date vere, oppure aggiungi la prima scadenza col +.</div>';return;}
+  L.innerHTML=OCC.map(function(s){
+    var cl=s.giorni<0?'rossa':(s.giorni<=30?'gialla':'verde');
+    var et=s.giorni<0?Math.abs(s.giorni)+' gg fa':(s.giorni===0?'oggi':s.giorni+' gg');
+    var dataIt=s.quando.split('-').reverse().join('/');
+    return '<div class="scad '+cl+'"><div class="pall"><div class="g">'+et.split(' ')[0]+'</div><div class="l">'+(s.giorni<0?'scaduta':(s.giorni===0?'oggi':'giorni'))+'</div></div>'
+     +'<div class="corpo"><div class="tit">'+esc(s.titolo)+'</div><div class="sub"><span class="tag">'+esc(s.categoria||'altro')+'</span>'+dataIt+' · ogni '+s.ricorrenza_mesi+' mesi'+(s.note?' · '+esc(s.note):'')+'</div></div>'
+     +'<div class="azioniS"><button class="btn ghost mini" onclick="modifica('+s.id+')">Modifica</button>'
+     +'<a class="btn ghost mini" target="_blank" rel="noopener" href="'+gcal(s)+'">+ Google</a>'
+     +'<button class="btn ghost mini" onclick="icsScad('+s.id+')">+ Apple</button>'
+     +'<button class="btn ghost mini" onclick="cancella('+s.id+')">×</button></div></div>';
+  }).join('');
+}
+function esc(s){return String(s==null?'':s).replace(/</g,'&lt;');}
+function gcal(s){
+  var d=s.quando.replace(/-/g,'');
+  var fine=String(Number(d)+1); // giorno intero
+  return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('81+ '+s.titolo)
+   +'&dates='+d+'/'+fine+'&recur='+encodeURIComponent('RRULE:FREQ=MONTHLY;INTERVAL='+s.ricorrenza_mesi)
+   +'&details='+encodeURIComponent((s.note||'')+' · Scadenziario 81+');
+}
+function icsScad(id){
+  var s=(OCC||[]).find(function(x){return x.id===id;});
+  if(!s){ return; }
+  var d=s.quando.replace(/-/g,'');
+  function fmt(x){return x;}
+  var NL='\\r\\n';
+  var ics='BEGIN:VCALENDAR'+NL+'VERSION:2.0'+NL+'PRODID:-//81plus//scadenze//IT'+NL+'BEGIN:VEVENT'+NL
+    +'UID:'+id+'-'+Date.now()+'@81plus.net'+NL
+    +'DTSTART;VALUE=DATE:'+d+NL
+    +'SUMMARY:81+ '+s.titolo+NL
+    +'DESCRIPTION:'+(s.note||'Scadenziario 81+')+NL
+    +(s.ricorrenza_mesi?'RRULE:FREQ=MONTHLY;INTERVAL='+s.ricorrenza_mesi+NL:'')
+    +'BEGIN:VALARM'+NL+'TRIGGER:-P7D'+NL+'ACTION:DISPLAY'+NL+'DESCRIPTION:Scadenza 81+ tra 7 giorni'+NL+'END:VALARM'+NL
+    +'END:VEVENT'+NL+'END:VCALENDAR';
+  var blob=new Blob([ics],{type:'text/calendar'});
+  var a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='81plus_'+s.titolo.replace(/[^a-z0-9]/gi,'_')+'.ics'; a.click();
+}
+function scadPdf(){
+  if(!OCC||!OCC.length){ alert('Lo scadenziario è vuoto.'); return; }
+  var oggi=new Date().toLocaleDateString('it-IT');
+  var righe=OCC.map(function(s){
+    return '<tr><td style="padding:7px;border-bottom:1px solid #eee">'+esc(s.titolo)+'</td>'
+      +'<td style="padding:7px;border-bottom:1px solid #eee;text-align:center">'+s.quando+'</td>'
+      +'<td style="padding:7px;border-bottom:1px solid #eee">'+esc(s.note||'')+'</td></tr>';
+  }).join('');
+  var box=document.createElement('div');
+  box.style.cssText='padding:30px;font-family:Arial;color:#111;background:#fff;width:780px';
+  box.innerHTML='<div style="border-bottom:3px solid #E8501A;padding-bottom:12px;margin-bottom:20px"><div style="font-size:30px;font-weight:900;color:#111">81<span style="color:#E8501A">+</span></div><div style="font-size:12px;color:#666">Scadenziario, Labo Tecnic Studio, info@81plus.net</div></div>'
+    +'<h2 style="color:#111">Il mio scadenziario 81+</h2><p style="font-size:13px;color:#444">Generato il '+oggi+'</p>'
+    +'<table style="width:100%;border-collapse:collapse;margin-top:16px;font-size:13px"><thead><tr style="background:#f4f4f4"><th style="text-align:left;padding:8px;border-bottom:2px solid #ddd">Scadenza</th><th style="padding:8px;border-bottom:2px solid #ddd">Data</th><th style="text-align:left;padding:8px;border-bottom:2px solid #ddd">Note</th></tr></thead><tbody>'+righe+'</tbody></table>'
+    +'<p style="font-size:11px;color:#999;margin-top:24px;border-top:1px solid #eee;padding-top:12px">Documento generato dallo scadenziario 81+. Le date sono quelle inserite dall utente.</p>';
+  document.body.appendChild(box);
+  html2pdf().set({margin:8,filename:'scadenziario_81plus_'+oggi.replace(/\//g,'-')+'.pdf',jsPDF:{unit:'mm',format:'a4'}}).from(box).save().then(function(){box.remove();});
+}
+function nuova(){
+  document.getElementById('dlgTit').textContent='Nuova scadenza';
+  ['fTit','fData','fNote','fId'].forEach(function(i){document.getElementById(i).value='';});
+  document.getElementById('fMesi').value='12';
+  document.getElementById('dlg').showModal();
+}
+function modifica(id){
+  var s=OCC.find(function(x){return x.id===id;}); if(!s)return;
+  document.getElementById('dlgTit').textContent='Modifica scadenza';
+  document.getElementById('fTit').value=s.titolo;
+  document.getElementById('fData').value=s.primo_termine;
+  document.getElementById('fMesi').value=String(s.ricorrenza_mesi);
+  document.getElementById('fCat').value=s.categoria||'altro';
+  document.getElementById('fNote').value=s.note||'';
+  document.getElementById('fId').value=s.id;
+  document.getElementById('dlg').showModal();
+}
+function salva(){
+  fetch('api/scadenze.php?az=salva',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({id:document.getElementById('fId').value||null,titolo:document.getElementById('fTit').value,
+    primo_termine:document.getElementById('fData').value,ricorrenza_mesi:document.getElementById('fMesi').value,
+    categoria:document.getElementById('fCat').value,note:document.getElementById('fNote').value})})
+   .then(function(r){return r.json();})
+   .then(function(d){ if(!d.ok){alert(d.err||'Errore');return;} document.getElementById('dlg').close(); carica(); });
+}
+function cancella(id){
+  if(!confirm('Eliminare questa scadenza?'))return;
+  fetch('api/scadenze.php?az=cancella',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}).then(function(){carica();});
+}
+function preset(p){
+  fetch('api/scadenze.php?az=preset',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({pacchetto:p})})
+   .then(function(r){return r.json();})
+   .then(function(d){ if(!d.ok){alert(d.err||'Errore');return;} alert('Aggiunte '+d.aggiunte+' scadenze dal pacchetto '+d.pacchetto+'. '+d.nota); carica(); });
+}
+function copiaFeed(){
+  if(!FEED)return;
+  navigator.clipboard.writeText(FEED).then(function(){alert('Indirizzo copiato, incollalo in Google Calendar o Apple Calendario.');}).catch(function(){});
+}
+carica();
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

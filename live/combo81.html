@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Combo 81+ · membership e sigilli su misura</title>
+<meta name="description" content="Componi la tua combo 81+, membership e sigillo sulla tua attività, sconti fedeltà fino al 20 per cento, nessun vincolo, disdici quando vuoi.">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070709;color:#ececf2;font-family:Sora,Arial,sans-serif;min-height:100vh;padding-bottom:40px}
+header{padding:16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #17171f;flex-wrap:wrap}
+header h1{font-family:Anton,Arial;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:#E8501A}
+.btn{background:#E8501A;color:#fff;border:0;padding:12px 18px;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;font-family:Sora;text-decoration:none;display:inline-block}
+.btn.ghost{background:#16161e;border:1px solid #2a2a35;color:#cfd2dd}
+.btn.wa{background:#25D366}
+main{max-width:760px;margin:0 auto;padding:16px}
+.card{background:#0d0d12;border:1px solid #1d1d26;border-radius:16px;padding:16px;margin-bottom:14px}
+h2{font-family:Anton,Arial;font-size:16px;color:#E8501A;text-transform:uppercase;margin-bottom:10px}
+.sugg{border:1px solid #E8501A;background:#16100c}
+.sugg .perche{font-size:12.5px;color:#ffd9c4;line-height:1.7;margin-top:6px}
+.griglia{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.griglia4{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+@media(max-width:560px){.griglia{grid-template-columns:1fr 1fr 1fr}.griglia4{grid-template-columns:1fr 1fr}}
+.opt{border:1px solid #2a2a35;border-radius:12px;padding:12px 8px;text-align:center;cursor:pointer;font-size:12px}
+.opt b{display:block;font-size:13px}
+.opt .pr{font-family:JetBrains Mono,monospace;color:#ffb38a;font-size:12px;margin-top:4px}
+.opt.on{border-color:#E8501A;background:#16100c}
+.opt .sc{font-size:10px;color:#1db954}
+#riassunto{font-size:13px;line-height:1.9}
+#riassunto .tot{font-family:Anton,Arial;font-size:26px;color:#E8501A}
+#riassunto .risp{color:#1db954;font-weight:700}
+.valore{font-size:12.5px;color:#bcbcc8;line-height:1.8;margin-top:8px}
+.flex{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+.micro{font-size:10.5px;color:#7c8195;line-height:1.7;margin-top:10px}
+</style>
+</head>
+<body>
+<header><h1>Combo 81+</h1><span style="margin-left:auto"></span><a class="btn ghost" href="dashboard.html">Dashboard</a></header>
+<main>
+  <div class="card sugg" id="boxSugg" style="display:none">
+    <h2>La combo pensata per la tua attività</h2>
+    <div id="suggTesto"></div>
+    <div class="perche" id="suggPerche"></div>
+    <div class="flex"><button class="btn" onclick="applicaSugg()">Parti da questa, poi la pieghi come vuoi</button></div>
+  </div>
+
+  <div class="card">
+    <h2>1. La tua membership</h2>
+    <div class="griglia" id="gMem"></div>
+    <div class="valore">La membership ti tiene in regola ogni giorno, fabbrica documenti, scadenziario sincronizzato col tuo calendario, audit, accademia con piattaforme accreditate e riconosciute, MIM e Regione Lazio, e la rete che lavora per te. Non compri un abbonamento, compri le notti tranquille.</div>
+  </div>
+
+  <div class="card">
+    <h2>2. Il tuo sigillo, facoltativo</h2>
+    <div class="griglia4" id="gSig"></div>
+    <div class="valore">Il sigillo è quello che i tuoi clienti vedono prima di sceglierti, la prova verificabile che la tua azienda fa le cose per bene. Una tantum, tuo per sempre.</div>
+  </div>
+
+  <div class="card">
+    <h2>3. Per quanto vuoi bloccare lo sconto</h2>
+    <div class="griglia4" id="gDur"></div>
+    <div class="valore"><b>Nessun vincolo, mai.</b> Disdici quando vuoi direttamente dal tuo PayPal, senza telefonate e senza penali. Lo sconto premia la continuità, non ti incatena, e resta tuo finché resti.</div>
+  </div>
+
+  <div class="card">
+    <h2>La tua combo</h2>
+    <div id="riassunto">Scegli membership e durata qui sopra.</div>
+    <div class="flex" id="azioni"></div>
+    <div class="micro">Prezzi finali del listino 81+. Il sigillo si paga una volta sola. L'abbonamento si rinnova al periodo scelto e si disdice in ogni momento dal tuo PayPal. Attivazione entro un giorno lavorativo con conferma per email.</div>
+  </div>
+</main>
+<script>
+var AB=null,COMBO=null,PIANI={},PROF=null;
+var SEL={mem:null,sig:null,dur:null};
+Promise.all([
+ fetch('data/abbonamenti.json').then(function(r){return r.json();}),
+ fetch('data/combo_preset.json').then(function(r){return r.json();}),
+ fetch('data/paypal_piani.json').then(function(r){return r.json();}).catch(function(){return {piani:{}};}),
+ fetch('api/auth.php?az=io').then(function(r){return r.json();}).catch(function(){return {ok:false};})
+]).then(function(R){
+  AB=R[0]; COMBO=R[1]; PIANI=R[2].piani||{}; PROF=R[3].ok?R[3].account:null;
+  disegna(); suggerisci();
+  fetch('api/pv_ricarica.php?az=config').then(function(r){return r.json();}).then(function(c){
+    if(c.ok&&c.paypal_client){var s=document.createElement('script');s.src='https://www.paypal.com/sdk/js?client-id='+encodeURIComponent(c.paypal_client)+'&vault=true&intent=subscription';s.onload=function(){calcola();};document.head.appendChild(s);}
+  }).catch(function(){});
+});
+function disegna(){
+  var gm=document.getElementById('gMem');
+  gm.innerHTML=Object.keys(AB.membership).map(function(k){var m=AB.membership[k];
+    return '<div class="opt" id="mem-'+k+'" onclick="sel(\'mem\',\''+k+'\')"><b>'+m.nome.replace('Member81+ ','')+'</b><span class="pr">'+m.mese+' € al mese</span></div>';}).join('');
+  var gs=document.getElementById('gSig');
+  gs.innerHTML='<div class="opt on" id="sig-no" onclick="sel(\'sig\',null)"><b>Senza</b><span class="pr">0 €</span></div>'+Object.keys(AB.sigilli).map(function(k){var s=AB.sigilli[k];
+    return '<div class="opt" id="sig-'+k+'" onclick="sel(\'sig\',\''+k+'\')"><b>'+s.nome.replace('Sigillo ','')+'</b><span class="pr">'+s.una_tantum.toLocaleString('it-IT')+' € una volta</span></div>';}).join('');
+  var gd=document.getElementById('gDur');
+  gd.innerHTML='<div class="opt" id="dur-1" onclick="sel(\'dur\',1)"><b>Mese per mese</b><span class="pr">prezzo pieno</span></div>'+AB.durate.map(function(d){
+    return '<div class="opt" id="dur-'+d.mesi+'" onclick="sel(\'dur\','+d.mesi+')"><b>'+d.mesi+' mesi</b><span class="pr">meno '+d.sconto+'%</span><span class="sc">sconto fedeltà</span></div>';}).join('');
+}
+function sel(t,v){
+  SEL[t]=v;
+  document.querySelectorAll('[id^="'+t+'-"]').forEach(function(e){e.classList.remove('on');});
+  var el=document.getElementById(t+'-'+(v===null?'no':v)); if(el)el.classList.add('on');
+  calcola();
+}
+function scontoDi(mesi){ var d=(AB.durate||[]).find(function(x){return x.mesi===mesi;}); return d?d.sconto:0; }
+function calcola(){
+  var R=document.getElementById('riassunto'),A=document.getElementById('azioni');
+  if(!SEL.mem||!SEL.dur){R.textContent='Scegli membership e durata qui sopra.';A.innerHTML='';return;}
+  var m=AB.membership[SEL.mem],sc=scontoDi(SEL.dur);
+  var mesePieno=m.mese, meseScont=Math.round(mesePieno*(100-sc))/100;
+  var mesi=SEL.dur===1?1:SEL.dur;
+  var totAbb=Math.round(meseScont*mesi*100)/100;
+  var risparmio=Math.round((mesePieno-meseScont)*mesi*100)/100;
+  var sig=SEL.sig?AB.sigilli[SEL.sig]:null;
+  var f=function(n){return n.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});};
+  R.innerHTML=m.nome+(sig?' + '+sig.nome:'')+'<br>'
+   +(sc?('Con la fedeltà '+SEL.dur+' mesi paghi <b>'+f(meseScont)+' € al mese</b> invece di '+f(mesePieno)+' €.<br><span class="risp">Tieni in tasca '+f(risparmio)+' € sul periodo.</span><br>'):('Mese per mese, '+f(mesePieno)+' € al mese, libero sempre.<br>'))
+   +(sig?('Sigillo '+f(sig.una_tantum)+' € una volta sola, tuo per sempre.<br>'):'')
+   +'<span class="tot">'+f(meseScont)+' € al mese</span>'+(sig?' <span style="font-size:12px;color:#9aa0b4">più sigillo una tantum</span>':'');
+  var pid=PIANI[SEL.mem+'_'+SEL.dur]||'';
+  var msg='Ciao, voglio attivare la combo '+m.nome+(sig?' con '+sig.nome:'')+' a '+(SEL.dur===1?'rinnovo mensile':SEL.dur+' mesi')+'. Il mio SIC è '+(PROF?PROF.sic:'in registrazione')+'.';
+  A.innerHTML=(pid?'<div id="ppCombo" style="min-width:220px"></div>':'')
+   +'<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/393388771737?text='+encodeURIComponent(msg)+'">Attivala ora su WhatsApp</a>';
+  if(pid && window.paypal){ paypal.Buttons({style:{layout:'horizontal',height:44,tagline:false},createSubscription:function(d,a2){return a2.subscription.create({plan_id:pid});},onApprove:function(){alert('Abbonamento attivato, benvenuto a bordo. Conferma in arrivo per email.');}}).render('#ppCombo'); }
+}
+function suggerisci(){
+  if(!PROF||!COMBO)return;
+  var ateco=String(PROF.ateco||''),dip=parseInt(PROF.dipendenti||0,10)||1;
+  var settore=COMBO.mappa_ateco['default'];
+  Object.keys(COMBO.mappa_ateco).forEach(function(p){ if(p!=='default'&&ateco.indexOf(p)===0)settore=COMBO.mappa_ateco[p]; });
+  var fascia=dip<=5?'1-5':(dip<=15?'6-15':'16+');
+  var s=(COMBO.matrice[settore]||{})[fascia]; if(!s)return;
+  window._SUGG=s;
+  document.getElementById('boxSugg').style.display='block';
+  document.getElementById('suggTesto').innerHTML='<b>'+AB.membership[s.membership].nome+' + '+AB.sigilli[s.sigillo].nome+'</b> · su misura per il settore '+settore+' con '+dip+' '+(dip===1?'lavoratore':'lavoratori')+'.';
+  document.getElementById('suggPerche').textContent=s.perche;
+}
+function applicaSugg(){ var s=window._SUGG; if(!s)return; sel('mem',s.membership); sel('sig',s.sigillo); sel('dur',12); window.scrollTo({top:document.getElementById('riassunto').offsetTop-120,behavior:'smooth'}); }
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

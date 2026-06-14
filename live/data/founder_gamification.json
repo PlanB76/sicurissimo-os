@@ -1,0 +1,47 @@
+{
+  "nota": "Gamification dei Founder 81+. I primi che entrano nell'ecosistema hanno status, badge e vantaggi permanenti legati al SIC-ID. Premia chi crede per primo nel progetto.",
+  "tiers": [
+    {
+      "id":"genesi","nome":"Founder Genesi","range":"SIC 1 - 100","icona":"👑","colore":"#FFD24A",
+      "desc":"I primi cento. I pionieri assoluti dell'ecosistema.",
+      "vantaggi":[
+        "Badge Genesi permanente sul profilo",
+        "Moltiplicatore PV x2 a vita su tutte le azioni",
+        "NFT Founder Genesi esclusivo",
+        "Accesso prioritario a ogni nuovo sub-progetto",
+        "Posto riservato nel muro dei pixel",
+        "Voce nelle decisioni della community"
+      ],
+      "bonus_pv":1000
+    },
+    {
+      "id":"pionieri","nome":"Founder Pionieri","range":"SIC 101 - 500","icona":"⭐","colore":"#FB6B00",
+      "desc":"I primi cinquecento. Chi ha costruito le fondamenta.",
+      "vantaggi":[
+        "Badge Pionieri permanente",
+        "Moltiplicatore PV x1.5 a vita",
+        "NFT Founder Pionieri",
+        "Accesso anticipato ai nuovi sub-progetti",
+        "Sconto fondatore sulle membership"
+      ],
+      "bonus_pv":500
+    },
+    {
+      "id":"early","nome":"Founder Early","range":"SIC 501 - 1000","icona":"🚀","colore":"#3FBF6B",
+      "desc":"I primi mille. Chi è salito a bordo presto.",
+      "vantaggi":[
+        "Badge Early permanente",
+        "Moltiplicatore PV x1.25 per il primo anno",
+        "NFT Founder Early",
+        "Inviti prioritari agli eventi VIP"
+      ],
+      "bonus_pv":250
+    }
+  ],
+  "regole":[
+    "Lo status founder è legato al numero progressivo del SIC-ID, assegnato alla registrazione.",
+    "Lo status è permanente e non si perde, salvo chiusura volontaria dell'account.",
+    "I moltiplicatori PV si applicano alle azioni reali, mai a iscrizioni finte.",
+    "I vantaggi founder non danno guadagni garantiti, sono benefit interni all'ecosistema."
+  ]
+}

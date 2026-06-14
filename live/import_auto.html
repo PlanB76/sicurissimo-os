@@ -1,0 +1,68 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · Import automatico clienti, riservato</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>:root{--o:#E8501A}*{box-sizing:border-box;margin:0;padding:0}body{background:#070710;color:#f3f3f8;font-family:'Sora',sans-serif}
+.wrap{max-width:720px;margin:0 auto;padding:34px 20px}.logo{display:inline-flex;font-family:'Anton';font-size:20px;border-radius:6px;overflow:hidden}.logo .a{background:var(--o);color:#fff;padding:3px 8px 0}.logo .b{background:#fff;color:#07070c;padding:3px 8px 0}
+h1{font-family:'Anton';font-weight:400;font-size:30px;text-transform:uppercase;margin:12px 0 4px}p{color:#9aa0b4;font-size:13px;margin-bottom:10px}
+label{font-size:12px;color:#9aa0b4;display:block;margin:8px 0 4px}input{width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;box-sizing:border-box}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{background:var(--o);border:none;color:#fff;border-radius:9px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:'Sora';margin-top:12px}
+.btn.gh{background:#1c1c28;border:1px solid #23232f}
+.bar{height:14px;background:#14141f;border-radius:8px;overflow:hidden;margin:14px 0 6px}.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,#E8501A,#ff8a50);transition:width .3s}
+.log{background:#0a0a12;border:1px solid #23232f;border-radius:10px;padding:12px;font-family:'JetBrains Mono';font-size:12px;color:#bcbcc8;height:200px;overflow:auto;white-space:pre-wrap;margin-top:10px}
+.warn{background:rgba(243,176,22,.1);border:1px solid rgba(243,176,22,.3);color:#f3b016;border-radius:10px;padding:12px;font-size:12.5px;margin:10px 0}
+</style><link rel="stylesheet" href="theme81.css">
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body><div class="wrap">
+<span class="logo"><span class="a">81</span><span class="b">+</span></span>
+<h1>Import automatico clienti</h1>
+<p>Pagina riservata alla direzione. Importa il file già caricato sul server e avvia le email a scaglioni. Non lasciare questa pagina raggiungibile pubblicamente, proteggila con password sul pannello Hostinger.</p>
+<div class="warn">Prima di partire, accendi SPF, DKIM e DMARC sul dominio, altrimenti le email finiscono nello spam. Parti con un tetto basso, trenta o cinquanta al giorno, e sali piano. Il sistema rispetta il consenso, i clienti senza consenso marketing ricevono solo l’email di servizio con l’attivazione.</div>
+<label>Chiave import, IMPORT_KEY</label><input id="key" type="password" placeholder="la chiave che hai messo nelle variabili ambiente">
+<div class="row">
+ <div><label>File sul server, in data</label><input id="file" value="lead_import_4000.csv"></div>
+ <div><label>Owner SIC, padrino dei lead</label><input id="owner" placeholder="SIC-0000001"></div>
+</div>
+<div class="row">
+ <div><label>Blocco per giro</label><input id="blocco" type="number" value="500"></div>
+ <div><label>Email al giorno, scaglione</label><input id="perg" type="number" value="50"></div>
+</div>
+<button class="btn" onclick="avvia()">Avvia import automatico</button>
+<button class="btn gh" onclick="stop=true">Ferma</button>
+<div class="bar"><i id="bar"></i></div>
+<div id="stato" style="font-size:13px;color:#9aa0b4">Pronto.</div>
+<div class="log" id="log"></div>
+</div>
+<script>
+var stop=false;
+function logln(t){var l=document.getElementById('log');l.textContent+=t+"\n";l.scrollTop=l.scrollHeight;}
+function avvia(){
+ stop=false;
+ var key=document.getElementById('key').value.trim();
+ if(!key){alert('Inserisci la chiave import');return;}
+ var file=document.getElementById('file').value.trim()||'lead_import_4000.csv';
+ var owner=document.getElementById('owner').value.trim();
+ var blocco=parseInt(document.getElementById('blocco').value)||500;
+ var perg=parseInt(document.getElementById('perg').value)||50;
+ var tot={creati:0,già:0,err:0,letti:0};
+ logln('Avvio import di '+file+' a blocchi di '+blocco+'.');
+ function giro(offset){
+  if(stop){document.getElementById('stato').textContent='Fermato a offset '+offset+'.';logln('Fermato.');return;}
+  document.getElementById('stato').textContent='Importo da offset '+offset+'...';
+  fetch('api/import_file.php',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({key:key,file:file,offset:offset,blocco:blocco,per_giorno:perg,owner_sic:owner||null,serie:'servizio'})})
+  .then(function(r){return r.json();}).then(function(d){
+   if(!d.ok){document.getElementById('stato').textContent='Errore';logln('ERRORE '+(d.err||''));return;}
+   tot.creati+=d.creati;tot.già+=d.gia_presenti;tot.err+=d.errori;tot.letti+=d.letti;
+   logln('blocco offset '+d.offset_iniziale+', letti '+d.letti+', creati '+d.creati+', già presenti '+d.gia_presenti+', errori '+d.errori);
+   var pct=Math.min(100,Math.round(d.prossimo_offset/4179*100));document.getElementById('bar').style.width=pct+'%';
+   if(d.finito){document.getElementById('stato').textContent='Fatto. Creati '+tot.creati+', già presenti '+tot.già+', errori '+tot.err+'. Le email partono a scaglioni dal cron.';logln('IMPORT COMPLETATO.');}
+   else{setTimeout(function(){giro(d.prossimo_offset);},700);}
+  }).catch(function(){document.getElementById('stato').textContent='Errore di rete';logln('errore di rete, riprovo tra 3 secondi');setTimeout(function(){giro(offset);},3000);});
+ }
+ giro(0);
+}
+</script><script src="theme81.js"></script>
+<script src="lang81.js"></script>
+</body></html>

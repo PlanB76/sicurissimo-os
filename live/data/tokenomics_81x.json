@@ -1,0 +1,41 @@
+{
+  "nota": "Tokenomics 81X. Token di utilità e accesso dell ecosistema 81+. Non è uno strumento finanziario, non promette rendimento. La fase reale on-chain parte solo dopo validazione MiCA. Oggi i saldi 81X sono un ledger interno trasparente, la migrazione Web3 è dichiarata e progressiva.",
+  "simbolo": "81X",
+  "rete_target": "BSC BEP-20",
+  "supply_massima": 21000000,
+  "base_emission": 5000000,
+  "halving_anni": 4,
+  "burn_transfer_pct": 0.5,
+  "genesi_prezzo_indicativo_usdt": 0.10,
+  "distribuzione": [
+    {"voce":"Base Emission, mining attività","qta":5000000,"pct":23.8,"colore":"#E8501A","desc":"Serbatoio per i reward di attività PIX81+, distribuito in 4 anni con halving."},
+    {"voce":"Founder, vesting","qta":5000000,"pct":23.8,"colore":"#FB6B00","desc":"Genesi founder per la promozione globale 81+. Cliff 12 mesi, vesting 48 mesi lineare."},
+    {"voce":"ICO, vendita pubblica","qta":4000000,"pct":19.0,"colore":"#FFD24A","desc":"Solo dopo validazione MiCA. Cliff 3 mesi, vesting 12-18 mesi."},
+    {"voce":"Liquidità DEX","qta":3000000,"pct":14.3,"colore":"#3FBF6B","desc":"Liquidity pool on-chain. LP bloccati 12-24 mesi."},
+    {"voce":"Airdrop early PIX81+","qta":1500000,"pct":7.1,"colore":"#4AE8C0","desc":"Primo rilascio agli early adopter con PIX81+ e SIC-ID verificato."},
+    {"voce":"Treasury, crescita ecosistema","qta":2500000,"pct":11.9,"colore":"#8A4AE8","desc":"Sviluppo metaverso, partnership, marketing. Cliff 6 mesi, governato dalla DAO."}
+  ],
+  "base_emission_per_anno": [
+    {"anno":1,"pct":35,"qta":1750000},
+    {"anno":2,"pct":30,"qta":1500000},
+    {"anno":3,"pct":20,"qta":1000000},
+    {"anno":4,"pct":15,"qta":750000}
+  ],
+  "emission_giornaliera_base": 3424,
+  "vesting": {
+    "founder":{"cliff_mesi":12,"vesting_mesi":48,"unlock":"lineare mensile"},
+    "ico":{"cliff_mesi":3,"vesting_mesi":18,"unlock":"lineare mensile"},
+    "mining":{"cliff_mesi":0,"unlock":"giornaliero","cap":"per wallet e per giorno"},
+    "liquidity":{"lock_mesi":24,"unlock":"LP bloccati"},
+    "treasury":{"cliff_mesi":6,"unlock":"governato DAO"}
+  },
+  "fasi": [
+    {"fase":1,"nome":"Web2 Core","stato":"in_corso","desc":"Mining ledger off-chain, wallet 81X interno, SIC-ID. I saldi sono crediti interni dell ecosistema."},
+    {"fase":2,"nome":"Trasparenza Hybrid","stato":"prossima","desc":"Hash giornalieri del ledger pubblicati per verifica. Proof of emission, nessun token reale ancora."},
+    {"fase":3,"nome":"Migrazione Web3","stato":"futura","desc":"Dopo i 5M di base emission, snapshot del ledger e claim del token 81X reale BEP-20. Solo previa validazione MiCA."},
+    {"fase":4,"nome":"Full Web3","stato":"futura","desc":"81X on-chain, DAO, staking di governance, DEX. Economia del Metaverso 81+."}
+  ],
+  "anti_inflazione": ["Burn 0,5% sui trasferimenti","Cap giornaliero globale di emissione","Halving ogni 4 anni","SIC-ID anti farming"],
+  "utilita_81x": ["Accesso premium al Metaverso 81+","Prenotazione spazi","Partecipazione al launchpad","Governance DAO","Sconti sui servizi ecosistema"],
+  "disclaimer": "81X è un token di utilità e accesso. Non è un investimento, non garantisce alcun rendimento. Le funzioni on-chain partiranno solo dopo le autorizzazioni di legge. I saldi attuali sono crediti interni non convertibili in denaro."
+}

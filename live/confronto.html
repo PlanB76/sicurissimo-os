@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title id="metaTitle">81+ · Confronti onesti</title>
+<meta id="metaDesc" name="description" content="Confronti onesti tra 81+ e le alternative per la sicurezza sul lavoro, HACCP e privacy. Pro e contro di entrambe le opzioni.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#FB6B00;--v:#3FBF6B;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.7}
+a{color:inherit;text-decoration:none}
+.w{max-width:820px;margin:0 auto;padding:0 20px}
+.hero{padding:44px 0 16px;text-align:center}
+.tag{display:inline-block;background:rgba(232,80,26,.12);border:1px solid var(--o);color:var(--o);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;text-transform:uppercase}
+h1{font-family:'Anton';font-size:clamp(28px,5vw,42px);color:#fff;margin:14px 0 8px;line-height:1.1}
+.hero p{color:var(--mu);font-size:16px;max-width:600px;margin:0 auto}
+.dolore{background:var(--c);border:1px solid var(--bd);border-left:3px solid var(--o);border-radius:10px;padding:16px 18px;margin:22px 0;font-size:15px;color:#fff}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:24px 0}
+@media(max-width:680px){.vs{grid-template-columns:1fr}}
+.col{background:var(--c);border:1px solid var(--bd);border-radius:16px;padding:22px}
+.col.a{border-color:var(--o)}
+.col h2{font-family:'Anton';font-size:24px;color:#fff;margin-bottom:14px;text-align:center}
+.col.a h2{color:var(--o2)}
+.block{margin-bottom:14px}
+.block .lab{font-size:12px;text-transform:uppercase;letter-spacing:1px;color:var(--mu);margin-bottom:6px}
+.block.pro .lab{color:var(--v)}
+.block ul{list-style:none}
+.block li{font-size:14px;padding:4px 0 4px 22px;position:relative}
+.block.pro li::before{content:'✓';position:absolute;left:0;color:var(--v);font-weight:700}
+.block.contro li::before{content:'–';position:absolute;left:0;color:var(--mu);font-weight:700}
+.concl{background:linear-gradient(135deg,rgba(232,80,26,.1),rgba(63,191,107,.05));border:1px solid var(--bd);border-radius:16px;padding:22px;margin:24px 0;font-size:15px}
+.concl .lab{font-family:'Anton';color:#fff;font-size:18px;margin-bottom:8px}
+.cta{text-align:center;margin:30px 0}
+.cta a{display:inline-block;background:linear-gradient(135deg,#E8501A,#FB6B00);color:#fff;font-family:'Anton';letter-spacing:.5px;font-size:16px;padding:14px 34px;border-radius:12px}
+.altri{margin:34px 0}
+.altri h3{font-family:'Anton';color:#fff;font-size:18px;margin-bottom:12px}
+.altri a{display:block;background:var(--c);border:1px solid var(--bd);border-radius:10px;padding:13px 16px;margin-bottom:8px;font-size:14px;color:var(--tx)}
+.altri a:hover{border-color:var(--o)}
+.indice{margin:24px 0}
+.indice .card{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:20px;margin-bottom:12px}
+.indice .card:hover{border-color:var(--o)}
+.indice .card h2{font-size:20px;color:#fff;margin-bottom:4px;font-family:'Anton'}
+.indice .card p{font-size:14px;color:var(--mu)}
+.note{font-size:12px;color:var(--mu);text-align:center;margin:24px auto 40px;max-width:560px}
+</style>
+</head>
+<body>
+<div class="w">
+<section class="hero">
+  <span class="tag">Confronto onesto</span>
+  <h1 id="titolo">Confronti</h1>
+  <p id="sottotitolo"></p>
+</section>
+<div id="contenuto"></div>
+<p class="note">Questo confronto è scritto in modo onesto, con pro e contro di entrambe le opzioni. Non contiene recensioni inventate. Le 294 recensioni reali dell'ecosistema 81+ hanno una media di 4,81 stelle su 35 settori.</p>
+</div>
+
+<script>
+async function carica(){
+  const slug=new URLSearchParams(location.search).get('v');
+  let data;
+  try{ data=await (await fetch('data/confronti_seo.json')).json(); }
+  catch(e){ document.getElementById('contenuto').innerHTML='<p style="text-align:center;color:var(--mu)">Contenuto non disponibile.</p>'; return; }
+  const conf=data.confronti;
+  if(!slug){ renderIndice(conf); return; }
+  const c=conf.find(x=>x.slug===slug);
+  if(!c){ renderIndice(conf); return; }
+  renderConfronto(c, conf);
+}
+
+function renderIndice(conf){
+  document.getElementById('titolo').textContent='Confronti onesti';
+  document.getElementById('sottotitolo').textContent='Stai valutando 81+ rispetto ad altre opzioni? Ecco i confronti, con pro e contro di entrambe le parti.';
+  document.getElementById('contenuto').innerHTML='<div class="indice">'+conf.map(c=>
+    `<a class="card" href="?v=${c.slug}"><h2>${c.titolo}</h2><p>${c.sottotitolo}</p></a>`).join('')+'</div>';
+}
+
+function renderConfronto(c, tutti){
+  document.getElementById('metaTitle').textContent='81+ · '+c.titolo;
+  document.getElementById('metaDesc').setAttribute('content',c.sottotitolo);
+  document.getElementById('titolo').textContent=c.titolo;
+  document.getElementById('sottotitolo').textContent=c.sottotitolo;
+  const col=(d,isA)=>`<div class="col ${isA?'a':''}">
+    <h2>${d.nome}</h2>
+    <div class="block pro"><div class="lab">A favore</div><ul>${d.pro.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+    <div class="block contro"><div class="lab">Contro</div><ul>${d.contro.map(p=>`<li>${p}</li>`).join('')}</ul></div>
+  </div>`;
+  const altri=tutti.filter(x=>x.slug!==c.slug);
+  document.getElementById('contenuto').innerHTML=`
+    <div class="dolore">${c.dolore}</div>
+    <div class="vs">${col(c.a,true)}${col(c.b,false)}</div>
+    <div class="concl"><div class="lab">In conclusione</div>${c.conclusione}</div>
+    <div class="cta"><a href="https://81plus.net/signup.html">Prova 81+ gratis</a></div>
+    ${altri.length?`<div class="altri"><h3>Altri confronti</h3>${altri.map(x=>`<a href="?v=${x.slug}">${x.titolo}</a>`).join('')}</div>`:''}`;
+}
+carica();
+</script>
+<script src="sito81.js" defer></script>
+</body>
+</html>

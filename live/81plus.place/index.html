@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ Place · 81+</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#ff6a36;--n:#0A0A0F;--n2:#141414;--w:#fff;--g:#c9c9d4;--g2:#7a7a88;--b:#2a2a36}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--n);color:var(--w);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px;background:radial-gradient(700px 300px at 50% 0,rgba(232,80,26,.14),transparent)}
+[data-lang="it"] .en{display:none!important}[data-lang="en"] .it{display:none!important}
+.logo{display:inline-flex;align-items:center;font-family:'Bebas Neue';font-size:30px;border-radius:7px;overflow:hidden;box-shadow:0 0 30px rgba(232,80,26,.35);margin-bottom:22px}
+.logo .a{background:var(--o);color:#fff;padding:5px 12px 3px;font-weight:900}.logo .b{background:#fff;color:#0A0A0F;padding:5px 12px 3px;font-weight:900}
+.area{font-family:'JetBrains Mono';font-size:11px;color:var(--g2);text-transform:uppercase;letter-spacing:2px;margin-bottom:10px}
+h1{font-family:'Bebas Neue';font-size:64px;line-height:.9;margin-bottom:10px}
+h1 .or{color:var(--o)}
+p{color:var(--g);max-width:520px;font-size:16px;margin-bottom:8px}
+.soon{font-family:'JetBrains Mono';font-size:12px;color:var(--o);text-transform:uppercase;letter-spacing:2px;margin:18px 0 26px}
+.cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.btn{font-weight:700;font-size:13px;text-transform:uppercase;letter-spacing:1px;padding:13px 24px;border-radius:7px;text-decoration:none;transition:.2s}
+.btn-o{background:var(--o);color:#fff}.btn-o:hover{background:var(--o2)}
+.btn-g{border:1.5px solid var(--b);color:var(--w)}.btn-g:hover{border-color:var(--o);color:var(--o)}
+.lang{position:fixed;top:16px;right:16px;display:flex;gap:4px}
+.lang button{background:transparent;border:1px solid var(--b);color:var(--g2);font-family:'JetBrains Mono';font-size:10px;padding:4px 8px;border-radius:3px;cursor:pointer}
+.lang button.on{border-color:var(--o);color:var(--o)}
+.foot{position:fixed;bottom:16px;font-family:'JetBrains Mono';font-size:10px;color:var(--g2)}
+</style></head>
+<body>
+<div class="lang"><button class="on" onclick="L('it',this)">IT</button><button onclick="L('en',this)">EN</button></div>
+<div class="logo"><span class="a">81</span><span class="b">+</span></div>
+<div class="area">Rete · 81plus.place</div>
+<h1>81+ Place</h1>
+<p class="it">La mappa. Trovi il punto 81+ più vicino.</p><p class="en">The map. Find your nearest 81+ point.</p>
+<div class="soon"><span class="it">In arrivo</span><span class="en">Coming soon</span></div>
+<div class="cta">
+  <a class="btn btn-o" href="https://81plus.net"><span class="it">Vai all'HUB</span><span class="en">Go to the HUB</span></a>
+  <a class="btn btn-g" href="https://81plus.net/signup"><span class="it">Registrati</span><span class="en">Sign up</span></a>
+</div>
+<div class="foot">Ecosistema 81+ · 81plus.net</div>
+<script>function L(l,e){document.documentElement.setAttribute('data-lang',l);document.querySelectorAll('.lang button').forEach(b=>b.classList.remove('on'));e.classList.add('on')}</script>
+</body></html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ · Audit gratuito, scopri dove sei in 3 minuti</title>
+<meta name="description" content="Controlla gratis la compliance della tua azienda. L'audit cambia in base al tuo settore ATECO e ti dice esattamente cosa manca su sicurezza, HACCP, privacy e formazione.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--a:#E8501A;--a2:#FB6B00;--v:#3FBF6B;--r:#e8504a;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.6}
+.w{max-width:720px;margin:0 auto;padding:0 20px}
+a{color:inherit;text-decoration:none}
+.hero{padding:46px 0 20px;text-align:center}
+.tag{display:inline-block;background:rgba(232,80,26,.12);border:1px solid var(--a);color:var(--a);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;text-transform:uppercase}
+h1{font-family:'Anton';font-size:clamp(30px,6vw,50px);color:#fff;line-height:1.02;margin:14px 0 8px}
+.hero p{font-size:16px;color:var(--mu);max-width:540px;margin:0 auto}
+.box{background:var(--c);border:1px solid var(--bd);border-radius:18px;padding:28px;margin:20px 0}
+.box h2{font-family:'Anton';color:#fff;font-size:22px;margin-bottom:16px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;color:var(--mu);margin-bottom:6px}
+.field input,.field select{width:100%;background:var(--bg);border:1px solid var(--bd);color:#fff;padding:12px 14px;border-radius:10px;font-size:15px;font-family:inherit}
+.field input:focus,.field select:focus{outline:none;border-color:var(--a)}
+.nota-form{font-size:11px;color:var(--mu);margin:14px 0;line-height:1.6}
+.btn{width:100%;background:var(--a);color:#fff;border:none;padding:14px;border-radius:11px;font-weight:800;font-family:'Anton';letter-spacing:.5px;font-size:16px;cursor:pointer;transition:.2s}
+.btn:hover{background:var(--a2)}
+.btn:disabled{background:var(--bd);color:var(--mu);cursor:not-allowed}
+.hide{display:none}
+/* quiz */
+.progress{height:7px;background:var(--bd);border-radius:4px;overflow:hidden;margin-bottom:8px}
+.progress span{display:block;height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:4px;transition:width .4s;width:0%}
+.qcount{font-size:12px;color:var(--mu);text-align:center;margin-bottom:20px}
+.qtema{display:inline-block;font-size:11px;font-family:'JetBrains Mono';text-transform:uppercase;letter-spacing:1px;color:var(--a2);margin-bottom:10px}
+.qtext{font-size:20px;color:#fff;font-weight:600;margin-bottom:6px;line-height:1.35;min-height:54px}
+.qrif{font-size:11px;color:var(--mu);margin-bottom:22px}
+.qrisposte{display:grid;gap:10px}
+.qr{background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:15px 18px;border-radius:11px;font-size:15px;cursor:pointer;text-align:left;transition:.15s;font-family:inherit;display:flex;align-items:center;gap:12px}
+.qr:hover{border-color:var(--a);transform:translateX(3px)}
+.qr .ic{font-size:20px}
+.qr.si:hover{border-color:var(--v)}
+.qr.no:hover{border-color:var(--r)}
+.qr.nonso:hover{border-color:var(--mu)}
+/* risultato */
+.score-box{text-align:center;margin-bottom:24px}
+.big{font-family:'Anton';font-size:72px;line-height:1}
+.lbl{color:var(--mu);font-size:14px}
+.tema-row{background:var(--bg);border:1px solid var(--bd);border-radius:12px;padding:16px;margin-bottom:10px}
+.tema-row .th{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.tema-row .tn{font-weight:700;color:#fff;font-size:15px}
+.tema-row .tp{font-family:'Anton';font-size:18px}
+.tema-bar{height:6px;background:var(--bd);border-radius:3px;overflow:hidden}
+.tema-bar span{display:block;height:100%;border-radius:3px;transition:width .5s}
+.cta-final{text-align:center;margin-top:26px;padding-top:24px;border-top:1px solid var(--bd)}
+.cta-final h3{font-family:'Anton';color:#fff;font-size:24px;margin-bottom:8px}
+.btn-wa{display:inline-block;background:#25D366;color:#fff;font-weight:700;padding:13px 26px;border-radius:11px;margin:8px 6px}
+.btn-reg{display:inline-block;background:var(--a);color:#fff;font-weight:700;padding:13px 26px;border-radius:11px;margin:8px 6px}
+.foot{border-top:1px solid var(--bd);padding:30px 0;text-align:center;font-size:12px;color:var(--mu)}.foot a{color:var(--a)}
+</style>
+</head>
+<body>
+<div class="w">
+<section class="hero">
+  <span class="tag">Audit gratuito</span>
+  <h1>Scopri dove sei<br>in 3 minuti</h1>
+  <p>L'audit cambia in base al tuo settore. Ti dice esattamente cosa manca su sicurezza, HACCP, privacy e formazione, con le norme di riferimento.</p>
+</section>
+
+<!-- STEP 1 -->
+<div class="box" id="step1">
+  <h2>Prima, chi sei</h2>
+  <div class="field"><label>Nome</label><input type="text" id="f-nome" placeholder="Il tuo nome"></div>
+  <div class="field"><label>Email aziendale</label><input type="email" id="f-email" placeholder="La tua email"></div>
+  <div class="field">
+    <label>Il tuo macrosettore</label>
+    <select id="f-settore"><option value="">Scegli il tuo settore...</option></select>
+  </div>
+  <div class="field">
+    <label>Quanti dipendenti</label>
+    <select id="f-dip"><option value="">Quanti...</option><option>1-5</option><option>6-15</option><option>16-50</option><option>51-200</option><option>200+</option></select>
+  </div>
+  <div class="nota-form">Proseguendo acconsenti al trattamento dei dati ai sensi del Reg. UE 2016/679 per ricevere il risultato e comunicazioni dall'ecosistema 81+. <a href="privacy.html" style="color:var(--a)">Privacy policy.</a></div>
+  <button class="btn" id="btn-avvia" onclick="avvia()" disabled>Avvia l'audit del mio settore</button>
+</div>
+
+<!-- STEP 2 -->
+<div class="box hide" id="step2">
+  <div class="progress"><span id="prog"></span></div>
+  <div class="qcount" id="qcount">Domanda 1</div>
+  <div class="qtema" id="qtema">SICUREZZA</div>
+  <div class="qtext" id="qtext"></div>
+  <div class="qrif" id="qrif"></div>
+  <div class="qrisposte">
+    <button class="qr si" onclick="rispondi(1)"><span class="ic">✓</span> Si, lo abbiamo</button>
+    <button class="qr no" onclick="rispondi(0)"><span class="ic">✗</span> No, manca</button>
+    <button class="qr nonso" onclick="rispondi(0.5)"><span class="ic">?</span> Non lo so</button>
+  </div>
+</div>
+
+<!-- STEP 3 -->
+<div class="box hide" id="step3">
+  <div class="score-box">
+    <div class="big" id="r-score">0%</div>
+    <div class="lbl">Il tuo punteggio di compliance</div>
+  </div>
+  <div id="r-temi"></div>
+  <div class="cta-final">
+    <h3 id="r-titolo">Vediamo cosa fare</h3>
+    <p style="margin-bottom:14px" id="r-msg">Parla con la direzione. Ti mostriamo le priorita e come metterti in regola.</p>
+    <a class="btn-wa" href="https://wa.me/393000000000">Scrivi su WhatsApp</a>
+    <a class="btn-reg" href="signup.html">Registrati e prendi 100 PV</a>
+    <button class="btn-reg" style="background:transparent;border:1px solid var(--bd);color:var(--tx);cursor:pointer;margin-top:8px" onclick="scaricaAuditPdf()">Scarica il report in PDF</button>
+  </div>
+</div>
+
+<div class="foot">81+ Audit &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="strumenti.html">Strumenti gratuiti</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script>
+let SETTORI=[], DEFAULT={}, BANCA={}, REGOLE={};
+let domande=[], idx=0, punti=[], datiUtente={};
+
+async function caricaDati(){
+  try{
+    const r=await fetch('data/ateco_settori.json'); const d=await r.json();
+    SETTORI=d.settori||[]; DEFAULT=d.default||{}; BANCA=d.normative_banca||{}; REGOLE=d.regole||{};
+  }catch(e){}
+  const sel=document.getElementById('f-settore');
+  SETTORI.forEach(s=>{ const o=document.createElement('option'); o.value=s.id; o.textContent=s.label; sel.appendChild(o); });
+}
+
+// abilita avvio solo con email e settore
+function checkForm(){
+  const ok=document.getElementById('f-email').value.includes('@') && document.getElementById('f-settore').value;
+  document.getElementById('btn-avvia').disabled=!ok;
+}
+['f-email','f-settore','f-nome'].forEach(id=>document.addEventListener('input',e=>{if(e.target.id&&['f-email','f-settore'].includes(e.target.id))checkForm();}));
+document.addEventListener('change',checkForm);
+
+function avvia(){
+  const sid=document.getElementById('f-settore').value;
+  const settore=SETTORI.find(s=>s.id===sid)||{rischio:'medio',haccp:false};
+  datiUtente={nome:document.getElementById('f-nome').value,email:document.getElementById('f-email').value,settore:settore.label,dip:document.getElementById('f-dip').value};
+
+  // costruisco le domande pertinenti al settore
+  let temi=[...(REGOLE.sempre||['sicurezza','privacy','formazione','gestione'])];
+  if(settore.haccp) temi=temi.concat(REGOLE.se_haccp||['haccp']);
+  if(settore.rischio==='alto') temi=temi.concat(REGOLE.se_rischio_alto||['sicurezza_alto']);
+
+  domande=[];
+  temi.forEach(t=>{ (BANCA[t]||[]).forEach(q=>domande.push({...q,tema:t})); });
+
+  idx=0; punti=[];
+  document.getElementById('step1').classList.add('hide');
+  document.getElementById('step2').classList.remove('hide');
+  mostraDomanda();
+}
+
+const NOMI_TEMA={sicurezza:'Sicurezza sul lavoro',sicurezza_alto:'Rischi specifici',haccp:'HACCP e igiene',privacy:'Privacy e GDPR',formazione:'Formazione',gestione:'Gestione emergenze'};
+
+function mostraDomanda(){
+  const q=domande[idx];
+  document.getElementById('qcount').textContent='Domanda '+(idx+1)+' di '+domande.length;
+  document.getElementById('qtema').textContent=(NOMI_TEMA[q.tema]||q.tema).toUpperCase();
+  document.getElementById('qtext').textContent=q.t;
+  document.getElementById('qrif').textContent='Riferimento, '+q.rif;
+  document.getElementById('prog').style.width=(idx/domande.length*100)+'%';
+}
+
+// risposta che avanza DA SOLA alla prossima senza pulsante
+function rispondi(val){
+  const q=domande[idx];
+  punti.push({tema:q.tema, peso:q.peso, val:val});
+  idx++;
+  if(idx<domande.length){
+    // piccola transizione e avanza da solo
+    document.getElementById('qtext').style.opacity=0;
+    setTimeout(()=>{ mostraDomanda(); document.getElementById('qtext').style.opacity=1; }, 180);
+  } else {
+    mostraRisultato();
+  }
+}
+
+function mostraRisultato(){
+  document.getElementById('prog').style.width='100%';
+  // punteggio per tema
+  const temi={};
+  punti.forEach(p=>{
+    if(!temi[p.tema]) temi[p.tema]={ottenuti:0,totali:0};
+    temi[p.tema].ottenuti += p.peso*p.val;
+    temi[p.tema].totali += p.peso;
+  });
+  let totO=0,totT=0;
+  Object.values(temi).forEach(t=>{totO+=t.ottenuti;totT+=t.totali;});
+  const score=Math.round(totO/totT*100);
+
+  document.getElementById('step2').classList.add('hide');
+  document.getElementById('step3').classList.remove('hide');
+  const col=score>=75?'var(--v)':score>=45?'var(--a2)':'var(--r)';
+  const sc=document.getElementById('r-score'); sc.textContent=score+'%'; sc.style.color=col;
+
+  document.getElementById('r-temi').innerHTML=Object.entries(temi).map(([k,t])=>{
+    const p=Math.round(t.ottenuti/t.totali*100);
+    const c=p>=75?'var(--v)':p>=45?'var(--a2)':'var(--r)';
+    return `<div class="tema-row"><div class="th"><span class="tn">${NOMI_TEMA[k]||k}</span><span class="tp" style="color:${c}">${p}%</span></div><div class="tema-bar"><span style="width:${p}%;background:${c}"></span></div></div>`;
+  }).join('');
+
+  if(score>=75){document.getElementById('r-titolo').textContent='Sei messo bene';document.getElementById('r-msg').textContent='Hai una buona base. Sistemiamo gli ultimi dettagli e sei a posto.';}
+  else if(score>=45){document.getElementById('r-titolo').textContent='Ci sono lacune da chiudere';document.getElementById('r-msg').textContent='Hai delle aree scoperte. Ti mostriamo le priorita e come metterti in regola.';}
+  else{document.getElementById('r-titolo').textContent='Attenzione, rischi sanzioni';document.getElementById('r-msg').textContent='Mancano adempimenti importanti. Meglio agire subito. La direzione ti guida.';}
+
+  // invio lead al backend
+  try{
+    fetch('api/audit_lead.php',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},
+      body:'nome='+encodeURIComponent(datiUtente.nome)+'&email='+encodeURIComponent(datiUtente.email)+'&settore='+encodeURIComponent(datiUtente.settore)+'&score='+score+'&consenso=1'});
+  }catch(e){}
+}
+
+caricaDati();
+
+function scaricaAuditPdf(){
+  const score=document.getElementById('r-score').textContent;
+  const temi=document.getElementById('r-temi').innerText;
+  const oggi=new Date().toLocaleDateString('it-IT');
+  const box=document.createElement('div');
+  box.style.cssText='padding:30px;font-family:Arial;color:#111;background:#fff;width:780px';
+  box.innerHTML='<div style="border-bottom:3px solid #E8501A;padding-bottom:12px;margin-bottom:20px"><div style="font-size:30px;font-weight:900;color:#111">81<span style="color:#E8501A">+</span></div><div style="font-size:12px;color:#666">Labo Tecnic Studio, P.IVA IT01504180298, info@81plus.net</div></div><h2 style="color:#111">Report Audit Compliance</h2><p style="font-size:13px;color:#444">Azienda, '+(datiUtente.nome||'-')+', settore '+(datiUtente.settore||'-')+', data '+oggi+'</p><div style="text-align:center;margin:24px 0"><div style="font-size:54px;font-weight:900;color:#E8501A">'+score+'</div><div style="color:#666">Punteggio di compliance</div></div><div style="font-size:13px;white-space:pre-line;color:#333;border-top:1px solid #eee;padding-top:16px">'+temi+'</div><p style="font-size:11px;color:#999;margin-top:24px;border-top:1px solid #eee;padding-top:12px">Report indicativo basato sulle norme vigenti. Per la messa in regola contatta la direzione 81+.</p>';
+  document.body.appendChild(box);
+  html2pdf().set({margin:8,filename:'audit_81plus_'+oggi.replace(/\//g,'-')+'.pdf',jsPDF:{unit:'mm',format:'a4'}}).from(box).save().then(function(){box.remove();});
+}
+</script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

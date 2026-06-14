@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Countdown Ammiraglio · 81+</title>
+<link rel="icon" href="favicon.svg">
+<style>
+:root{--o:#E8501A;--bg:#05050a;--c:#111118;--bd:#1a1a22;--tx:#c8c8d2}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.wrap{max-width:800px;width:100%;padding:24px}
+h1{font-size:clamp(28px,5vw,42px);color:#fff;text-align:center;margin-bottom:4px}
+h1 span{color:var(--o)}
+.sub{text-align:center;color:#666;font-size:14px;margin-bottom:32px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;margin-bottom:24px}
+.box{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:16px 8px;text-align:center}
+.box .n{font-family:'JetBrains Mono',monospace;font-size:clamp(28px,5vw,44px);color:#fff;font-weight:700;line-height:1.1}
+.box .l{font-size:11px;color:#666;margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+.box.highlight .n{color:var(--o)}
+.bar{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:16px 20px;margin-bottom:16px}
+.bar-label{display:flex;justify-content:space-between;font-size:12px;color:#666;margin-bottom:6px}
+.bar-track{height:8px;background:var(--bd);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width 1s}
+.info{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px}
+.info-box{background:var(--c);border:1px solid var(--bd);border-radius:10px;padding:12px 16px}
+.info-box .k{font-size:11px;color:#666}
+.info-box .v{font-size:16px;color:#fff;font-weight:600}
+.quote{text-align:center;font-style:italic;color:#555;font-size:13px;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>COUNTDOWN <span>AMMIRAGLIO</span></h1>
+  <p class="sub">Nato il 29 marzo 1976 · Obiettivo: 29 marzo 2076 · 100 anni</p>
+
+  <div class="grid">
+    <div class="box highlight"><div class="n" id="y">--</div><div class="l">Anni</div></div>
+    <div class="box"><div class="n" id="mo">--</div><div class="l">Mesi</div></div>
+    <div class="box"><div class="n" id="d">--</div><div class="l">Giorni</div></div>
+    <div class="box"><div class="n" id="h">--</div><div class="l">Ore</div></div>
+    <div class="box"><div class="n" id="mi">--</div><div class="l">Minuti</div></div>
+    <div class="box highlight"><div class="n" id="s">--</div><div class="l">Secondi</div></div>
+  </div>
+
+  <div class="bar">
+    <div class="bar-label"><span>Vita consumata</span><span id="pct">--</span></div>
+    <div class="bar-track"><div class="bar-fill" id="fill" style="width:0;background:linear-gradient(90deg,#E8501A,#FB6B00)"></div></div>
+  </div>
+
+  <div class="info">
+    <div class="info-box"><div class="k">Età attuale</div><div class="v" id="age">--</div></div>
+    <div class="info-box"><div class="k">Giorni vissuti</div><div class="v" id="lived">--</div></div>
+    <div class="info-box"><div class="k">Giorni rimanenti</div><div class="v" id="remain">--</div></div>
+    <div class="info-box"><div class="k">Giorni totali (100 anni)</div><div class="v" id="total">--</div></div>
+  </div>
+
+  <p class="quote">Tutto è possibile. Chi sei per non poter brillare.</p>
+</div>
+
+<script>
+const BIRTH=new Date(1976,2,29,0,0,0);
+const DEATH=new Date(2076,2,29,0,0,0);
+const TOTAL_MS=DEATH-BIRTH;
+
+function pad(n){return String(n).padStart(2,'0')}
+
+function update(){
+  const now=new Date();
+  const remaining=DEATH-now;
+  if(remaining<=0){document.getElementById('y').textContent='0';return;}
+
+  // Years, months, days between now and death
+  let dy=DEATH.getFullYear()-now.getFullYear();
+  let dm=DEATH.getMonth()-now.getMonth();
+  let dd=DEATH.getDate()-now.getDate();
+  let dh=DEATH.getHours()-now.getHours();
+  let dmi=DEATH.getMinutes()-now.getMinutes();
+  let ds=DEATH.getSeconds()-now.getSeconds();
+
+  if(ds<0){ds+=60;dmi--;}
+  if(dmi<0){dmi+=60;dh--;}
+  if(dh<0){dh+=24;dd--;}
+  if(dd<0){
+    const prev=new Date(DEATH.getFullYear(),DEATH.getMonth(),0).getDate();
+    dd+=prev;dm--;
+  }
+  if(dm<0){dm+=12;dy--;}
+
+  document.getElementById('y').textContent=dy;
+  document.getElementById('mo').textContent=pad(dm);
+  document.getElementById('d').textContent=pad(dd);
+  document.getElementById('h').textContent=pad(dh);
+  document.getElementById('mi').textContent=pad(dmi);
+  document.getElementById('s').textContent=pad(ds);
+
+  // Progress
+  const elapsed=now-BIRTH;
+  const pct=(elapsed/TOTAL_MS*100).toFixed(2);
+  document.getElementById('pct').textContent=pct+'%';
+  document.getElementById('fill').style.width=pct+'%';
+
+  // Info
+  const ageY=now.getFullYear()-1976-(now<new Date(now.getFullYear(),2,29)?1:0);
+  document.getElementById('age').textContent=ageY+' anni';
+  const lived=Math.floor(elapsed/86400000);
+  const remain=Math.floor(remaining/86400000);
+  const total=Math.floor(TOTAL_MS/86400000);
+  document.getElementById('lived').textContent=lived.toLocaleString('it-IT');
+  document.getElementById('remain').textContent=remain.toLocaleString('it-IT');
+  document.getElementById('total').textContent=total.toLocaleString('it-IT');
+}
+
+update();
+setInterval(update,1000);
+</script>
+</body>
+</html>

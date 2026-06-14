@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Italia 3D · 81+</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070709;color:#ececf2;font-family:Sora,Arial,sans-serif;overflow:hidden;height:100vh}
+#scena{position:absolute;inset:0}
+.hud{position:absolute;z-index:5}
+#testata{top:0;left:0;right:0;padding:14px 18px;display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(7,7,9,.92),transparent);flex-wrap:wrap}
+#testata h1{font-family:Anton,Arial;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:#E8501A}
+#testata .sub{font-size:11px;color:#9aa0b4}
+.btn{background:#E8501A;color:#fff;border:0;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:12px;font-family:Sora;text-decoration:none}
+.btn.ghost{background:#16161e;border:1px solid #2a2a35;color:#cfd2dd}
+#destra{margin-left:auto;display:flex;gap:8px}
+#scheda{top:70px;right:14px;width:300px;max-width:86vw;max-height:72vh;overflow:auto;background:rgba(12,12,17,.95);border:1px solid #E8501A;border-radius:14px;padding:16px;display:none}
+#scheda h2{font-family:Anton,Arial;font-size:19px;color:#E8501A}
+#scheda .tot{font-family:JetBrains Mono,monospace;font-size:12px;color:#ffb38a;margin:2px 0 10px}
+.membro{border:1px solid #1f1f29;border-radius:9px;padding:8px 10px;margin-bottom:7px;font-size:12px;color:#cfd2dd}
+.membro .ms{font-family:JetBrains Mono,monospace;font-size:10.5px;color:#8b90a3}
+#legenda{bottom:14px;left:14px;background:rgba(13,13,18,.88);border:1px solid #23232e;border-radius:12px;padding:10px 14px;font-size:11px;color:#aeb3c4;line-height:1.7}
+#conta{bottom:14px;right:14px;background:rgba(13,13,18,.88);border:1px solid #23232e;border-radius:12px;padding:10px 14px;font-size:11px;color:#aeb3c4;font-family:JetBrains Mono,monospace}
+#carico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#070709;z-index:10;flex-direction:column;gap:14px}
+#carico .anello{width:46px;height:46px;border:3px solid #2a2a35;border-top-color:#E8501A;border-radius:50%;animation:g 1s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+#tip{position:absolute;pointer-events:none;background:#101016;border:1px solid #E8501A;border-radius:8px;padding:6px 10px;font-size:11.5px;display:none;z-index:6}
+</style>
+</head>
+<body>
+<div id="carico"><div class="anello"></div><div style="font-size:12px;color:#9aa0b4">Sollevo l'Italia in tre dimensioni</div></div>
+<div id="scena"></div>
+<div class="hud" id="testata">
+  <h1>Italia 3D <span id="modo" style="color:#fff"></span></h1>
+  <span class="sub">trascina per ruotare, rotella per lo zoom, click su una colonna per la regione</span>
+  <div id="destra">
+    <button class="btn ghost" onclick="vistaCasa()">Centra</button>
+    <a class="btn" href="rete3d.html" id="lnk3d">Rete 3D</a>
+    <a class="btn ghost" href="dashboard.html" id="lnkback">Dashboard</a>
+  </div>
+</div>
+<div class="hud" id="legenda"><span style="color:#E8501A;font-weight:700">Colonne</span> = membri per regione<br>più alta la colonna, più forte la zona</div>
+<div class="hud" id="conta"></div>
+<div class="hud" id="scheda">
+  <h2 id="rnome"></h2>
+  <div class="tot" id="rtot"></div>
+  <div id="rlista"></div>
+  <button class="btn ghost" style="margin-top:6px" onclick="document.getElementById('scheda').style.display='none'">Chiudi</button>
+</div>
+<div id="tip"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var K=new URLSearchParams(location.search).get('k')||'';
+var scena,cam,rend,raycaster,mouse,pilastri=[],dati={};
+var rot={x:-0.9,y:0},dist=300,pan=new THREE.Vector3(0,0,0),drag=null;
+var REGIONI=[
+ ['Piemonte',7.9,45.05],['Valle d\'Aosta',7.4,45.74],['Lombardia',9.75,45.62],['Trentino',11.3,46.4],
+ ['Veneto',11.85,45.6],['Friuli',13.1,46.1],['Liguria',8.7,44.4],['Emilia-Romagna',11.0,44.5],
+ ['Toscana',11.1,43.45],['Umbria',12.5,42.95],['Marche',13.2,43.35],['Lazio',12.8,41.9],
+ ['Abruzzo',13.8,42.2],['Molise',14.6,41.7],['Campania',14.8,40.9],['Puglia',16.6,41.0],
+ ['Basilicata',16.1,40.5],['Calabria',16.3,39.05],['Sicilia',14.1,37.5],['Sardegna',9.0,40.0]];
+var SAGOMA=[[7.5,43.8],[7.0,44.2],[6.7,45.1],[7.0,45.9],[7.7,45.95],[8.4,46.4],[9.3,46.5],[10.1,46.6],[10.5,46.85],[11.1,47.0],[12.2,47.1],[13.7,46.55],[13.6,45.8],[13.1,45.65],[12.5,45.55],[12.3,45.2],[12.4,44.8],[12.25,44.2],[13.6,43.55],[14.0,42.65],[14.9,42.2],[15.6,41.95],[16.2,41.9],[18.0,40.65],[18.5,40.1],[18.05,39.9],[17.15,40.45],[16.6,40.15],[16.5,39.7],[17.15,39.0],[16.6,38.4],[16.1,37.95],[15.65,38.0],[15.9,38.55],[16.2,38.95],[15.65,39.55],[15.3,40.0],[14.95,40.25],[14.45,40.6],[14.1,40.8],[13.6,41.2],[12.65,41.45],[11.65,42.3],[11.1,42.4],[10.55,42.95],[10.1,43.85],[9.7,44.05],[8.9,44.4],[8.15,44.0]];
+var SICILIA=[[12.45,37.8],[13.1,38.15],[13.75,38.05],[14.8,38.15],[15.45,38.25],[15.1,37.4],[15.1,36.7],[14.4,36.75],[13.05,37.5]];
+var SARDEGNA=[[8.2,40.95],[8.5,41.25],[9.25,41.25],[9.6,40.9],[9.7,40.3],[9.55,39.2],[9.05,39.0],[8.45,38.95],[8.35,39.75],[8.4,40.5]];
+function xy(lon,lat){ return [ (lon-12.5)*22, -(lat-42.0)*30 ]; }
+function avvio(){
+  scena=new THREE.Scene(); scena.fog=new THREE.Fog(0x070709,500,1500);
+  cam=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,1,3000);
+  rend=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  rend.setSize(innerWidth,innerHeight); rend.setPixelRatio(Math.min(devicePixelRatio,2));
+  document.getElementById('scena').appendChild(rend.domElement);
+  scena.add(new THREE.AmbientLight(0xffffff,.6));
+  var l=new THREE.PointLight(0xE8501A,1.0,1600); l.position.set(120,300,160); scena.add(l);
+  var l2=new THREE.PointLight(0x7f77dd,.45,1600); l2.position.set(-220,180,-200); scena.add(l2);
+  var stelle=new THREE.BufferGeometry(),sp=[];
+  for(var i=0;i<600;i++){sp.push((Math.random()-0.5)*2400,(Math.random()-0.5)*2400,(Math.random()-0.5)*2400);}
+  stelle.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));
+  scena.add(new THREE.Points(stelle,new THREE.PointsMaterial({color:0x33333f,size:1.4})));
+  [SAGOMA,SICILIA,SARDEGNA].forEach(function(poly){
+    var sh=new THREE.Shape();
+    poly.forEach(function(p,i){ var c=xy(p[0],p[1]); if(i===0)sh.moveTo(c[0],c[1]); else sh.lineTo(c[0],c[1]); });
+    var g=new THREE.ExtrudeGeometry(sh,{depth:6,bevelEnabled:false});
+    var m=new THREE.Mesh(g,new THREE.MeshStandardMaterial({color:0x14141c,roughness:0.85,metalness:0.15}));
+    m.rotation.x=-Math.PI/2; m.position.y=0; scena.add(m);
+    var bordo=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(poly.map(function(p){var c=xy(p[0],p[1]);return new THREE.Vector3(c[0],6.4,-c[1]);})),new THREE.LineBasicMaterial({color:0x3a3a4a}));
+    bordo.rotation.x=0; scena.add(bordo);
+  });
+  raycaster=new THREE.Raycaster(); mouse=new THREE.Vector2();
+  controlli(); anima(); carica();
+}
+function carica(){
+  fetch('api/italia3d.php'+(K?('?k='+encodeURIComponent(K)):''))
+   .then(function(r){return r.json();})
+   .then(function(d){ if(!d.ok){demo();return;} costruisci(d); })
+   .catch(function(){ demo(); });
+}
+function demo(){
+  var r={}; REGIONI.forEach(function(R,i){ var n=Math.floor(Math.random()*40)+2; r[R[0]]={n:n,membri:[{sic:'SIC-DEMO'+i,nome:'Membro di prova',dal:'2026-04-01'}]}; });
+  costruisci({ok:true,globale:false,regioni:r,totale:300,demo:true});
+}
+function costruisci(d){
+  document.getElementById('modo').textContent=d.globale?'· plancia globale':'· la tua rete';
+  if(d.demo)document.getElementById('modo').textContent+=' · anteprima';
+  if(d.globale){document.getElementById('lnkback').href='plancia_dio.html?k='+encodeURIComponent(K);document.getElementById('lnk3d').href='rete3d.html?k='+encodeURIComponent(K);}
+  dati=d.regioni||{};
+  var max=1; REGIONI.forEach(function(R){ if(dati[R[0]]&&dati[R[0]].n>max)max=dati[R[0]].n; });
+  REGIONI.forEach(function(R){
+    var info=dati[R[0]]||{n:0,membri:[]};
+    var h=6+(info.n/max)*120;
+    var c=xy(R[1],R[2]);
+    var col=info.n===0?0x2a2a35:(info.n>=max*0.6?0xE8501A:(info.n>=max*0.25?0xffb38a:0x7f77dd));
+    var p=new THREE.Mesh(new THREE.CylinderGeometry(4.6,5.4,h,14),new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:info.n?0.3:0.05,roughness:0.45}));
+    p.position.set(c[0],6+h/2,c[1]); p.userData={regione:R[0],n:info.n,membri:info.membri};
+    scena.add(p); pilastri.push(p);
+    if(info.n){
+      var an=new THREE.Mesh(new THREE.TorusGeometry(7,0.5,8,24),new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.7}));
+      an.position.set(c[0],6.6,c[1]); an.rotation.x=Math.PI/2; scena.add(an);
+    }
+  });
+  var nd=Object.keys(dati).filter(function(k){return k!=='ND';}).length;
+  document.getElementById('conta').textContent='membri '+d.totale+' · regioni attive '+nd+(dati['ND']?' · senza CAP '+dati['ND'].n:'');
+  document.getElementById('carico').style.display='none';
+}
+function scheda(u){
+  document.getElementById('rnome').textContent=u.regione;
+  document.getElementById('rtot').textContent=u.n+' membri';
+  document.getElementById('rlista').innerHTML=(u.membri||[]).map(function(m){
+    return '<div class="membro"><b>'+m.nome+'</b><div class="ms">'+m.sic+' · dal '+(m.dal||'-')+'</div></div>';
+  }).join('')||'<div style="color:#8b90a3;font-size:12px">Nessun membro qui, ancora. Territorio da conquistare.</div>';
+  document.getElementById('scheda').style.display='block';
+}
+function vistaCasa(){ pan.set(0,0,0); dist=300; rot={x:-0.9,y:0}; }
+function controlli(){
+  var el=rend.domElement;
+  el.addEventListener('mousedown',function(e){ drag={x:e.clientX,y:e.clientY,b:e.button}; });
+  addEventListener('mouseup',function(){drag=null;});
+  addEventListener('mousemove',function(e){
+    if(drag){
+      var dx=e.clientX-drag.x,dy=e.clientY-drag.y; drag.x=e.clientX;drag.y=e.clientY;
+      if(drag.b===2){ var v=new THREE.Vector3(-dx*dist/900,0,-dy*dist/900).applyAxisAngle(new THREE.Vector3(0,1,0),rot.y); pan.add(v); }
+      else { rot.y+=dx*0.006; rot.x+=dy*0.005; rot.x=Math.max(-1.5,Math.min(-0.2,rot.x)); }
+    } else {
+      var u=pesca(e),t=document.getElementById('tip');
+      if(u){ t.style.display='block'; t.style.left=(e.clientX+14)+'px'; t.style.top=(e.clientY+10)+'px'; t.innerHTML='<b>'+u.regione+'</b> · '+u.n+' membri'; }
+      else t.style.display='none';
+    }
+  });
+  el.addEventListener('contextmenu',function(e){e.preventDefault();});
+  el.addEventListener('wheel',function(e){ e.preventDefault(); dist*=e.deltaY>0?1.1:0.9; dist=Math.max(60,Math.min(1200,dist)); },{passive:false});
+  el.addEventListener('click',function(e){ var u=pesca(e); if(u)scheda(u); });
+  var t0=null;
+  el.addEventListener('touchstart',function(e){ if(e.touches.length===1){ t0={x:e.touches[0].clientX,y:e.touches[0].clientY}; } },{passive:true});
+  el.addEventListener('touchmove',function(e){ if(e.touches.length===1&&t0){ rot.y+=(e.touches[0].clientX-t0.x)*0.006; rot.x+=(e.touches[0].clientY-t0.y)*0.005; rot.x=Math.max(-1.5,Math.min(-0.2,rot.x)); t0={x:e.touches[0].clientX,y:e.touches[0].clientY}; } },{passive:true});
+  addEventListener('resize',function(){ cam.aspect=innerWidth/innerHeight; cam.updateProjectionMatrix(); rend.setSize(innerWidth,innerHeight); });
+}
+function pesca(e){
+  mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,cam);
+  var h=raycaster.intersectObjects(pilastri);
+  return h.length?h[0].object.userData:null;
+}
+function anima(){
+  requestAnimationFrame(anima);
+  cam.position.set(pan.x+dist*Math.cos(rot.x)*Math.sin(rot.y),pan.y+dist*Math.sin(-rot.x),pan.z+dist*Math.cos(rot.x)*Math.cos(rot.y));
+  cam.lookAt(pan);
+  rend.render(scena,cam);
+}
+avvio();
+</script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

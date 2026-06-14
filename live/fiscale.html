@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fiscale e fatture, direzione 81+</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--arancio:#E8501A;--arancio2:#FB6B00;--verde:#3FBF6B;--rosso:#ff5a4d;--giallo:#ffce4d;--blu:#5a9bff;--viola:#c45aff;--fondo:#0A0A0B;--carta:#141417;--bordo:#26262b;--testo:#c4c4cc;--muto:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--fondo);color:var(--testo);font-family:'Sora',sans-serif;font-size:14px}
+.wrap{max-width:1280px;margin:0 auto;padding:24px 18px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-bottom:6px}
+h1{font-family:'Anton',sans-serif;color:#fff;font-size:28px}
+h1 b{color:var(--arancio)}
+.sub{color:var(--muto);font-size:12px;margin-bottom:18px}
+.privato{font-size:11px;color:var(--muto);border:1px solid var(--bordo);border-radius:20px;padding:4px 12px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px;border-bottom:1px solid var(--bordo);padding-bottom:12px}
+.tab{background:var(--carta);border:1px solid var(--bordo);color:var(--testo);border-radius:10px;padding:9px 15px;cursor:pointer;font-size:13px;font-weight:600}
+.tab.on{background:var(--arancio);color:#fff;border-color:var(--arancio)}
+.sez{display:none}.sez.on{display:block;animation:f .25s}
+@keyframes f{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
+.card{background:var(--carta);border:1px solid var(--bordo);border-radius:14px;padding:16px}
+.card .lab{font-size:11px;color:var(--muto);text-transform:uppercase;letter-spacing:.7px}
+.card .val{font-family:'JetBrains Mono',monospace;font-size:21px;font-weight:700;margin-top:5px}
+.card .sub2{font-size:11px;color:var(--muto);margin-top:3px}
+.e{color:var(--verde)}.u{color:var(--rosso)}.o{color:var(--arancio)}.s{color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+@media(max-width:900px){.grid2{grid-template-columns:1fr}}
+.panel{background:var(--carta);border:1px solid var(--bordo);border-radius:14px;padding:18px;margin-bottom:16px}
+.panel h3{color:#fff;font-size:14px;margin-bottom:12px;display:flex;justify-content:space-between}
+.panel h3 small{color:var(--muto);font-weight:400;font-size:11px}
+table{width:100%;border-collapse:collapse;font-size:12.5px}
+th,td{text-align:left;padding:8px 7px;border-bottom:1px solid var(--bordo)}
+th{color:var(--muto);font-weight:600;text-transform:uppercase;font-size:10.5px}
+td.num,th.num{text-align:right;font-family:'JetBrains Mono',monospace}
+.att{color:var(--verde)}.pas{color:var(--rosso)}
+.badge{display:inline-block;background:#1d1d22;border:1px solid var(--bordo);border-radius:6px;padding:2px 7px;font-size:10.5px}
+.filtri{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.filtri select,.filtri input{background:#1d1d22;border:1px solid var(--bordo);color:#fff;border-radius:9px;padding:8px;font-size:13px}
+.filtri button{background:var(--arancio2);color:#fff;border:none;font-weight:700;padding:9px 15px;border-radius:9px;cursor:pointer}
+.note{font-size:11.5px;color:var(--muto);margin-top:8px;line-height:1.55}
+.alert{background:rgba(255,206,77,.08);border:1px solid var(--giallo);border-radius:10px;padding:12px;font-size:12.5px;color:#e8d9a8;margin-top:12px}
+.import{background:var(--carta);border:1px dashed var(--arancio);border-radius:14px;padding:18px;text-align:center;margin-bottom:18px}
+.import label{display:inline-block;background:var(--arancio);color:#fff;font-weight:700;padding:10px 20px;border-radius:10px;cursor:pointer}
+.import input[type=file]{display:none}
+.barra{height:8px;border-radius:4px;background:#1d1d22;overflow:hidden;margin-top:5px}
+.barra span{display:block;height:100%;background:var(--arancio)}
+.riga{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid var(--bordo);font-size:13px}
+.riga:last-child{border:none}
+@media print{.tabs,.filtri,.import,canvas{display:none!important}.sez{display:block!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top">
+    <h1>Fiscale e <b>Fatture</b></h1>
+    <span class="privato">Riservato alla direzione</span>
+  </div>
+  <div class="sub">Labo Tecnic Studio, P.IVA IT01504180298, dati reali dalle fatture elettroniche</div>
+  <div class="tabs">
+    <div class="tab on" onclick="vai('quadro', this)">Quadro fiscale</div>
+    <div class="tab" onclick="vai('anni', this)">Anno per anno</div>
+    <div class="tab" onclick="vai('iva', this)">IVA</div>
+    <div class="tab" onclick="vai('clienti', this)">Clienti e fornitori</div>
+    <div class="tab" onclick="vai('elenco', this)">Elenco fatture</div>
+  </div>
+  <div class="sez on" id="s-quadro"><div class="kpi">
+    <div class="card"><div class="lab">Ricavi</div><div class="val e" id="k-ric">0</div></div>
+    <div class="card"><div class="lab">Costi</div><div class="val u" id="k-cos">0</div></div>
+    <div class="card"><div class="lab">Margine</div><div class="val s" id="k-mar">0</div></div>
+  </div><div class="note">Dati dalle fatture elettroniche. Margine lordo prima delle tasse.</div></div>
+  <div class="sez" id="s-anni"><div class="note">Tab anni carica da API.</div></div>
+  <div class="sez" id="s-iva"><div class="note">Tab IVA carica da API.</div></div>
+  <div class="sez" id="s-clienti"><div class="note">Tab clienti carica da API.</div></div>
+  <div class="sez" id="s-elenco"><div class="note">Tab elenco carica da API.</div></div>
+</div>
+<script>
+function vai(id, el){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('on'));
+  el.classList.add('on');
+  document.querySelectorAll('.sez').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-'+id).classList.add('on');
+}
+async function boot(){
+  try{
+    const r=await fetch('/api/fiscale.php?azione=riepilogo');
+    if(r.ok){ const d=await r.json(); if(d.ok){
+      document.getElementById('k-ric').textContent=(d.totali.attive.imponibile||0).toLocaleString('it-IT');
+      document.getElementById('k-cos').textContent=(d.totali.passive.imponibile||0).toLocaleString('it-IT');
+      document.getElementById('k-mar').textContent=((d.totali.attive.imponibile||0)-(d.totali.passive.imponibile||0)).toLocaleString('it-IT');
+    }}
+  }catch(e){ document.getElementById('s-quadro').innerHTML+='<div class="alert">API fiscale non ancora attiva.</div>'; }
+}
+boot();
+</script>
+</body>
+</html>

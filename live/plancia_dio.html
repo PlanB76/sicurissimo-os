@@ -1,0 +1,157 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · Plancia DIO, riservata</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme81.css">
+<style>
+:root{--o:#E8501A;--au:#ffd700}*{box-sizing:border-box;margin:0;padding:0}
+body{background:#05050c;color:#f3f3f8;font-family:'Sora',sans-serif;min-height:100vh}
+.wrap{max-width:1100px;margin:0 auto;padding:26px 18px}
+.head{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+.logo{display:inline-flex;font-family:'Anton';font-size:22px;border-radius:6px;overflow:hidden}.logo .a{background:var(--o);color:#fff;padding:3px 9px 0}.logo .b{background:#fff;color:#07070c;padding:3px 9px 0}
+.grado{font-family:'JetBrains Mono';font-size:11px;color:var(--au);letter-spacing:2px;text-transform:uppercase;border:1px solid rgba(255,215,0,.4);border-radius:8px;padding:6px 12px;text-shadow:0 0 12px rgba(255,215,0,.5)}
+h1{font-family:'Anton';font-weight:400;font-size:34px;text-transform:uppercase}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:#0c0c16;border:1px solid #23232f;border-radius:12px;padding:14px;text-align:center}
+.kpi b{display:block;font-family:'JetBrains Mono';font-size:24px;color:#fff;margin-bottom:2px}
+.kpi span{font-size:10.5px;color:#9aa0b4;text-transform:uppercase;letter-spacing:.5px}
+.kpi.oro{border-color:rgba(255,215,0,.4)}.kpi.oro b{color:var(--au);text-shadow:0 0 14px rgba(255,215,0,.4)}
+.kpi.fuoco{border-color:rgba(232,80,26,.5)}.kpi.fuoco b{color:var(--o)}
+.card{background:#0c0c16;border:1px solid #23232f;border-radius:14px;padding:18px;margin-bottom:14px}
+.ct{font-family:'Anton';font-weight:400;font-size:17px;text-transform:uppercase;margin-bottom:10px}
+table{width:100%;border-collapse:collapse;font-size:12px}
+td,th{padding:7px 6px;border-bottom:1px solid #1a1a26;text-align:left}
+th{color:#9aa0b4;font-weight:600;font-size:10.5px;text-transform:uppercase}
+td{color:#cfd2dd;font-family:'JetBrains Mono';font-size:11.5px}
+input{background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:11px;width:100%;max-width:340px}
+.btn{background:linear-gradient(180deg,#ff7a3d,#E8501A 55%,#c23f12);border:none;color:#fff;border-radius:9px;padding:11px 18px;font-weight:700;cursor:pointer;font-family:'Sora';text-decoration:none;display:inline-block;font-size:13px;margin:4px 6px 0 0}
+.btn.gh{background:linear-gradient(180deg,#262635,#1c1c28 60%,#14141c);border:1px solid #23232f}
+.g{color:#9aa0b4;font-size:12px}
+.mon{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.mon{grid-template-columns:1fr}}
+</style><meta name="robots" content="noindex,nofollow">
+</head>
+<body><div class="wrap">
+<div class="head">
+ <span class="logo"><span class="a">81</span><span class="b">+</span></span>
+ <span class="grado">AMMIRAGLIO · GRADO DIO · SIC-0000001</span>
+</div>
+<h1>Plancia di comando</h1>
+<p class="g" style="margin-bottom:14px">Numeri veri, in diretta dal database. Inserisci la chiave di comando per accendere la plancia.</p>
+<div class="card" id="keybox">
+ <div class="ct">Chiave di comando</div>
+ <input id="key" type="password" placeholder="ADMIN_KEY dalle variabili ambiente">
+ <button class="btn" onclick="boot()">Accendi la plancia</button>
+ <div class="g" id="kmsg" style="margin-top:8px"></div>
+</div>
+<div id="plancia" style="display:none">
+ <div class="card" style="border-color:rgba(255,215,0,.35)">
+  <div class="ct" style="color:#ffd700">Monetizzazione, i due binari</div>
+  <div class="mon">
+   <div style="background:#11100a;border:1px solid rgba(243,176,22,.4);border-radius:10px;padding:14px">
+    <div class="g" style="text-transform:uppercase;font-size:10px;letter-spacing:1px;margin-bottom:6px">ANFOS · sicurezza HACCP privacy</div>
+    <b style="font-family:'JetBrains Mono';font-size:30px" id="kAnfos">,</b>
+    <div class="g">click totali al tuo referral · <span id="kAnfosOggi">,</span> oggi</div>
+   </div>
+   <div style="background:#0a1016;border:1px solid rgba(58,160,255,.4);border-radius:10px;padding:14px">
+    <div class="g" style="text-transform:uppercase;font-size:10px;letter-spacing:1px;margin-bottom:6px">LEZIONE-ONLINE · crescita</div>
+    <b style="font-family:'JetBrains Mono';font-size:30px" id="kLez">,</b>
+    <div class="g">click totali al tuo referral · <span id="kLezOggi">,</span> oggi</div>
+   </div>
+  </div>
+  <div class="g" style="margin-top:8px">Ogni click parte dal tuo link. Le commissioni le vedi nei pannelli partner, ANFOS dal 20 al 50 per cento, Lezione-online 15 per cento, pagamento a 60 giorni fine mese.</div>
+ </div>
+ <div class="kpis" id="kpis"></div>
+ <div class="card"><div class="ct">Coda email a scaglioni</div><div id="coda"></div></div>
+ <div class="card"><div class="ct">Ultimi iscritti</div><div id="iscritti"></div></div>
+ <div class="card"><div class="ct">Ultimi eventi</div><div id="eventi"></div></div>
+ 
+ <div class="card"><div class="ct">Blog autonomo</div>
+  <div class="g" style="margin-bottom:8px">Il bot legge le fonti ogni giorno dal cron, riscrive in stile 81+ e pubblica con la fonte citata. Da qui lo comandi a mano.</div>
+  <button class="btn" onclick="blogGiro()">Fai un giro adesso</button>
+  <button class="btn gh" onclick="blogStato()">Aggiorna elenco</button>
+  <div class="g" id="blogMsg" style="margin-top:8px"></div>
+  <div id="blogList" style="margin-top:10px"></div>
+ </div>
+ <div class="card"><div class="ct">Azioni rapide</div>
+  <a class="btn" href="import_auto.html">Import 4000 lead</a>
+  <a class="btn gh" href="sistema_12_passi.html">I 12 passi del sistema</a>
+  <a class="btn gh" href="dashboard.html">Dashboard</a>
+  <a class="btn" href="dashboard_economia.html" style="background:#3FBF6B;color:#fff">💶 Economia privata</a>
+  <a class="btn gh" href="academy.html">Academy</a>
+  <a class="btn gh" href="modulistica.html">Modulistica</a>
+  <button class="btn gh" onclick="boot()">Aggiorna numeri</button>
+ </div>
+</div>
+</div>
+<script src="theme81.js"></script>
+<script src="lang81.js"></script>
+<script>
+function boot(){
+ var k=document.getElementById('key').value.trim();
+ if(!k){document.getElementById('kmsg').textContent='Inserisci la chiave.';return;}
+ try{sessionStorage.setItem('ak',k);}catch(e){}
+ fetch('api/admin.php?key='+encodeURIComponent(k)).then(r=>r.json()).then(function(d){
+  if(!d.ok){document.getElementById('kmsg').textContent='Chiave non valida.';return;}
+  document.getElementById('keybox').style.display='none';
+  document.getElementById('plancia').style.display='block';
+  var x=d.dati;
+  document.getElementById('kAnfos').textContent=x.click_anfos.toLocaleString('it-IT');
+  document.getElementById('kAnfosOggi').textContent=x.click_anfos_oggi;
+  document.getElementById('kLez').textContent=x.click_lezione.toLocaleString('it-IT');
+  document.getElementById('kLezOggi').textContent=x.click_lezione_oggi;
+  var K=[['Utenti totali',x.utenti_totali,'oro'],['Attivi',x.utenti_attivi,''],['Da attivare',x.da_attivare,''],['Iscritti oggi',x.registrati_oggi,'fuoco'],
+   ['Profili completi',x.profili_completi,''],['PV totali',x.pv_totali.toLocaleString('it-IT'),'fuoco'],['Lead',x.lead_totali,''],['Newsletter',x.newsletter_attivi,''],
+   ['Email in coda',x.welcome_in_coda,''],['Serie completate',x.welcome_completate,''],['Audit fatti',x.audit_fatti,''],['KYC avviati',x.kyc_livello1,''],
+   ['Badge assegnati',x.badge_assegnati,''],['Documenti sbloccati',x.documenti_sbloccati,''],['Click YouTube',x.click_youtube||0,''],['Click Telegram',x.click_telegram||0,''],['Email comportamentali',x.email_comportamentali||0,''],['URL in sitemap',(x.seo&&x.seo.url_in_sitemap)||0,''],['Chat Telegram',x.telegram_chats||0,''],['Telegram collegati',x.telegram_collegati||0,''],['Post Telegram inviati',(x.telegram_stato&&x.telegram_stato.post_totali)||0,''],['Bonus promo erogati',x.bonus_promo_settimana||0,'']];
+  document.getElementById('kpis').innerHTML=K.map(function(k){return '<div class="kpi '+k[2]+'"><b>'+k[1]+'</b><span>'+k[0]+'</span></div>';}).join('');
+  function tab(rows,cols){if(!rows||!rows.length)return '<div class="g">Niente da mostrare ancora.</div>';
+   return '<table><tr>'+cols.map(function(c){return '<th>'+c+'</th>';}).join('')+'</tr>'+rows.map(function(r){return '<tr>'+cols.map(function(c){return '<td>'+String(r[c.toLowerCase().replace(/ /g,'_')]||r[c]||'').slice(0,40)+'</td>';}).join('')+'</tr>';}).join('')+'</table>';}
+  document.getElementById('coda').innerHTML=tab(x.prossimi_invii,['email','serie','step','next_at']);
+  document.getElementById('iscritti').innerHTML=tab(x.ultimi_iscritti,['sic','email','status','created_at']);
+  document.getElementById('eventi').innerHTML=tab(x.ultimi_eventi,['type','account_id','created_at']);
+  blogStato();
+ }).catch(function(){document.getElementById('kmsg').textContent='Backend non raggiungibile.';});
+}
+
+function ak(){try{return sessionStorage.getItem('ak')||document.getElementById('key').value.trim();}catch(e){return document.getElementById('key').value.trim();}}
+function blogGiro(){var m=document.getElementById('blogMsg');m.textContent='Giro in corso, leggo le fonti e riscrivo...';
+ fetch('api/blog_bot.php?action=giro&force=1&key='+encodeURIComponent(ak())).then(r=>r.json()).then(function(d){
+  if(!d.ok){m.textContent='Errore, '+(d.err||'');return;}
+  m.textContent='Fatto. Fonti lette '+d.fonti_lette+', fallite '+d.fonti_fallite+', articoli nuovi '+d.creati+', doppioni saltati '+d.doppioni_saltati+', riscritture fallite '+d.riscritture_fallite+'.';
+  blogStato();
+ }).catch(function(){m.textContent='Backend non raggiungibile.';});}
+function blogStato(){fetch('api/blog_bot.php?action=stato&key='+encodeURIComponent(ak())).then(r=>r.json()).then(function(d){
+  if(!d.ok)return;var el=document.getElementById('blogList');
+  el.innerHTML=(d.ultimi_articoli||[]).map(function(a){
+   return '<div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #1a1a26;padding:6px 2px;font-size:12px;gap:8px"><span style="color:#cfd2dd">'+a.data+' · '+(a.categoria||'')+' · '+a.titolo+' <i style="color:#6b7180">('+(a.fonte_nome||'manuale')+')</i></span><button class="btn gh" style="padding:5px 10px;font-size:11px;margin:0" onclick="blogElimina(\''+a.slug+'\')">Elimina</button></div>';
+  }).join('')||'<div class="g">Nessun articolo automatico ancora.</div>';
+ }).catch(function(){});}
+function blogElimina(slug){if(!confirm('Eliminare '+slug+'?'))return;
+ fetch('api/blog_bot.php?action=elimina&key='+encodeURIComponent(ak())+'&slug='+encodeURIComponent(slug)).then(r=>r.json()).then(function(d){if(d.ok)blogStato();});}
+
+try{var sk=sessionStorage.getItem('ak');if(sk){document.getElementById('key').value=sk;boot();}}catch(e){}
+</script><script>(function(){var b=document.createElement('div');b.style.cssText='position:fixed;bottom:14px;left:14px;z-index:50;display:flex;gap:8px';b.innerHTML='<a id="lnkrete3d" href="api/fatture.php?az=csv&k=___K___" style="margin-right:6px">💶 Cassa CSV fatture</a><a href="admin_scenari.html" style="margin-right:6px">📈 Scenari 100k</a><a href="rete3d.html" style="background:#E8501A;color:#fff;padding:9px 14px;border-radius:8px;font-weight:700;text-decoration:none;font-size:12px">Rete globale 3D</a><a id="lnkita3d" href="italia3d.html" style="background:#16161e;border:1px solid #2a2a35;color:#cfd2dd;padding:9px 14px;border-radius:8px;font-weight:700;text-decoration:none;font-size:12px">Italia 3D</a>';document.body.appendChild(b);var k=new URLSearchParams(location.search).get('key');if(k){document.getElementById('lnkrete3d').href='rete3d.html?k='+encodeURIComponent(k);document.getElementById('lnkita3d').href='italia3d.html?k='+encodeURIComponent(k);}})();</script><script>
+(function(){
+ function ins(){
+  var host=document.querySelector('main')||document.body;
+  var d=document.createElement('div'); d.id='caldi81'; d.style.cssText='max-width:1100px;margin:18px auto;padding:0 16px;display:grid;grid-template-columns:1fr 1fr;gap:14px';
+  d.innerHTML='<div style="background:#0f0f15;border:1px solid #E8501A;border-radius:14px;padding:16px"><div style="font-family:Anton,Arial;font-size:16px;text-transform:uppercase;color:#E8501A">Membri caldi adesso</div><div id="caldi81box" style="margin-top:8px;font-size:12px;color:#cfd2dd">Carico...</div></div>'
+   +'<div style="background:#0f0f15;border:1px solid #23232e;border-radius:14px;padding:16px"><div style="font-family:Anton,Arial;font-size:16px;text-transform:uppercase;color:#ffb38a">Rapporto della settimana</div><div id="rep81box" style="margin-top:8px;font-size:12px;color:#cfd2dd;white-space:pre-line;max-height:280px;overflow:auto">In attesa della prima domenica sera.</div></div>';
+  if(window.innerWidth<760)d.style.gridTemplateColumns='1fr';
+  host.appendChild(d);
+  var k=new URLSearchParams(location.search).get('key')||'';
+  fetch('api/admin.php?key='+encodeURIComponent(k)).then(r=>r.json()).then(function(j){
+   var x=j.dati||j;
+   if(x.membri_caldi&&x.membri_caldi.length){
+    document.getElementById('caldi81box').innerHTML=x.membri_caldi.map(function(m){
+     var col=m.fascia==='caldo'?'#E8501A':(m.fascia==='tiepido'?'#ffb38a':'#7f77dd');
+     return '<div style="display:flex;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid #17171f"><span><b>'+m.nome+'</b> <span style="font-family:monospace;font-size:10.5px;color:#8b90a3">'+m.sic+'</span><br><span style="color:#8b90a3;font-size:11px">'+m.perche+'</span></span><b style="color:'+col+'">'+m.punti+'</b></div>';
+    }).join('');
+   } else document.getElementById('caldi81box').textContent='Ancora nessun segnale, arriveranno.';
+   if(x.report_settimana&&x.report_settimana.testo)document.getElementById('rep81box').textContent=x.report_settimana.testo;
+  }).catch(function(){});
+ }
+ ins();
+})();
+</script>
+<script>(function(){var k=new URLSearchParams(location.search).get("key")||new URLSearchParams(location.search).get("k")||"";document.querySelectorAll('a[href*="___K___"]').forEach(function(a){a.href=a.href.replace("___K___",encodeURIComponent(k));});})();</script></body></html>

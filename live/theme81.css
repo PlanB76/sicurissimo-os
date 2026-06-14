@@ -1,0 +1,27 @@
+/* 81+ THEME, metallo, stelle, riflessi. Si applica sopra lo stile esistente. */
+#t81stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+body>*:not(#t81stars){position:relative;z-index:1}
+/* card metalliche: bordo luminoso e riflesso che scorre */
+.m81card,.card,.lv,.book,.box,[class*="card"]{
+  background-image:linear-gradient(160deg,rgba(255,255,255,.045),rgba(255,255,255,0) 38%,rgba(232,80,26,.05) 100%)!important;
+  border:1px solid rgba(232,80,26,.22)!important;
+  box-shadow:0 10px 36px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06)!important;
+  position:relative;overflow:hidden;
+}
+.m81card::before,.card::before,.lv::before,.book::before,.box::before{
+  content:"";position:absolute;top:0;left:-80%;width:55%;height:100%;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.075),transparent);
+  transform:skewX(-18deg);animation:t81shine 7.5s ease-in-out infinite;pointer-events:none;
+}
+@keyframes t81shine{0%,55%{left:-80%}75%{left:130%}100%{left:130%}}
+/* bottoni metallici */
+.btn,.m81btn,.amz,button.btn{
+  background-image:linear-gradient(180deg,#ff7a3d,#E8501A 55%,#c23f12)!important;
+  box-shadow:0 4px 16px rgba(232,80,26,.35), inset 0 1px 0 rgba(255,255,255,.35), inset 0 -2px 4px rgba(0,0,0,.25)!important;
+  text-shadow:0 1px 1px rgba(0,0,0,.3);
+}
+.btn.gh,.m81btn[style*="1c1c28"]{background-image:linear-gradient(180deg,#262635,#1c1c28 60%,#14141c)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.07)!important}
+/* titoli con sfumatura metallica */
+h1,.m81title{background:linear-gradient(180deg,#ffffff,#cfd2dd 55%,#8d93a8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+/* barre progresso lucide */
+.bar>i,[id*="bar"]{box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}

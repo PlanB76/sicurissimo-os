@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ · La tua crescita, ruota della vita e piramide di Maslow</title>
+<meta name="description" content="Guarda la tua crescita nell'ecosistema 81+. Ruota della vita a otto aree e piramide di Maslow, tutto misurato in PV, con lo storico dei tuoi progressi.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#FB6B00;--v:#3FBF6B;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.6}
+.w{max-width:980px;margin:0 auto;padding:0 20px}
+a{color:inherit;text-decoration:none}
+.hero{padding:40px 0 10px;text-align:center}
+.tag{display:inline-block;background:rgba(232,80,26,.12);border:1px solid var(--o);color:var(--o);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;text-transform:uppercase}
+h1{font-family:'Anton';font-size:clamp(28px,5vw,46px);color:#fff;line-height:1.05;margin:12px 0 6px}
+.hero p{font-size:15px;max-width:540px;margin:0 auto;color:var(--mu)}
+.tot{display:flex;justify-content:center;gap:30px;margin:20px 0;flex-wrap:wrap}
+.tot .k{text-align:center}
+.tot .k .v{font-family:'Anton';font-size:34px;color:var(--o)}
+.tot .k .l{font-size:12px;color:var(--mu);text-transform:uppercase;letter-spacing:1px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:24px 0}
+@media(max-width:780px){.grid2{grid-template-columns:1fr}}
+.card{background:var(--c);border:1px solid var(--bd);border-radius:18px;padding:24px}
+.card h2{font-family:'Anton';color:#fff;font-size:22px;margin-bottom:4px;text-align:center}
+.card .sub{font-size:13px;color:var(--mu);text-align:center;margin-bottom:16px}
+/* ruota */
+#ruota{display:block;margin:0 auto;max-width:340px;width:100%}
+.legenda{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:14px;font-size:12px}
+.legenda .li{display:flex;align-items:center;gap:6px}
+.legenda .dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.legenda .pv{margin-left:auto;color:var(--mu);font-family:'JetBrains Mono'}
+/* maslow */
+.piramide{display:flex;flex-direction:column;align-items:center;gap:5px;margin:10px 0}
+.liv{display:flex;align-items:center;justify-content:center;gap:8px;color:#fff;font-weight:700;border-radius:6px;padding:10px;transition:.3s;position:relative;font-size:13px}
+.liv.off{opacity:.28;filter:grayscale(.6)}
+.liv .ic{font-size:18px}
+.liv .check{position:absolute;right:10px;font-size:14px}
+.maslow-info{text-align:center;margin-top:14px;padding:14px;background:#101016;border-radius:12px}
+.maslow-info .nome{font-family:'Anton';font-size:20px;color:#fff}
+.maslow-info .desc{font-size:13px;color:var(--mu);margin-top:4px}
+.maslow-info .next{font-size:12px;color:var(--o2);margin-top:8px}
+/* storico */
+.storico{margin-top:18px}
+#graf{width:100%;height:160px;display:block}
+.note{font-size:12px;color:var(--mu);text-align:center;margin:6px auto 30px;max-width:640px}
+.login-msg{text-align:center;padding:40px;color:var(--mu)}
+.login-msg a{color:var(--o)}
+</style>
+</head>
+<body>
+<div class="w">
+<section class="hero">
+  <span class="tag">La tua crescita</span>
+  <h1>Ruota della vita e piramide di Maslow</h1>
+  <p>Tutto misurato in PV. Più cresci nell'ecosistema, più la ruota si riempie e sali di livello. Guarda i tuoi progressi nel tempo.</p>
+</section>
+
+<div id="contenuto">
+  <div class="tot">
+    <div class="k"><div class="v" id="totPv">0</div><div class="l">PV totali</div></div>
+    <div class="k"><div class="v" id="livMaslow">1</div><div class="l">Livello Maslow</div></div>
+    <div class="k"><div class="v" id="areeAttive">0/8</div><div class="l">Aree attive</div></div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h2>Ruota della vita</h2>
+      <div class="sub">Le otto aree del tuo percorso 81+</div>
+      <svg id="ruota" viewBox="0 0 300 300"></svg>
+      <div class="legenda" id="legenda"></div>
+    </div>
+
+    <div class="card">
+      <h2>Piramide di Maslow</h2>
+      <div class="sub">Il tuo livello di realizzazione</div>
+      <div class="piramide" id="piramide"></div>
+      <div class="maslow-info" id="maslowInfo"></div>
+    </div>
+  </div>
+
+  <div class="card storico">
+    <h2>Il tuo storico</h2>
+    <div class="sub">Andamento dei PV nel tempo, progressi e regressi</div>
+    <svg id="graf" viewBox="0 0 600 160" preserveAspectRatio="none"></svg>
+    <div id="grafLabel" style="text-align:center;font-size:12px;color:var(--mu);margin-top:8px"></div>
+  </div>
+
+  <p class="note">La ruota cresce con i PV che guadagni in ogni area completando azioni, corsi, missioni e documenti. La piramide sale al crescere dei PV totali. I PV sono crediti interni non convertibili in denaro.</p>
+</div>
+</div>
+
+<script>
+let MODELLO={};
+async function carica(){
+  const rm=await fetch('data/crescita_modello.json'); MODELLO=await rm.json();
+  try{
+    const r=await fetch('api/crescita.php'); const d=await r.json();
+    if(!d.ok){ mostraLogin(); return; }
+    render(d);
+  }catch(e){ demo(); }
+}
+function mostraLogin(){
+  document.getElementById('contenuto').innerHTML='<div class="login-msg">Accedi dalla <a href="login.html">dashboard</a> per vedere la tua crescita personale.</div>';
+}
+function demo(){
+  // anteprima con dati esempio quando il backend non c'è
+  render({ok:true,aree:{sicurezza:250,formazione:180,compliance:300,network:90,finanza:200,digitale:40,community:60,leadership:120},totale:1240,maslow_livello:3,prossima_soglia:2000,
+    storico:[{mese:'2026-01',saldo:100},{mese:'2026-02',saldo:420},{mese:'2026-03',saldo:680},{mese:'2026-04',saldo:540},{mese:'2026-05',saldo:980},{mese:'2026-06',saldo:1240}]});
+}
+
+function render(d){
+  document.getElementById('totPv').textContent=d.totale.toLocaleString('it-IT');
+  document.getElementById('livMaslow').textContent=d.maslow_livello;
+  const attive=Object.values(d.aree).filter(v=>v>0).length;
+  document.getElementById('areeAttive').textContent=attive+'/8';
+  disegnaRuota(d.aree);
+  disegnaPiramide(d.maslow_livello, d.totale, d.prossima_soglia);
+  disegnaStorico(d.storico||[]);
+}
+
+function disegnaRuota(aree){
+  const svg=document.getElementById('ruota');
+  const cx=150,cy=150,rMax=120,rMin=30;
+  const A=MODELLO.ruota_vita.aree;
+  const n=A.length, step=2*Math.PI/n;
+  const maxPv=Math.max(100,...Object.values(aree));
+  let html='';
+  // cerchi guida
+  [0.33,0.66,1].forEach(f=>{ html+=`<circle cx="${cx}" cy="${cy}" r="${rMin+(rMax-rMin)*f}" fill="none" stroke="#26262b" stroke-width="1"/>`; });
+  A.forEach((area,i)=>{
+    const pv=aree[area.id]||0;
+    const frac=Math.min(1,pv/maxPv);
+    const r=rMin+(rMax-rMin)*frac;
+    const a0=i*step - Math.PI/2, a1=(i+1)*step - Math.PI/2;
+    const x0=cx+Math.cos(a0)*r, y0=cy+Math.sin(a0)*r;
+    const x1=cx+Math.cos(a1)*r, y1=cy+Math.sin(a1)*r;
+    const large=step>Math.PI?1:0;
+    html+=`<path d="M${cx},${cy} L${x0},${y0} A${r},${r} 0 ${large} 1 ${x1},${y1} Z" fill="${area.colore}" fill-opacity="0.78" stroke="${area.colore}" stroke-width="1.5"/>`;
+    // etichetta icona a meta spicchio sul bordo esterno
+    const am=(a0+a1)/2, lr=rMax+14;
+    const lx=cx+Math.cos(am)*lr, ly=cy+Math.sin(am)*lr;
+    html+=`<text x="${lx}" y="${ly}" font-size="15" text-anchor="middle" dominant-baseline="middle">${area.icona}</text>`;
+  });
+  svg.innerHTML=html;
+  // legenda
+  document.getElementById('legenda').innerHTML=A.map(area=>{
+    const pv=aree[area.id]||0;
+    return `<div class="li"><span class="dot" style="background:${area.colore}"></span>${area.nome}<span class="pv">${pv} PV</span></div>`;
+  }).join('');
+}
+
+function disegnaPiramide(livAttuale, totale, prossima){
+  const L=MODELLO.maslow.livelli;
+  // dal piu alto al piu basso per la piramide
+  const html=[...L].reverse().map(l=>{
+    const on=l.liv<=livAttuale;
+    const w=40+l.liv*12; // larghezza crescente verso il basso
+    return `<div class="liv ${on?'':'off'}" style="background:${l.colore};width:${w}%">
+      <span class="ic">${l.icona}</span> ${l.nome} ${on?'<span class="check">✓</span>':''}</div>`;
+  }).join('');
+  document.getElementById('piramide').innerHTML=html;
+  const cur=L.find(x=>x.liv===livAttuale)||L[0];
+  let info=`<div class="nome">${cur.icona} ${cur.nome}</div><div class="desc">${cur.desc}</div>`;
+  if(prossima){ info+=`<div class="next">Ti mancano ${(prossima-totale).toLocaleString('it-IT')} PV per il livello successivo</div>`; }
+  else { info+=`<div class="next">Hai raggiunto il livello massimo</div>`; }
+  document.getElementById('maslowInfo').innerHTML=info;
+}
+
+function disegnaStorico(storico){
+  const svg=document.getElementById('graf');
+  if(!storico.length){ svg.innerHTML='<text x="300" y="80" text-anchor="middle" fill="#8a8a92" font-size="13">Ancora nessun movimento</text>'; return; }
+  const W=600,H=160,pad=20;
+  const max=Math.max(...storico.map(s=>s.saldo),100);
+  const dx=(W-pad*2)/Math.max(1,storico.length-1);
+  let pts=storico.map((s,i)=>{ const x=pad+i*dx; const y=H-pad-(s.saldo/max)*(H-pad*2); return [x,y]; });
+  let line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  let area=line+` L${pts[pts.length-1][0].toFixed(1)},${H-pad} L${pad},${H-pad} Z`;
+  let dots=pts.map((p,i)=>{
+    const reg=i>0 && storico[i].saldo<storico[i-1].saldo;
+    return `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="4" fill="${reg?'#E8501A':'#3FBF6B'}"/>`;
+  }).join('');
+  svg.innerHTML=`<defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#E8501A" stop-opacity=".4"/><stop offset="1" stop-color="#E8501A" stop-opacity="0"/></linearGradient></defs>
+    <path d="${area}" fill="url(#g)"/><path d="${line}" fill="none" stroke="#FB6B00" stroke-width="2.5"/>${dots}`;
+  const ultimo=storico[storico.length-1], primo=storico[0];
+  const diff=ultimo.saldo-primo.saldo;
+  document.getElementById('grafLabel').innerHTML=`Da ${primo.mese} a ${ultimo.mese}, ${diff>=0?'+':''}${diff.toLocaleString('it-IT')} PV. Pallino verde crescita, arancio calo.`;
+}
+
+carica();
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

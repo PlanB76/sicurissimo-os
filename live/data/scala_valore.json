@@ -1,0 +1,14 @@
+{
+ "why":"Nessuno deve più farsi male al lavoro per colpa di una carta mancante.",
+ "how":"Automatizziamo la burocrazia con l intelligenza artificiale e la trasformiamo in un vantaggio, documenti, scadenze, formazione e controlli in un posto solo.",
+ "what":"Un ecosistema con un identità unica, il SIC ID, membership che ti tengono in regola, sigilli che i clienti vedono e una rete che cresce.",
+ "gradini":[
+  {"liv":"INGRESSO","nome":"Gratis, per conoscerci","cosa":"Audit in 2 minuti, guida In regola in 2 minuti, libro La sicurezza in 1 click, SIC ID con 100 PV in regalo","url":"index.html#audit","fascia":"0 €"},
+  {"liv":"BASE","nome":"Prodotti base e ricariche","cosa":"Documenti singoli dalla fabbrica, anteprime gratuite, ricariche PV da 50 a 200 euro con bonus","url":"ricarica_pv.html","fascia":"da 35 PV"},
+  {"liv":"PRO","nome":"Abbonamenti e bundle","cosa":"Member81+ Basic e Pro, bundle documenti 12 mesi, studio preventivi brandizzato","url":"combo81.html","fascia":"49 e 99 € al mese"},
+  {"liv":"ELITE","nome":"Copertura completa","cosa":"Member81+ Elite, sigilli Bronze Silver Gold, combo su misura del tuo ATECO con sconto fedeltà","url":"combo81.html","fascia":"149 € al mese e sigilli da 990 €"},
+  {"liv":"CLUB","nome":"Il vertice","cosa":"Club 81+ VIP, PALLADIUM+, IRIDIUM+ e RHODIUM+, accesso diretto alla direzione, network e franchising ZONE","url":"https://wa.me/393388771737","fascia":"su invito"}
+ ],
+ "pipeline":["Lead generation","Lead freddi","Lead tiepidi","Lead caldi","Clienti"],
+ "regola":"Applicare a tutto. Ogni prodotto di ogni HUB sale questa scala, dal gratis al club."
+}

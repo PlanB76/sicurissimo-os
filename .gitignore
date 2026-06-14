@@ -1,0 +1,8 @@
+
+# Live site — file da non committare mai
+live/.env
+live/.env.local
+live/.env.production
+live/uploads/*
+!live/uploads/.gitkeep
+live/installer.php

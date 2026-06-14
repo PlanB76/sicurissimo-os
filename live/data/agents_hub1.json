@@ -1,0 +1,7 @@
+{ "agenti":[
+ {"id":"SIC-AG-001","nome":"Mirco AI","categoria":"Comando HUB1","istruzioni":"Accoglie, orienta, smista verso il sole giusto, porta a registrazione e audit.","live":true},
+ {"id":"SIC-AG-002","nome":"Command Center","categoria":"Coordinamento","istruzioni":"Coordina le due ali Web2 e Web3, sta sopra la flotta.","live":false},
+ {"id":"SIC-AG-003","nome":"Nicolas","categoria":"Vendite","istruzioni":"Acquisizione e vendita, lead e consulenza.","live":false},
+ {"id":"SIC-AG-004","nome":"Noemi","categoria":"Marketing","istruzioni":"Contenuti e persuasione, social.","live":false},
+ {"id":"SIC-AG-005","nome":"Mirco Agente","categoria":"Compliance","istruzioni":"Conformita e documenti.","live":false},
+ {"id":"SIC-AG-006","nome":"THOR","categoria":"Rete e Web3","istruzioni":"Rete e formazione, layer digitale.","live":false} ] }

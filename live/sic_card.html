@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · SIC Card</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070710;font-family:'Sora',sans-serif;color:#fff;display:flex;flex-direction:column;align-items:center;padding:34px 16px;min-height:100vh}
+h1{font-family:'Anton';font-weight:400;font-size:26px;text-transform:uppercase;margin-bottom:18px;background:linear-gradient(180deg,#fff,#9aa0b4);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+.scene{perspective:1100px}
+.card{width:360px;height:226px;border-radius:18px;position:relative;overflow:hidden;cursor:pointer;
+ transform-style:preserve-3d;transition:transform .12s ease-out, box-shadow .25s;
+ box-shadow:0 24px 60px rgba(0,0,0,.7);
+ border:1px solid var(--edge,#E8501A)}
+.card .metal{position:absolute;inset:0;background:var(--bg,linear-gradient(135deg,#14141f,#0a0a14))}
+.card .holo{position:absolute;inset:0;mix-blend-mode:overlay;opacity:.55;pointer-events:none;
+ background:radial-gradient(circle at var(--mx,30%) var(--my,30%), rgba(255,255,255,.5), rgba(255,255,255,.06) 24%, transparent 55%)}
+.card .iris{position:absolute;inset:0;opacity:.18;pointer-events:none;
+ background:linear-gradient(115deg,#ff004c,#ff8a00,#ffe600,#2bd96a,#00d0ff,#7a5cff,#ff004c);
+ background-size:300% 300%;animation:iris 9s linear infinite;mix-blend-mode:color-dodge}
+@keyframes iris{0%{background-position:0% 50%}100%{background-position:300% 50%}}
+.card .stars{position:absolute;inset:0;pointer-events:none}
+.card .shine{position:absolute;top:0;left:-90%;width:50%;height:100%;transform:skewX(-18deg);
+ background:linear-gradient(105deg,transparent,rgba(255,255,255,.22),transparent);animation:sweep 5.5s ease-in-out infinite;pointer-events:none}
+@keyframes sweep{0%,55%{left:-90%}78%{left:140%}100%{left:140%}}
+.band{position:absolute;top:0;left:0;right:0;height:7px;background:var(--band,#E8501A);box-shadow:0 1px 8px var(--band,#E8501A)}
+.logo{position:absolute;top:18px;left:18px;font-family:'Anton';font-size:19px;transform:translateZ(40px)}
+.logo .a{background:#E8501A;color:#fff;padding:2px 7px;border-radius:4px 0 0 4px}.logo .b{background:#fff;color:#07070c;padding:2px 7px;border-radius:0 4px 4px 0}
+.brand{position:absolute;top:23px;left:96px;font-family:'JetBrains Mono';font-size:9px;letter-spacing:2px;color:#cfd2dd;text-transform:uppercase;transform:translateZ(30px)}
+.tipo{position:absolute;top:20px;right:18px;font-family:'JetBrains Mono';font-size:10px;color:var(--rk,#9aa0b4);text-transform:uppercase;letter-spacing:1px;text-align:right;transform:translateZ(35px)}
+.tipo b{display:block;font-size:14px;letter-spacing:2px;text-shadow:0 0 14px var(--rk,#9aa0b4)}
+.nome{position:absolute;top:72px;left:18px;font-size:16px;font-weight:700;max-width:210px;line-height:1.25;transform:translateZ(46px);text-shadow:0 2px 8px rgba(0,0,0,.6)}
+.sic{position:absolute;top:122px;left:18px;font-family:'JetBrains Mono';font-size:18px;color:var(--rk,#E8501A);letter-spacing:2px;transform:translateZ(46px);text-shadow:0 0 16px var(--rk,#E8501A)}
+.pv{position:absolute;bottom:40px;left:18px;font-family:'JetBrains Mono';font-size:11px;color:#cfd2dd;transform:translateZ(30px)}
+.badges{position:absolute;bottom:16px;left:18px;font-family:'JetBrains Mono';font-size:9.5px;color:#f3b016;transform:translateZ(30px)}
+.qr{position:absolute;right:16px;bottom:16px;background:#fff;padding:6px;border-radius:9px;transform:translateZ(40px);box-shadow:0 6px 18px rgba(0,0,0,.5)}
+.btns{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap;justify-content:center}
+.btn{background:linear-gradient(180deg,#ff7a3d,#E8501A 55%,#c23f12);border:none;color:#fff;border-radius:10px;padding:12px 18px;font-weight:700;cursor:pointer;font-family:'Sora';text-decoration:none;font-size:14px;box-shadow:0 4px 16px rgba(232,80,26,.35),inset 0 1px 0 rgba(255,255,255,.35)}
+.btn.gh{background:linear-gradient(180deg,#262635,#1c1c28 60%,#14141c);border:1px solid #23232f}
+.hint{color:#9aa0b4;font-size:12.5px;margin-top:14px;max-width:420px;text-align:center;line-height:1.6}
+.rkinfo{margin-top:10px;font-family:'JetBrains Mono';font-size:11px;color:var(--rk,#9aa0b4)}
+@media print{body{background:#fff}.btns,.hint,h1,.rkinfo{display:none}.card{box-shadow:none}}
+</style><meta name="robots" content="noindex,nofollow">
+</head>
+<body>
+<h1>La tua SIC Card</h1>
+<div class="scene">
+ <div class="card" id="card">
+  <div class="metal"></div><div class="iris" id="iris"></div>
+  <canvas class="stars" id="cstars"></canvas>
+  <div class="holo" id="holo"></div><div class="shine"></div>
+  <div class="band"></div>
+  <span class="logo"><span class="a">81</span><span class="b">+</span></span>
+  <span class="brand">SICURISSIMO GLOBAL</span>
+  <div class="tipo"><span id="cTier">MEMBER</span><b id="cVip">81+</b></div>
+  <div class="nome" id="cNome">,</div>
+  <div class="sic" id="cSic">,</div>
+  <div class="pv" id="cPv"></div>
+  <div class="badges" id="cBadges"></div>
+  <div class="qr" id="cQr"></div>
+ </div>
+</div>
+<div class="rkinfo" id="rkInfo"></div>
+<div class="btns">
+ <button class="btn" onclick="window.print()">Stampa o salva in PDF</button>
+ <a class="btn gh" href="dashboard.html">Dashboard</a>
+ <a class="btn gh" href="profilo.html">Profilo</a>
+</div>
+<p class="hint">Muovi il mouse sulla card, o inclina il telefono, e guardala vivere. Il QR porta al tuo link di invito personale. La card si rinnova da sola a ogni passaggio di grado VIP, colori e materiale cambiano col tuo rango.</p>
+<script>
+// temi per rango: materiale, bordo, colore rank
+var TIERS={
+ 0:{n:'MEMBER',rk:'#9aa0b4',edge:'#3a3a4a',band:'#E8501A',bg:'linear-gradient(135deg,#16161f,#0a0a12)',iris:.10},
+ 1:{n:'VIP 1 · BRONZO',rk:'#d08a4f',edge:'#a96a35',band:'#d08a4f',bg:'linear-gradient(135deg,#231711,#120b07)',iris:.14},
+ 2:{n:'VIP 2 · ARGENTO',rk:'#d9dde8',edge:'#aab0c0',band:'#d9dde8',bg:'linear-gradient(135deg,#23242c,#101117)',iris:.18},
+ 3:{n:'VIP 3 · ORO',rk:'#f3c545',edge:'#caa12f',band:'#f3c545',bg:'linear-gradient(135deg,#262011,#13100a)',iris:.22},
+ 4:{n:'VIP 4 · PLATINO',rk:'#bfe9ff',edge:'#8fd4f5',band:'#bfe9ff',bg:'linear-gradient(135deg,#1b2430,#0c1118)',iris:.28},
+ 5:{n:'VIP 5 · IMPERIUM',rk:'#ffd700',edge:'#ffd700',band:'#ffd700',bg:'linear-gradient(135deg,#0c0c0c,#000000)',iris:.36}
+};
+var card=document.getElementById('card');
+function applyTier(lv){var t=TIERS[lv]||TIERS[0];
+ card.style.setProperty('--rk',t.rk);card.style.setProperty('--edge',t.edge);
+ card.style.setProperty('--band',t.band);card.style.setProperty('--bg',t.bg);
+ document.getElementById('iris').style.opacity=t.iris;
+ document.getElementById('cTier').textContent=lv>0?'GRADO':'MEMBER';
+ document.getElementById('cVip').textContent=lv>0?t.n:'81+';
+ document.getElementById('rkInfo').textContent=lv>0?('Card di grado '+t.n+', si e rinnovata col tuo rango.'):'Card base. Sale di materiale a ogni grado VIP.';
+ document.body.style.setProperty('--rk',t.rk);}
+// tilt 3D mouse e giroscopio
+function tilt(rx,ry){card.style.transform='rotateX('+rx+'deg) rotateY('+ry+'deg)';}
+card.addEventListener('mousemove',function(e){var r=card.getBoundingClientRect();
+ var px=(e.clientX-r.left)/r.width, py=(e.clientY-r.top)/r.height;
+ card.style.setProperty('--mx',(px*100)+'%');card.style.setProperty('--my',(py*100)+'%');
+ tilt((py-.5)*-14,(px-.5)*16);});
+card.addEventListener('mouseleave',function(){tilt(0,0);card.style.setProperty('--mx','30%');card.style.setProperty('--my','30%');});
+if(window.DeviceOrientationEvent){addEventListener('deviceorientation',function(e){if(e.beta===null)return;
+ tilt(Math.max(-14,Math.min(14,(e.beta-45)/3)),Math.max(-16,Math.min(16,e.gamma/3)));});}
+// stelle dentro la card
+(function(){var c=document.getElementById('cstars');var x=c.getContext('2d');
+ c.width=360;c.height=226;var S=[];for(var i=0;i<46;i++)S.push({x:Math.random()*360,y:Math.random()*226,r:Math.random()*1.1+.2,a:Math.random(),v:Math.random()*.02+.006});
+ (function f(){x.clearRect(0,0,360,226);for(var i=0;i<S.length;i++){var s=S[i];s.a+=s.v;if(s.a>1||s.a<.05)s.v*=-1;
+  x.beginPath();x.arc(s.x,s.y,s.r,0,6.283);x.fillStyle='rgba(255,255,255,'+(s.a*.8)+')';x.fill();}requestAnimationFrame(f);})();})();
+// dati reali
+fetch('api/auth.php?action=me').then(r=>r.json()).then(function(d){
+ if(!d.ok){location.href='login.html';return;}
+ document.getElementById('cNome').textContent=d.ragione_sociale||((d.nome||'')+' '+(d.cognome||'')).trim()||'Member 81+';
+ document.getElementById('cSic').textContent=d.sic;
+ new QRCode(document.getElementById('cQr'),{text:d.ref_link,width:76,height:76,correctLevel:QRCode.CorrectLevel.M});
+ fetch('api/gamify.php?action=stato').then(r=>r.json()).then(function(g){if(g.ok){
+   applyTier(g.vip||0);document.getElementById('cPv').textContent=(g.pv||0).toLocaleString('it-IT')+' PV';}});
+ fetch('api/gamify.php?action=progress').then(r=>r.json()).then(function(p){if(p.ok&&p.badges&&p.badges.length){
+   document.getElementById('cBadges').textContent='\u2726 '+p.badges.length+' badge';}}).catch(function(){});
+}).catch(function(){
+ document.getElementById('cNome').textContent='Anteprima Member';document.getElementById('cSic').textContent='SIC-XXXXXXX';
+ applyTier(3);document.getElementById('cPv').textContent='12.450 PV';
+ try{new QRCode(document.getElementById('cQr'),{text:'https://81plus.net',width:76,height:76});}catch(e){}
+});
+applyTier(0);
+</script><script src="lang81.js"></script>
+<script src="sito81.js" defer></script>
+</body></html>
