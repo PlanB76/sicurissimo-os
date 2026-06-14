@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard · 81+</title>
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="/assets/logo-81plus.svg">
+<link rel="stylesheet" href="/kit81/kit81.css">
+<style>
+/* ── LAYOUT ── */
+.dash-wrap {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 32px 20px 80px;
+}
+
+/* ── WELCOME BAR ── */
+.welcome-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 32px;
+}
+.welcome-left h1 {
+  font-family: var(--fh);
+  font-size: 32px;
+  letter-spacing: .5px;
+  line-height: 1.1;
+}
+.welcome-left h1 span { color: var(--o); }
+.welcome-left p { font-size: 14px; color: var(--t2); margin-top: 4px; }
+.pv-chip {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,210,74,.08);
+  border: 1px solid rgba(255,210,74,.2);
+  border-radius: 100px;
+  padding: 8px 18px;
+  font-family: var(--fm);
+  font-size: 15px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.pv-chip .pv-icon { font-size: 18px; }
+
+/* ── KPI ROW ── */
+.kpi-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap);
+  margin-bottom: 32px;
+}
+.kpi-card {
+  background: var(--c1);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute; inset: 0 0 auto 0; height: 2px;
+  background: var(--kpi-accent, var(--o));
+}
+.kpi-label {
+  font-size: 12px; color: var(--mu); text-transform: uppercase;
+  letter-spacing: .8px; margin-bottom: 10px;
+}
+.kpi-value {
+  font-family: var(--fh);
+  font-size: 38px;
+  color: var(--kpi-accent, var(--o));
+  line-height: 1;
+}
+.kpi-unit { font-size: 14px; color: var(--t2); margin-top: 6px; }
+
+/* ── QUICK ACTIONS ── */
+.section-title {
+  font-family: var(--fh);
+  font-size: 22px;
+  letter-spacing: .5px;
+  margin-bottom: 16px;
+  color: var(--t);
+}
+.actions-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--gap);
+  margin-bottom: 32px;
+}
+.action-card {
+  background: var(--c1);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  padding: 24px;
+  display: flex; flex-direction: column; gap: 12px;
+  text-decoration: none; color: inherit;
+  transition: border-color .2s, transform .15s;
+  position: relative; overflow: hidden;
+}
+.action-card:hover {
+  border-color: var(--ac-color, var(--o));
+  transform: translateY(-2px);
+  color: inherit;
+}
+.action-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 80% 60% at 90% 110%, var(--ac-glow, rgba(251,107,0,.06)) 0%, transparent 70%);
+  pointer-events: none;
+}
+.ac-icon {
+  width: 44px; height: 44px;
+  background: var(--ac-bg, rgba(251,107,0,.1));
+  border-radius: var(--r-sm);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px;
+}
+.ac-title {
+  font-family: var(--fh);
+  font-size: 20px;
+  letter-spacing: .3px;
+}
+.ac-desc { font-size: 13px; color: var(--t2); line-height: 1.5; }
+.ac-badge {
+  display: inline-flex; align-items: center;
+  background: var(--ac-badge-bg, rgba(251,107,0,.12));
+  color: var(--ac-color, var(--o));
+  border-radius: 100px; padding: 3px 10px;
+  font-size: 12px; font-weight: 600;
+  align-self: flex-start;
+}
+
+/* ── MAIN CONTENT SPLIT ── */
+.dash-split {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 20px;
+  align-items: start;
+}
+
+/* ── ACTIVITY FEED ── */
+.feed-card {
+  background: var(--c1);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.feed-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--bd);
+}
+.feed-header h2 { font-family: var(--fh); font-size: 18px; }
+.feed-header a { font-size: 13px; color: var(--o); }
+.feed-list { padding: 8px 0; }
+.feed-item {
+  display: flex; align-items: flex-start; gap: 14px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--bd2);
+  transition: background .15s;
+}
+.feed-item:last-child { border-bottom: none; }
+.feed-item:hover { background: rgba(255,255,255,.02); }
+.feed-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--dot-color, var(--o));
+  margin-top: 6px; flex-shrink: 0;
+}
+.feed-text { flex: 1; }
+.feed-text strong { display: block; font-size: 14px; font-weight: 600; }
+.feed-text span { font-size: 12px; color: var(--mu); }
+.feed-time { font-family: var(--fm); font-size: 11px; color: var(--mu); white-space: nowrap; }
+.feed-empty {
+  padding: 40px 20px;
+  text-align: center; color: var(--mu); font-size: 14px;
+}
+
+/* ── SIDEBAR ── */
+.sidebar { display: flex; flex-direction: column; gap: 16px; }
+
+/* ── SKILL STATUS ── */
+.skill-card {
+  background: var(--c1);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.skill-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--bd);
+}
+.skill-header h2 { font-family: var(--fh); font-size: 16px; flex: 1; }
+.status-dot-pulse {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--vs);
+  box-shadow: 0 0 0 0 rgba(34,197,94,.4);
+  animation: pulse-ring 2s ease-in-out infinite;
+}
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.4); }
+  70%  { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); }
+}
+.skill-list { padding: 8px 0; }
+.skill-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 18px;
+  font-size: 13px;
+  border-bottom: 1px solid var(--bd2);
+}
+.skill-row:last-child { border-bottom: none; }
+.skill-name { color: var(--t2); }
+.skill-name strong { color: var(--t); }
+.skill-badge {
+  font-size: 11px; font-weight: 600; padding: 2px 8px;
+  border-radius: 100px;
+}
+.sk-ok  { background: rgba(34,197,94,.12); color: var(--vs); }
+.sk-off { background: rgba(96,96,120,.15);  color: var(--mu); }
+.sk-warn{ background: rgba(255,210,74,.12); color: var(--gold); }
+
+/* ── COMPLIANCE RING ── */
+.compliance-card {
+  background: var(--c1);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  padding: 24px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 16px;
+}
+.compliance-card h2 { font-family: var(--fh); font-size: 16px; align-self: flex-start; }
+.ring-wrap { position: relative; width: 120px; height: 120px; }
+.ring-wrap svg { transform: rotate(-90deg); }
+.ring-bg  { fill: none; stroke: var(--bd); stroke-width: 10; }
+.ring-fg  {
+  fill: none; stroke: var(--o); stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 339.3;
+  stroke-dashoffset: var(--ring-offset, 339.3);
+  transition: stroke-dashoffset 1.2s cubic-bezier(.22,1,.36,1);
+}
+.ring-val {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  font-family: var(--fh); font-size: 30px; color: var(--o);
+}
+.ring-val small { font-family: var(--fb); font-size: 11px; color: var(--mu); margin-top: -4px; }
+.compliance-items { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+.ci-row {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px;
+}
+.ci-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--dot-c, var(--vs)); flex-shrink: 0; }
+.ci-label { flex: 1; color: var(--t2); }
+.ci-val { font-family: var(--fm); font-size: 12px; color: var(--t); }
+
+/* ── NEXT DEADLINE ── */
+.deadline-card {
+  background: var(--c1);
+  border: 1px solid var(--bd);
+  border-radius: var(--r);
+  padding: 20px;
+}
+.deadline-card h2 { font-family: var(--fh); font-size: 16px; margin-bottom: 14px; }
+.deadline-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 12px 0; border-bottom: 1px solid var(--bd2);
+}
+.deadline-item:last-child { border-bottom: none; }
+.deadline-days {
+  min-width: 46px; height: 46px;
+  background: var(--dd-bg, rgba(239,68,68,.1));
+  border: 1px solid var(--dd-border, rgba(239,68,68,.25));
+  border-radius: var(--r-sm);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.deadline-days .dd-num {
+  font-family: var(--fh); font-size: 18px;
+  color: var(--dd-color, var(--er)); line-height: 1;
+}
+.deadline-days .dd-lbl { font-size: 9px; color: var(--mu); text-transform: uppercase; letter-spacing: .5px; }
+.deadline-info strong { display: block; font-size: 14px; font-weight: 600; }
+.deadline-info span { font-size: 12px; color: var(--mu); }
+
+/* ── NICOLAS CTA ── */
+.nicolas-card {
+  background: linear-gradient(135deg, #0f0f18 0%, #1a1020 100%);
+  border: 1px solid rgba(138,74,232,.25);
+  border-radius: var(--r);
+  padding: 22px;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.nicolas-tag {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; text-transform: uppercase; letter-spacing: 1px;
+  color: var(--pu); font-weight: 700;
+}
+.nicolas-tag::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--pu);
+  animation: pulse-ring 1.8s ease-in-out infinite;
+  box-shadow: 0 0 0 0 rgba(138,74,232,.4);
+}
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(138,74,232,.4); }
+  70%  { box-shadow: 0 0 0 6px rgba(138,74,232,0); }
+  100% { box-shadow: 0 0 0 0 rgba(138,74,232,0); }
+}
+.nicolas-card h3 { font-family: var(--fh); font-size: 20px; }
+.nicolas-card p { font-size: 13px; color: var(--t2); line-height: 1.5; }
+.nicolas-card .btn { align-self: flex-start; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .dash-split { grid-template-columns: 1fr; }
+  .sidebar { flex-direction: column; }
+}
+@media (max-width: 600px) {
+  .kpi-row { grid-template-columns: 1fr 1fr; }
+  .actions-grid { grid-template-columns: 1fr; }
+  .welcome-bar { flex-direction: column; align-items: flex-start; }
+  .kpi-value { font-size: 30px; }
+}
+</style>
+</head>
+<body>
+<a class="skip-link" href="#main">Vai al contenuto principale</a>
+
+<script>
+window.K81 = { hub: 1, ticker: true };
+</script>
+<script src="/kit81/kit81.js"></script>
+
+<main id="main" class="dash-wrap" role="main">
+
+  <!-- WELCOME BAR -->
+  <div class="welcome-bar">
+    <div class="welcome-left">
+      <h1>Ciao, <span id="dash-name">Caricamento...</span></h1>
+      <p id="dash-sub">Ecco il tuo riepilogo operativo di oggi.</p>
+    </div>
+    <div class="pv-chip" aria-label="Saldo PV">
+      <span class="pv-icon" aria-hidden="true">◈</span>
+      <span id="dash-pv">0</span> PV
+    </div>
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="kpi-row" role="region" aria-label="Indicatori chiave">
+    <div class="kpi-card" style="--kpi-accent: var(--o)">
+      <div class="kpi-label">Compliance</div>
+      <div class="kpi-value" id="kpi-compliance">—</div>
+      <div class="kpi-unit">punteggio su 100</div>
+    </div>
+    <div class="kpi-card" style="--kpi-accent: var(--vs)">
+      <div class="kpi-label">Documenti</div>
+      <div class="kpi-value" id="kpi-docs">—</div>
+      <div class="kpi-unit">generati questo mese</div>
+    </div>
+    <div class="kpi-card" style="--kpi-accent: var(--cy)">
+      <div class="kpi-label">Agenti attivi</div>
+      <div class="kpi-value" id="kpi-agents">—</div>
+      <div class="kpi-unit">di 40 Skill totali</div>
+    </div>
+    <div class="kpi-card" style="--kpi-accent: var(--gold)">
+      <div class="kpi-label">Prossima scadenza</div>
+      <div class="kpi-value" id="kpi-deadline">—</div>
+      <div class="kpi-unit" id="kpi-deadline-label">giorni</div>
+    </div>
+  </div>
+
+  <!-- QUICK ACTIONS -->
+  <h2 class="section-title">Strumenti</h2>
+  <div class="actions-grid" role="navigation" aria-label="Strumenti principali">
+
+    <a href="/audit.html" class="action-card"
+       style="--ac-color: var(--o); --ac-glow: rgba(251,107,0,.08);
+              --ac-bg: rgba(251,107,0,.1); --ac-badge-bg: rgba(251,107,0,.12)">
+      <div class="ac-icon" aria-hidden="true">🛡️</div>
+      <div class="ac-title">Audit AI</div>
+      <div class="ac-desc">Analisi rischi D.Lgs 81/08 e HACCP guidata dall'intelligenza artificiale. Risultato in 3 minuti.</div>
+      <div class="ac-badge">Avvia audit</div>
+    </a>
+
+    <a href="/agenti.html" class="action-card"
+       style="--ac-color: var(--pu); --ac-glow: rgba(138,74,232,.08);
+              --ac-bg: rgba(138,74,232,.1); --ac-badge-bg: rgba(138,74,232,.12)">
+      <div class="ac-icon" aria-hidden="true">🤖</div>
+      <div class="ac-title">Agenti AI</div>
+      <div class="ac-desc">18 agenti specializzati per sicurezza, HACCP, formazione, marketing e compliance. Sempre attivi.</div>
+      <div class="ac-badge" style="color: var(--pu)">Esplora agenti</div>
+    </a>
+
+    <a href="/documenti.html" class="action-card"
+       style="--ac-color: var(--vs); --ac-glow: rgba(34,197,94,.06);
+              --ac-bg: rgba(34,197,94,.08); --ac-badge-bg: rgba(34,197,94,.1)">
+      <div class="ac-icon" aria-hidden="true">📄</div>
+      <div class="ac-title">Documenti</div>
+      <div class="ac-desc">DVR, HACCP plan, POS, procedure sicurezza e attestati formazione generati automaticamente.</div>
+      <div class="ac-badge" style="color: var(--vs)">Genera documento</div>
+    </a>
+
+    <a href="/scadenziario.html" class="action-card"
+       style="--ac-color: var(--gold); --ac-glow: rgba(255,210,74,.06);
+              --ac-bg: rgba(255,210,74,.08); --ac-badge-bg: rgba(255,210,74,.1)">
+      <div class="ac-icon" aria-hidden="true">📅</div>
+      <div class="ac-title">Scadenziario</div>
+      <div class="ac-desc">Monitora visite mediche, corsi obbligatori, revisioni DVR e ispezioni. Zero rischio dimenticanze.</div>
+      <div class="ac-badge" style="color: var(--gold)">Vedi scadenze</div>
+    </a>
+
+  </div>
+
+  <!-- MAIN SPLIT -->
+  <div class="dash-split">
+
+    <!-- ACTIVITY FEED -->
+    <div class="feed-card" role="region" aria-label="Attività recente">
+      <div class="feed-header">
+        <h2>Attività recente</h2>
+        <a href="/documenti.html">Vedi tutto</a>
+      </div>
+      <div class="feed-list" id="feed-list">
+        <div class="feed-empty" id="feed-empty">
+          Nessuna attività ancora. Avvia il tuo primo audit.
+        </div>
+      </div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <!-- COMPLIANCE RING -->
+      <div class="compliance-card" role="region" aria-label="Indice compliance">
+        <h2>Indice Compliance</h2>
+        <div class="ring-wrap" role="img" aria-label="Punteggio compliance: 0 su 100">
+          <svg viewBox="0 0 120 120" width="120" height="120">
+            <circle class="ring-bg" cx="60" cy="60" r="54"/>
+            <circle class="ring-fg" id="ring-fg" cx="60" cy="60" r="54"/>
+          </svg>
+          <div class="ring-val">
+            <span id="ring-val-num">0</span>
+            <small>/100</small>
+          </div>
+        </div>
+        <div class="compliance-items">
+          <div class="ci-row">
+            <div class="ci-dot" style="--dot-c: var(--o)"></div>
+            <div class="ci-label">DVR aggiornato</div>
+            <div class="ci-val" id="ci-dvr">—</div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-dot" style="--dot-c: var(--vs)"></div>
+            <div class="ci-label">HACCP plan</div>
+            <div class="ci-val" id="ci-haccp">—</div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-dot" style="--dot-c: var(--cy)"></div>
+            <div class="ci-label">Formazione</div>
+            <div class="ci-val" id="ci-form">—</div>
+          </div>
+          <div class="ci-row">
+            <div class="ci-dot" style="--dot-c: var(--gold)"></div>
+            <div class="ci-label">Visite mediche</div>
+            <div class="ci-val" id="ci-med">—</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SKILL STATUS -->
+      <div class="skill-card" role="region" aria-label="Stato sistema">
+        <div class="skill-header">
+          <h2>Sistema</h2>
+          <div class="status-dot-pulse" aria-label="Sistema operativo"></div>
+          <span style="font-size: 12px; color: var(--vs); font-weight: 600;">Operativo</span>
+        </div>
+        <div class="skill-list">
+          <div class="skill-row">
+            <span class="skill-name"><strong>Nicolas</strong> Skill 34</span>
+            <span class="skill-badge sk-ok">Attivo</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name"><strong>Daily Monitor</strong> Skill 35</span>
+            <span class="skill-badge sk-ok">04:00 ✓</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name"><strong>Lead Scoring</strong> Skill 38</span>
+            <span class="skill-badge sk-ok">09:00 ✓</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name"><strong>Social Automator</strong> Skill 30</span>
+            <span class="skill-badge sk-warn">In attesa</span>
+          </div>
+          <div class="skill-row">
+            <span class="skill-name"><strong>Drive Scanner</strong> Skill 37</span>
+            <span class="skill-badge sk-off">Standby</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEXT DEADLINES -->
+      <div class="deadline-card" role="region" aria-label="Prossime scadenze">
+        <h2>Prossime scadenze</h2>
+        <div id="deadlines-list">
+          <div class="deadline-item">
+            <div class="deadline-days" style="--dd-bg: rgba(251,107,0,.1); --dd-border: rgba(251,107,0,.25); --dd-color: var(--o)">
+              <span class="dd-num">—</span>
+              <span class="dd-lbl">giorni</span>
+            </div>
+            <div class="deadline-info">
+              <strong>Aggiorna il DVR</strong>
+              <span>Completa l'audit per calcolare</span>
+            </div>
+          </div>
+          <div class="deadline-item">
+            <div class="deadline-days" style="--dd-bg: rgba(34,197,94,.08); --dd-border: rgba(34,197,94,.2); --dd-color: var(--vs)">
+              <span class="dd-num">—</span>
+              <span class="dd-lbl">giorni</span>
+            </div>
+            <div class="deadline-info">
+              <strong>Formazione antincendio</strong>
+              <span>Nessuna data registrata</span>
+            </div>
+          </div>
+          <div class="deadline-item">
+            <div class="deadline-days" style="--dd-bg: rgba(255,210,74,.08); --dd-border: rgba(255,210,74,.2); --dd-color: var(--gold)">
+              <span class="dd-num">—</span>
+              <span class="dd-lbl">giorni</span>
+            </div>
+            <div class="deadline-info">
+              <strong>Visite mediche</strong>
+              <span>Nessuna data registrata</span>
+            </div>
+          </div>
+        </div>
+        <a href="/scadenziario.html" class="btn btn-ghost" style="width:100%;justify-content:center;margin-top:14px;">
+          Gestisci scadenze
+        </a>
+      </div>
+
+      <!-- NICOLAS CTA -->
+      <div class="nicolas-card" role="complementary" aria-label="Assistente Nicolas">
+        <span class="nicolas-tag">Nicolas · Skill 34</span>
+        <h3>Parla con Nicolas</h3>
+        <p>Il Co-Fondatore Artificiale di Sicurissimo è attivo. Fai una domanda su normativa, HACCP o formazione.</p>
+        <a href="https://wa.me/3388771737" target="_blank" rel="noopener noreferrer"
+           class="btn" aria-label="Avvia chat WhatsApp con Nicolas">
+          WhatsApp ora
+        </a>
+      </div>
+
+    </div>
+  </div>
+</main>
+
+<script>
+(function () {
+  /* Auth guard */
+  var auth = window.K81 && K81.getAuth ? K81.getAuth() : null;
+  if (!auth) {
+    window.location.replace('/login.html?next=' + encodeURIComponent(window.location.pathname));
+    return;
+  }
+
+  /* Populate welcome */
+  var name = auth.nome || auth.name || 'Utente';
+  document.getElementById('dash-name').textContent = name;
+  document.getElementById('dash-pv').textContent = parseInt(localStorage.getItem('sic_pv') || 0).toLocaleString('it-IT');
+
+  /* Sub label with date */
+  var days = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'];
+  var months = ['gennaio','febbraio','marzo','aprile','maggio','giugno','luglio','agosto','settembre','ottobre','novembre','dicembre'];
+  var now = new Date();
+  document.getElementById('dash-sub').textContent =
+    days[now.getDay()] + ' ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear() + ' · Riepilogo operativo.';
+
+  /* Load dashboard data from API */
+  fetch('/api/dashboard.php', {
+    headers: { 'Authorization': 'Bearer ' + localStorage.getItem('sic_token') }
+  })
+  .then(function(r){ return r.ok ? r.json() : null; })
+  .then(function(d){ if (d && d.ok) populateDash(d.data); else renderDefaults(); })
+  .catch(function(){ renderDefaults(); });
+
+  function renderDefaults() {
+    /* KPI defaults */
+    animateNum('kpi-compliance', 0, 0);
+    document.getElementById('kpi-docs').textContent = '0';
+    document.getElementById('kpi-agents').textContent = '5';
+    document.getElementById('kpi-deadline').textContent = '—';
+    document.getElementById('kpi-deadline-label').textContent = 'completa audit';
+
+    /* Compliance ring */
+    setRing(0);
+    document.getElementById('ci-dvr').textContent   = 'Da fare';
+    document.getElementById('ci-haccp').textContent = 'Da fare';
+    document.getElementById('ci-form').textContent  = 'Da fare';
+    document.getElementById('ci-med').textContent   = 'Da fare';
+  }
+
+  function populateDash(data) {
+    var score = data.compliance_score || 0;
+    animateNum('kpi-compliance', 0, score, 1000);
+    document.getElementById('kpi-docs').textContent    = data.docs_month || 0;
+    document.getElementById('kpi-agents').textContent  = data.agents_active || 5;
+
+    if (data.next_deadline_days != null) {
+      document.getElementById('kpi-deadline').textContent = data.next_deadline_days;
+      document.getElementById('kpi-deadline-label').textContent = 'giorni alla scadenza';
+    }
+
+    setRing(score);
+    document.getElementById('ci-dvr').textContent   = data.dvr_ok   ? 'Aggiornato' : 'Da fare';
+    document.getElementById('ci-haccp').textContent = data.haccp_ok ? 'Aggiornato' : 'Da fare';
+    document.getElementById('ci-form').textContent  = data.form_ok  ? 'OK'         : 'Da fare';
+    document.getElementById('ci-med').textContent   = data.med_ok   ? 'OK'         : 'Da fare';
+
+    if (data.activity && data.activity.length) {
+      renderFeed(data.activity);
+    }
+  }
+
+  /* Compliance ring animation */
+  function setRing(score) {
+    var circumference = 339.3;
+    var offset = circumference - (score / 100) * circumference;
+    var fg = document.getElementById('ring-fg');
+    fg.style.setProperty('--ring-offset', offset + 'px');
+    fg.style.strokeDashoffset = offset;
+    /* Color by score */
+    var color = score >= 75 ? 'var(--vs)' : score >= 50 ? 'var(--gold)' : 'var(--er)';
+    fg.style.stroke = color;
+    document.getElementById('ring-val-num').textContent = score;
+    document.querySelector('.ring-wrap').setAttribute('aria-label', 'Punteggio compliance: ' + score + ' su 100');
+  }
+
+  /* Animate number counter */
+  function animateNum(id, from, to, duration) {
+    duration = duration || 800;
+    var el = document.getElementById(id);
+    var start = performance.now();
+    requestAnimationFrame(function step(ts) {
+      var p = Math.min((ts - start) / duration, 1);
+      el.textContent = Math.round(from + (to - from) * easeOut(p));
+      if (p < 1) requestAnimationFrame(step);
+    });
+    function easeOut(t) { return 1 - Math.pow(1 - t, 3); }
+  }
+
+  /* Render activity feed */
+  function renderFeed(items) {
+    var empty = document.getElementById('feed-empty');
+    if (empty) empty.remove();
+    var list = document.getElementById('feed-list');
+    var icons = { audit: '🛡️', document: '📄', agent: '🤖', login: '🔑', deadline: '📅' };
+    items.slice(0, 8).forEach(function(item) {
+      var el = document.createElement('div');
+      el.className = 'feed-item';
+      var dotColor = item.type === 'audit' ? 'var(--o)' : item.type === 'document' ? 'var(--vs)' :
+                     item.type === 'agent' ? 'var(--pu)' : 'var(--cy)';
+      el.innerHTML =
+        '<div class="feed-dot" style="background:' + dotColor + '"></div>' +
+        '<div class="feed-text"><strong>' + escHtml(item.label) + '</strong>' +
+        '<span>' + escHtml(item.detail || '') + '</span></div>' +
+        '<div class="feed-time">' + formatTime(item.ts) + '</div>';
+      list.appendChild(el);
+    });
+  }
+
+  function formatTime(ts) {
+    if (!ts) return '';
+    var d = new Date(ts * 1000);
+    return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+  }
+
+  function escHtml(str) {
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  /* Render defaults if fetch fails immediately */
+  renderDefaults();
+})();
+</script>
+</body>
+</html>
