@@ -1,0 +1,7 @@
+# Documenti fiscali e personali
+*.pdf
+*.zip
+
+# File temporanei
+*.tmp
+*.log
