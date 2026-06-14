@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Crea il tuo SIC-ID Gratis · 81+</title>
+<meta name="description" content="Crea il tuo SIC-ID gratuito in 60 secondi. Un'identità digitale per tutto l'ecosistema 81+: audit, agenti AI, documenti, scadenziario.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/svg+xml" href="/assets/logo-81plus.svg">
+<link rel="stylesheet" href="/kit81/kit81.css">
+<style>
+.auth-wrap {
+  min-height: calc(100vh - var(--nav-h));
+  display: flex; align-items: flex-start; justify-content: center;
+  padding: 40px 24px 80px;
+  position: relative;
+}
+.auth-bg {
+  position: fixed; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(251,107,0,.07) 0%, transparent 70%);
+}
+.auth-card {
+  width: min(460px, 100%);
+  background: var(--c2);
+  border: 1px solid var(--bd);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative; z-index: 1;
+}
+.auth-logo {
+  display: flex; align-items: baseline; gap: 2px;
+  justify-content: center; margin-bottom: 20px; text-decoration: none;
+}
+.auth-logo .logo-81  { font-family: var(--fh); font-size: 40px; color: var(--o); line-height: 1; }
+.auth-logo .logo-plus { font-family: var(--fh); font-size: 40px; color: #fff; line-height: 1; }
+.auth-title { font-family: var(--fh); font-size: 28px; text-align: center; margin-bottom: 6px; }
+.auth-sub   { font-size: 14px; color: var(--mu); text-align: center; margin-bottom: 28px; }
+.btn-full { width: 100%; justify-content: center; margin-top: 4px; }
+
+.benefits-list {
+  background: var(--c1); border: 1px solid var(--bd);
+  border-radius: var(--r-sm); padding: 14px 16px;
+  margin-bottom: 24px; display: flex; flex-direction: column; gap: 6px;
+}
+.benefit-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--t2);
+}
+.benefit-item .check { color: var(--vs); font-size: 14px; flex-shrink: 0; }
+
+.settore-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 6px;
+}
+.settore-btn {
+  background: var(--c1); border: 1px solid var(--bd);
+  border-radius: var(--r-sm); padding: 10px 12px;
+  font-size: 13px; color: var(--t2); cursor: pointer;
+  text-align: left; transition: border-color .15s, color .15s;
+  display: flex; align-items: center; gap: 8px;
+}
+.settore-btn:hover, .settore-btn.active {
+  border-color: var(--o); color: var(--t);
+}
+.settore-btn.active { background: rgba(251,107,0,.08); }
+
+.auth-terms {
+  font-size: 11px; color: var(--mu); text-align: center; margin-top: 16px; line-height: 1.5;
+}
+.auth-terms a { color: var(--mu); text-decoration: underline; }
+.auth-terms a:hover { color: var(--t2); }
+
+.auth-links { text-align: center; margin-top: 20px; font-size: 13px; color: var(--mu); }
+.auth-links a { color: var(--o); }
+
+.password-wrap { position: relative; }
+.password-wrap .input { padding-right: 44px; }
+.pw-toggle {
+  position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  color: var(--mu); cursor: pointer; font-size: 16px;
+  padding: 4px; transition: color .15s;
+}
+.pw-toggle:hover { color: var(--t2); }
+
+#signupError {
+  display: none; background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  border-radius: var(--r-sm); padding: 10px 14px;
+  font-size: 13px; color: var(--er); margin-bottom: 16px;
+}
+.pw-strength {
+  height: 3px; border-radius: 99px;
+  background: var(--bd); margin-top: 6px; overflow: hidden;
+}
+.pw-strength-fill { height: 100%; border-radius: 99px; transition: width .3s, background .3s; width: 0; }
+</style>
+</head>
+<body>
+<script>
+window.K81 = { hub: 'NET' };
+</script>
+
+<div class="auth-bg" aria-hidden="true"></div>
+
+<main id="main-content" class="auth-wrap">
+  <div class="auth-card" role="main">
+
+    <a class="auth-logo" href="/" aria-label="81+ Home">
+      <span class="logo-81">81</span><span class="logo-plus">+</span>
+    </a>
+
+    <h1 class="auth-title">Crea il tuo SIC-ID</h1>
+    <p class="auth-sub">Gratis. Attivo in 60 secondi.</p>
+
+    <div class="benefits-list" role="list">
+      <div class="benefit-item" role="listitem"><span class="check">✓</span> Audit AI D.Lgs 81/08 e HACCP</div>
+      <div class="benefit-item" role="listitem"><span class="check">✓</span> 18 agenti AI sempre disponibili</div>
+      <div class="benefit-item" role="listitem"><span class="check">✓</span> Fabbrica documenti e scadenziario</div>
+      <div class="benefit-item" role="listitem"><span class="check">✓</span> Wallet PV: 1 PV = 1€ di sconto</div>
+    </div>
+
+    <div id="signupError" role="alert" aria-live="polite"></div>
+
+    <form id="signupForm" novalidate aria-label="Modulo di registrazione">
+
+      <div class="grid-2" style="gap:12px">
+        <div class="form-group">
+          <label class="form-label" for="signupNome">Nome</label>
+          <input class="input" type="text" id="signupNome" name="nome"
+            placeholder="Mario" autocomplete="given-name"
+            required aria-required="true">
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="signupCognome">Cognome</label>
+          <input class="input" type="text" id="signupCognome" name="cognome"
+            placeholder="Rossi" autocomplete="family-name"
+            required aria-required="true">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signupEmail">Email</label>
+        <input class="input" type="email" id="signupEmail" name="email"
+          placeholder="mario@azienda.it" autocomplete="email"
+          required aria-required="true">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signupPassword">Password</label>
+        <div class="password-wrap">
+          <input class="input" type="password" id="signupPassword" name="password"
+            placeholder="Minimo 8 caratteri" autocomplete="new-password"
+            required aria-required="true" minlength="8">
+          <button class="pw-toggle" type="button" id="pwToggle" aria-label="Mostra/nascondi password">
+            👁
+          </button>
+        </div>
+        <div class="pw-strength" aria-hidden="true">
+          <div class="pw-strength-fill" id="pwStrengthFill"></div>
+        </div>
+        <span class="form-hint" id="pwStrengthLabel"></span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="signupPiva">Partita IVA (opzionale)</label>
+        <input class="input" type="text" id="signupPiva" name="piva"
+          placeholder="IT01234567890" autocomplete="off" maxlength="13">
+        <span class="form-hint">Obbligatoria per accedere ai sigilli e ai servizi B2B.</span>
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" id="settoreLabel">Il tuo settore</label>
+        <div class="settore-grid" role="group" aria-labelledby="settoreLabel">
+          <button class="settore-btn" type="button" data-settore="manifatturiero">🏭 Manifatturiero</button>
+          <button class="settore-btn" type="button" data-settore="food">🍽️ Food &amp; HACCP</button>
+          <button class="settore-btn" type="button" data-settore="cantieri">🏗️ Cantieri</button>
+          <button class="settore-btn" type="button" data-settore="uffici">🏢 Uffici</button>
+          <button class="settore-btn" type="button" data-settore="commercio">🛒 Commercio</button>
+          <button class="settore-btn" type="button" data-settore="altro">⚙️ Altro</button>
+        </div>
+        <input type="hidden" id="settoreHidden" name="settore" value="">
+      </div>
+
+      <button class="btn btn-primary btn-full" type="submit" id="signupBtn">
+        Crea il mio SIC-ID gratis →
+      </button>
+
+    </form>
+
+    <p class="auth-terms">
+      Registrandoti accetti i <a href="/termini.html">Termini di Servizio</a> e
+      la <a href="/privacy.html">Privacy Policy</a> di 81+.
+      I tuoi dati non vengono mai venduti a terzi.
+    </p>
+
+    <div class="auth-links">
+      Hai già un account? <a href="/login.html">Accedi qui</a>
+    </div>
+
+  </div>
+</main>
+
+<script src="/kit81/kit81.js"></script>
+<script>
+(function () {
+  /* Settore selection */
+  let selectedSettore = '';
+  document.querySelectorAll('.settore-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.settore-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      selectedSettore = btn.dataset.settore;
+      document.getElementById('settoreHidden').value = selectedSettore;
+      btn.setAttribute('aria-pressed', 'true');
+    });
+  });
+
+  /* Password toggle */
+  const toggle = document.getElementById('pwToggle');
+  const pwInput = document.getElementById('signupPassword');
+  toggle?.addEventListener('click', () => {
+    const show = pwInput.type === 'password';
+    pwInput.type = show ? 'text' : 'password';
+    toggle.textContent = show ? '🙈' : '👁';
+    toggle.setAttribute('aria-label', show ? 'Nascondi password' : 'Mostra password');
+  });
+
+  /* Password strength */
+  const fill = document.getElementById('pwStrengthFill');
+  const lbl  = document.getElementById('pwStrengthLabel');
+  pwInput?.addEventListener('input', () => {
+    const v = pwInput.value;
+    let score = 0;
+    if (v.length >= 8) score++;
+    if (/[A-Z]/.test(v)) score++;
+    if (/[0-9]/.test(v)) score++;
+    if (/[^A-Za-z0-9]/.test(v)) score++;
+    const map = [
+      { w: '0%', c: 'transparent', t: '' },
+      { w: '25%', c: 'var(--er)',   t: 'Troppo corta' },
+      { w: '50%', c: 'var(--gold)', t: 'Debole' },
+      { w: '75%', c: 'var(--o)',    t: 'Buona' },
+      { w: '100%', c: 'var(--vs)', t: 'Ottima' },
+    ];
+    const s = map[score] || map[0];
+    fill.style.width = s.w;
+    fill.style.background = s.c;
+    lbl.textContent = s.t;
+    lbl.style.color = s.c;
+  });
+
+  /* Form submit */
+  const form   = document.getElementById('signupForm');
+  const errBox = document.getElementById('signupError');
+  const btn    = document.getElementById('signupBtn');
+
+  function showError(msg) { errBox.textContent = msg; errBox.style.display = 'block'; errBox.scrollIntoView({ block: 'nearest' }); }
+  function clearError()   { errBox.style.display = 'none'; errBox.textContent = ''; }
+
+  form?.addEventListener('submit', async e => {
+    e.preventDefault();
+    clearError();
+
+    const nome     = document.getElementById('signupNome').value.trim();
+    const cognome  = document.getElementById('signupCognome').value.trim();
+    const email    = document.getElementById('signupEmail').value.trim();
+    const password = document.getElementById('signupPassword').value;
+    const piva     = document.getElementById('signupPiva').value.trim();
+    const settore  = selectedSettore;
+
+    if (!nome || !cognome) { showError('Inserisci nome e cognome.'); return; }
+    if (!email || !/\S+@\S+\.\S+/.test(email)) { showError('Inserisci un indirizzo email valido.'); return; }
+    if (password.length < 8) { showError('La password deve avere almeno 8 caratteri.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Creazione SIC-ID in corso…';
+
+    try {
+      const res = await fetch('/api/auth.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'register', nome, cognome, email, password, piva, settore }),
+      });
+      const data = await res.json();
+      if (data.ok && data.data?.token) {
+        localStorage.setItem('sic_token', data.data.token);
+        if (data.data.pv !== undefined) localStorage.setItem('sic_pv', data.data.pv);
+        window.location.href = data.data.redirect || '/dashboard.html';
+      } else {
+        showError(data.err || 'Registrazione non riuscita. Riprova.');
+        btn.disabled = false;
+        btn.textContent = 'Crea il mio SIC-ID gratis →';
+      }
+    } catch {
+      showError('Errore di rete. Controlla la connessione e riprova.');
+      btn.disabled = false;
+      btn.textContent = 'Crea il mio SIC-ID gratis →';
+    }
+  });
+})();
+</script>
+</body>
+</html>

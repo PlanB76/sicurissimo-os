@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pagina non trovata · 81+</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/svg+xml" href="/assets/logo-81plus.svg">
+<link rel="stylesheet" href="/kit81/kit81.css">
+<style>
+.err-wrap {
+  min-height: calc(100vh - var(--nav-h));
+  display: flex; align-items: center; justify-content: center;
+  text-align: center; padding: 40px 24px;
+  position: relative;
+}
+.err-num {
+  font-family: var(--fh); font-size: clamp(100px, 20vw, 200px);
+  color: rgba(251,107,0,.1); line-height: 1; display: block;
+  position: absolute; top: 50%; left: 50%;
+  transform: translate(-50%, -60%); pointer-events: none;
+}
+.err-content { position: relative; z-index: 1; }
+.err-content h1 { font-size: clamp(32px, 5vw, 56px); margin-bottom: 16px; }
+.err-content p  { font-size: 17px; color: var(--t2); margin-bottom: 32px; max-width: 480px; }
+.err-links { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+<script>window.K81 = { hub: 'NET' };</script>
+
+<main id="main-content" class="err-wrap">
+  <span class="err-num" aria-hidden="true">404</span>
+  <div class="err-content">
+    <h1>Pagina <span class="accent">non trovata.</span></h1>
+    <p>L'URL che hai cercato non esiste o è stato spostato. Torna alla home e riparti da lì.</p>
+    <div class="err-links">
+      <a class="btn btn-primary" href="/">Vai alla Home</a>
+      <a class="btn btn-ghost" href="/audit.html">Prova l'Audit AI</a>
+    </div>
+  </div>
+</main>
+
+<script src="/kit81/kit81.js"></script>
+</body>
+</html>

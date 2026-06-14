@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Accedi · 81+</title>
+<meta name="description" content="Accedi al tuo account 81+ con il SIC-ID. Dashboard, agenti AI, documenti e scadenziario in un clic.">
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/svg+xml" href="/assets/logo-81plus.svg">
+<link rel="stylesheet" href="/kit81/kit81.css">
+<style>
+.auth-wrap {
+  min-height: calc(100vh - var(--nav-h));
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 24px;
+  position: relative;
+}
+.auth-bg {
+  position: fixed; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(251,107,0,.07) 0%, transparent 70%);
+}
+.auth-card {
+  width: min(420px, 100%);
+  background: var(--c2);
+  border: 1px solid var(--bd);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative; z-index: 1;
+}
+.auth-logo {
+  display: flex; align-items: baseline; gap: 2px;
+  justify-content: center; margin-bottom: 28px; text-decoration: none;
+}
+.auth-logo .logo-81  { font-family: var(--fh); font-size: 40px; color: var(--o); line-height: 1; }
+.auth-logo .logo-plus { font-family: var(--fh); font-size: 40px; color: #fff; line-height: 1; }
+.auth-title { font-family: var(--fh); font-size: 28px; text-align: center; margin-bottom: 6px; }
+.auth-sub   { font-size: 14px; color: var(--mu); text-align: center; margin-bottom: 28px; }
+.btn-full { width: 100%; justify-content: center; margin-top: 4px; }
+.auth-divider {
+  display: flex; align-items: center; gap: 12px;
+  margin: 20px 0; color: var(--mu); font-size: 12px;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1; border-top: 1px solid var(--bd);
+}
+.auth-links { text-align: center; margin-top: 20px; font-size: 13px; color: var(--mu); }
+.auth-links a { color: var(--o); }
+.password-wrap { position: relative; }
+.password-wrap .input { padding-right: 44px; }
+.pw-toggle {
+  position: absolute; right: 12px; top: 50%;
+  transform: translateY(-50%);
+  background: none; border: none;
+  color: var(--mu); cursor: pointer; font-size: 16px;
+  padding: 4px; transition: color .15s;
+}
+.pw-toggle:hover { color: var(--t2); }
+#loginError {
+  display: none; background: rgba(239,68,68,.1);
+  border: 1px solid rgba(239,68,68,.3);
+  border-radius: var(--r-sm); padding: 10px 14px;
+  font-size: 13px; color: var(--er); margin-bottom: 16px;
+}
+</style>
+</head>
+<body>
+<script>
+window.K81 = { hub: 'NET' };
+</script>
+
+<div class="auth-bg" aria-hidden="true"></div>
+
+<main id="main-content" class="auth-wrap">
+  <div class="auth-card" role="main">
+
+    <a class="auth-logo" href="/" aria-label="81+ Home">
+      <span class="logo-81">81</span><span class="logo-plus">+</span>
+    </a>
+
+    <h1 class="auth-title">Bentornato</h1>
+    <p class="auth-sub">Accedi con il tuo SIC-ID</p>
+
+    <div id="loginError" role="alert" aria-live="polite"></div>
+
+    <form id="loginForm" novalidate aria-label="Modulo di accesso">
+
+      <div class="form-group">
+        <label class="form-label" for="loginEmail">Email</label>
+        <input class="input" type="email" id="loginEmail" name="email"
+          placeholder="tua@email.com" autocomplete="email"
+          required aria-required="true">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="loginPassword">
+          Password
+          <a href="/reset-password.html" style="float:right;color:var(--o);font-size:11px;font-weight:normal;letter-spacing:0;text-transform:none">Hai dimenticato?</a>
+        </label>
+        <div class="password-wrap">
+          <input class="input" type="password" id="loginPassword" name="password"
+            placeholder="••••••••" autocomplete="current-password"
+            required aria-required="true">
+          <button class="pw-toggle" type="button" id="pwToggle" aria-label="Mostra/nascondi password">
+            👁
+          </button>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-full" type="submit" id="loginBtn">
+        Accedi al tuo account
+      </button>
+
+    </form>
+
+    <div class="auth-divider">oppure</div>
+
+    <div class="auth-links">
+      Non hai ancora un account?
+      <a href="/signup.html">Crea il tuo SIC-ID gratis</a>
+    </div>
+
+  </div>
+</main>
+
+<script src="/kit81/kit81.js"></script>
+<script>
+(function () {
+  /* Password toggle */
+  const toggle = document.getElementById('pwToggle');
+  const pwInput = document.getElementById('loginPassword');
+  toggle?.addEventListener('click', () => {
+    const show = pwInput.type === 'password';
+    pwInput.type = show ? 'text' : 'password';
+    toggle.textContent = show ? '🙈' : '👁';
+    toggle.setAttribute('aria-label', show ? 'Nascondi password' : 'Mostra password');
+  });
+
+  /* Form submit */
+  const form = document.getElementById('loginForm');
+  const errBox = document.getElementById('loginError');
+  const btn = document.getElementById('loginBtn');
+
+  function showError(msg) {
+    errBox.textContent = msg;
+    errBox.style.display = 'block';
+  }
+  function clearError() {
+    errBox.style.display = 'none';
+    errBox.textContent = '';
+  }
+
+  form?.addEventListener('submit', async e => {
+    e.preventDefault();
+    clearError();
+    const email = document.getElementById('loginEmail').value.trim();
+    const password = document.getElementById('loginPassword').value;
+    if (!email || !password) { showError('Inserisci email e password.'); return; }
+
+    btn.disabled = true;
+    btn.textContent = 'Accesso in corso…';
+
+    try {
+      const res = await fetch('/api/auth.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'login', email, password }),
+      });
+      const data = await res.json();
+      if (data.ok && data.data?.token) {
+        localStorage.setItem('sic_token', data.data.token);
+        if (data.data.pv !== undefined) localStorage.setItem('sic_pv', data.data.pv);
+        window.location.href = data.data.redirect || '/dashboard.html';
+      } else {
+        showError(data.err || 'Credenziali non valide. Riprova.');
+        btn.disabled = false;
+        btn.textContent = 'Accedi al tuo account';
+      }
+    } catch {
+      showError('Errore di rete. Controlla la connessione e riprova.');
+      btn.disabled = false;
+      btn.textContent = 'Accedi al tuo account';
+    }
+  });
+})();
+</script>
+</body>
+</html>

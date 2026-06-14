@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="it" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ · Il tuo SIC-ID. Tutta la sicurezza aziendale.</title>
+<meta name="description" content="Crea il tuo SIC-ID gratis. Un'identità digitale per accedere all'intero ecosistema 81+: audit AI, documenti D.Lgs 81/08, HACCP, 18 agenti e molto altro.">
+
+<!-- Open Graph -->
+<meta property="og:title" content="81+ · Il tuo SIC-ID. Tutta la sicurezza aziendale.">
+<meta property="og:description" content="Crea il tuo SIC-ID gratis e accedi all'ecosistema 81+: audit AI, fabbrica documenti, 18 agenti, scadenziario normativo.">
+<meta property="og:image" content="https://81plus.net/assets/og-home.jpg">
+<meta property="og:url" content="https://81plus.net/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="it_IT">
+<meta name="twitter:card" content="summary_large_image">
+
+<!-- Preconnect fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/assets/logo-81plus.svg">
+
+<!-- KIT81 -->
+<link rel="stylesheet" href="/kit81/kit81.css">
+
+<style>
+/* Page-specific styles */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  min-height: calc(100vh - var(--nav-h) - 32px);
+  padding: 60px 0;
+}
+.hero-text { text-align: left; }
+.hero-text h1 { margin-bottom: 20px; }
+.hero-text p { font-size: 18px; margin-bottom: 36px; max-width: 480px; }
+.hero-panel {
+  background: var(--c1);
+  border: 1px solid var(--bd);
+  border-radius: 24px;
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.hero-panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at 80% 20%, rgba(251,107,0,.08) 0%, transparent 60%);
+  pointer-events: none;
+}
+.sic-preview {
+  background: var(--c2);
+  border: 1px solid var(--bd);
+  border-radius: var(--r-sm);
+  padding: 16px 20px;
+  margin-bottom: 20px;
+}
+.sic-preview-label {
+  font-family: var(--fm); font-size: 9px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 2px; color: var(--mu);
+  margin-bottom: 8px; display: block;
+}
+.sic-id-display {
+  font-family: var(--fm); font-size: 18px; font-weight: 700;
+  color: var(--o); letter-spacing: 2px;
+}
+.hub-orbit {
+  display: flex; flex-direction: column; gap: 10px;
+  margin: 24px 0;
+}
+.hub-pill {
+  display: flex; align-items: center; gap: 12px;
+  background: var(--c2); border: 1px solid var(--bd);
+  border-radius: var(--r-sm); padding: 10px 14px;
+  transition: border-color .2s;
+}
+.hub-pill:hover { border-color: rgba(251,107,0,.3); }
+.hub-pill-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.hub-pill-dot.orange { background: var(--o); }
+.hub-pill-dot.cyan   { background: var(--cy); }
+.hub-pill-dot.gold   { background: var(--gold); }
+.hub-pill-name { font-size: 13px; font-weight: 600; color: var(--t); flex: 1; }
+.hub-pill-domain { font-family: var(--fm); font-size: 10px; color: var(--mu); }
+
+/* Stats bar */
+.stats-bar {
+  background: var(--c1);
+  border-top: 1px solid var(--bd);
+  border-bottom: 1px solid var(--bd);
+  padding: 28px 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  text-align: center;
+}
+.stat-item {
+  padding: 16px 0;
+  border-right: 1px solid var(--bd);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num { font-family: var(--fh); font-size: 42px; color: var(--o); display: block; line-height: 1; }
+.stat-label { font-size: 12px; color: var(--mu); margin-top: 6px; font-family: var(--fm); text-transform: uppercase; letter-spacing: 1px; }
+
+/* How it works */
+.steps-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+.step-card { position: relative; }
+.step-connector {
+  position: absolute; top: 24px; right: -12px;
+  width: 24px; height: 2px;
+  background: linear-gradient(90deg, var(--bd), rgba(251,107,0,.3));
+  z-index: 1;
+}
+.step-card:last-child .step-connector { display: none; }
+
+/* HUBs section */
+.hubs-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+.hub-card { text-decoration: none; color: inherit; display: block; }
+.hub-card h3 { font-size: 22px; margin-bottom: 8px; }
+.hub-card .hub-domain {
+  font-family: var(--fm); font-size: 11px; color: var(--mu);
+  margin-bottom: 16px; display: block;
+}
+.hub-card p { font-size: 14px; color: var(--t2); margin-bottom: 20px; }
+.hub-number {
+  font-family: var(--fh); font-size: 80px; color: rgba(251,107,0,.06);
+  position: absolute; top: 8px; right: 16px; line-height: 1;
+  pointer-events: none; user-select: none;
+}
+.hub-card.hub2 { border-color: rgba(255,210,74,.2); }
+.hub-card.hub2 .hub-number { color: rgba(255,210,74,.06); }
+.hub-card.hub3 { border-color: rgba(0,217,255,.2); }
+.hub-card.hub3 .hub-number { color: rgba(0,217,255,.06); }
+
+/* Products grid */
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--gap);
+}
+.product-icon {
+  font-size: 28px; margin-bottom: 16px; display: block;
+}
+.product-card h3 { font-size: 18px; margin-bottom: 8px; }
+.product-card p  { font-size: 13px; }
+.product-badge   { margin-bottom: 12px; }
+
+/* Final CTA */
+.cta-section {
+  background: var(--c1);
+  border-top: 1px solid var(--bd);
+  border-bottom: 1px solid var(--bd);
+  padding: 80px 0;
+  text-align: center;
+}
+.cta-section h2 { margin-bottom: 16px; }
+.cta-section p  { font-size: 18px; margin-bottom: 36px; }
+.cta-section .btn { min-width: 280px; }
+
+/* Reviews */
+.reviews-row { display: flex; gap: var(--gap); flex-wrap: wrap; }
+.review-card { flex: 1; min-width: 240px; }
+.review-stars { color: var(--gold); font-size: 14px; margin-bottom: 8px; }
+.review-text  { font-size: 13px; color: var(--t2); font-style: italic; margin-bottom: 12px; }
+.review-author { font-size: 12px; color: var(--mu); font-family: var(--fm); }
+
+/* Responsive */
+@media (max-width: 860px) {
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; min-height: auto; }
+  .hero-text { text-align: center; }
+  .hero-text p { margin: 0 auto 36px; }
+  .stats-grid { grid-template-columns: repeat(2,1fr); }
+  .stat-item:nth-child(2) { border-right: none; }
+  .steps-grid, .hubs-grid { grid-template-columns: 1fr; }
+  .step-connector { display: none; }
+}
+@media (max-width: 540px) {
+  .hero-panel { padding: 28px 20px; }
+  .stats-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<!-- K81 config: injects nav, ticker, footer, cookie bar automatically -->
+<script>
+window.K81 = {
+  hub: 'NET',
+  ticker: true,
+  ticker: [
+    { lbl: 'AZIENDE DAL 2003', val: '32.000+', cls: 'up' },
+    { lbl: 'ATTESTATI EMESSI', val: '225.000+', cls: '' },
+    { lbl: 'RECENSIONI GOOGLE', val: '4,81 ★ (294)', cls: 'up' },
+    { lbl: 'SETTORI COPERTI', val: '35', cls: '' },
+    { lbl: 'INFORTUNI INAIL 2023', val: '597.710', cls: 'dn' },
+    { lbl: 'IRREGOLARITÀ ISPETTIVA', val: '7 su 10', cls: 'dn' },
+    { lbl: 'PV', val: '1 PV = 1€ sconto', cls: '' },
+    { lbl: '81X MAX SUPPLY', val: '21.000.000', cls: 'cyan' },
+    { lbl: 'HUB ATTIVI', val: '3', cls: 'up' },
+  ],
+};
+</script>
+
+<main id="main-content">
+
+  <!-- HERO -->
+  <section class="section-lg" aria-labelledby="hero-heading" style="padding-top:0">
+    <div class="wrapper">
+      <div class="hero-grid">
+
+        <div class="hero-text">
+          <span class="section-label">HUB1 · 81plus.net</span>
+          <h1 id="hero-heading">Un solo ID.<br><span class="accent">Tutta la sicurezza.</span></h1>
+          <p>Crea il tuo SIC-ID gratis. Accedi ad audit AI, fabbrica documenti, 18 agenti intelligenti e lo scadenziario normativo. Una sola identità per l'intero ecosistema 81+.</p>
+          <div class="hero-cta" style="justify-content:flex-start">
+            <a class="btn btn-primary" href="/signup.html">Crea il tuo SIC-ID — è gratis</a>
+            <a class="btn btn-ghost" href="/come-funziona.html" style="font-family:var(--fb);font-size:14px;font-weight:600">Come funziona ›</a>
+          </div>
+          <p style="font-size:12px;color:var(--mu);margin-top:16px">Nessuna carta di credito. Attivo in 60 secondi.</p>
+        </div>
+
+        <div class="hero-panel" role="presentation" aria-hidden="true">
+          <div class="sic-preview">
+            <span class="sic-preview-label">Il tuo SIC-ID</span>
+            <div class="sic-id-display">SIC-IT-2026-XXXXXX</div>
+          </div>
+          <div class="hub-orbit">
+            <div class="hub-pill">
+              <div class="hub-pill-dot orange"></div>
+              <span class="hub-pill-name">HUB1 · Identità</span>
+              <span class="hub-pill-domain">81plus.net</span>
+              <span class="badge badge-live">Live</span>
+            </div>
+            <div class="hub-pill">
+              <div class="hub-pill-dot gold"></div>
+              <span class="hub-pill-name">HUB2 · Economia</span>
+              <span class="hub-pill-domain">81plus.it</span>
+              <span class="badge badge-live">Live</span>
+            </div>
+            <div class="hub-pill">
+              <div class="hub-pill-dot cyan"></div>
+              <span class="hub-pill-name">HUB3 · Web3</span>
+              <span class="hub-pill-domain">81plus.online</span>
+              <span class="badge badge-build">In arrivo</span>
+            </div>
+          </div>
+          <p style="font-size:12px;color:var(--mu);text-align:center">Un ID. Tre HUB. Nessuna barriera.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS BAR -->
+  <div class="stats-bar" role="region" aria-label="Numeri chiave">
+    <div class="wrapper">
+      <div class="stats-grid">
+        <div class="stat-item">
+          <span class="stat-num">32.000<span style="font-size:.6em">+</span></span>
+          <span class="stat-label">Aziende dal 2003</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">225k<span style="font-size:.6em">+</span></span>
+          <span class="stat-label">Attestati emessi</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num" style="color:var(--gold)">4,81<span style="font-size:.5em"> ★</span></span>
+          <span class="stat-label">294 recensioni verificate</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">35</span>
+          <span class="stat-label">Settori coperti</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" aria-labelledby="come-funziona-heading">
+    <div class="wrapper">
+      <div class="text-center mb-lg">
+        <span class="section-label">Come funziona</span>
+        <h2 id="come-funziona-heading">Tre passi. Zero burocrazia.</h2>
+        <p class="section-sub" style="margin:16px auto 0">Dalla registrazione all'audit completo in meno di 5 minuti.</p>
+      </div>
+      <div class="steps-grid">
+        <div class="card step-card">
+          <div class="step-connector" aria-hidden="true"></div>
+          <div class="step-icon" aria-hidden="true">🆔</div>
+          <span class="section-label">Passo 1</span>
+          <h3>Crei il SIC-ID</h3>
+          <p>Un'identità digitale unica per tutto l'ecosistema 81+. Email, settore, partita IVA. Fatto.</p>
+        </div>
+        <div class="card step-card">
+          <div class="step-connector" aria-hidden="true"></div>
+          <div class="step-icon" aria-hidden="true">🤖</div>
+          <span class="section-label">Passo 2</span>
+          <h3>Attivi gli agenti</h3>
+          <p>18 agenti AI analizzano la tua azienda. Audit D.Lgs 81/08, HACCP, ISO 45001. Risultato in 60 secondi.</p>
+        </div>
+        <div class="card step-card">
+          <div class="step-icon" aria-hidden="true">📄</div>
+          <span class="section-label">Passo 3</span>
+          <h3>Scarichi i documenti</h3>
+          <p>La fabbrica documenti genera DVR, procedure, checklist e registri pronti alla firma. Conformi per legge.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- I TRE HUB -->
+  <section class="section" style="background:var(--c1);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)" aria-labelledby="hubs-heading">
+    <div class="wrapper">
+      <div class="text-center mb-lg">
+        <span class="section-label">L'ecosistema</span>
+        <h2 id="hubs-heading">Tre HUB. Un solo obiettivo.</h2>
+      </div>
+      <div class="hubs-grid">
+
+        <a class="card hub-card" href="https://81plus.net" aria-label="HUB1 · Identità globale su 81plus.net">
+          <span class="hub-number" aria-hidden="true">1</span>
+          <span class="badge badge-live" style="margin-bottom:16px">Operativo</span>
+          <h3>HUB1 · <span class="accent">Identità</span></h3>
+          <span class="hub-domain">81plus.net</span>
+          <p>Il portale centrale. SIC-ID, dashboard, 18 agenti AI, fabbrica documenti, audit, scadenziario e wallet PV.</p>
+          <span class="label" style="color:var(--o)">Sei qui →</span>
+        </a>
+
+        <a class="card hub-card hub2" href="https://81plus.it" aria-label="HUB2 · Economia reale su 81plus.it">
+          <span class="hub-number" aria-hidden="true">2</span>
+          <span class="badge badge-live" style="margin-bottom:16px">Operativo</span>
+          <h3>HUB2 · <span style="color:var(--gold)">Economia</span></h3>
+          <span class="hub-domain">81plus.it · sicurissimo.online</span>
+          <p>Membership, sigilli, academy accreditata, ZONE fisiche e network commerciale. L'ecosistema produce valore reale.</p>
+          <span class="label" style="color:var(--gold)">Vai a 81plus.it →</span>
+        </a>
+
+        <a class="card hub-card hub3" href="https://81plus.online" aria-label="HUB3 · Web3 su 81plus.online">
+          <span class="hub-number" aria-hidden="true">3</span>
+          <span class="badge badge-build" style="margin-bottom:16px">In costruzione</span>
+          <h3>HUB3 · <span style="color:var(--cy)">Web3</span></h3>
+          <span class="hub-domain">81plus.online</span>
+          <p>Token 81X BEP-20, wallet SAF, NFT Sigilli, DEX on-chain e metaverso. Blockchain solo su binari autorizzati.</p>
+          <span class="label" style="color:var(--cy)">Scopri HUB3 →</span>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODOTTI / FUNZIONALITÀ -->
+  <section class="section" aria-labelledby="prodotti-heading">
+    <div class="wrapper">
+      <div class="text-center mb-lg">
+        <span class="section-label">Cosa trovi nel portale</span>
+        <h2 id="prodotti-heading">Tutto quello che serve. Già pronto.</h2>
+      </div>
+      <div class="products-grid">
+
+        <div class="card product-card">
+          <span class="product-icon" aria-hidden="true">🔍</span>
+          <span class="badge badge-live product-badge">Live</span>
+          <h3>Audit AI</h3>
+          <p>Analisi automatica dei rischi D.Lgs 81/08 e HACCP. Genera il report in 60 secondi con priorità di intervento.</p>
+        </div>
+
+        <div class="card product-card">
+          <span class="product-icon" aria-hidden="true">🤖</span>
+          <span class="badge badge-live product-badge">18 Agenti</span>
+          <h3>Agenti AI</h3>
+          <p>Nicolas, Graziella e 16 agenti specializzati presidiano la tua azienda 24/7. Dalla compliance al marketing.</p>
+        </div>
+
+        <div class="card product-card">
+          <span class="product-icon" aria-hidden="true">📄</span>
+          <span class="badge badge-live product-badge">Live</span>
+          <h3>Fabbrica Documenti</h3>
+          <p>DVR, procedure, checklist, registri HACCP e moduli 81/08 generati automaticamente e pronti per la firma.</p>
+        </div>
+
+        <div class="card product-card">
+          <span class="product-icon" aria-hidden="true">📅</span>
+          <span class="badge badge-live product-badge">Live</span>
+          <h3>Scadenziario</h3>
+          <p>Tutte le scadenze normative, le visite mediche e le formazioni tracciate automaticamente. Zero sorprese.</p>
+        </div>
+
+        <div class="card product-card">
+          <span class="product-icon" aria-hidden="true">🏅</span>
+          <span class="badge badge-gold product-badge">Premium</span>
+          <h3>Sigilli &amp; NFT</h3>
+          <p>Certificazioni digitali verificabili on-chain. Bronze, Silver, Gold e Platinum. Reputazione inattaccabile.</p>
+        </div>
+
+        <div class="card product-card">
+          <span class="product-icon" aria-hidden="true">💰</span>
+          <span class="badge badge-live product-badge">PV System</span>
+          <h3>Wallet PV</h3>
+          <p>Accumula PV (Punti Valore) con ogni azione. 1 PV = 1€ di sconto fino al 20% sui servizi 81+.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- RECENSIONI -->
+  <section class="section-sm" style="background:var(--c1);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)" aria-labelledby="recensioni-heading">
+    <div class="wrapper">
+      <div class="text-center mb-lg">
+        <span class="section-label">Recensioni reali</span>
+        <h2 id="recensioni-heading">294 recensioni. Media <span class="gold">4,81 ★</span></h2>
+        <p class="section-sub" style="margin:12px auto 0;font-size:14px">Tutti i giudizi sono verificati su Google. Mai un'opinione costruita.</p>
+      </div>
+      <div class="reviews-row">
+        <div class="card review-card">
+          <div class="review-stars" aria-label="5 stelle">★★★★★</div>
+          <p class="review-text">"Avevo paura dell'ispezione. Con il sistema 81+ ho completato il DVR e tutti i registri in due giorni. L'ispettore ha trovato tutto in regola."</p>
+          <span class="review-author">Titolare, settore ristorativo · Verona</span>
+        </div>
+        <div class="card review-card">
+          <div class="review-stars" aria-label="5 stelle">★★★★★</div>
+          <p class="review-text">"L'agente Nicolas risponde alle domande normative meglio di molti consulenti. E lo fa alle 3 di notte quando ho bisogno."</p>
+          <span class="review-author">Datore di lavoro, manifatturiero · Milano</span>
+        </div>
+        <div class="card review-card">
+          <div class="review-stars" aria-label="5 stelle">★★★★★</div>
+          <p class="review-text">"Da 20 anni seguo la normativa 81/08. Questo sistema è il salto di paradigma che aspettavo. Immediato, preciso, documentato."</p>
+          <span class="review-author">RSPP esterno · Roma</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="cta-section" aria-labelledby="cta-heading">
+    <div class="wrapper">
+      <span class="section-label" style="display:block;margin-bottom:12px">Inizia oggi</span>
+      <h2 id="cta-heading">Il tuo SIC-ID è<br><span class="accent">gratuito per sempre.</span></h2>
+      <p>Crea l'account in 60 secondi. Accedi all'audit AI, ai documenti e ai tuoi agenti. Zero carta di credito.</p>
+      <a class="btn btn-primary" href="/signup.html" style="min-width:300px">Crea il tuo SIC-ID gratis →</a>
+      <p style="font-size:13px;color:var(--mu);margin-top:20px">Già registrato? <a href="/login.html" style="color:var(--o)">Accedi qui</a></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- KIT81 JS — must be last -->
+<script src="/kit81/kit81.js"></script>
+</body>
+</html>
