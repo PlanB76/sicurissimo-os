@@ -1,0 +1,213 @@
+﻿{
+  "name": "81+ WAVE 1 · Welcome Signup · SIC-ID · QR · Referral",
+  "active": false,
+  "version": "1.0.0",
+  "notes": "Workflow logico per n8n. Non contiene credenziali reali. Prima dell'importazione sostituire URL, API key e nomi credenziali.",
+  "nodes": [
+    {
+      "id": "webhook_signup",
+      "name": "Webhook Signup 81plus.net",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [0, 0],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "81plus/signup",
+        "responseMode": "responseNode"
+      }
+    },
+    {
+      "id": "validate_payload",
+      "name": "Validate Signup Payload",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 2,
+      "position": [280, 0],
+      "parameters": {
+        "functionCode": "const body = $json.body || $json;\nconst required = ['name','email','privacy_consent'];\nfor (const key of required) {\n  if (!body[key]) throw new Error('Missing field: ' + key);\n}\nif (body.privacy_consent !== true) throw new Error('Privacy consent required');\nconst email = String(body.email).trim().toLowerCase();\nif (!email.match(/^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/)) throw new Error('Invalid email');\nreturn [{ json: { name: String(body.name).trim(), email, source: body.source || 'signup', magnet: body.magnet || null, lang: body.lang || 'it', ip: body.ip || null, user_agent: body.user_agent || null } }];"
+      }
+    },
+    {
+      "id": "create_sicid",
+      "name": "Create SIC-ID via HUB1 API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [560, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://81plus.net/api/sic/create.php",
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "={ \"name\": $json.name, \"email\": $json.email, \"source\": $json.source, \"magnet\": $json.magnet, \"lang\": $json.lang, \"ip\": $json.ip, \"user_agent\": $json.user_agent }"
+      }
+    },
+    {
+      "id": "create_wallets",
+      "name": "Create Wallets PV PV+",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [840, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://81plus.net/api/wallet/init.php",
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "={ \"sic_id\": $json.sic_id, \"email\": $json.email, \"pv_initial\": 0, \"pvplus_initial\": 100, \"reason\": \"welcome_free_pack\" }"
+      }
+    },
+    {
+      "id": "generate_referral",
+      "name": "Generate Referral Link",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1120, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://81plus.net/api/referral/create.php",
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "={ \"sic_id\": $json.sic_id, \"email\": $json.email }"
+      }
+    },
+    {
+      "id": "generate_qr",
+      "name": "Generate QR Code",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1400, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://81plus.net/api/qr/create.php",
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "={ \"sic_id\": $json.sic_id, \"target_url\": $json.referral_url, \"type\": \"referral\" }"
+      }
+    },
+    {
+      "id": "send_welcome_email",
+      "name": "Send Welcome Email info@81plus.net",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1680, 0],
+      "parameters": {
+        "method": "POST",
+        "url": "https://81plus.net/api/email/send_welcome.php",
+        "sendBody": true,
+        "contentType": "json",
+        "jsonBody": "={ \"sic_id\": $json.sic_id, \"email\": $json.email, \"name\": $json.name, \"from\": \"info@81plus.net\", \"referral_url\": $json.referral_url, \"qr_url\": $json.qr_url, \"dashboard_url\": \"https://81plus.net/dashboard\" }"
+      }
+    },
+    {
+      "id": "write_audit_log",
+      "name": "Write Automation Log",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4,
+      "position": [1960, 0],
+      "parameters": {
+
+# ============================================================
+# 81+ MASTER VIVO · NOTEBOOKLM PROMPTS
+# Crea prompt operativi per Gemini / NotebookLM
+# ============================================================
+
+$Desktop = [Environment]::GetFolderPath("Desktop")
+$Base = Join-Path $Desktop "81+ MASTER VIVO"
+
+if (!(Test-Path $Base)) {
+    Write-Host "Cartella 81+ MASTER VIVO non trovata sul Desktop." -ForegroundColor Red
+    exit
+}
+
+function Write-File {
+    param (
+        [string]$RelativePath,
+        [string]$Content
+    )
+
+    $FullPath = Join-Path $Base $RelativePath
+    $Dir = Split-Path $FullPath -Parent
+    New-Item -ItemType Directory -Path $Dir -Force | Out-Null
+    $Content | Set-Content -Path $FullPath -Encoding UTF8
+}
+
+New-Item -ItemType Directory -Path (Join-Path $Base "32_NOTEBOOKLM_CONTROL") -Force | Out-Null
+
+Write-File "32_NOTEBOOKLM_CONTROL\01_PROMPT_BASE_REVISORE_DOCUMENTALE.md" @'
+Agisci come revisore documentale del progetto 81+ MASTER VIVO.
+
+Devi rispondere solo usando le fonti caricate in questo notebook.
+
+Non inventare.
+Non aggiungere nuovi nomi.
+Non creare nuovi token.
+Non creare nuovi HUB.
+Non cambiare architettura.
+Non dire che qualcosa è approvato se nelle fonti non è chiaro.
+
+Regole definitive:
+
+SICONET non esiste.
+Usare NETWORK 81+.
+
+SAFE5.0 non esiste.
+Usare 81plus.digital.
+
+GreenGrove81 e Groove81+ non esistono.
+Usare Green81+.
+
+Exchange81+ è DEX.
+Non è CEX.
+
+Email pubblica e operativa:
+info@81plus.net.
+
+Email welcome:
+welcome@81plus.net solo per email automatica di benvenuto alla registrazione.
+
+PV è credito interno Web2.
+PV non è denaro elettronico.
+PV non è rimborsabile.
+PV non è convertibile in euro.
+PV non entra nel Web3.
+
+PV+ è reward gamificato.
+PV+ serve per missioni, activity score, piano equilibrio e ponte verso SAF.
+
+SAF è utility interna 81plus.digital.
+81X è token utility Web3 su BSC BEP20.
+
+Corsi e documenti partner si pagano in euro sulle piattaforme partner, non in PV.
+
+Parole vietate:
+investimento
+rendita
+rendimento
+profitto garantito
+guadagno garantito
+APY
+staking garantito
+CEX per Exchange81+
+schema piramidale
+promessa economica garantita
+
+Compito:
+analizza le fonti caricate e crea un report con:
+
+1. decisioni definitive
+2. contraddizioni
+3. file o parti obsolete
+4. parole vietate trovate
+5. rischi tecnici
+6. rischi semantici
+7. rischi legali
+8. file mancanti
+9. priorità operative
+10. prossima azione consigliata
+
+Formato output:
+
+STATO
+COERENTE
+DA CORREGGERE
+DA VALIDARE
+DA NON USARE
+PROSSIMA AZIONE
