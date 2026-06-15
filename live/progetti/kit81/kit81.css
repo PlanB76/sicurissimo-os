@@ -1,0 +1,35 @@
+/* KIT 81+ . identico per ogni sub progetto, dark, arancio E8501A, Anton Sora JetBrains */
+:root{--o:#E8501A;--bg:#070709;--card:#0d0d12;--bordo:#1d1d26;--t:#ececf2;--g:#9aa0b4}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t);font-family:Sora,Arial,sans-serif;min-height:100vh;overflow-x:hidden}
+#stelle{position:fixed;inset:0;z-index:0;pointer-events:none}
+.k-wrap{position:relative;z-index:1}
+.k-header{display:flex;align-items:center;gap:14px;padding:16px 20px;border-bottom:1px solid var(--bordo);backdrop-filter:blur(8px);background:rgba(7,7,9,.75);position:sticky;top:0;z-index:10}
+.k-logo{font-family:Anton,Arial;font-size:21px;letter-spacing:1px;color:var(--o);text-decoration:none;text-transform:uppercase}
+.k-logo .met,.met{background:linear-gradient(110deg,#ffb38a 10%,#fff 18%,var(--o) 30%,#a33208 55%,#ffb38a 75%);background-size:220% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:metallo 5.5s linear infinite}
+@keyframes metallo{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.k-nav{margin-left:auto;display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px}
+.k-nav a{color:var(--g);text-decoration:none}
+.k-nav a:hover{color:var(--o)}
+.k-hero{max-width:980px;margin:0 auto;padding:64px 20px 30px;text-align:center}
+.k-hero h1{font-family:Anton,Arial;font-size:clamp(34px,7vw,64px);line-height:1.05;text-transform:uppercase;letter-spacing:1px}
+.k-hero p{color:var(--g);font-size:15.5px;max-width:640px;margin:16px auto 0;line-height:1.8}
+.k-cta{display:inline-block;margin-top:26px;background:var(--o);color:#fff;padding:15px 28px;border-radius:12px;font-weight:700;text-decoration:none;font-size:15px;box-shadow:0 8px 30px rgba(232,80,26,.35);transition:transform .15s}
+.k-cta:hover{transform:translateY(-2px)}
+.k-grid{max-width:1080px;margin:30px auto;padding:0 20px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+.k-card{background:var(--card);border:1px solid var(--bordo);border-radius:18px;padding:22px;position:relative;overflow:hidden;transition:transform .18s,border-color .18s}
+.k-card:hover{transform:translateY(-4px) rotateX(2deg);border-color:var(--o)}
+.k-card::before{content:"";position:absolute;top:-60%;left:-60%;width:80%;height:220%;background:linear-gradient(100deg,transparent 30%,rgba(255,255,255,.07) 50%,transparent 70%);transform:rotate(12deg);transition:left .5s}
+.k-card:hover::before{left:120%}
+.k-card h3{font-family:Anton,Arial;font-size:17px;color:var(--o);text-transform:uppercase;letter-spacing:.5px}
+.k-card .dom{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:#7c8195;margin:4px 0 8px}
+.k-card p{font-size:12.5px;color:var(--g);line-height:1.7}
+.k-card .stato{display:inline-block;margin-top:10px;font-size:9.5px;padding:3px 10px;border-radius:20px;border:1px solid var(--bordo);color:var(--g);text-transform:uppercase;letter-spacing:1px}
+.k-card .stato.live{border-color:#1db954;color:#1db954}
+.k-card .stato.presto{border-color:#ffb38a;color:#ffb38a}
+.k-footer{margin-top:60px;border-top:1px solid var(--bordo);padding:26px 20px;text-align:center;font-size:11px;color:#7c8195;line-height:2}
+.k-footer a{color:var(--g);text-decoration:none;margin:0 8px}
+.k-footer a:hover{color:var(--o)}
+.k-brill{position:absolute;width:6px;height:6px;border-radius:50%;background:radial-gradient(#fff,rgba(255,179,138,0));animation:brilla 3s ease-in-out infinite;pointer-events:none}
+@keyframes brilla{0%,100%{opacity:0;transform:scale(.4)}50%{opacity:1;transform:scale(1.4)}}
+@media(max-width:640px){.k-nav{display:none}}

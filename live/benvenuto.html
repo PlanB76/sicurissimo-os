@@ -1,0 +1,75 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · Benvenuto Member</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>:root{--o:#E8501A;--g:#9aa0b4}*{box-sizing:border-box;margin:0;padding:0}
+body{background:#070710;color:#f3f3f8;font-family:'Sora',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.box{max-width:520px;width:100%}
+.logo{display:inline-flex;font-family:'Anton';font-size:22px;border-radius:6px;overflow:hidden;margin-bottom:14px}.logo .a{background:var(--o);color:#fff;padding:3px 9px 0}.logo .b{background:#fff;color:#07070c;padding:3px 9px 0}
+h1{font-family:'Anton';font-weight:400;font-size:34px;text-transform:uppercase;line-height:1.05;margin-bottom:6px}
+.sub{color:var(--g);font-size:14px;margin-bottom:18px}
+.card{background:#0e0e1a;border:1px solid #23232f;border-radius:16px;padding:20px;margin-bottom:12px}
+.sic{font-family:'JetBrains Mono';font-size:22px;color:var(--o);letter-spacing:1px}
+.pv{display:flex;align-items:baseline;gap:8px;margin-top:8px}.pv b{font-family:'JetBrains Mono';font-size:30px;color:var(--o)}.pv span{font-size:12px;color:var(--g)}
+.bar{height:12px;background:#14141f;border-radius:8px;overflow:hidden;margin:14px 0 6px}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#E8501A,#ff8a50);width:0;transition:width .8s}
+.perc{font-size:12px;color:var(--g)}
+.cta{display:block;text-align:center;background:var(--o);color:#fff;border:none;border-radius:12px;padding:16px;font-weight:700;font-size:16px;cursor:pointer;font-family:'Sora';text-decoration:none;margin-top:14px;box-shadow:0 8px 26px rgba(232,80,26,.35)}
+.links{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-top:12px}
+.lk{background:#0e0e1a;border:1px solid #23232f;border-radius:12px;padding:14px 8px;text-align:center;text-decoration:none;color:#f3f3f8;font-size:13px;font-weight:600}
+.lk small{display:block;color:var(--g);font-weight:400;font-size:11px;margin-top:3px}
+.done{background:rgba(29,185,84,.12);border:1px solid rgba(29,185,84,.35);color:#1db954;border-radius:12px;padding:12px;font-size:13px;text-align:center;margin-top:12px;display:none}
+</style><link rel="stylesheet" href="theme81.css">
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body><div class="box">
+<span class="logo"><span class="a">81</span><span class="b">+</span></span>
+<h1>Benvenuto<br>Member 81+</h1>
+<p class="sub">Il tuo posto nell’ecosistema è pronto. Parti da qui, un passo alla volta.</p>
+<div class="card">
+ <div style="font-size:11px;color:var(--g)">IL TUO CODICE</div>
+ <div class="sic" id="sic">,</div>
+ <div class="pv"><b id="pv">1000</b><span>PV nel tuo wallet. Sono i punti valore 81+, ti danno bonus, vantaggi, benefit e fanno salire il tuo livello.</span></div>
+ <div class="bar"><i id="bar"></i></div>
+ <div class="perc" id="perc">profilo, in caricamento</div>
+ <a class="cta" id="cta" href="profilo.html">COMPLETA IL PROFILO , +1000 PV</a>
+ <div class="done" id="done">Profilo completo. Hai sbloccato il pacchetto SIC’è il bonus.</div>
+</div>
+<div class="links">
+ <a class="lk" href="audit.html">Audit gratuito<small>quanto sei in regola</small></a>
+ <a class="lk" href="academy.html">81+ Academy<small>i tuoi corsi</small></a>
+ <a class="lk" href="dashboard.html">Dashboard<small>il tuo centro</small></a>
+</div>
+</div>
+<script>
+fetch('api/auth.php?action=me').then(r=>r.json()).then(function(d){
+ if(!d.ok){location.href='login.html';return;}
+ document.getElementById('sic').textContent=d.sic;
+ document.getElementById('pv').textContent=d.pv;
+ var p=d.completamento||0;
+ document.getElementById('bar').style.width=p+'%';
+ document.getElementById('perc').textContent='profilo completo al '+p+' per cento';
+ if(d.profilo_completo){document.getElementById('cta').style.display='none';document.getElementById('done').style.display='block';}
+}).catch(function(){document.getElementById('perc').textContent='anteprima senza backend';});
+</script><!-- 81+ COOKIE BANNER -->
+<div id="ck81" style="position:fixed;left:0;right:0;bottom:0;z-index:99999;background:#0e0e1a;border-top:1px solid #E8501A;padding:16px;font-family:Sora,Arial,sans-serif;display:none">
+ <div style="max-width:1000px;margin:0 auto;display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between">
+  <div style="font-size:13px;color:#bcbcc8;flex:1;min-width:240px">Usiamo cookie tecnici per far funzionare il sito e, solo col tuo consenso, cookie di statistica e marketing. Scegli tu. <a href="cookie.html" style="color:#E8501A">Dettagli</a></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap">
+   <button onclick="ck81set('rifiuta')" style="background:#1c1c28;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px 16px;cursor:pointer;font-family:Sora;font-size:13px">Solo tecnici</button>
+   <button onclick="ck81set('accetta')" style="background:#E8501A;border:none;color:#fff;border-radius:8px;padding:10px 18px;cursor:pointer;font-weight:700;font-family:Sora;font-size:13px">Accetta tutti</button>
+  </div>
+ </div>
+</div>
+<script>
+(function(){try{if(!localStorage.getItem('ck81'))document.addEventListener('DOMContentLoaded',function(){var b=document.getElementById('ck81');if(b)b.style.display='block';});}catch(e){var b=document.getElementById('ck81');if(b)b.style.display='block';}})();
+function ck81set(v){try{localStorage.setItem('ck81',v);localStorage.setItem('ck81_ts',new Date().toISOString());}catch(e){}var b=document.getElementById('ck81');if(b)b.style.display='none';}
+</script>
+<!-- /81+ COOKIE BANNER -->
+<script src="theme81.js"></script>
+<script src="lang81.js"></script>
+<div style="max-width:560px;margin:20px auto;background:#0e0e1a;border:1px solid rgba(232,80,26,.4);border-radius:14px;padding:18px;font-family:Sora,Arial,sans-serif;position:relative;z-index:1">
+ <div style="font-family:Anton,Arial;font-size:18px;text-transform:uppercase;color:#fff;margin-bottom:6px">Sei in regola con la formazione obbligatoria</div>
+ <div style="font-size:13px;color:#9aa0b4;margin-bottom:12px">La legge chiede corsi con attestato per te e per chi lavora con te. Li trovi qui, su piattaforme accreditate, e li fai da casa.</div>
+ <a href="api/track.php?to=ac1&src=benvenuto" target="_blank" rel="noopener" style="display:inline-block;background:linear-gradient(180deg,#ff7a3d,#E8501A 55%,#c23f12);color:#fff;text-decoration:none;font-weight:700;padding:12px 20px;border-radius:9px;font-size:14px">Vedi i corsi obbligatori</a>
+</div>
+<script src="promo81.js"></script>
+</body></html>

@@ -1,0 +1,17 @@
+<!-- FORM 81+ INCORPORABILE. Incollalo in qualsiasi pagina o landing.
+     Invia a https://81plus.net/api/lead.php è attiva lead, newsletter e flusso welcome. -->
+<div id="f81" style="max-width:380px;background:#0e0e1a;border:1px solid #23232f;border-radius:14px;padding:20px;font-family:Sora,Arial,sans-serif;color:#f3f3f8">
+ <div style="font-size:17px;font-weight:700;margin-bottom:10px">Ricevi gli aggiornamenti 81+</div>
+ <input id="f81n" placeholder="Nome" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:8px;box-sizing:border-box">
+ <input id="f81e" type="email" placeholder="Email" style="width:100%;background:#14141f;border:1px solid #23232f;color:#fff;border-radius:8px;padding:10px;margin-bottom:10px;box-sizing:border-box">
+ <label style="font-size:11px;color:#9aa0b4;display:block;margin-bottom:10px"><input type="checkbox" id="f81c"> Acconsento a ricevere comunicazioni. Informativa privacy su 81plus.net/privacy.html</label>
+ <button onclick="f81send()" style="width:100%;background:#E8501A;border:none;color:#fff;border-radius:9px;padding:11px;font-weight:700;cursor:pointer">Iscrivimi</button>
+ <div id="f81m" style="font-size:12px;color:#9aa0b4;margin-top:8px;min-height:14px"></div>
+</div>
+<script>
+function f81send(){var n=document.getElementById('f81n').value,e=document.getElementById('f81e').value,c=document.getElementById('f81c').checked,m=document.getElementById('f81m');
+ if(!c){m.textContent='Serve il consenso per iscriverti.';return;} if(!e){m.textContent='Inserisci la tua email.';return;}
+ fetch('https://81plus.net/api/lead.php',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome:n,email:e,source:'form_embed'})})
+ .then(function(r){return r.json();}).then(function(d){m.textContent=d.ok?'Iscrizione ricevuta, grazie.':(d.err||'Errore.');})
+ .catch(function(){m.textContent='Invio non riuscito, riprova.';});}
+</script>

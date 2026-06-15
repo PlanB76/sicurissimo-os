@@ -1,0 +1,82 @@
+{
+ "name": "81plus eventi",
+ "nodes": [
+  {
+   "parameters": {
+    "rule": {
+     "interval": [
+      {
+       "field": "minutes",
+       "minutesInterval": 10
+      }
+     ]
+    }
+   },
+   "name": "Ogni 10 minuti",
+   "type": "n8n-nodes-base.scheduleTrigger",
+   "typeVersion": 1,
+   "position": [
+    0,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "url": "https://81plus.net/api/n8n.php?az=eventi&da={{$json.ultimo||0}}",
+    "options": {},
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "X-81PLUS-SIGNATURE",
+       "value": "FIRMA_HMAC_SHA256_DI_n8n81_CON_N8N_SECRET"
+      }
+     ]
+    }
+   },
+   "name": "Leggi eventi 81+",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4,
+   "position": [
+    220,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "// qui instrada gli eventi, telegram, brevo, fogli, quello che vuoi\nreturn items;"
+   },
+   "name": "Instrada",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    440,
+    0
+   ]
+  }
+ ],
+ "connections": {
+  "Ogni 10 minuti": {
+   "main": [
+    [
+     {
+      "node": "Leggi eventi 81+",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "Leggi eventi 81+": {
+   "main": [
+    [
+     {
+      "node": "Instrada",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

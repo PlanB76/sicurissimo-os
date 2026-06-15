@@ -1,0 +1,118 @@
+# ============================================================
+# 81PLUS.NET — HTACCESS UNICO DELL'ECOSISTEMA
+# 7 giugno 2026. Da caricare nella cartella radice di 81plus.net.
+#
+# Contiene tutti i redirect dei domini verso la loro destinazione.
+# Funziona per i domini che puntano a questo spazio. Se un dominio
+# ha una cartella separata su Hostinger, la sua riga va messa anche
+# nel suo .htaccess. Le condizioni sono per HTTP_HOST, quindi sicure.
+# ============================================================
+
+RewriteEngine On
+Options -Indexes
+
+# --- HTTPS forzato su tutto ---
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# --- SICURISSIMO, sotto progetto. online verso io ---
+RewriteCond %{HTTP_HOST} ^(www\.)?sicurissimo\.online$ [NC]
+RewriteRule ^(.*)$ https://sicurissimo.io/$1 [R=301,L]
+
+# --- SAFE 5.0, verso il sub HUB Web3 81plus.digital ---
+RewriteCond %{HTTP_HOST} ^(www\.)?safe5\.xyz$ [NC]
+RewriteRule ^(.*)$ https://81plus.digital/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^(www\.)?safe5\.it$ [NC]
+RewriteRule ^(.*)$ https://81plus.digital/$1 [R=301,L]
+
+# --- SICONET, alias rete verso 81plus.network ---
+RewriteCond %{HTTP_HOST} ^(www\.)?siconet\.online$ [NC]
+RewriteRule ^(.*)$ https://81plus.network/$1 [R=301,L]
+
+# --- 81plus.online verso l'HUB finale 81plus.net ---
+RewriteCond %{HTTP_HOST} ^(www\.)?81plus\.online$ [NC]
+RewriteRule ^(.*)$ https://81plus.net/$1 [R=301,L]
+
+# --- www verso dominio nudo per l'HUB ---
+RewriteCond %{HTTP_HOST} ^www\.81plus\.net$ [NC]
+RewriteRule ^(.*)$ https://81plus.net/$1 [R=301,L]
+
+# --- URL pulite per le pagine di accesso e dashboard dell'HUB ---
+RewriteRule ^login/?$ login.html [L]
+RewriteRule ^signup/?$ signup.html [L]
+RewriteRule ^registrati/?$ signup.html [L]
+RewriteRule ^dashboard/?$ dashboard.html [L]
+RewriteRule ^comando/?$ comando-flotta.html [L]
+
+# --- Protezione cartelle interne ---
+RewriteRule ^(_database|_flotta|_reference)/ - [F,L]
+<FilesMatch "\.(env|sql|md|json)$">
+  Require all denied
+</FilesMatch>
+
+# Permetti il roster flotta letto dal sito, ma non i file sensibili
+<Files "flotta_118_agenti.json">
+  Require all granted
+</Files>
+
+
+# ============================================================
+# 81PLUS.NET — HTACCESS UNICO DELL'ECOSISTEMA
+# 7 giugno 2026. Da caricare nella cartella radice di 81plus.net.
+#
+# Contiene tutti i redirect dei domini verso la loro destinazione.
+# Funziona per i domini che puntano a questo spazio. Se un dominio
+# ha una cartella separata su Hostinger, la sua riga va messa anche
+# nel suo .htaccess. Le condizioni sono per HTTP_HOST, quindi sicure.
+# ============================================================
+
+RewriteEngine On
+Options -Indexes
+
+# --- HTTPS forzato su tutto ---
+RewriteCond %{HTTPS} off
+RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
+
+# --- SICURISSIMO, sotto progetto. online verso io ---
+RewriteCond %{HTTP_HOST} ^(www\.)?sicurissimo\.online$ [NC]
+RewriteRule ^(.*)$ https://sicurissimo.io/$1 [R=301,L]
+
+# --- SAFE 5.0, verso il sub HUB Web3 81plus.digital ---
+RewriteCond %{HTTP_HOST} ^(www\.)?safe5\.xyz$ [NC]
+RewriteRule ^(.*)$ https://81plus.digital/$1 [R=301,L]
+RewriteCond %{HTTP_HOST} ^(www\.)?safe5\.it$ [NC]
+RewriteRule ^(.*)$ https://81plus.digital/$1 [R=301,L]
+
+# --- SICONET, alias rete verso 81plus.network ---
+RewriteCond %{HTTP_HOST} ^(www\.)?siconet\.online$ [NC]
+RewriteRule ^(.*)$ https://81plus.network/$1 [R=301,L]
+
+# --- 81plus.online verso l'HUB finale 81plus.net ---
+RewriteCond %{HTTP_HOST} ^(www\.)?81plus\.online$ [NC]
+RewriteRule ^(.*)$ https://81plus.net/$1 [R=301,L]
+
+# --- www verso dominio nudo per l'HUB ---
+RewriteCond %{HTTP_HOST} ^www\.81plus\.net$ [NC]
+RewriteRule ^(.*)$ https://81plus.net/$1 [R=301,L]
+
+# --- URL pulite per le pagine di accesso e dashboard dell'HUB ---
+RewriteRule ^login/?$ login.html [L]
+RewriteRule ^signup/?$ signup.html [L]
+RewriteRule ^registrati/?$ signup.html [L]
+RewriteRule ^dashboard/?$ dashboard.html [L]
+RewriteRule ^comando/?$ comando-flotta.html [L]
+
+# --- Protezione cartelle interne ---
+RewriteRule ^(_database|_flotta|_reference)/ - [F,L]
+<FilesMatch "\.(env|sql|md|json)$">
+  Require all denied
+</FilesMatch>
+
+# Permetti il roster flotta letto dal sito, ma non i file sensibili
+<Files "flotta_118_agenti.json">
+  Require all granted
+</Files>
+
+
+# PIX81+ link univoco: /p/slug -> landing pixel
+RewriteRule ^p/([a-zA-Z0-9_-]+)/?$ p.html?s=$1 [L,QSA]

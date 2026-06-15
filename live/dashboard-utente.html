@@ -1,0 +1,252 @@
+<!DOCTYPE html><html lang="it"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Area Riservata 81+ | Sicurissimo</title>
+<link rel="icon" href="favicon.png">
+<style>
+:root{--o:#FB6B00;--bg:#080808;--card:#111;--bd:#222;--mut:#9a9a9a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#fff;line-height:1.5;}
+a{color:var(--o);text-decoration:none;}
+.demo{background:#2a1a00;color:#ffb066;text-align:center;font-size:12px;padding:7px;border-bottom:1px solid #3a2400;}
+/* LOGIN */
+.login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.login-card{background:var(--card);border:1px solid var(--bd);border-top:4px solid var(--o);padding:36px 30px;width:100%;max-width:380px;text-align:center;}
+.logo{font-weight:800;font-size:24px;letter-spacing:1px;margin-bottom:6px;}.logo span{color:var(--o);}
+.login-card h1{font-size:18px;margin:14px 0 18px;font-weight:700;}
+.login-card input{width:100%;padding:13px;background:#0c0c0c;border:1px solid #333;color:#fff;margin-bottom:12px;font-size:15px;font-family:inherit;}
+.btn{width:100%;background:var(--o);color:#080808;border:none;font-weight:800;padding:14px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;font-family:inherit;font-size:14px;}
+.muted{color:var(--mut);font-size:12px;margin-top:14px;}
+/* APP */
+#app{display:none;min-height:100vh;}
+.topbar{background:#0c0c0c;border-bottom:1px solid var(--bd);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:relative;}
+.topbar .right{display:flex;align-items:center;gap:14px;}
+.badge{background:rgba(251,107,0,.15);color:var(--o);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:5px 11px;border-radius:3px;}
+.switcher{font-size:11px;color:var(--mut);}
+.switcher select{background:#0c0c0c;color:#fff;border:1px solid #333;padding:5px;font-family:inherit;font-size:12px;}
+.layout{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 53px);}
+.side{background:#0a0a0a;border-right:1px solid var(--bd);padding:18px 0;}
+.side a{display:block;padding:11px 22px;color:#cfcfcf;font-size:14px;border-left:3px solid transparent;cursor:pointer;}
+.side a:hover{background:#141414;}
+.side a.active{border-left-color:var(--o);color:#fff;background:#141414;}
+.side a.lock{opacity:.45;}
+.side .lock-tag{font-size:9px;background:#333;color:#bbb;padding:1px 6px;border-radius:3px;margin-left:6px;text-transform:uppercase;}
+.main{padding:28px 30px;max-width:1000px;}
+.main h2{font-size:22px;margin-bottom:4px;}
+.main .lead{color:var(--mut);margin-bottom:22px;font-size:14px;}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:26px;}
+.kc{background:var(--card);border:1px solid var(--bd);padding:18px;}
+.kc .n{font-size:26px;font-weight:800;color:var(--o);}
+.kc .l{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
+.panel{background:var(--card);border:1px solid var(--bd);padding:22px;margin-bottom:20px;}
+.panel h3{font-size:16px;margin-bottom:14px;}
+table{width:100%;border-collapse:collapse;font-size:14px;}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid #1e1e1e;}
+th{color:var(--mut);font-size:12px;text-transform:uppercase;letter-spacing:.5px;}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:700;}
+.pill.ok{background:rgba(46,160,67,.18);color:#5fd17a;}
+.pill.wait{background:rgba(251,107,0,.18);color:var(--o);}
+.bar{height:7px;background:#222;border-radius:4px;overflow:hidden;margin-top:6px;}
+.bar > i{display:block;height:100%;background:var(--o);}
+.conv{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+.conv .c{background:#0c0c0c;border:1px solid var(--bd);padding:18px;}
+.conv .c .cat{color:var(--o);font-size:11px;text-transform:uppercase;letter-spacing:.5px;font-weight:700;}
+.conv .c h4{font-size:15px;margin:8px 0;}
+.conv .c p{font-size:13px;color:var(--mut);margin-bottom:12px;}
+.conv .c .disc{color:#5fd17a;font-weight:700;font-size:13px;}
+.btn-sm{display:inline-block;background:var(--o);color:#080808;font-weight:700;padding:9px 16px;font-size:12px;text-transform:uppercase;letter-spacing:.5px;cursor:pointer;border:none;font-family:inherit;margin-top:8px;}
+.btn-gh{display:inline-block;border:2px solid #333;color:#fff;font-weight:700;padding:9px 16px;font-size:12px;text-transform:uppercase;cursor:pointer;font-family:inherit;background:none;}
+.upg{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;}
+.upg .pl{background:#0c0c0c;border:1px solid var(--bd);padding:20px;text-align:center;}
+.upg .pl.cur{border-color:var(--o);}
+.upg .pl .nm{font-weight:800;font-size:18px;}
+.upg .pl .pr{font-size:24px;font-weight:800;color:var(--o);margin:6px 0;}
+.hidden{display:none!important;}
+@media(max-width:760px){.layout{grid-template-columns:1fr;}.side{display:flex;flex-wrap:wrap;}.side a{border-left:none;border-bottom:3px solid transparent;}}
+</style><style>
+.s81bar{position:sticky;top:0;z-index:9998;background:#080808;border-bottom:1px solid #1c1c1c;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;font-family:Arial,Helvetica,sans-serif;}
+.s81bar .s81logo{font-weight:800;font-size:20px;letter-spacing:1px;color:#fff;text-decoration:none;}
+.s81bar .s81logo span{color:#FB6B00;}
+.s81bar .s81links{display:flex;align-items:center;gap:20px;}
+.s81bar .s81links a{color:#cfcfcf;text-decoration:none;font-size:14px;}
+.s81bar .s81links a:hover{color:#fff;}
+.s81bar .s81links a.active{color:#FB6B00;}
+.s81bar .s81cta{background:#FB6B00;color:#080808 !important;font-weight:700;padding:9px 18px;text-transform:uppercase;letter-spacing:.5px;font-size:12px;}
+.s81tog{display:none;background:none;border:1px solid #333;color:#fff;font-size:20px;padding:3px 11px;cursor:pointer;}
+@media(max-width:900px){
+ .s81bar{position:relative;}
+ .s81bar .s81links{display:none;position:absolute;top:100%;left:0;right:0;background:#080808;flex-direction:column;gap:0;border-bottom:1px solid #1c1c1c;z-index:9998;}
+ .s81bar .s81links.open{display:flex;}
+ .s81bar .s81links a{padding:13px 5%;width:100%;border-top:1px solid #161616;}
+ .s81tog{display:block;}
+}
+</style>
+</head><body>
+<div class="s81bar"><a class="s81logo" href="index.html">81<span>+</span></a><button class="s81tog" onclick="var l=this.parentNode.querySelector('.s81links');l.classList.toggle('open')">&#9776;</button><div class="s81links"><a href="index.html">Home</a><a href="index.html#pricing">Membership</a><a href="libri.html">Pubblicazioni</a><a href="partners.html">Partners</a><a href="eventi.html">Eventi</a><a href="strumenti.html">Strumenti</a><a href="network81.html">NETWORK81+</a><a href="dashboard-utente.html" class="active">Area Riservata</a><a href="newsletter.html">Newsletter</a><a class="s81cta" href="index.html#pricing">Iscriviti</a></div></div>
+
+<div class="demo">Anteprima dimostrativa. I dati sono di esempio. L'accesso reale con login e pagamenti richiede l'attivazione del sistema membri.</div>
+
+<!-- LOGIN -->
+<div class="login-wrap" id="login">
+  <div class="login-card">
+    <div class="logo">81<span>+</span></div>
+    <h1>Area Riservata Membri</h1>
+    <input type="text" id="user" placeholder="Username o email" value="mario.rossi">
+    <input type="password" id="pass" placeholder="Password" value="demo">
+    <button class="btn" onclick="enter()">Accedi</button>
+    <p class="muted">Anteprima. Premi Accedi per vedere la dashboard.<br><a href="index.html">Torna al sito</a></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <div class="topbar">
+    <div class="logo" style="font-size:20px;">81<span>+</span></div>
+    <div class="right">
+      <span class="switcher">Anteprima livello
+        <select id="lvl" onchange="setLevel(this.value)">
+          <option value="basic">Basic+</option>
+          <option value="pro" selected>Pro+</option>
+          <option value="elite">Elite+</option>
+        </select>
+      </span>
+      <span class="badge" id="lvlBadge">Pro+</span>
+      <span style="font-size:13px;color:#ccc;">Ciao, Mario</span>
+      <a href="#" onclick="logout();return false;" style="font-size:12px;color:#888;">Esci</a>
+    </div>
+  </div>
+  <div class="layout">
+    <nav class="side" id="side"></nav>
+    <main class="main" id="view"></main>
+  </div>
+</div>
+
+<script>
+var LEVEL="pro";
+var DATA={
+  user:{nome:"Mario Rossi", azienda:"Rossi Costruzioni Srl", dal:"Marzo 2024"},
+  pagamenti:[
+    {data:"01/05/2026", desc:"Membership Pro+", importo:"99,00 €", stato:"Pagato"},
+    {data:"01/04/2026", desc:"Membership Pro+", importo:"99,00 €", stato:"Pagato"},
+    {data:"22/03/2026", desc:"Attestato Antincendio", importo:"38,00 €", stato:"Pagato"},
+    {data:"01/03/2026", desc:"Membership Pro+", importo:"99,00 €", stato:"Pagato"}
+  ],
+  corsi:[
+    {nome:"Formazione Generale Lavoratori", prog:100},
+    {nome:"Formazione Specifica Rischio Medio", prog:100},
+    {nome:"Aggiornamento RSPP Datore di Lavoro ASR 2025", prog:60},
+    {nome:"Corso Preposto partecipata", prog:20},
+    {nome:"Primo Soccorso", prog:0}
+  ],
+  convenzioni:[
+    {cat:"DPI e antinfortunistica", nome:"Fornitore DPI Convenzionato", desc:"Caschi, calzature, imbracature e protezioni certificate.", disc:"Sconto 15% riservato 81+"},
+    {cat:"Materiali e segnaletica", nome:"Segnaletica Sicurezza Partner", desc:"Cartelli, segnaletica e kit emergenza a norma.", disc:"Sconto 12% riservato 81+"},
+    {cat:"Formazione e attestati", nome:"Piattaforma Corsi Accreditata", desc:"Oltre 500 corsi accreditati, attestati validi per legge.", disc:"Corsi gratis, paghi solo l'attestato"},
+    {cat:"Documenti e modulistica", nome:"Documenti Pronti 81+", desc:"DVR, POS, DUVRI e modulistica precompilata.", disc:"Inclusi e scontati per i membri"},
+    {cat:"Hotel e SPA", nome:"Circuito Hotel e SPA Convenzionati", desc:"Soggiorni e benessere a tariffa riservata in tutta Italia.", disc:"Tariffe riservate 81+"},
+    {cat:"Servizi assicurativi", nome:"Broker Assicurativo Partner", desc:"Polizze RC e infortuni a condizioni dedicate.", disc:"Preventivo agevolato 81+"}
+  ]
+};
+var PLANS={basic:{nm:"Basic+",pr:"49"},pro:{nm:"Pro+",pr:"99"},elite:{nm:"Elite+",pr:"199"}};
+var PAYPAL="https://81plus.it";
+
+var MENU=[
+  {id:"home",  label:"Panoramica",            min:"basic"},
+  {id:"piatt", label:"Piattaforma corsi",     min:"basic"},
+  {id:"corsi", label:"I miei corsi",          min:"basic"},
+  {id:"conv",  label:"Convenzioni partner",   min:"basic"},
+  {id:"pag",   label:"Pagamenti",             min:"basic"},
+  {id:"cons",  label:"Consulenze incluse",    min:"pro"},
+  {id:"live",  label:"Live 81+",              min:"pro"},
+  {id:"vip",   label:"Supporto VIP WhatsApp", min:"elite"},
+  {id:"mem",   label:"La mia membership",     min:"basic"},
+  {id:"crescita", label:"La mia crescita",     min:"basic", url:"crescita.html"},
+  {id:"scad",     label:"Scadenziario",         min:"basic", url:"scadenze.html"},
+  {id:"prev",     label:"Crea preventivo",      min:"basic", url:"preventivo.html"},
+  {id:"ref",      label:"Invita e guadagna",    min:"basic", url:"invita.html"},
+  {id:"pix",      label:"I miei PIX81+",        min:"basic", url:"pixel_gestione.html"},
+  {id:"pix3d",    label:"Mappa 3D",             min:"basic", url:"https://81plus.place"},
+  {id:"gamif",    label:"La mia partita",       min:"basic", url:"gamification.html"},
+  {id:"abb",      label:"I miei abbonamenti",   min:"basic", url:"abbonamenti.html"},
+  {id:"wallet",   label:"Carica wallet",        min:"basic", url:"swap.html"},
+  {id:"x81",      label:"Token 81X e mining",   min:"basic", url:"token81x.html"}
+];
+var RANK={basic:1,pro:2,elite:3};
+
+function enter(){document.getElementById("login").style.display="none";document.getElementById("app").style.display="block";renderSide();show("home");}
+function logout(){document.getElementById("app").style.display="none";document.getElementById("login").style.display="flex";}
+function setLevel(l){LEVEL=l;document.getElementById("lvlBadge").textContent=PLANS[l].nm;renderSide();show("home");}
+
+function renderSide(){
+  var s=document.getElementById("side");s.innerHTML="";
+  MENU.forEach(function(m){
+    var locked=RANK[LEVEL]<RANK[m.min];
+    var a=document.createElement("a");
+    a.className=locked?"lock":"";
+    a.innerHTML=m.label+(locked?'<span class="lock-tag">'+PLANS[m.min].nm+'</span>':"");
+    a.onclick=function(){ if(m.url){ location.href=m.url; return; } if(locked){ show("mem"); } else { show(m.id); } setActive(a); };
+    s.appendChild(a);
+  });
+}
+function setActive(el){document.querySelectorAll(".side a").forEach(function(a){a.classList.remove("active");});el&&el.classList.add("active");}
+
+function show(id){
+  var v=document.getElementById("view");
+  if(id==="home"){
+    v.innerHTML='<h2>Ciao, '+DATA.user.nome+'</h2><p class="lead">'+DATA.user.azienda+' • Membro dal '+DATA.user.dal+' • Livello '+PLANS[LEVEL].nm+'</p>'+
+    '<div class="cards">'+
+      kc(PLANS[LEVEL].nm,"Membership attiva")+
+      kc(done()+"/"+DATA.corsi.length,"Corsi completati")+
+      kc(DATA.pagamenti.length,"Pagamenti registrati")+
+      kc(DATA.convenzioni.length,"Convenzioni attive")+
+    '</div>'+
+    '<div class="panel"><h3>Prossime azioni consigliate</h3>'+
+      '<p style="color:#cfcfcf;font-size:14px;">Hai 2 corsi da completare e l\'aggiornamento RSPP ASR 2025 al 60%. Completa la formazione per restare in regola.</p>'+
+      '<button class="btn-sm" onclick="show(\'corsi\');">Vai ai corsi</button></div>'+
+    '<div id="pix81-widget" style="margin-top:18px"></div>';
+    if(window.__pixw)window.__pixw(); else { var s=document.createElement("script"); s.src="pix81_widget.js"; document.body.appendChild(s); }
+  }
+  else if(id==="piatt"){
+    v.innerHTML=head("Piattaforma corsi","Accedi alla piattaforma accreditata. I corsi sono gratis, paghi solo l'attestato se ti serve.")+
+    '<div class="panel"><p style="color:#cfcfcf;">Vieni reindirizzato alla piattaforma corsi con il tuo accesso riservato 81+.</p>'+
+    '<a class="btn-sm" href="https://corsi.elearningsicurezza.com/pid/2377#login" target="_blank">Apri la piattaforma corsi</a></div>';
+  }
+  else if(id==="corsi"){
+    var r="";DATA.corsi.forEach(function(c){r+='<tr><td>'+c.nome+'</td><td style="width:160px;">'+c.prog+'%<div class="bar"><i style="width:'+c.prog+'%"></i></div></td><td style="width:120px;">'+(c.prog===100?'<span class="pill ok">Completato</span>':'<span class="pill wait">In corso</span>')+'</td></tr>';});
+    v.innerHTML=head("I miei corsi","Lo stato della tua formazione, sempre aggiornato.")+'<div class="panel"><table><tr><th>Corso</th><th>Avanzamento</th><th>Stato</th></tr>'+r+'</table></div>';
+  }
+  else if(id==="conv"){
+    var c="";DATA.convenzioni.forEach(function(x){c+='<div class="c"><div class="cat">'+x.cat+'</div><h4>'+x.nome+'</h4><p>'+x.desc+'</p><div class="disc">'+x.disc+'</div><button class="btn-sm" onclick="alert(\'Anteprima. Qui il membro accede alla convenzione.\')">Accedi alla convenzione</button></div>';});
+    v.innerHTML=head("Convenzioni partner","Tutti i vantaggi della rete 81+, presenti e futuri. DPI, materiali, formazione, documenti, hotel e SPA.")+'<div class="conv">'+c+'</div>';
+  }
+  else if(id==="pag"){
+    var r="";DATA.pagamenti.forEach(function(p){r+='<tr><td>'+p.data+'</td><td>'+p.desc+'</td><td>'+p.importo+'</td><td><span class="pill ok">'+p.stato+'</span></td></tr>';});
+    v.innerHTML=head("Pagamenti","Lo storico dei tuoi pagamenti e abbonamenti.")+'<div class="panel"><table><tr><th>Data</th><th>Descrizione</th><th>Importo</th><th>Stato</th></tr>'+r+'</table></div>';
+  }
+  else if(id==="cons"){
+    v.innerHTML=head("Consulenze incluse","Il tuo livello include consulenze con un Partner Certificato 81+ della tua zona.")+
+    '<div class="panel"><p style="color:#cfcfcf;">Hai 2 consulenze disponibili questo mese.</p><button class="btn-sm" onclick="alert(\'Anteprima. Qui il membro prenota la consulenza.\')">Prenota una consulenza</button></div>';
+  }
+  else if(id==="live"){
+    v.innerHTML=head("Live 81+","Gli incontri live mensili riservati ai membri Pro ed Elite.")+
+    '<div class="panel"><p style="color:#cfcfcf;">Prossima Live 81+ in programma. Riceverai il link nell\'area e via email.</p><button class="btn-sm" onclick="alert(\'Anteprima.\')">Iscriviti alla prossima Live</button></div>';
+  }
+  else if(id==="vip"){
+    v.innerHTML=head("Supporto VIP WhatsApp","Riservato Elite. Linea diretta e prioritaria con il team Sicurissimo.")+
+    '<div class="panel"><a class="btn-sm" href="https://wa.me/393388771737" target="_blank">Apri il supporto prioritario</a></div>';
+  }
+  else if(id==="mem"){
+    var cards="";["basic","pro","elite"].forEach(function(k){
+      var cur=k===LEVEL;
+      var action=cur?'<span class="pill ok">Attuale</span>':(RANK[k]>RANK[LEVEL]?'<a class="btn-sm" href="'+PAYPAL+'">Passa a '+PLANS[k].nm+'</a>':'<button class="btn-gh" onclick="alert(\'Anteprima. Qui il membro passa al livello inferiore.\')">Scendi a '+PLANS[k].nm+'</button>');
+      cards+='<div class="pl '+(cur?"cur":"")+'"><div class="nm">'+PLANS[k].nm+'</div><div class="pr">'+PLANS[k].pr+'€<span style="font-size:12px;color:#999;">/mese</span></div>'+action+'</div>';
+    });
+    v.innerHTML=head("La mia membership","Cambia livello quando vuoi. Upgrade immediato, downgrade dal mese successivo. Nessun vincolo.")+'<div class="upg">'+cards+'</div>'+
+    '<p class="muted" style="margin-top:18px;">Anteprima. L\'upgrade e il downgrade reali avvengono tramite il gestore pagamenti collegato al tuo abbonamento.</p>';
+  }
+}
+function head(t,l){return '<h2>'+t+'</h2><p class="lead">'+l+'</p>';}
+function kc(n,l){return '<div class="kc"><div class="n">'+n+'</div><div class="l">'+l+'</div></div>';}
+function done(){return DATA.corsi.filter(function(c){return c.prog===100;}).length;}
+</script>
+<script src="lang81.js" defer></script>
+</body></html>

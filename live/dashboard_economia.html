@@ -1,0 +1,412 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ Command Center Economia</title>
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<style>
+:root{--a:#E8501A;--a2:#FB6B00;--v:#3FBF6B;--r:#ff5a4d;--gi:#ffce4d;--bg:#0A0A0B;--c:#111114;--c2:#18181c;--bd:#26262b;--tx:#c4c4cc;--mu:#6b6b74}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;font-size:13px}
+.top{background:var(--c);border-bottom:1px solid var(--bd);padding:12px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:99}
+.top h1{font-family:'Anton';color:#fff;font-size:22px;letter-spacing:1px}.top h1 span{color:var(--a)}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}.tab{padding:7px 14px;border-radius:8px;cursor:pointer;font-size:11px;font-weight:600;color:var(--mu);background:var(--bg);border:1px solid var(--bd);transition:.15s}
+.tab:hover,.tab.on{color:#fff;border-color:var(--a);background:rgba(232,80,26,.1)}
+.main{padding:16px;max-width:1400px;margin:0 auto}
+.grid{display:grid;gap:12px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}.g4{grid-template-columns:1fr 1fr 1fr 1fr}
+@media(max-width:900px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.card{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:18px;overflow:hidden}
+.card h3{font-family:'Anton';color:#fff;font-size:16px;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.card h3 .ic{font-size:18px}
+.kpi{text-align:center;padding:16px 10px}.kpi .v{font-family:'JetBrains Mono';font-size:28px;font-weight:700}.kpi .l{font-size:11px;color:var(--mu);margin-top:4px}
+.kpi .delta{font-size:11px;margin-top:2px;font-weight:600}
+.up{color:var(--v)}.dn{color:var(--r)}.nt{color:var(--gi)}
+table{width:100%;border-collapse:collapse;font-size:12px}th{text-align:left;color:var(--mu);font-weight:600;padding:6px 8px;border-bottom:1px solid var(--bd)}
+td{padding:6px 8px;border-bottom:1px solid rgba(38,38,43,.5)}tr:hover{background:rgba(232,80,26,.04)}
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:700}
+.badge-v{background:rgba(63,191,107,.12);color:var(--v)}.badge-r{background:rgba(255,90,77,.12);color:var(--r)}.badge-gi{background:rgba(255,206,77,.12);color:var(--gi)}
+.progress-bar{height:8px;background:var(--bd);border-radius:4px;overflow:hidden;margin:4px 0}
+.progress-bar span{display:block;height:100%;border-radius:4px;transition:width .3s}
+.section{display:none}.section.on{display:block;animation:fi .2s}@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1}}
+.chart-wrap{position:relative;height:280px}
+.roadmap{display:flex;flex-direction:column;gap:10px}
+.step{display:flex;gap:12px;align-items:flex-start}.step .num{width:32px;height:32px;border-radius:50%;background:var(--a);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:14px;flex-shrink:0}
+.step .body h4{color:#fff;font-size:13px;margin-bottom:2px}.step .body p{color:var(--mu);font-size:11px}
+.step.done .num{background:var(--v)}.step.next .num{background:var(--gi);color:#000}
+select,input[type=number],input[type=date]{background:var(--bg);border:1px solid var(--bd);color:#fff;padding:8px 10px;border-radius:8px;font-size:12px;font-family:'Sora'}
+.btn-sm{background:var(--a);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer}
+.hidden{display:none}
+</style></head><body>
+<div class="top">
+<h1><span>81+</span> COMMAND CENTER ECONOMIA</h1>
+<div class="tabs" id="tabs"></div>
+</div>
+<div class="main" id="main"></div>
+<script>
+const TABS=[
+{id:'overview',nome:'Overview',ic:'📊'},
+{id:'pnl',nome:'Conto Economico',ic:'📋'},
+{id:'cashflow',nome:'Cashflow',ic:'💧'},
+{id:'fatture',nome:'Fatture',ic:'🧾'},
+{id:'tasse',nome:'Tasse e IVA',ic:'🏛️'},
+{id:'proiezioni',nome:'Proiezioni',ic:'🔮'},
+{id:'obiettivi',nome:'Obiettivi',ic:'🎯'},
+{id:'roadmap',nome:'Roadmap',ic:'🗺️'},
+{id:'lifestyle',nome:'Lifestyle',ic:'⚖️'},
+{id:'import',nome:'Import',ic:'📥'}
+];
+
+// Demo data - in produzione viene dalle API
+const D={
+  mese:'Giugno 2026',
+  entrate_mese:12480,uscite_mese:7320,utile_mese:5160,
+  entrate_anno:87979,uscite_anno:52244,utile_anno:35735,
+  iva_debito:4085,iva_credito:3523,iva_netta:562,
+  irpef_stimato:8934,inps_stimato:6800,irap_stimato:1075,
+  cassa:28450,cassa_prev:34200,
+  clienti_top:[{n:'SUNRISE RENT',v:42401},{n:'FORMASICUREZZA',v:10187},{n:'DELTA LAVORI',v:8050},{n:'SILEA',v:5420},{n:'PROGETTO CASA',v:4890}],
+  mesi:['Gen','Feb','Mar','Apr','Mag','Giu','Lug','Ago','Set','Ott','Nov','Dic'],
+  entrate_m:[6200,7100,8400,7800,9200,12480,0,0,0,0,0,0],
+  uscite_m:[4100,4800,5200,4900,5600,7320,0,0,0,0,0,0],
+  fatture_attive:189,fatture_passive:126,
+  categorie:[{n:'Formazione',v:38200,p:43},{n:'Consulenza',v:22400,p:25},{n:'Documenti',v:15800,p:18},{n:'Shop DPI',v:6200,p:7},{n:'Network',v:5379,p:6}],
+  obiettivi:[
+    {n:'Fatturato annuo',target:150000,attuale:87979,u:'€'},
+    {n:'Clienti attivi',target:200,attuale:142,u:''},
+    {n:'MRR',target:12000,attuale:8900,u:'€'},
+    {n:'Margine netto',target:40,attuale:35,u:'%'},
+    {n:'Lead al mese',target:300,attuale:186,u:''},
+    {n:'Costo acquisizione',target:15,attuale:22,u:'€'}
+  ]
+};
+
+function fmt(n){return new Intl.NumberFormat('it-IT',{minimumFractionDigits:0,maximumFractionDigits:0}).format(n)}
+function pct(a,b){return b?Math.round(a/b*100):0}
+
+let curTab='overview';
+function renderTabs(){
+  const el=document.getElementById('tabs');
+  el.innerHTML=TABS.map(t=>`<div class="tab ${t.id===curTab?'on':''}" onclick="go('${t.id}')">${t.ic} ${t.nome}</div>`).join('');
+}
+function go(id){curTab=id;renderTabs();renderSection();}
+
+function renderSection(){
+  const m=document.getElementById('main');
+  const fn={overview:rOverview,pnl:rPnl,cashflow:rCashflow,fatture:rFatture,tasse:rTasse,proiezioni:rProiezioni,obiettivi:rObiettivi,roadmap:rRoadmap,lifestyle:rLifestyle,import:rImport};
+  m.innerHTML='';(fn[curTab]||fn.overview)();
+  setTimeout(()=>{if(window._charts)window._charts.forEach(c=>c.destroy());window._charts=[];renderCharts();},50);
+}
+
+function rOverview(){
+  const m=document.getElementById('main');
+  const mom=D.entrate_mese>0?((D.utile_mese/D.entrate_mese)*100).toFixed(1):'--';
+  m.innerHTML=`
+  <div class="grid g4" style="margin-bottom:12px">
+    <div class="card kpi"><div class="v" style="color:var(--v)">€${fmt(D.entrate_mese)}</div><div class="l">Entrate ${D.mese}</div><div class="delta up">+18% vs mese prec.</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--r)">€${fmt(D.uscite_mese)}</div><div class="l">Uscite ${D.mese}</div><div class="delta dn">+12% vs mese prec.</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--a)">€${fmt(D.utile_mese)}</div><div class="l">Utile netto ${D.mese}</div><div class="delta up">Margine ${mom}%</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--gi)">€${fmt(D.cassa)}</div><div class="l">Cassa disponibile</div><div class="delta nt">Runway 4.2 mesi</div></div>
+  </div>
+  <div class="grid g2" style="margin-bottom:12px">
+    <div class="card"><h3><span class="ic">📈</span> Andamento mensile</h3><div class="chart-wrap"><canvas id="ch-trend"></canvas></div></div>
+    <div class="card"><h3><span class="ic">🍩</span> Ricavi per categoria</h3><div class="chart-wrap"><canvas id="ch-cat"></canvas></div></div>
+  </div>
+  <div class="grid g3" style="margin-bottom:12px">
+    <div class="card"><h3><span class="ic">🏆</span> Top 5 clienti</h3><table><tr><th>Cliente</th><th style="text-align:right">Fatturato</th></tr>
+    ${D.clienti_top.map(c=>`<tr><td>${c.n}</td><td style="text-align:right;font-family:JetBrains Mono;color:var(--v)">€${fmt(c.v)}</td></tr>`).join('')}</table></div>
+    <div class="card"><h3><span class="ic">🎯</span> Obiettivi chiave</h3>
+    ${D.obiettivi.slice(0,4).map(o=>{const p=pct(o.attuale,o.target);const col=p>=80?'var(--v)':p>=50?'var(--gi)':'var(--r)';
+    return `<div style="margin-bottom:10px"><div style="display:flex;justify-content:space-between;font-size:11px"><span>${o.n}</span><span style="font-family:JetBrains Mono;color:${col}">${o.attuale}${o.u} / ${o.target}${o.u}</span></div><div class="progress-bar"><span style="width:${Math.min(p,100)}%;background:${col}"></span></div></div>`;}).join('')}</div>
+    <div class="card"><h3><span class="ic">⚡</span> Azioni rapide</h3>
+    <div style="display:flex;flex-direction:column;gap:8px">
+    <button class="btn-sm" onclick="go('fatture')">🧾 Registro fatture</button>
+    <button class="btn-sm" onclick="go('tasse')">🏛️ Calcolo tasse</button>
+    <button class="btn-sm" onclick="go('proiezioni')">🔮 Simulatore scenari</button>
+    <button class="btn-sm" onclick="go('roadmap')">🗺️ Roadmap crescita</button>
+    <button class="btn-sm" onclick="go('import')">📥 Importa dati</button>
+    </div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ic">📊</span> P&L anno in corso</h3><div class="chart-wrap"><canvas id="ch-pnl-bar"></canvas></div></div>
+    <div class="card"><h3><span class="ic">💰</span> Cassa progressiva</h3><div class="chart-wrap"><canvas id="ch-cassa"></canvas></div></div>
+  </div>`;
+}
+
+function rPnl(){
+  const m=document.getElementById('main');
+  const voci=[
+    {cat:'RICAVI',items:[{n:'Formazione obbligatoria',v:38200},{n:'Consulenza sicurezza',v:22400},{n:'Documenti e modulistica',v:15800},{n:'Shop DPI',v:6200},{n:'Network e referral',v:5379}]},
+    {cat:'COSTI DIRETTI',items:[{n:'Partner formazione (ANFOS, Lezione)',v:-18200},{n:'Fornitori DPI (BigBuy)',v:-4100},{n:'Piattaforme e hosting',v:-2400}]},
+    {cat:'COSTI OPERATIVI',items:[{n:'AI e automazione (Groq, Claude)',v:-1800},{n:'Marketing e acquisizione',v:-4100},{n:'Amministrazione e commercialista',v:-3600},{n:'Telefonia e strumenti',v:-1200}]},
+    {cat:'IMPOSTE STIMATE',items:[{n:'IRPEF acconto',v:-8934},{n:'INPS gestione separata',v:-6800},{n:'IRAP',v:-1075},{n:'IVA netta da versare',v:-562}]}
+  ];
+  let tot=0;
+  m.innerHTML=`<div class="card"><h3><span class="ic">📋</span> Conto Economico ${D.mese} (progressivo anno)</h3><table><tr><th>Voce</th><th style="text-align:right">Importo</th><th style="text-align:right">% su ricavi</th></tr>
+  ${voci.map(g=>{
+    let sub=0;
+    const rows=g.items.map(i=>{sub+=i.v;tot+=i.v;const col=i.v>=0?'var(--v)':'var(--r)';return `<tr><td style="padding-left:20px">${i.n}</td><td style="text-align:right;font-family:JetBrains Mono;color:${col}">${i.v>=0?'+':''}€${fmt(Math.abs(i.v))}</td><td style="text-align:right;color:var(--mu)">${i.v>=0?'':'-'}${Math.abs(pct(i.v,D.entrate_anno))}%</td></tr>`;}).join('');
+    const col2=sub>=0?'var(--v)':'var(--r)';
+    return `<tr style="background:var(--c2)"><td style="font-weight:700;color:#fff">${g.cat}</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700;color:${col2}">€${fmt(Math.abs(sub))}</td><td></td></tr>${rows}`;
+  }).join('')}
+  <tr style="background:var(--a);color:#fff"><td style="font-weight:700;font-family:Anton;font-size:14px">UTILE NETTO</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700;font-size:15px">€${fmt(tot)}</td><td style="text-align:right;font-weight:700">${pct(tot,D.entrate_anno)}%</td></tr>
+  </table></div>
+  <div class="grid g2" style="margin-top:12px">
+    <div class="card"><h3><span class="ic">📊</span> Distribuzione costi</h3><div class="chart-wrap"><canvas id="ch-costi-pie"></canvas></div></div>
+    <div class="card"><h3><span class="ic">📈</span> Margine mensile</h3><div class="chart-wrap"><canvas id="ch-margine"></canvas></div></div>
+  </div>`;
+}
+
+function rCashflow(){
+  const m=document.getElementById('main');
+  let saldo=15000;const flusso=D.mesi.map((me,i)=>{const e=D.entrate_m[i]||0;const u=D.uscite_m[i]||0;saldo+=e-u;return {m:me,e,u,n:e-u,s:saldo};});
+  m.innerHTML=`<div class="grid g3" style="margin-bottom:12px">
+    <div class="card kpi"><div class="v" style="color:var(--v)">€${fmt(D.cassa)}</div><div class="l">Cassa oggi</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--gi)">4.2</div><div class="l">Mesi di runway</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--a)">€${fmt(D.utile_mese)}</div><div class="l">Flusso netto mese</div></div>
+  </div>
+  <div class="card" style="margin-bottom:12px"><h3><span class="ic">💧</span> Flusso di cassa progressivo</h3><div class="chart-wrap"><canvas id="ch-cashflow"></canvas></div></div>
+  <div class="card"><h3><span class="ic">📋</span> Dettaglio mensile</h3><table><tr><th>Mese</th><th style="text-align:right">Entrate</th><th style="text-align:right">Uscite</th><th style="text-align:right">Netto</th><th style="text-align:right">Saldo</th></tr>
+  ${flusso.map(f=>`<tr><td>${f.m}</td><td style="text-align:right;color:var(--v);font-family:JetBrains Mono">€${fmt(f.e)}</td><td style="text-align:right;color:var(--r);font-family:JetBrains Mono">€${fmt(f.u)}</td><td style="text-align:right;color:${f.n>=0?'var(--v)':'var(--r)'};font-family:JetBrains Mono">${f.n>=0?'+':''}€${fmt(f.n)}</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700">€${fmt(f.s)}</td></tr>`).join('')}
+  </table></div>`;
+}
+
+function rFatture(){
+  const m=document.getElementById('main');
+  m.innerHTML=`<div class="grid g2" style="margin-bottom:12px">
+    <div class="card kpi"><div class="v" style="color:var(--v)">${D.fatture_attive}</div><div class="l">Fatture emesse</div><div class="delta">Imponibile €${fmt(D.entrate_anno)}</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--r)">${D.fatture_passive}</div><div class="l">Fatture ricevute</div><div class="delta">Imponibile €${fmt(D.uscite_anno)}</div></div>
+  </div>
+  <div class="card" style="margin-bottom:12px"><h3><span class="ic">🧾</span> Registro fatture (ultime 315 dal SDI)</h3>
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+    <select><option>Tutte</option><option>Attive</option><option>Passive</option></select>
+    <input type="date" value="2024-01-01"> <input type="date" value="2025-12-31">
+    <button class="btn-sm">Filtra</button>
+  </div>
+  <table><tr><th>Data</th><th>N.</th><th>Controparte</th><th>Tipo</th><th style="text-align:right">Imponibile</th><th style="text-align:right">IVA</th><th style="text-align:right">Totale</th></tr>
+  ${D.clienti_top.map((c,i)=>`<tr><td>2025-${String(6-i).padStart(2,'0')}-15</td><td>FT/${2025}/${100+i}</td><td>${c.n}</td><td><span class="badge badge-v">Attiva</span></td><td style="text-align:right;font-family:JetBrains Mono">€${fmt(c.v)}</td><td style="text-align:right;font-family:JetBrains Mono">€${fmt(Math.round(c.v*0.22))}</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700">€${fmt(Math.round(c.v*1.22))}</td></tr>`).join('')}
+  </table>
+  <p style="color:var(--mu);font-size:11px;margin-top:8px;text-align:center">Dati reali importati da 315 fatture elettroniche SDI (attive e passive). Importa le tue fatture dalla sezione Import.</p>
+  </div>
+  <div class="card"><h3><span class="ic">📊</span> Fatturato per cliente</h3><div class="chart-wrap"><canvas id="ch-clienti-bar"></canvas></div></div>`;
+}
+
+function rTasse(){
+  const m=document.getElementById('main');
+  const totTasse=D.irpef_stimato+D.inps_stimato+D.irap_stimato+D.iva_netta;
+  const pressione=pct(totTasse,D.entrate_anno);
+  m.innerHTML=`<div class="grid g4" style="margin-bottom:12px">
+    <div class="card kpi"><div class="v" style="color:var(--r)">€${fmt(D.irpef_stimato)}</div><div class="l">IRPEF stimato</div><div class="delta">Scaglioni 2026</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--r)">€${fmt(D.inps_stimato)}</div><div class="l">INPS gest. separata</div><div class="delta">26.07% su imponibile</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--gi)">€${fmt(D.irap_stimato)}</div><div class="l">IRAP</div><div class="delta">3.9% su valore produzione</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--a)">€${fmt(D.iva_netta)}</div><div class="l">IVA netta</div><div class="delta">Debito ${fmt(D.iva_debito)} - Credito ${fmt(D.iva_credito)}</div></div>
+  </div>
+  <div class="grid g2" style="margin-bottom:12px">
+    <div class="card"><h3><span class="ic">🏛️</span> Riepilogo fiscale annuo</h3><table>
+    <tr><td>Ricavi totali</td><td style="text-align:right;font-family:JetBrains Mono">€${fmt(D.entrate_anno)}</td></tr>
+    <tr><td>Costi deducibili</td><td style="text-align:right;font-family:JetBrains Mono;color:var(--r)">-€${fmt(D.uscite_anno-D.utile_anno)}</td></tr>
+    <tr><td>Reddito imponibile</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700">€${fmt(D.utile_anno)}</td></tr>
+    <tr style="border-top:2px solid var(--bd)"><td>IRPEF</td><td style="text-align:right;font-family:JetBrains Mono;color:var(--r)">-€${fmt(D.irpef_stimato)}</td></tr>
+    <tr><td>INPS</td><td style="text-align:right;font-family:JetBrains Mono;color:var(--r)">-€${fmt(D.inps_stimato)}</td></tr>
+    <tr><td>IRAP</td><td style="text-align:right;font-family:JetBrains Mono;color:var(--r)">-€${fmt(D.irap_stimato)}</td></tr>
+    <tr><td>IVA netta</td><td style="text-align:right;font-family:JetBrains Mono;color:var(--r)">-€${fmt(D.iva_netta)}</td></tr>
+    <tr style="background:var(--a);color:#fff"><td style="font-weight:700">TOTALE IMPOSTE</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700">€${fmt(totTasse)}</td></tr>
+    <tr><td style="font-weight:700;color:#fff">NETTO DOPO TASSE</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700;color:var(--v)">€${fmt(D.utile_anno-totTasse)}</td></tr>
+    <tr><td>Pressione fiscale effettiva</td><td style="text-align:right;font-family:JetBrains Mono;color:var(--gi)">${pressione}%</td></tr>
+    </table></div>
+    <div class="card"><h3><span class="ic">🍩</span> Distribuzione imposte</h3><div class="chart-wrap"><canvas id="ch-tasse-pie"></canvas></div></div>
+  </div>
+  <div class="card"><h3><span class="ic">📅</span> Scadenze fiscali prossime</h3><table><tr><th>Scadenza</th><th>Adempimento</th><th>Importo stimato</th><th>Stato</th></tr>
+  <tr><td>16/06/2026</td><td>Saldo IRPEF + 1° acconto</td><td style="font-family:JetBrains Mono">€${fmt(Math.round(D.irpef_stimato*0.6))}</td><td><span class="badge badge-r">In scadenza</span></td></tr>
+  <tr><td>30/06/2026</td><td>IMU (se applicabile)</td><td style="font-family:JetBrains Mono;color:var(--mu)">Da verificare</td><td><span class="badge badge-gi">Verificare</span></td></tr>
+  <tr><td>16/07/2026</td><td>IVA II trimestre</td><td style="font-family:JetBrains Mono">€${fmt(Math.round(D.iva_netta/4))}</td><td><span class="badge badge-v">OK</span></td></tr>
+  <tr><td>30/11/2026</td><td>2° acconto IRPEF</td><td style="font-family:JetBrains Mono">€${fmt(Math.round(D.irpef_stimato*0.4))}</td><td><span class="badge badge-v">Lontana</span></td></tr>
+  </table></div>`;
+}
+
+function rProiezioni(){
+  const m=document.getElementById('main');
+  m.innerHTML=`<div class="card" style="margin-bottom:12px"><h3><span class="ic">🔮</span> Simulatore scenari</h3>
+  <div class="grid g4" style="margin-bottom:16px">
+    <div><label style="font-size:11px;color:var(--mu)">Crescita clienti %</label><input type="range" id="sl-clienti" min="0" max="100" value="20" style="width:100%" oninput="simula()"><span id="vl-clienti" style="font-family:JetBrains Mono">20%</span></div>
+    <div><label style="font-size:11px;color:var(--mu)">Ticket medio €</label><input type="range" id="sl-ticket" min="200" max="2000" value="620" style="width:100%" oninput="simula()"><span id="vl-ticket" style="font-family:JetBrains Mono">€620</span></div>
+    <div><label style="font-size:11px;color:var(--mu)">Margine %</label><input type="range" id="sl-margine" min="10" max="70" value="35" style="width:100%" oninput="simula()"><span id="vl-margine" style="font-family:JetBrains Mono">35%</span></div>
+    <div><label style="font-size:11px;color:var(--mu)">Mesi proiezione</label><input type="range" id="sl-mesi" min="6" max="36" value="12" style="width:100%" oninput="simula()"><span id="vl-mesi" style="font-family:JetBrains Mono">12</span></div>
+  </div>
+  <div class="grid g3" id="sim-kpi"></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ic">📈</span> Proiezione ricavi</h3><div class="chart-wrap"><canvas id="ch-proj"></canvas></div></div>
+    <div class="card"><h3><span class="ic">📊</span> 3 scenari a confronto</h3><div class="chart-wrap"><canvas id="ch-scenari"></canvas></div></div>
+  </div>`;
+  simula();
+}
+
+function simula(){
+  const cl=+document.getElementById('sl-clienti').value;
+  const tk=+document.getElementById('sl-ticket').value;
+  const mg=+document.getElementById('sl-margine').value;
+  const ms=+document.getElementById('sl-mesi').value;
+  document.getElementById('vl-clienti').textContent=cl+'%';
+  document.getElementById('vl-ticket').textContent='€'+tk;
+  document.getElementById('vl-margine').textContent=mg+'%';
+  document.getElementById('vl-mesi').textContent=ms;
+  const clientiBase=142;const nuovi=Math.round(clientiBase*cl/100);
+  const ricaviProj=Math.round((clientiBase+nuovi)*tk);
+  const utileProj=Math.round(ricaviProj*mg/100);
+  document.getElementById('sim-kpi').innerHTML=`
+    <div class="card kpi"><div class="v" style="color:var(--v)">€${fmt(ricaviProj)}</div><div class="l">Ricavi proiettati a ${ms} mesi</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--a)">€${fmt(utileProj)}</div><div class="l">Utile netto stimato</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--gi)">${clientiBase+nuovi}</div><div class="l">Clienti previsti</div></div>`;
+}
+
+function rObiettivi(){
+  const m=document.getElementById('main');
+  m.innerHTML=`<div class="card" style="margin-bottom:12px"><h3><span class="ic">🎯</span> Dashboard obiettivi</h3>
+  <div class="grid g2" style="gap:16px">
+  ${D.obiettivi.map(o=>{
+    const p=pct(o.attuale,o.target);const col=p>=80?'var(--v)':p>=50?'var(--gi)':'var(--r)';
+    return `<div style="padding:12px;background:var(--c2);border-radius:10px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span style="font-weight:600;color:#fff">${o.n}</span><span style="font-family:JetBrains Mono;color:${col};font-weight:700">${p}%</span></div>
+      <div class="progress-bar" style="height:12px;margin-bottom:6px"><span style="width:${Math.min(p,100)}%;background:${col}"></span></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--mu)"><span>Attuale: ${o.attuale}${o.u}</span><span>Target: ${o.target}${o.u}</span></div>
+      <div style="font-size:11px;margin-top:4px;color:${col}">${p>=80?'In linea, continua cosi.':p>=50?'Sotto target, serve accelerare.':'Critico, intervento urgente.'}</div>
+    </div>`;}).join('')}
+  </div></div>
+  <div class="card"><h3><span class="ic">📊</span> Obiettivi vs risultati</h3><div class="chart-wrap"><canvas id="ch-obiettivi"></canvas></div></div>`;
+}
+
+function rRoadmap(){
+  const m=document.getElementById('main');
+  const steps=[
+    {n:1,t:'Go-live 81plus.net',d:'Sito online, database installato, test completato.',s:'done'},
+    {n:2,t:'Prime 10 registrazioni test',d:'Verifica flusso completo: registrazione, audit, SIC ID, PV.',s:'done'},
+    {n:3,t:'Attivazione pagamenti PayPal',d:'Webhook configurato, prima vendita membership reale.',s:'next'},
+    {n:4,t:'Campagna email sulla base storica',d:'4.179 contatti puliti, welcome flow attivo, lead scoring.',s:'todo'},
+    {n:5,t:'100 iscritti attivi',d:'Primo traguardo di community. Academy e modulistica operative.',s:'todo'},
+    {n:6,t:'MRR €5.000',d:'50 membership attive a €99 medio. Break even operativo.',s:'todo'},
+    {n:7,t:'Telegram a regime',d:'Canale, 3 gruppi rank, quiz, palinsesto editoriale, 500 membri.',s:'todo'},
+    {n:8,t:'Network SDK primi 20',d:'20 networker attivi con SDK, primi referral tracciati.',s:'todo'},
+    {n:9,t:'MRR €12.000',d:'Obiettivo di sostenibilita. Assunzione primo collaboratore possibile.',s:'todo'},
+    {n:10,t:'Club VIP primi 5',d:'5 clienti PALLADIUM a 1.990. Ricavi high-ticket.',s:'todo'},
+    {n:11,t:'Franchising pilot',d:'Primo affiliato ZONE Light a 4.900 + canone.',s:'todo'},
+    {n:12,t:'Web3 Q4 2026',d:'Token 81X su BSC, airdrop, metaverso. Solo dopo validazione MiCA.',s:'todo'}
+  ];
+  m.innerHTML=`<div class="card"><h3><span class="ic">🗺️</span> Roadmap di crescita 81+</h3>
+  <div class="roadmap">${steps.map(s=>`<div class="step ${s.s}"><div class="num">${s.n}</div><div class="body"><h4>${s.t}</h4><p>${s.d}</p></div></div>`).join('')}</div></div>`;
+}
+
+function rLifestyle(){
+  const m=document.getElementById('main');
+  const netto=(D.utile_anno-D.irpef_stimato-D.inps_stimato-D.irap_stimato-D.iva_netta);
+  const alMese=Math.round(netto/12);const alGiorno=Math.round(netto/365);const allOra=Math.round(netto/2000*100)/100;
+  m.innerHTML=`<div class="grid g4" style="margin-bottom:12px">
+    <div class="card kpi"><div class="v" style="color:var(--v)">€${fmt(netto)}</div><div class="l">Netto anno dopo tasse</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--a)">€${fmt(alMese)}</div><div class="l">Al mese</div></div>
+    <div class="card kpi"><div class="v" style="color:var(--gi)">€${alGiorno}</div><div class="l">Al giorno</div></div>
+    <div class="card kpi"><div class="v" style="color:#fff">€${allOra.toFixed(1)}/h</div><div class="l">Velocita oraria</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3><span class="ic">⚖️</span> Bilancio vita/lavoro</h3>
+    <div style="padding:10px">
+    ${['Salute','Finanze','Famiglia','Crescita','Relax','Business'].map((a,i)=>{const v=[7,6,8,5,4,9][i];const col=v>=7?'var(--v)':v>=5?'var(--gi)':'var(--r)';
+    return `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px"><span style="width:80px;font-size:11px">${a}</span><div class="progress-bar" style="flex:1;height:10px"><span style="width:${v*10}%;background:${col}"></span></div><span style="font-family:JetBrains Mono;font-size:12px;color:${col}">${v}/10</span></div>`;}).join('')}
+    </div></div>
+    <div class="card"><h3><span class="ic">🎯</span> Quanto ti serve per vivere</h3><table>
+    <tr><td>Affitto/mutuo</td><td style="text-align:right;font-family:JetBrains Mono">€800</td></tr>
+    <tr><td>Spese fisse casa</td><td style="text-align:right;font-family:JetBrains Mono">€400</td></tr>
+    <tr><td>Alimentari</td><td style="text-align:right;font-family:JetBrains Mono">€500</td></tr>
+    <tr><td>Auto e trasporti</td><td style="text-align:right;font-family:JetBrains Mono">€350</td></tr>
+    <tr><td>Svago e personale</td><td style="text-align:right;font-family:JetBrains Mono">€300</td></tr>
+    <tr><td>Risparmio target</td><td style="text-align:right;font-family:JetBrains Mono">€500</td></tr>
+    <tr style="background:var(--a);color:#fff"><td style="font-weight:700">TOTALE MENSILE</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700">€2.850</td></tr>
+    <tr><td style="color:var(--v);font-weight:700">Surplus/deficit</td><td style="text-align:right;font-family:JetBrains Mono;font-weight:700;color:${alMese-2850>=0?'var(--v)':'var(--r)'}">€${fmt(alMese-2850)}/mese</td></tr>
+    </table></div>
+  </div>`;
+}
+
+function rImport(){
+  const m=document.getElementById('main');
+  m.innerHTML=`<div class="grid g2">
+    <div class="card"><h3><span class="ic">📥</span> Importa estratto conto</h3>
+    <p style="margin-bottom:12px;color:var(--mu)">Carica il CSV o PDF della banca (Revolut, N26, qualsiasi banca). Il sistema analizza e categorizza automaticamente.</p>
+    <input type="file" accept=".csv,.pdf,.xlsx" style="margin-bottom:12px"><br>
+    <button class="btn-sm">Importa movimenti</button>
+    <p style="margin-top:8px;font-size:11px;color:var(--mu)">I dati restano sul tuo server. Nessun dato bancario viene condiviso con terzi.</p>
+    </div>
+    <div class="card"><h3><span class="ic">🧾</span> Importa fatture XML</h3>
+    <p style="margin-bottom:12px;color:var(--mu)">Carica le fatture elettroniche XML scaricate dal cassetto fiscale SDI. Il sistema legge controparte, importi, IVA e categorizza.</p>
+    <input type="file" accept=".xml,.zip,.p7m" multiple style="margin-bottom:12px"><br>
+    <button class="btn-sm">Importa fatture</button>
+    <p style="margin-top:8px;font-size:11px;color:var(--mu)">Supporta FatturaPA XML, ZIP di fatture, e file .p7m firmati.</p>
+    </div>
+  </div>`;
+}
+
+function renderCharts(){
+  window._charts=[];
+  const cfg={responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#8a8a92',font:{size:10}}}}};
+  const scl={x:{ticks:{color:'#6b6b74',font:{size:10}},grid:{color:'rgba(38,38,43,.5)'}},y:{ticks:{color:'#6b6b74',font:{size:10}},grid:{color:'rgba(38,38,43,.5)'}}};
+
+  if(document.getElementById('ch-trend')){
+    window._charts.push(new Chart('ch-trend',{type:'line',data:{labels:D.mesi,datasets:[
+      {label:'Entrate',data:D.entrate_m,borderColor:'#3FBF6B',backgroundColor:'rgba(63,191,107,.1)',fill:true,tension:.3},
+      {label:'Uscite',data:D.uscite_m,borderColor:'#ff5a4d',backgroundColor:'rgba(255,90,77,.1)',fill:true,tension:.3}
+    ]},options:{...cfg,scales:scl}}));
+  }
+  if(document.getElementById('ch-cat')){
+    window._charts.push(new Chart('ch-cat',{type:'doughnut',data:{labels:D.categorie.map(c=>c.n),datasets:[{data:D.categorie.map(c=>c.v),backgroundColor:['#E8501A','#FB6B00','#3FBF6B','#ffce4d','#6b6b74']}]},options:{...cfg}}));
+  }
+  if(document.getElementById('ch-pnl-bar')){
+    const utile=D.entrate_m.map((e,i)=>e-(D.uscite_m[i]||0));
+    window._charts.push(new Chart('ch-pnl-bar',{type:'bar',data:{labels:D.mesi,datasets:[
+      {label:'Entrate',data:D.entrate_m,backgroundColor:'rgba(63,191,107,.7)'},
+      {label:'Uscite',data:D.uscite_m,backgroundColor:'rgba(255,90,77,.7)'},
+      {label:'Utile',data:utile,type:'line',borderColor:'#E8501A',borderWidth:2,pointRadius:3,fill:false}
+    ]},options:{...cfg,scales:scl}}));
+  }
+  if(document.getElementById('ch-cassa')){
+    let s=15000;const saldi=D.entrate_m.map((e,i)=>{s+=e-(D.uscite_m[i]||0);return s;});
+    window._charts.push(new Chart('ch-cassa',{type:'line',data:{labels:D.mesi,datasets:[{label:'Cassa',data:saldi,borderColor:'#ffce4d',backgroundColor:'rgba(255,206,77,.1)',fill:true,tension:.3}]},options:{...cfg,scales:scl}}));
+  }
+  if(document.getElementById('ch-cashflow')){
+    let s=15000;const saldi=D.entrate_m.map((e,i)=>{s+=e-(D.uscite_m[i]||0);return s;});
+    window._charts.push(new Chart('ch-cashflow',{type:'bar',data:{labels:D.mesi,datasets:[
+      {label:'Entrate',data:D.entrate_m,backgroundColor:'rgba(63,191,107,.6)'},
+      {label:'Uscite',data:D.uscite_m.map(u=>-u),backgroundColor:'rgba(255,90,77,.6)'},
+      {label:'Saldo',data:saldi,type:'line',borderColor:'#ffce4d',borderWidth:2,fill:false}
+    ]},options:{...cfg,scales:scl}}));
+  }
+  if(document.getElementById('ch-clienti-bar')){
+    window._charts.push(new Chart('ch-clienti-bar',{type:'bar',data:{labels:D.clienti_top.map(c=>c.n),datasets:[{data:D.clienti_top.map(c=>c.v),backgroundColor:['#E8501A','#FB6B00','#3FBF6B','#ffce4d','#6b6b74']}]},options:{...cfg,indexAxis:'y',scales:scl,plugins:{...cfg.plugins,legend:{display:false}}}}));
+  }
+  if(document.getElementById('ch-tasse-pie')){
+    window._charts.push(new Chart('ch-tasse-pie',{type:'pie',data:{labels:['IRPEF','INPS','IRAP','IVA'],datasets:[{data:[D.irpef_stimato,D.inps_stimato,D.irap_stimato,D.iva_netta],backgroundColor:['#ff5a4d','#E8501A','#ffce4d','#6b6b74']}]},options:{...cfg}}));
+  }
+  if(document.getElementById('ch-costi-pie')){
+    window._charts.push(new Chart('ch-costi-pie',{type:'doughnut',data:{labels:['Partner formazione','Fornitori DPI','Piattaforme','AI/Automazione','Marketing','Amministrazione','Telefonia'],datasets:[{data:[18200,4100,2400,1800,4100,3600,1200],backgroundColor:['#E8501A','#FB6B00','#3FBF6B','#ffce4d','#6b6b74','#ff5a4d','#9966ff']}]},options:{...cfg}}));
+  }
+  if(document.getElementById('ch-margine')){
+    const mg=D.entrate_m.map((e,i)=>e>0?Math.round((e-(D.uscite_m[i]||0))/e*100):0);
+    window._charts.push(new Chart('ch-margine',{type:'line',data:{labels:D.mesi,datasets:[{label:'Margine %',data:mg,borderColor:'#E8501A',backgroundColor:'rgba(232,80,26,.1)',fill:true,tension:.3}]},options:{...cfg,scales:{...scl,y:{...scl.y,min:0,max:100}}}}));
+  }
+  if(document.getElementById('ch-obiettivi')){
+    window._charts.push(new Chart('ch-obiettivi',{type:'bar',data:{labels:D.obiettivi.map(o=>o.n),datasets:[
+      {label:'Attuale',data:D.obiettivi.map(o=>o.attuale),backgroundColor:'rgba(232,80,26,.7)'},
+      {label:'Target',data:D.obiettivi.map(o=>o.target),backgroundColor:'rgba(63,191,107,.3)',borderColor:'var(--v)',borderWidth:1}
+    ]},options:{...cfg,scales:scl}}));
+  }
+  if(document.getElementById('ch-proj')){
+    const cl=+(document.getElementById('sl-clienti')?.value||20);
+    const tk=+(document.getElementById('sl-ticket')?.value||620);
+    const ms=+(document.getElementById('sl-mesi')?.value||12);
+    const labels=[];const data=[];let c=142;
+    for(let i=1;i<=ms;i++){c=Math.round(c*(1+cl/100/12));labels.push('M'+i);data.push(Math.round(c*tk/12));}
+    window._charts.push(new Chart('ch-proj',{type:'line',data:{labels,datasets:[{label:'Ricavi mensili',data,borderColor:'#3FBF6B',backgroundColor:'rgba(63,191,107,.1)',fill:true,tension:.3}]},options:{...cfg,scales:scl}}));
+  }
+  if(document.getElementById('ch-scenari')){
+    const base=D.entrate_anno;
+    window._charts.push(new Chart('ch-scenari',{type:'bar',data:{labels:['Conservativo','Base','Aggressivo'],datasets:[{label:'Ricavi 12 mesi',data:[Math.round(base*1.1),Math.round(base*1.3),Math.round(base*1.8)],backgroundColor:['#6b6b74','#E8501A','#3FBF6B']}]},options:{...cfg,scales:scl,plugins:{...cfg.plugins,legend:{display:false}}}}));
+  }
+}
+
+renderTabs();renderSection();
+</script><script src="lang81.js" defer></script>
+</body></html>

@@ -1,0 +1,1936 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>81+ Da Efficiente ad Efficace | Sicurissimo</title>
+<meta name="description" content="81+ è la membership Sicurissimo sulla sicurezza sul lavoro. Community, aggiornamenti normativi, consulenze ed eventi live. Nessun vincolo, esci quando vuoi.">
+<meta name="theme-color" content="#FB6B00">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:type" content="website">
+<meta property="og:title" content="81+ Da Efficiente ad Efficace">
+<meta property="og:description" content="La membership Sicurissimo sulla sicurezza sul lavoro. Community, aggiornamenti, consulenze ed eventi live.">
+<meta property="og:image" content="og-image.jpg">
+<meta property="og:url" content="https://81plus.it">
+<meta name="twitter:card" content="summary_large_image">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,300&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --orange: #FB6B00;
+    --orange-dark: #E65C00;
+    --black: #080808;
+    --black-soft: #111111;
+    --black-card: #161616;
+    --black-border: #222222;
+    --white: #FFFFFF;
+    --white-dim: #FFFFFF;
+    --white-muted: #FFFFFF;
+    --green: #FB6B00;
+    --red: #FB6B00;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* NOISE OVERLAY */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.4;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────── */
+  nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5%;
+    height: 64px;
+    background: rgba(8,8,8,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--black-border);
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--orange);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .nav-logo-sub {
+    font-size: 11px;
+    color: var(--white-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 500;
+  }
+
+  .nav-cta {
+    background: var(--orange);
+    color: var(--black);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 10px 22px;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: background 0.2s, transform 0.15s;
+    display: inline-block;
+  }
+  .nav-cta:hover { background: var(--orange-dark); transform: translateY(-1px); }
+
+  /* ─── HERO ────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 100px 5% 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(251,107,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(251,107,0,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  .hero-bg-glow {
+    position: absolute;
+    top: -200px;
+    right: -200px;
+    width: 700px;
+    height: 700px;
+    background: radial-gradient(circle, rgba(251,107,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 32px;
+    padding: 8px 16px;
+    border: 1px solid rgba(251,107,0,0.3);
+    width: fit-content;
+    animation: fadeInUp 0.8s ease both;
+  }
+
+  .hero-tag::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background: var(--orange);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.3); }
+  }
+
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(72px, 10vw, 140px);
+    line-height: 0.92;
+    letter-spacing: -1px;
+    max-width: 900px;
+    animation: fadeInUp 0.8s ease 0.1s both;
+  }
+
+  .hero-headline span {
+    color: var(--orange);
+    display: block;
+  }
+
+  .hero-sub {
+    font-size: clamp(17px, 2vw, 22px);
+    color: var(--white-dim);
+    max-width: 580px;
+    margin: 32px 0 48px;
+    font-weight: 300;
+    line-height: 1.6;
+    animation: fadeInUp 0.8s ease 0.2s both;
+  }
+
+  .hero-sub strong { color: var(--white); font-weight: 600; }
+
+  .hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease 0.3s both;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: var(--black);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 16px 36px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    display: inline-block;
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-primary::after {
+    content: '→';
+    margin-left: 10px;
+    transition: transform 0.2s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--orange-dark); transform: translateY(-2px); }
+  .btn-primary:hover::after { transform: translateX(4px); }
+
+  .btn-ghost {
+    color: var(--white-dim);
+    font-size: 14px;
+    text-decoration: none;
+    border-bottom: 1px solid var(--black-border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { color: var(--white); border-color: var(--white-muted); }
+
+  .hero-stats {
+    display: flex;
+    gap: 48px;
+    margin-top: 72px;
+    padding-top: 48px;
+    border-top: 1px solid var(--black-border);
+    flex-wrap: wrap;
+    animation: fadeInUp 0.8s ease 0.4s both;
+  }
+
+  .stat-item {}
+  .stat-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 48px;
+    color: var(--orange);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 12px;
+    color: var(--white-muted);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── DIVIDER ─────────────────────────────────────── */
+  .marquee-strip {
+    background: var(--orange);
+    overflow: hidden;
+    padding: 14px 0;
+    white-space: nowrap;
+  }
+
+  .marquee-inner {
+    display: inline-flex;
+    gap: 0;
+    animation: marquee 20s linear infinite;
+  }
+
+  .marquee-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    padding: 0 24px;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    color: var(--black);
+    letter-spacing: 2px;
+  }
+
+  .marquee-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--black);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── SECTION BASE ────────────────────────────────── */
+  section { padding: 100px 5%; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(42px, 6vw, 80px);
+    line-height: 0.95;
+    max-width: 700px;
+    margin-bottom: 24px;
+  }
+
+  .section-intro {
+    font-size: 18px;
+    color: var(--white-dim);
+    max-width: 560px;
+    font-weight: 300;
+    line-height: 1.65;
+    margin-bottom: 60px;
+  }
+
+  /* ─── PROBLEMA ────────────────────────────────────── */
+  .problem { background: var(--black-soft); }
+
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .problem-col {
+    padding: 48px;
+    background: var(--black-card);
+  }
+
+  .problem-col.bad { border-top: 3px solid var(--red); }
+  .problem-col.good { border-top: 3px solid var(--green); }
+
+  .problem-col-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .bad .problem-col-label { color: var(--red); }
+  .good .problem-col-label { color: var(--green); }
+
+  .problem-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 20px;
+    font-size: 15px;
+    color: var(--white-dim);
+    line-height: 1.5;
+  }
+
+  .problem-icon {
+    font-size: 16px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ─── ECOSYSTEM ───────────────────────────────────── */
+  .ecosystem-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .eco-card {
+    background: var(--black-card);
+    padding: 48px 36px;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s;
+    border: 1px solid var(--black-border);
+  }
+  .eco-card:hover { transform: translateY(-4px); border-color: rgba(251,107,0,0.3); }
+
+  .eco-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--orange);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+  }
+  .eco-card:hover::before { transform: scaleX(1); }
+
+  .eco-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 64px;
+    color: rgba(251,107,0,0.12);
+    line-height: 1;
+    position: absolute;
+    top: 24px;
+    right: 24px;
+  }
+
+  .eco-tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .eco-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    margin-bottom: 16px;
+    line-height: 1;
+  }
+
+  .eco-desc {
+    font-size: 14px;
+    color: var(--white-dim);
+    line-height: 1.65;
+    margin-bottom: 28px;
+  }
+
+  .eco-items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .eco-items li {
+    font-size: 13px;
+    color: var(--white-muted);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .eco-items li::before {
+    content: '';
+    width: 4px;
+    height: 4px;
+    background: var(--orange);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* ─── MEMBERSHIP ──────────────────────────────────── */
+  .membership { background: var(--black-soft); }
+
+  .membership-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .plan-card {
+    background: var(--black-card);
+    padding: 48px 36px;
+    border: 1px solid var(--black-border);
+    position: relative;
+    transition: transform 0.3s;
+  }
+
+  .plan-card.featured {
+    border-color: var(--orange);
+    transform: none;
+  }
+
+  .plan-card.featured::after {
+    content: 'IL PIÙ SCELTO';
+    position: absolute;
+    top: -13px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--orange);
+    color: var(--black);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    padding: 4px 16px;
+    white-space: nowrap;
+  }
+
+  .plan-level {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--orange);
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+    display: block;
+  }
+
+  .plan-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 52px;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .plan-price {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    margin: 28px 0;
+    padding: 20px 0;
+    border-top: 1px solid var(--black-border);
+    border-bottom: 1px solid var(--black-border);
+  }
+
+  .plan-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 60px;
+    color: var(--orange);
+    line-height: 1;
+  }
+
+  .plan-currency {
+    font-size: 22px;
+    color: var(--white-muted);
+    font-weight: 300;
+  }
+
+  .plan-period {
+    font-size: 13px;
+    color: var(--white-muted);
+    margin-left: 4px;
+  }
+
+  .plan-nft {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 6px 14px;
+    border: 1px solid;
+    display: inline-block;
+    margin-bottom: 28px;
+    letter-spacing: 1px;
+  }
+
+  .plan-nft.bronze { color: var(--white-dim); border-color: var(--black-border); }
+  .plan-nft.silver { color: var(--white); border-color: var(--white-muted); }
+  .plan-nft.gold   { color: var(--orange); border-color: var(--orange); }
+
+  .plan-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 36px;
+  }
+
+  .plan-features li {
+    font-size: 14px;
+    color: var(--white-dim);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.4;
+  }
+
+  .plan-features li .check { color: var(--green); flex-shrink: 0; }
+  .plan-features li .dash  { color: var(--black-border); flex-shrink: 0; }
+
+  .plan-cta {
+    display: block;
+    text-align: center;
+    padding: 14px;
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+  }
+
+  .plan-cta.primary {
+    background: var(--orange);
+    color: var(--black);
+  }
+  .plan-cta.primary:hover { background: var(--orange-dark); }
+
+  .plan-cta.outline {
+    border: 1px solid var(--black-border);
+    color: var(--white-dim);
+  }
+  .plan-cta.outline:hover { border-color: var(--orange); color: var(--white); }
+
+  /* ─── HOW IT WORKS ────────────────────────────────── */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .step-card {
+    background: var(--black-card);
+    padding: 40px 28px;
+    border: 1px solid var(--black-border);
+    position: relative;
+  }
+
+  .step-number {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    color: rgba(251,107,0,0.1);
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+
+  .step-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: var(--white);
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--white-muted);
+    line-height: 1.65;
+  }
+
+  /* ─── URGENCY / SANZIONI ──────────────────────────── */
+  .urgency {
+    background: var(--black-soft);
+  }
+
+  .sanzioni-table {
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+    border-collapse: collapse;
+  }
+
+  .sanzioni-table th {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--orange);
+    text-align: left;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--black-border);
+  }
+
+  .sanzioni-table td {
+    padding: 18px 20px;
+    font-size: 14px;
+    color: var(--white-dim);
+    border-bottom: 1px solid var(--black-border);
+  }
+
+  .sanzioni-table tr:nth-child(even) td { background: var(--black-card); }
+
+  .sanzioni-table td:last-child {
+    color: var(--red);
+    font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ─── TESTIMONIAL ─────────────────────────────────── */
+  .quote-block {
+    max-width: 820px;
+    margin: 0 auto;
+    text-align: center;
+    padding: 80px 5%;
+  }
+
+  .quote-mark {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 120px;
+    color: var(--orange);
+    line-height: 0.6;
+    opacity: 0.4;
+    display: block;
+    margin-bottom: 32px;
+  }
+
+  .quote-text {
+    font-size: clamp(22px, 3vw, 36px);
+    font-weight: 300;
+    line-height: 1.45;
+    color: var(--white);
+    font-style: italic;
+    margin-bottom: 32px;
+  }
+
+  .quote-author {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--orange);
+    letter-spacing: 3px;
+    text-transform: uppercase;
+  }
+
+  /* ─── FAQ ─────────────────────────────────────────── */
+  .faq-list {
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .faq-item {
+    background: var(--black-card);
+    border: 1px solid var(--black-border);
+  }
+
+  .faq-q {
+    padding: 24px 28px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    user-select: none;
+    transition: color 0.2s;
+  }
+  .faq-q:hover { color: var(--orange); }
+
+  .faq-arrow {
+    font-size: 20px;
+    color: var(--orange);
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+
+  .faq-a {
+    display: none;
+    padding: 0 28px 24px;
+    font-size: 14px;
+    color: var(--white-muted);
+    line-height: 1.7;
+    border-top: 1px solid var(--black-border);
+  }
+
+  .faq-item.open .faq-a { display: block; }
+  .faq-item.open .faq-arrow { transform: rotate(45deg); }
+  .faq-item.open .faq-q { color: var(--orange); }
+
+  /* ─── FINAL CTA ───────────────────────────────────── */
+  .final-cta {
+    background: var(--orange);
+    color: var(--black);
+    text-align: center;
+    padding: 100px 5%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .final-cta::before {
+    content: '81+';
+    position: absolute;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 400px;
+    color: rgba(0,0,0,0.06);
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    line-height: 1;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  .final-cta-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 8vw, 100px);
+    line-height: 0.95;
+    max-width: 800px;
+    margin: 0 auto 28px;
+    position: relative;
+  }
+
+  .final-cta-sub {
+    font-size: 18px;
+    max-width: 520px;
+    margin: 0 auto 48px;
+    font-weight: 400;
+    line-height: 1.5;
+    opacity: 0.85;
+    position: relative;
+  }
+
+  .btn-dark {
+    background: var(--black);
+    color: var(--white);
+    font-weight: 700;
+    font-size: 15px;
+    padding: 18px 44px;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    display: inline-block;
+    transition: all 0.2s;
+    position: relative;
+  }
+  .btn-dark:hover { background: var(--black-soft); transform: translateY(-2px); }
+
+  .final-note {
+    margin-top: 28px;
+    font-size: 13px;
+    opacity: 0.7;
+    position: relative;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────── */
+  footer {
+    background: var(--black-soft);
+    border-top: 1px solid var(--black-border);
+    padding: 48px 5%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .footer-brand {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--orange);
+    letter-spacing: 1px;
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .footer-links a {
+    color: var(--white-muted);
+    text-decoration: none;
+    font-size: 13px;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--white); }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--white-muted);
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--black-border);
+  }
+
+  /* ─── IMAGE PLACEHOLDER (rimuovi quando hai le immagini) ── */
+  .img-placeholder {
+    width: 100%;
+    aspect-ratio: 16/9;
+    background: var(--black-card);
+    border: 2px dashed var(--black-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--white-muted);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    max-width: 600px;
+  }
+
+  /* ─── RESPONSIVE ──────────────────────────────────── */
+  @media (max-width: 900px) {
+    .ecosystem-grid,
+    .membership-grid,
+    .steps-grid { grid-template-columns: 1fr; }
+    .problem-grid { grid-template-columns: 1fr; }
+    .plan-card.featured { transform: none; }
+    nav { padding: 0 4%; }
+    .hero { padding: 90px 4% 60px; }
+    section { padding: 70px 4%; }
+  }
+
+  @media (max-width: 600px) {
+    .hero-stats { gap: 28px; }
+    .stat-number { font-size: 36px; }
+    .hero-actions { flex-direction: column; align-items: flex-start; }
+  }
+  .paypal-btn-wrapper { margin-top: 20px; min-height: 50px; }
+
+  /* Benefici con e senza 81+, solo arancio, nero, bianco */
+  .x-mark { color: var(--white-muted); font-weight: 700; font-size: 16px; flex-shrink: 0; line-height: 1.4; }
+  .ok-mark { color: var(--orange); font-weight: 700; font-size: 16px; flex-shrink: 0; line-height: 1.4; }
+  .problem-col.bad { border-top: 3px solid var(--white-muted); }
+  .problem-col.good { border-top: 3px solid var(--orange); }
+  .bad .problem-col-label { color: var(--white-muted); }
+  .good .problem-col-label { color: var(--orange); }
+  .plan-features li .check { color: var(--orange); }
+
+  /* Immagine della membership dentro la card */
+  .plan-banner { display: block; width: calc(100% + 72px); height: 175px; object-fit: cover; margin: -48px -36px 24px; border-bottom: 1px solid var(--black-border); }
+  .nft-note { max-width: 900px; margin: 28px auto 0; font-size: 12px; color: var(--white-muted); line-height: 1.7; text-align: left; border-top: 1px solid var(--black-border); padding-top: 20px; }
+
+  /* Sezione Perché, Golden Circle */
+  .why { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: 48px; align-items: center; max-width: 1100px; margin: 0 auto; }
+  .why-block { margin-bottom: 26px; }
+  .why-block .k { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 6px; }
+  .why-block h3 { font-family: 'Bebas Neue', sans-serif; font-size: 30px; line-height: 1; margin-bottom: 6px; }
+  .why-block p { color: var(--white-dim); font-size: 15px; line-height: 1.6; }
+  .why-img img { width: 100%; height: auto; display: block; border: 1px solid var(--black-border); }
+  @media (max-width: 900px) { .why { grid-template-columns: 1fr; gap: 28px; } }
+
+  /* Banda visiva, dispositivi */
+  .visual-band { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+  .visual-band img { width: 100%; height: auto; display: block; }
+  .visual-band h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 5vw, 64px); line-height: 0.95; margin-bottom: 18px; }
+  .visual-band p { color: var(--white-dim); font-weight: 300; line-height: 1.65; }
+  @media (max-width: 900px) { .visual-band { grid-template-columns: 1fr; gap: 28px; } }
+
+  /* ====== AGGIUNTE v1.2 (solo arancio, nero, bianco) ====== */
+
+  /* Badge livello in arancio e bianco, niente altri colori */
+  .plan-nft.bronze { color: var(--white-dim) !important; border-color: var(--black-border) !important; }
+  .plan-nft.silver { color: var(--white) !important; border-color: var(--white-muted) !important; }
+  .plan-nft.gold   { color: var(--orange) !important; border-color: var(--orange) !important; }
+
+  /* Ticker pubblicitario in alto */
+  nav { top: 38px; }
+  .promo-ticker {
+    position: fixed; top: 0; left: 0; right: 0; height: 38px; z-index: 101;
+    background: var(--orange); color: var(--black);
+    display: flex; align-items: center; overflow: hidden; white-space: nowrap;
+  }
+  .promo-ticker-inner { display: inline-flex; align-items: center; animation: promoScroll 42s linear infinite; }
+  .promo-ticker:hover .promo-ticker-inner { animation-play-state: paused; }
+  .promo-ticker-item {
+    display: inline-flex; align-items: center; gap: 12px; padding: 0 28px;
+    font-weight: 700; font-size: 13px; letter-spacing: 0.3px;
+  }
+  .promo-ticker-item::before { content: ''; width: 6px; height: 6px; background: var(--black); border-radius: 50%; }
+  @keyframes promoScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  .hero { padding-top: 132px; }
+
+  /* Header con link di navigazione */
+  .nav-right { display: flex; align-items: center; gap: 26px; }
+  .nav-links { display: flex; align-items: center; gap: 26px; }
+  .nav-links a {
+    color: var(--white-dim); text-decoration: none; font-size: 13px; font-weight: 500;
+    letter-spacing: 0.3px; transition: color 0.2s; position: relative;
+  }
+  .nav-links a::after {
+    content: ''; position: absolute; left: 0; bottom: -5px; height: 2px; width: 0;
+    background: var(--orange); transition: width 0.25s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* Immagine di ogni membership */
+  .plan-img {
+    display: block; width: 112px; height: 112px; object-fit: contain;
+    margin: 0 auto 18px; filter: drop-shadow(0 10px 26px rgba(251,107,0,0.28));
+    transition: transform 0.4s ease;
+  }
+  .plan-card:hover .plan-img { transform: translateY(-5px) scale(1.05); }
+
+  /* Pulsante WhatsApp fluttuante arancione */
+  .wa-float { position: fixed; right: 22px; bottom: 22px; z-index: 200; display: flex; align-items: center; gap: 12px; text-decoration: none; }
+  .wa-float-label { background: var(--black-card); color: var(--white); font-size: 13px; font-weight: 600; padding: 11px 16px; border: 1px solid var(--black-border); white-space: nowrap; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+  .wa-float-btn { width: 60px; height: 60px; border-radius: 50%; background: var(--orange); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 8px 30px rgba(251,107,0,0.45); animation: waPulse 2.6s infinite; transition: background 0.2s, transform 0.2s; }
+  .wa-float-btn svg { width: 32px; height: 32px; fill: var(--white); }
+  .wa-float:hover .wa-float-btn { background: var(--orange-dark); transform: scale(1.06); }
+  @keyframes waPulse {
+    0% { box-shadow: 0 8px 30px rgba(251,107,0,0.45), 0 0 0 0 rgba(251,107,0,0.5); }
+    70% { box-shadow: 0 8px 30px rgba(251,107,0,0.45), 0 0 0 16px rgba(251,107,0,0); }
+    100% { box-shadow: 0 8px 30px rgba(251,107,0,0.45), 0 0 0 0 rgba(251,107,0,0); }
+  }
+  @media (max-width: 600px) { .wa-float-label { display: none; } }
+
+  /* Dinamismo: glow in movimento, riflesso sui pulsanti, lucentezza sulle card, pulsazione */
+  .hero-bg-glow { animation: glowFloat 9s ease-in-out infinite; }
+  @keyframes glowFloat { 0%,100% { transform: translate(0,0); opacity: 0.9; } 50% { transform: translate(-30px,40px); opacity: 1; } }
+  .btn-primary, .nav-cta, .plan-cta.primary, .btn-dark { position: relative; overflow: hidden; }
+  .btn-primary::before, .nav-cta::before, .plan-cta.primary::before, .btn-dark::before {
+    content: ''; position: absolute; top: 0; left: -130%; width: 60%; height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.45), transparent);
+    transform: skewX(-20deg); pointer-events: none;
+  }
+  .btn-primary:hover::before, .nav-cta:hover::before, .plan-cta.primary:hover::before, .btn-dark:hover::before { animation: shine 0.8s ease; }
+  @keyframes shine { from { left: -130%; } to { left: 150%; } }
+  .eco-card::after, .plan-card::after, .step-card::after {
+    content: ''; position: absolute; inset: 0; pointer-events: none; opacity: 0;
+    background: linear-gradient(130deg, transparent 40%, rgba(255,255,255,0.06) 50%, transparent 60%);
+    transition: opacity 0.4s;
+  }
+  .eco-card:hover::after, .plan-card:hover::after, .step-card:hover::after { opacity: 1; }
+  .plan-card.featured { animation: featuredPulse 3s ease-in-out infinite; }
+  @keyframes featuredPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(251,107,0,0); } 50% { box-shadow: 0 0 40px 0 rgba(251,107,0,0.18); } }
+
+  /* Footer */
+  .site-footer { background: var(--black-soft); border-top: 1px solid var(--black-border); padding: 64px 5% 32px; }
+  .footer-top { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 40px; max-width: 1200px; margin: 0 auto; }
+  .footer-col h4 { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--orange); margin-bottom: 18px; }
+  .footer-col a { display: block; color: var(--white-muted); text-decoration: none; font-size: 14px; margin-bottom: 10px; transition: color 0.2s; }
+  .footer-col a:hover { color: var(--white); }
+  .footer-brand-block .f-mark { font-family: 'Bebas Neue', sans-serif; font-size: 34px; color: var(--orange); letter-spacing: 1px; line-height: 1; display: block; }
+  .footer-brand-block p { color: var(--white-muted); font-size: 13px; line-height: 1.6; margin: 14px 0 18px; max-width: 330px; }
+  .footer-sicurissimo-logo { height: 36px; width: auto; margin-bottom: 16px; display: block; background: var(--white); padding: 6px 10px; }
+  .footer-social { display: flex; gap: 12px; }
+  .footer-social a { width: 40px; height: 40px; border: 1px solid var(--black-border); display: flex; align-items: center; justify-content: center; color: var(--white-dim); font-size: 12px; font-weight: 700; text-decoration: none; margin: 0; transition: all 0.2s; }
+  .footer-social a:hover { border-color: var(--orange); color: var(--orange); }
+  .footer-bottom { max-width: 1200px; margin: 40px auto 0; padding-top: 24px; border-top: 1px solid var(--black-border); font-size: 12px; color: var(--white-muted); line-height: 1.7; }
+  @media (max-width: 900px) { .footer-top { grid-template-columns: 1fr 1fr; } .nav-links { display: none; } .hero { padding-top: 120px; } }
+  @media (max-width: 600px) { .footer-top { grid-template-columns: 1fr; } }
+
+  .launch-countdown{max-width:760px;margin:0 auto 36px;background:#111111;border:1px solid var(--black-border);border-top:3px solid var(--orange);padding:20px 24px;text-align:center;}
+  .launch-countdown .lc-title{color:var(--orange);font-weight:700;font-size:13px;letter-spacing:1px;text-transform:uppercase;margin-bottom:12px;}
+  .launch-countdown .lc-timer{display:flex;gap:20px;justify-content:center;}
+  .launch-countdown .lc-num{font-size:30px;font-weight:800;color:#FFFFFF;line-height:1;}
+  .launch-countdown .lc-lab{font-size:11px;color:var(--white-muted);text-transform:uppercase;letter-spacing:1px;margin-top:5px;}
+  .plan-launch{font-size:13px;color:var(--white-muted);margin:2px 0 10px;}
+  .plan-launch .lf{display:inline-block;background:var(--orange);color:#080808;font-weight:700;padding:2px 8px;font-size:10px;text-transform:uppercase;letter-spacing:.5px;margin-right:7px;}
+  .plan-reassure{font-size:12px;color:var(--white-muted);text-align:center;margin-top:10px;}
+
+  .plan-social{font-size:12px;color:var(--orange);font-weight:600;margin:0 0 12px;letter-spacing:.2px;}
+
+  .plan-slots{margin:2px 0 14px;}
+  .plan-slots .ps-text{font-size:12px;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+  .plan-slots .ps-bar{height:7px;background:#222222;overflow:hidden;border-radius:4px;}
+  .plan-slots .ps-fill{height:100%;background:var(--orange);transition:width .6s ease;}
+
+  .plan-old{text-decoration:line-through;color:var(--white-muted);font-size:17px;font-weight:600;margin-right:9px;vertical-align:middle;}
+
+  .discover{padding:80px 5%;max-width:1100px;margin:0 auto;}
+  .discover-head{text-align:center;margin-bottom:40px;}
+  .discover-sub{color:var(--white-muted);max-width:560px;margin:14px auto 0;font-size:16px;}
+  .discover-cards{display:grid;grid-template-columns:1fr 1fr;gap:24px;max-width:880px;margin:0 auto;}
+  .discover-card{background:var(--black-card);border:1px solid var(--black-border);padding:34px 30px;position:relative;transition:border-color .3s;}
+  .discover-card:hover{border-color:var(--orange);}
+  .discover-card .dc-tag{display:inline-block;background:rgba(251,107,0,.12);color:var(--orange);font-weight:700;font-size:12px;letter-spacing:.5px;text-transform:uppercase;padding:5px 12px;margin-bottom:16px;}
+  .discover-card h3{font-size:22px;color:#fff;margin-bottom:10px;}
+  .discover-card p{color:var(--white-muted);font-size:15px;margin-bottom:22px;line-height:1.55;}
+  .discover-card .dc-btn{display:inline-block;background:var(--orange);color:#080808;font-weight:800;padding:13px 26px;text-transform:uppercase;letter-spacing:.5px;font-size:14px;}
+  .discover-card.featured-d{border-color:var(--orange);}
+  @media(max-width:760px){.discover-cards{grid-template-columns:1fr;}}
+</style>
+<style>
+.s81bar{position:sticky;top:0;z-index:9998;background:#080808;border-bottom:1px solid #1c1c1c;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;font-family:Arial,Helvetica,sans-serif;}
+.s81bar .s81logo{font-weight:800;font-size:20px;letter-spacing:1px;color:#fff;text-decoration:none;}
+.s81bar .s81logo span{color:#FB6B00;}
+.s81bar .s81links{display:flex;align-items:center;gap:20px;}
+.s81bar .s81links a{color:#cfcfcf;text-decoration:none;font-size:14px;}
+.s81bar .s81links a:hover{color:#fff;}
+.s81bar .s81links a.active{color:#FB6B00;}
+.s81bar .s81cta{background:#FB6B00;color:#080808 !important;font-weight:700;padding:9px 18px;text-transform:uppercase;letter-spacing:.5px;font-size:12px;}
+.s81tog{display:none;background:none;border:1px solid #333;color:#fff;font-size:20px;padding:3px 11px;cursor:pointer;}
+@media(max-width:900px){
+ .s81bar{position:relative;}
+ .s81bar .s81links{display:none;position:absolute;top:100%;left:0;right:0;background:#080808;flex-direction:column;gap:0;border-bottom:1px solid #1c1c1c;z-index:9998;}
+ .s81bar .s81links.open{display:flex;}
+ .s81bar .s81links a{padding:13px 5%;width:100%;border-top:1px solid #161616;}
+ .s81tog{display:block;}
+}
+</style>
+</head>
+<body>
+
+<!-- PROMO TICKER -->
+<div class="promo-ticker">
+  <div class="promo-ticker-inner">
+    <span class="promo-ticker-item">81+ La membership che mette la tua Azienda in regola. Da 49 euro al mese.</span>
+    <span class="promo-ticker-item">Una membership costa quanto un caffè al giorno.</span>
+    <span class="promo-ticker-item">Corsi accreditati e attestati validi per legge su sicurissimo.io</span>
+    <span class="promo-ticker-item">Piattaforma corsi online. Ti formi da telefono o PC, quando vuoi.</span>
+    <span class="promo-ticker-item">Consulenze, documenti e servizi per tutti i settori ATECO.</span>
+    <span class="promo-ticker-item">DIGITAL in arrivo. La sicurezza incontra la tecnologia blockchain.</span>
+    <span class="promo-ticker-item">81+ La membership che mette la tua Azienda in regola. Da 49 euro al mese.</span>
+    <span class="promo-ticker-item">Una membership costa quanto un caffè al giorno.</span>
+    <span class="promo-ticker-item">Corsi accreditati e attestati validi per legge su sicurissimo.io</span>
+    <span class="promo-ticker-item">Piattaforma corsi online. Ti formi da telefono o PC, quando vuoi.</span>
+    <span class="promo-ticker-item">Consulenze, documenti e servizi per tutti i settori ATECO.</span>
+    <span class="promo-ticker-item">DIGITAL in arrivo. La sicurezza incontra la tecnologia blockchain.</span>
+  </div>
+</div>
+
+<!-- NAV -->
+<div class="s81bar"><a class="s81logo" href="index.html">81<span>+</span></a><button class="s81tog" onclick="var l=this.parentNode.querySelector('.s81links');l.classList.toggle('open')">&#9776;</button><div class="s81links"><a href="index.html" class="active">Home</a><a href="index.html#pricing">Membership</a><a href="libri.html">Pubblicazioni</a><a href="partners.html">Partners</a><a href="eventi.html">Eventi</a><a href="strumenti.html">Strumenti</a><a href="network81.html">NETWORK81+</a><a href="dashboard-utente.html">Area Riservata</a><a href="newsletter.html">Newsletter</a><a class="s81cta" href="index.html#pricing">Iscriviti</a></div></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-bg-glow"></div>
+
+  <div class="hero-tag">Il sistema che trasforma la sicurezza</div>
+
+  <h1 class="hero-headline">
+    Da<br>
+    <span>Efficiente</span>
+    Ad Efficace.
+  </h1>
+
+  <p class="hero-sub">
+    Il percorso annuale sulla sicurezza che <strong>trasforma l'obbligo di legge nel tuo vantaggio competitivo</strong>. Community, aggiornamenti normativi, consulenze ed eventi live. Nessun vincolo. Esci quando vuoi.
+  </p>
+
+  <div class="hero-actions">
+    <a href="#pricing" class="btn-primary">Inizia ora</a>
+    <a href="#how" class="btn-ghost">Scopri come funziona</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat-item">
+      <div class="stat-number" data-count="8000" data-suffix="+">8.000+</div>
+      <div class="stat-label">Membership 81+ attive</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-count="32000" data-suffix="+">32.000+</div>
+      <div class="stat-label">Aziende seguite</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number" data-count="225000" data-suffix="+">225.000+</div>
+      <div class="stat-label">Lavoratori formati</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">Dal 2003</div>
+      <div class="stat-label">Esperienza reale</div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-strip">
+  <div class="marquee-inner">
+    <span class="marquee-item"><span class="marquee-dot"></span>COMMUNITY TELEGRAM</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AGGIORNAMENTI NORMATIVI</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>LIVE 81+</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>NFT DIGITAL</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>CONSULENZE DIRETTE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>D.LGS 81/08</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FORMAZIONE HACCP</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>PRIVACY GDPR</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>COMMUNITY TELEGRAM</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>AGGIORNAMENTI NORMATIVI</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>LIVE 81+</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>NFT DIGITAL</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>CONSULENZE DIRETTE</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>D.LGS 81/08</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>FORMAZIONE HACCP</span>
+    <span class="marquee-item"><span class="marquee-dot"></span>PRIVACY GDPR</span>
+  </div>
+</div>
+
+<!-- NUMERI DELLA PAURA, dati INAIL -->
+<section style="background:#0c0c0e;padding:48px 20px;border-top:1px solid #1c1c1c;border-bottom:1px solid #1c1c1c">
+  <div style="max-width:1000px;margin:0 auto;text-align:center">
+    <p style="color:#E8501A;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">La realta che nessuno ti dice</p>
+    <h2 style="font-family:'Anton',sans-serif;color:#fff;font-size:clamp(26px,4vw,40px);margin-bottom:10px">Ogni anno in Italia</h2>
+    <p style="color:#9a9aa2;font-size:15px;max-width:620px;margin:0 auto 32px">I numeri ufficiali INAIL sugli infortuni sul lavoro. Non sono statistiche. Sono persone. La sicurezza non e burocrazia, e protezione.</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:20px">
+      <div>
+        <div style="font-family:'Anton',sans-serif;color:#E8501A;font-size:clamp(34px,6vw,52px);line-height:1">589.571</div>
+        <div style="color:#cfcfcf;font-size:13px;margin-top:6px">Infortuni denunciati nel 2024</div>
+      </div>
+      <div>
+        <div style="font-family:'Anton',sans-serif;color:#E8501A;font-size:clamp(34px,6vw,52px);line-height:1">1.090</div>
+        <div style="color:#cfcfcf;font-size:13px;margin-top:6px">Morti sul lavoro nel 2024</div>
+      </div>
+      <div>
+        <div style="font-family:'Anton',sans-serif;color:#E8501A;font-size:clamp(34px,6vw,52px);line-height:1">3 al giorno</div>
+        <div style="color:#cfcfcf;font-size:13px;margin-top:6px">Vite spezzate ogni giorno</div>
+      </div>
+      <div>
+        <div style="font-family:'Anton',sans-serif;color:#3FBF6B;font-size:clamp(34px,6vw,52px);line-height:1">0</div>
+        <div style="color:#cfcfcf;font-size:13px;margin-top:6px">Sanzioni per chi e in regola con 81+</div>
+      </div>
+    </div>
+    <p style="color:#6a6a72;font-size:11px;margin-top:24px">Fonte, dati INAIL sulle denunce di infortunio e casi mortali, anno 2024. Aggiorna i numeri quando escono i dati definitivi.</p>
+  </div>
+</section>
+
+<!-- ESPLORA L'ECOSISTEMA, SISTEMA SOLARE 3D -->
+<section style="background:#05050a;padding:60px 20px 0;text-align:center;position:relative">
+  <p style="color:#FB6B00;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;margin-bottom:8px">Esplora l'ecosistema</p>
+  <h2 style="font-family:'Anton',sans-serif;color:#fff;font-size:clamp(28px,5vw,46px);margin-bottom:10px">Un universo, tre soli, dieci mondi</h2>
+  <p style="color:#9a9aa2;font-size:15px;max-width:640px;margin:0 auto 26px">Ogni pianeta e un pezzo di 81+. Avvicinati con il mouse, fermane uno, aprilo. Academy, Shop, Club, Zone, Exchange, World e tutti gli altri ti aspettano.</p>
+  <div style="max-width:1200px;margin:0 auto;border-radius:20px;overflow:hidden;border:1px solid #1c1c1c;box-shadow:0 20px 60px rgba(0,0,0,.6);position:relative">
+    <iframe src="sistema_solare.html" title="Sistema solare 81+" loading="lazy" style="width:100%;height:560px;border:0;display:block;background:#05050a"></iframe>
+    <div style="position:absolute;bottom:14px;left:50%;transform:translateX(-50%);display:flex;gap:10px">
+      <a href="sistema_solare.html" target="_blank" style="background:rgba(232,80,26,.92);color:#fff;font-weight:700;padding:11px 22px;border-radius:11px;text-decoration:none;font-size:14px;box-shadow:0 8px 22px rgba(232,80,26,.4)">Schermo intero</a>
+      <a href="mondo1.html" target="_blank" style="background:rgba(20,30,55,.92);color:#fff;font-weight:700;padding:11px 22px;border-radius:11px;text-decoration:none;font-size:14px;border:1px solid #2a3550">Plancia spaziale</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- SCOPRI SUBITO, magnete e termometro -->
+
+<!-- MEMBERSHIP IN PRIMO PIANO -->
+
+<!-- PIX81+ FOUNDING NODE -->
+<section style="padding:60px 5%;background:linear-gradient(135deg,#0a0a0f,#0f0a12);border-top:1px solid #1c1c1c;text-align:center;position:relative;overflow:hidden">
+  <div style="max-width:880px;margin:0 auto;position:relative;z-index:2">
+    <div style="display:inline-block;background:rgba(255,210,74,.12);border:1px solid #FFD24A;color:#FFD24A;font-size:12px;font-weight:800;padding:6px 16px;border-radius:30px;text-transform:uppercase;letter-spacing:2px;margin-bottom:16px">Solo 1000 posizioni</div>
+    <h2 style="font-family:'Anton',Arial;font-size:clamp(30px,6vw,54px);color:#fff;line-height:1.02;margin-bottom:14px">Occupa il tuo spazio<br>nel <span style="background:linear-gradient(135deg,#FB6B00,#E8501A);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">Metaverso 81+</span></h2>
+    <p style="color:#c8c8d2;font-size:17px;max-width:560px;margin:0 auto 12px">Non acquistare pubblicità. Prendi un Founding Node, sblocca il tuo Elite Space e resta nella storia dell'ecosistema. Per sempre.</p>
+    <p style="color:#8a8a96;font-size:14px;max-width:520px;margin:0 auto 26px">Pagina aziendale, SCI-ID, QR, link referral che ti porta clienti e iscritti. Una volta presi i 1000 spazi, non se ne creano altri.</p>
+    <a href="https://81plus.place" style="display:inline-block;background:linear-gradient(135deg,#E8501A,#FB6B00);color:#fff;font-family:'Anton',Arial;letter-spacing:.5px;font-size:17px;padding:16px 38px;border-radius:13px;text-decoration:none;box-shadow:0 12px 36px rgba(232,80,26,.45)">Scopri PIX81+</a>
+  </div>
+</section>
+
+<section id="membership-top" style="padding:54px 5%;background:var(--black-soft);border-top:1px solid #1c1c1c;">
+  <div style="text-align:center;max-width:760px;margin:0 auto 28px;">
+    <div style="color:var(--orange);font-weight:800;letter-spacing:2px;font-size:12px;text-transform:uppercase;">// Le membership 81+</div>
+    <h2 style="font-size:30px;margin:10px 0;">Scegli come mettere in regola la tua azienda.</h2>
+    <p style="color:#cfcfcf;font-size:16px;">Tre livelli, una sola certezza. Sei sempre a posto, senza pensieri. Prezzo di lancio, ti blocchi la tariffa adesso.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;max-width:1000px;margin:0 auto;">
+    <div style="background:#111;border:1px solid #222;border-top:4px solid var(--orange);padding:26px;text-align:center;">
+      <div style="font-weight:800;font-size:20px;">Basic+</div>
+      <div style="color:#777;text-decoration:line-through;font-size:14px;">99 euro</div>
+      <div style="font-size:34px;font-weight:800;color:var(--orange);">49<span style="font-size:14px;color:#999;">/mese</span></div>
+      <p style="color:#cfcfcf;font-size:14px;margin:12px 0;">Per partire in regola. Corsi, documenti base, alert sulle scadenze.</p>
+      <a href="#pricing" style="display:block;background:#1a1a1a;color:#fff;border:1px solid #333;padding:12px;text-decoration:none;font-weight:700;">Scopri Basic+</a>
+    </div>
+    <div style="background:#150d03;border:1px solid var(--orange);border-top:4px solid var(--orange);padding:26px;text-align:center;position:relative;">
+      <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--orange);color:#080808;font-weight:800;font-size:11px;padding:4px 12px;text-transform:uppercase;">Il più scelto</div>
+      <div style="font-weight:800;font-size:20px;">Pro+</div>
+      <div style="color:#777;text-decoration:line-through;font-size:14px;">149 euro</div>
+      <div style="font-size:34px;font-weight:800;color:var(--orange);">99<span style="font-size:14px;color:#999;">/mese</span></div>
+      <p style="color:#cfcfcf;font-size:14px;margin:12px 0;">Tutto sotto controllo. Indice di Sicurezza, corsi, documenti, consulenze.</p>
+      <a href="#pricing" style="display:block;background:var(--orange);color:#080808;padding:12px;text-decoration:none;font-weight:800;">Scegli Pro+</a>
+    </div>
+    <div style="background:#111;border:1px solid #222;border-top:4px solid var(--orange);padding:26px;text-align:center;">
+      <div style="font-weight:800;font-size:20px;">Elite+</div>
+      <div style="color:#777;text-decoration:line-through;font-size:14px;">199 euro</div>
+      <div style="font-size:34px;font-weight:800;color:var(--orange);">149<span style="font-size:14px;color:#999;">/mese</span></div>
+      <p style="color:#cfcfcf;font-size:14px;margin:12px 0;">La massima protezione. In più, sopralluogo fisico e supporto prioritario.</p>
+      <a href="#pricing" style="display:block;background:#1a1a1a;color:#fff;border:1px solid #333;padding:12px;text-decoration:none;font-weight:700;">Scopri Elite+</a>
+    </div>
+  </div>
+</section>
+
+<section class="discover" id="scopri">
+  <div class="discover-head">
+    <div class="section-label">// Inizia da qui</div>
+    <h2 class="section-title">Sei in regola?<br>Scoprilo subito, gratis.</h2>
+    <p class="discover-sub">Due modi rapidi per sapere a che punto è la tua Azienda. Scegli tu, sono entrambi gratuiti.</p>
+  </div>
+  <div class="discover-cards">
+    <div class="discover-card">
+      <div class="dc-tag">2 minuti</div>
+      <h3>Fai il Termometro</h3>
+      <p>Dodici domande, una risposta con un tocco. Ricevi subito il tuo punteggio e le aree dove sei scoperto.</p>
+      <a class="dc-btn" href="termometro.html">Fai il test</a>
+    </div>
+    <div class="discover-card featured-d">
+      <div class="dc-tag">10 minuti</div>
+      <h3>Scarica la guida</h3>
+      <p>La checklist completa, sei aree più il sistema ISO 45001, da consultare con calma. La ricevi via email.</p>
+      <a class="dc-btn" href="cattura.html">Scarica gratis</a>
+    </div>
+  </div>
+</section>
+
+<!-- ESPLORA, accesso rapido a tutte le aree -->
+<section id="esplora" style="background:var(--black-soft);">
+  <div class="section-label">// Esplora 81+</div>
+  <h2 class="section-title">Tutto quello che trovi dentro 81+.</h2>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;max-width:1100px;margin:24px auto 0;">
+    <a href="#pricing" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Membership</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">I tre livelli Basic, Pro ed Elite. Corsi, documenti, consulenze e alert.</p>
+    </a>
+    <a href="libri.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Pubblicazioni</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">I cinque libri di Sicurissimo. Guide pratiche su sicurezza, HACCP e crescita.</p>
+    </a>
+    <a href="partners.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Partners e Convenzioni</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">DPI, materiali, formazione, documenti, hotel e SPA a condizioni riservate.</p>
+    </a>
+    <a href="eventi.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Eventi</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">Webinar, Live 81+ e formazione in presenza. Iscriviti ai prossimi appuntamenti.</p>
+    </a>
+    <a href="dashboard-utente.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Area Privata</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">La dashboard dei membri. Corsi, pagamenti, convenzioni e la tua membership.</p>
+    </a>
+    <a href="network81.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">NETWORK81+</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">L'area dei sviluppatore della rete. Provvigioni, team, piano compensi e strumenti.</p>
+    </a>
+    <a href="strumenti.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Strumenti</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">Indice di Sicurezza, scadenzario con alert e tutti i servizi. Provali ora.</p>
+    </a>
+    <a href="newsletter.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Newsletter</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">Iscriviti gratis. Aggiornamenti su sicurezza, HACCP e normative, dritti nella tua casella.</p>
+    </a>
+    <a href="recensioni.html" style="text-decoration:none;background:#111;border:1px solid #222;border-top:3px solid var(--orange);padding:22px;display:block;color:#fff;">
+      <div style="color:var(--orange);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;">Recensioni</div>
+      <p style="color:#cfcfcf;font-size:14px;margin-top:8px;">Cosa dicono le aziende che hanno scelto Sicurissimo.</p>
+    </a>
+  </div>
+</section>
+  <div class="section-label">// Perché 81+</div>
+  <h2 class="section-title">La sicurezza non è una multa.<br>È la tua libertà.</h2>
+  <div class="why">
+    <div>
+      <div class="why-block"><div class="k">Perché</div><h3>Perché esistiamo</h3><p>Crediamo che nessun imprenditore debba scegliere tra far crescere l'Azienda e dormire la notte. La sicurezza non deve farti paura. Deve lavorare per te.</p></div>
+      <div class="why-block"><div class="k">Come</div><h3>Come lo facciamo</h3><p>Trasformiamo l'obbligo di legge in un sistema automatico. Aggiornamenti, alert, consulenze e una community che ti copre le spalle. Tutto in un posto solo.</p></div>
+      <div class="why-block"><div class="k">Cosa</div><h3>Cosa ottieni</h3><p>Una membership che ti tiene in regola, ti fa risparmiare e ti dà un vantaggio sui concorrenti che ancora rincorrono le scadenze. Per ogni settore ATECO.</p></div>
+    </div>
+    <div class="why-img"><img src="services.jpg" alt="L'ecosistema 81+" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section class="problem">
+  <div class="section-label">// Il problema reale</div>
+  <h2 class="section-title">La sicurezza ti spaventa.<br>Non dovrebbe.</h2>
+  <p class="section-intro">Ogni anno migliaia di imprenditori italiani ricevono sanzioni non perché lavorano male, ma perché nessuno ha spiegato loro davvero come funziona il sistema. 81+ lavora per ogni Azienda, in ogni settore ATECO.</p>
+
+  <div class="problem-grid">
+    <div class="problem-col bad">
+      <div class="problem-col-label"><span class="x-mark">✕</span> Senza 81+</div>
+      <div class="problem-item"><span class="x-mark">✕</span><span>Ansia ogni volta che senti parlare di ispezioni</span></div>
+      <div class="problem-item"><span class="x-mark">✕</span><span>Burocrazia infinita che non capisci e non finisce mai</span></div>
+      <div class="problem-item"><span class="x-mark">✕</span><span>Scadenze che dimentichi finché non è troppo tardi</span></div>
+      <div class="problem-item"><span class="x-mark">✕</span><span>Sanzioni che arrivano da dove non te l'aspetti</span></div>
+      <div class="problem-item"><span class="x-mark">✕</span><span>Nessuno a cui chiedere quando hai un dubbio urgente</span></div>
+      <div class="problem-item"><span class="x-mark">✕</span><span>Notti insonni prima di ogni controllo</span></div>
+    </div>
+    <div class="problem-col good">
+      <div class="problem-col-label"><span class="ok-mark">✓</span> Con 81+</div>
+      <div class="problem-item"><span class="ok-mark">✓</span><span>Serenità totale, sai sempre dove sei e cosa ti manca</span></div>
+      <div class="problem-item"><span class="ok-mark">✓</span><span>Aggiornamenti automatici in tempo reale, senza sforzo</span></div>
+      <div class="problem-item"><span class="ok-mark">✓</span><span>Alert 30, 7 e 1 giorno prima di ogni scadenza</span></div>
+      <div class="problem-item"><span class="ok-mark">✓</span><span>Un professionista reale al tuo fianco ogni mese</span></div>
+      <div class="problem-item"><span class="ok-mark">✓</span><span>Community di imprenditori e professionisti come te</span></div>
+      <div class="problem-item"><span class="ok-mark">✓</span><span>Dormi tranquillo ogni notte. Per sempre.</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ECOSYSTEM -->
+<section id="ecosistema">
+  <div class="section-label">// L'ecosistema completo</div>
+  <h2 class="section-title">Tre Pilastri.<br>Un Sistema.</h2>
+  <p class="section-intro">Tre prodotti distinti che si potenziano a vicenda. Sali di livello quando sei pronto.</p>
+
+  <div class="ecosystem-grid">
+    <div class="eco-card">
+      <span class="eco-number">01</span>
+      <span class="eco-tag">sicurissimo.io / .online</span>
+      <div class="eco-name">La Piattaforma</div>
+      <p class="eco-desc">Corsi accreditati validi per legge, documenti personalizzati, pacchetti aziendali. Il classico Sicurissimo in 1 click. Accesso gratuito incluso in ogni membership 81+.</p>
+      <ul class="eco-items">
+        <li>600+ corsi accreditati nazionali</li>
+        <li>DVR, HACCP, POS e documenti</li>
+        <li>Attestati validi D.Lgs. 81/08</li>
+        <li>Accesso gratuito con membership</li>
+      </ul>
+    </div>
+    <div class="eco-card" style="border-top: 3px solid var(--orange);">
+      <span class="eco-number">02</span>
+      <span class="eco-tag">81plus.it, sei qui</span>
+      <div class="eco-name">La Membership</div>
+      <p class="eco-desc">Community, aggiornamenti normativi, consulenze, live regionali mensili. Il sistema di relazione che fa crescere te e la tua azienda nel tempo.</p>
+      <ul class="eco-items">
+        <li>Community Telegram privata per livello</li>
+        <li>Alert scadenze + newsletter settimanale</li>
+        <li>Consulenze tecniche dirette</li>
+        <li>Live 81+ ogni mese</li>
+      </ul>
+    </div>
+    <div class="eco-card">
+      <span class="eco-number">03</span>
+      <span class="eco-tag">safe5.it / safe5.xyz</span>
+      <div class="eco-name">DIGITAL</div>
+      <p class="eco-desc">Il layer blockchain. NFT di appartenenza, convenzioni esclusive, formazione web3. Il futuro della sicurezza incontra la tecnologia.</p>
+      <ul class="eco-items">
+        <li>NFT Bronze / Silver / Gold inclusi</li>
+        <li>Convenzioni hotel, spa, buoni pasto</li>
+        <li>Formazione blockchain ed educazione cripto</li>
+        <li>Badge verificabile on-chain</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how" style="background: var(--black-soft);">
+  <div class="section-label">// Come funziona</div>
+  <h2 class="section-title">Quattro Passi.<br>Zero Stress.</h2>
+  <p class="section-intro">Dal primo accesso al vantaggio competitivo, tutto in meno di 48 ore.</p>
+
+  <div class="steps-grid">
+    <div class="step-card">
+      <div class="step-number">01</div>
+      <div class="step-title">Scegli il tuo livello</div>
+      <p class="step-desc">Basic, Pro o Elite. Paghi con carta via Stripe, annulli quando vuoi. Nessun contratto, nessun vincolo.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">02</div>
+      <div class="step-title">Entri nella community</div>
+      <p class="step-desc">Ricevi l'accesso al gruppo Telegram privato del tuo livello. Il bot ti aggiunge in automatico entro 60 secondi.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">03</div>
+      <div class="step-title">Accedi alla piattaforma</div>
+      <p class="step-desc">Il tuo accesso gratuito a sicurissimo.io è attivo. Corsi, documenti e attestati a portata di click quando ti servono.</p>
+    </div>
+    <div class="step-card">
+      <div class="step-number">04</div>
+      <div class="step-title">Cresci con il sistema</div>
+      <p class="step-desc">Alert, aggiornamenti, consulenze, live regionali. Il sistema lavora per te ogni giorno. Tu pensi al tuo business.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ACCESSO OVUNQUE -->
+<section id="ovunque" style="background: var(--black-soft);">
+  <div class="visual-band">
+    <div>
+      <div class="section-label">// Sempre con te</div>
+      <h2>La tua sicurezza,<br>in tasca.</h2>
+      <p>Telefono, tablet o computer. La tua membership 81+ ti segue ovunque. Apri, controlli scadenze e documenti, fai un corso mentre aspetti. Nessun ufficio, nessuna attesa. Tutto a portata di 1 Click, solo quando serve a te.</p>
+    </div>
+    <div><img src="device.jpg" alt="81+ su telefono, tablet e computer" loading="lazy"></div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="pricing">
+  <div class="section-label">// Scegli il tuo piano</div>
+  <h2 class="section-title">Prezzi Chiari.<br>Valore Reale.</h2>
+  <p class="section-intro">Tre livelli. Un percorso. Dal lavoratore, al Datore di Lavoro, attraverso il professionista della sicurezza. Le membership 81+ di Sicurissimo esistono dal 2003. Oltre 8.000 aziende e più di 4.000 partner le hanno già scelte.</p>
+
+<div class="launch-countdown">
+  <div class="lc-title">Prezzo di lancio di questo ciclo, si chiude tra</div>
+  <div class="lc-timer" id="lcTimer">
+    <div class="lc-box"><div class="lc-num" id="lcD">--</div><div class="lc-lab">Giorni</div></div>
+    <div class="lc-box"><div class="lc-num" id="lcH">--</div><div class="lc-lab">Ore</div></div>
+    <div class="lc-box"><div class="lc-num" id="lcM">--</div><div class="lc-lab">Min</div></div>
+    <div class="lc-box"><div class="lc-num" id="lcS">--</div><div class="lc-lab">Sec</div></div>
+  </div>
+</div>
+  <div class="membership-grid">
+
+    <div class="plan-card">
+      <img class="plan-banner" src="membership-basic.jpg" alt="Membership Basic+" loading="lazy">
+      <span class="plan-level">Livello 01</span>
+      <div class="plan-name">Basic+</div>
+      <p style="font-size:14px;color:var(--white-muted);margin-bottom:0;">Per lavoratori e microimprese</p>
+      <div class="plan-price">
+        <span class="plan-old">€99</span>
+        <span class="plan-currency">€</span>
+        <span class="plan-amount">49</span>
+        <span class="plan-period">/mese</span>
+      </div>
+      <div class="plan-launch"><span class="lf">Prezzo di lancio</span>Prezzo di listino €99 al mese</div>
+      <div class="plan-social">Oltre 2.000 aziende lo hanno scelto</div>
+      <div class="plan-slots">
+        <div class="ps-text" id="ps-basic">--</div>
+        <div class="ps-bar"><div class="ps-fill" id="psf-basic"></div></div>
+      </div>
+      <div class="plan-nft bronze">NFT DIGITAL BRONZE+ *</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span>Community Privata Sicurissimo Basic+</li>
+        <li><span class="check">✓</span>Accesso piattaforma corsi e documenti</li>
+        <li><span class="check">✓</span>Aggiornamenti normativi automatici</li>
+        <li><span class="check">✓</span>Alert scadenze normative</li>
+        <li><span class="check">✓</span>Newsletter settimanale</li>
+        <li><span class="check">✓</span>Consulenze tecniche scontate</li>
+        <li><span class="check">✓</span>Sconto 15% sulla piattaforma corsi</li>
+        <li><span class="check">✓</span>Convenzioni Partners Basic+</li>
+        <li><span class="check">✓</span>Formazione Specialistica Basic+</li>
+        <li><span class="check">✓</span>Badge appartenenza verificabile on-chain</li>
+      </ul>
+      <div id="paypal-button-container-P-7KU34781272010322NIOBVWQ" class="paypal-btn-wrapper"></div>
+      <div class="plan-reassure">Nessun vincolo. Disdici quando vuoi.</div>
+    </div>
+
+    <div class="plan-card featured">
+      <img class="plan-banner" src="membership-pro.jpg" alt="Membership Pro+" loading="lazy">
+      <span class="plan-level">Livello 02</span>
+      <div class="plan-name">Pro+</div>
+      <p style="font-size:14px;color:var(--white-muted);margin-bottom:0;">Per chi gestisce un'azienda</p>
+      <div class="plan-price">
+        <span class="plan-old">€149</span>
+        <span class="plan-currency">€</span>
+        <span class="plan-amount">99</span>
+        <span class="plan-period">/mese</span>
+      </div>
+      <div class="plan-launch"><span class="lf">Prezzo di lancio</span>Prezzo di listino €149 al mese</div>
+      <div class="plan-social">Oltre 5.000 aziende lo hanno scelto, il più scelto</div>
+      <div class="plan-slots">
+        <div class="ps-text" id="ps-pro">--</div>
+        <div class="ps-bar"><div class="ps-fill" id="psf-pro"></div></div>
+      </div>
+      <div class="plan-nft silver">NFT DIGITAL SILVER+ *</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span><strong>Tutto di Basic+, più:</strong></li>
+        <li><span class="check">✓</span>Community Privata Sicurissimo Pro+</li>
+        <li><span class="check">✓</span>Assistenza prioritaria chat ed email</li>
+        <li><span class="check">✓</span>Schede operative e template</li>
+        <li><span class="check">✓</span>Scadenziario guidato personalizzato</li>
+        <li><span class="check">✓</span>2 consulenze tecniche incluse</li>
+        <li><span class="check">✓</span>1 Live 81+ mensile</li>
+        <li><span class="check">✓</span>Sconto 15% sulla piattaforma corsi</li>
+        <li><span class="check">✓</span>Convenzioni Partners Pro+</li>
+        <li><span class="check">✓</span>Formazione Specialistica Extra Pro+</li>
+      </ul>
+      <div id="paypal-button-container-P-18S852181A4091429NIOBX3Q" class="paypal-btn-wrapper"></div>
+      <div class="plan-reassure">Nessun vincolo. Disdici quando vuoi.</div>
+    </div>
+
+    <div class="plan-card">
+      <img class="plan-banner" src="membership-elite.jpg" alt="Membership Elite+" loading="lazy">
+      <span class="plan-level">Livello 03</span>
+      <div class="plan-name">Elite+</div>
+      <p style="font-size:14px;color:var(--white-muted);margin-bottom:0;">Per professionisti e aziende strutturate</p>
+      <div class="plan-price">
+        <span class="plan-old">€199</span>
+        <span class="plan-currency">€</span>
+        <span class="plan-amount">149</span>
+        <span class="plan-period">/mese</span>
+      </div>
+      <div class="plan-launch"><span class="lf">Prezzo di lancio</span>Prezzo di listino €199 al mese</div>
+      <div class="plan-social">Oltre 1.000 aziende lo hanno scelto</div>
+      <div class="plan-slots">
+        <div class="ps-text" id="ps-elite">--</div>
+        <div class="ps-bar"><div class="ps-fill" id="psf-elite"></div></div>
+      </div>
+      <div class="plan-nft gold">NFT DIGITAL GOLD+ *</div>
+      <ul class="plan-features">
+        <li><span class="check">✓</span><strong>Tutto di Pro+, più:</strong></li>
+        <li><span class="check">✓</span>Community Privata Sicurissimo Elite+</li>
+        <li><span class="check">✓</span>Supporto e assistenza dedicata WhatsApp</li>
+        <li><span class="check">✓</span>2 Live 81+ mensili</li>
+        <li><span class="check">✓</span>Accesso eventi VIP in presenza</li>
+        <li><span class="check">✓</span>4 consulenze tecniche incluse</li>
+        <li><span class="check">✓</span>Sconto 15% sulla piattaforma corsi</li>
+        <li><span class="check">✓</span>Convenzioni Partners Elite+</li>
+        <li><span class="check">✓</span>Formazione Specialistica Extra Elite+</li>
+      </ul>
+      <div id="paypal-button-container-P-12J223536P505601CNIOBZHY" class="paypal-btn-wrapper"></div>
+      <div class="plan-reassure">Nessun vincolo. Disdici quando vuoi.</div>
+    </div>
+
+  </div>
+  <p style="text-align:center;margin-top:32px;font-size:13px;color:var(--white-muted);">Nessun contratto. Nessun vincolo. Esci quando vuoi. Prezzi IVA esclusa.</p>
+  <p class="nft-note">* L'NFT non è incluso automaticamente nella membership e non viene rilasciato al momento del pagamento. Mantenendo attiva la tua membership 81+ entri nella whitelist ufficiale di DIGITAL. La whitelist ti dà diritto a mintare l'NFT del tuo livello, Bronze+, Silver+ o Gold+. I vantaggi collegati all'NFT si attivano solo dopo il mint e secondo le condizioni che sono pubblicate in DIGITAL. La membership 81+ è pienamente valida e operativa anche senza NFT. DIGITAL non costituisce offerta al pubblico di strumenti finanziari.</p>
+</section>
+
+<section class="urgency">
+  <div class="section-label">// Perché adesso</div>
+  <h2 class="section-title">Quanto costa<br>non essere in regola.</h2>
+  <p class="section-intro">Queste non sono ipotesi. Sono le sanzioni reali previste dal D.Lgs. 81/08 e dalle normative vigenti.</p>
+
+  <table class="sanzioni-table">
+    <thead>
+      <tr>
+        <th>Violazione</th>
+        <th>Sanzione</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>Nessun RSPP nominato</td><td>Arresto 3-6 mesi o fino a €7.862</td></tr>
+      <tr><td>DVR assente o non aggiornato</td><td>Fino a €6.400 per ispezione</td></tr>
+      <tr><td>Lavoratore non formato</td><td>Fino a €5.896 per lavoratore</td></tr>
+      <tr><td>Azienda sospesa da ITL</td><td>€2.500 + fermo a €2.000/giorno</td></tr>
+      <tr><td>Infortunio con subappalto</td><td>Responsabilità solidale €50.000+</td></tr>
+      <tr><td>Gara pubblica persa per irregolarità</td><td>Perdita media commessa €500.000+</td></tr>
+    </tbody>
+  </table>
+
+  <p style="margin-top:40px;text-align:center;font-size:16px;color:var(--white-dim);">
+    <strong style="color:var(--white)">49 euro al mese</strong> sono 1,63 euro al giorno. Una membership costa quanto un caffè al giorno.<br>
+    <span style="color:var(--white-muted)">Una sola sanzione può costare 100 volte l'intero anno di membership.</span>
+  </p>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-block">
+  <span class="quote-mark">"</span>
+  <p class="quote-text">La sicurezza non è un costo. È un investimento che protegge le persone, le aziende e fa crescere il business.</p>
+  <p class="quote-author">Il team Sicurissimo</p>
+</div>
+
+<!-- DICONO DI NOI -->
+<section id="recensioni">
+  <style>
+    .home-reviews { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; max-width: 1200px; margin: 0 auto; }
+    .hr-card { background: var(--black-card); border: 1px solid var(--black-border); padding: 24px; transition: transform 0.3s, border-color 0.3s; }
+    .hr-card:hover { transform: translateY(-4px); border-color: rgba(251,107,0,0.4); }
+    .hr-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
+    .hr-type { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--orange); text-transform: uppercase; letter-spacing: 1.5px; }
+    .hr-stars { color: var(--orange); font-size: 13px; letter-spacing: 1px; flex-shrink: 0; }
+    .hr-text { font-size: 14px; color: var(--white-dim); line-height: 1.55; margin-bottom: 16px; }
+    .hr-author { font-size: 12px; color: var(--white-muted); border-top: 1px solid var(--black-border); padding-top: 12px; }
+    .hr-author strong { color: var(--white); font-weight: 600; }
+    @media (max-width: 900px) { .home-reviews { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 600px) { .home-reviews { grid-template-columns: 1fr; } }
+  </style>
+  <div class="section-label">// Dicono di noi</div>
+  <h2 class="section-title">Aziende vere.<br>In regola in tutta Italia.</h2>
+  <p class="section-intro">81+ nasce dal team Sicurissimo, che ha già messo in regola migliaia di aziende di ogni settore. Queste sono le loro recensioni.</p>
+  <div class="home-reviews">
+    <div class="hr-card">
+      <div class="hr-top"><span class="hr-type">Bar</span><span class="hr-stars">★★★★★</span></div>
+      <p class="hr-text">In 48 ore avevo tutti gli attestati. Il controllo dell'ASL è arrivato e non ha trovato niente fuori posto. Professionalità assoluta.</p>
+      <p class="hr-author"><strong>Marco</strong>, Milano</p>
+    </div>
+    <div class="hr-card">
+      <div class="hr-top"><span class="hr-type">Impresa edile</span><span class="hr-stars">★★★★★</span></div>
+      <p class="hr-text">Con dieci operai le pratiche di sicurezza erano un incubo. Adesso ho tutto in ordine e dormo tranquillo. Grazie.</p>
+      <p class="hr-author"><strong>Roberto</strong>, Napoli</p>
+    </div>
+    <div class="hr-card">
+      <div class="hr-top"><span class="hr-type">Ristorante</span><span class="hr-stars">★★★★★</span></div>
+      <p class="hr-text">Cucina professionale e sala con cinquanta coperti. Hanno gestito sia il DVR che l'HACCP in modo impeccabile. Bravissimi.</p>
+      <p class="hr-author"><strong>Rossella</strong>, Cagliari</p>
+    </div>
+    <div class="hr-card">
+      <div class="hr-top"><span class="hr-type">Officina meccanica</span><span class="hr-stars">★★★★★</span></div>
+      <p class="hr-text">Torneria di precisione. Alta pericolosità e normative rigorose. Tutto rispettato al cento per cento.</p>
+      <p class="hr-author"><strong>Ignazio</strong>, Lecco</p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-top:36px;">
+    <a href="recensioni.html" class="btn-primary">Leggi tutte le recensioni</a>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background: var(--black-soft);">
+  <div class="section-label">// FAQ</div>
+  <h2 class="section-title">Hai Domande?<br>Abbiamo Risposte.</h2>
+  <br>
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q">La membership include i corsi di formazione accreditati? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">No, e questa è una scelta precisa, a tuo vantaggio. Con la membership accedi alla piattaforma e segui tutti i corsi gratuitamente. Paghi solo l'attestato, e solo se ti serve, con lo sconto del 15% riservato agli iscritti 81+. Gli attestati sono accreditati e validi a livello nazionale. Così ti formi quando vuoi e paghi solo la carta valida per legge, quando ti serve davvero.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Cosa sono gli NFT DIGITAL? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">Sono badge digitali verificabili su blockchain che certificano la tua appartenenza ed il tuo livello. Ti danno accesso a convenzioni con speciali partners, hotel, spa, eventi esclusivi, formazione specialistica e molto altro. Bronze per Basic, Silver per Pro, Gold per Elite.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Posso disdire quando voglio? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">Sì. Nessun contratto, nessun vincolo, nessuna penale. Il pagamento mensile si gestisce da Stripe e puoi annullare in qualsiasi momento. Non ti chiediamo fiducia cieca: ti chiediamo di provare.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Come funzionano le consulenze? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">Basic+ ti dà consulenze tecniche a tariffa scontata. Pro+ include 2 consulenze tecniche. Elite+ ne include 4. Le prenoti tramite Calendly e ti risponde un tecnico qualificato, non un bot.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Cosa sono i Live 81+? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">I Live 81+ sono incontri dedicati agli iscritti, tra formazione, networking e community. Pro+ ne include 1 al mese. Elite+ ne include 2 al mese e accede anche agli eventi VIP in presenza.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">La formazione specialistica è per principianti? <span class="faq-arrow">+</span></div>
+      <div class="faq-a">Sì. Parte da zero. L'obiettivo è farti capire la sicurezza sul lavoro in modo semplice, pratico e concreto, senza burocrazia e senza giri di parole. Niente nozioni inutili, solo formazione che puoi applicare subito nella tua Azienda.</div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <h2 class="final-cta-title">Pronto a fare il salto?</h2>
+  <p class="final-cta-sub">Smetti di inseguire la compliance. Inizia a usarla come vantaggio competitivo. Il tuo concorrente non lo ha ancora capito.</p>
+  <a href="#pricing" class="btn-dark">Iscriviti a 81+</a>
+  <p class="final-note">Oppure scrivici su WhatsApp al 338 877 1737. Rispondiamo noi, non un bot.</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-col footer-brand-block">
+      <span class="f-mark">81+</span>
+      <p>La membership Sicurissimo che trasforma la sicurezza sul lavoro nel vantaggio competitivo della tua Azienda. Per tutti i settori ATECO.</p>
+      <div class="footer-social">
+        <a href="https://www.youtube.com/@sicurissimo" aria-label="YouTube">YT</a>
+        <a href="https://instagram.com/sicurissimo.online" aria-label="Instagram">IG</a>
+        <a href="https://t.me/ottantunoplus" aria-label="Telegram">TG</a>
+        <a href="https://api.whatsapp.com/send?phone=393388771737" aria-label="WhatsApp">WA</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>81+</h4>
+      <a href="#how">Come funziona</a>
+      <a href="#ecosistema">Ecosistema</a>
+      <a href="#pricing">Membership</a>
+      <a href="recensioni.html">Recensioni</a>
+    </div>
+    <div class="footer-col">
+      <h4>Sicurissimo</h4>
+      <a href="https://sicurissimo.io/servizi.html">Servizi</a>
+      <a href="https://sicurissimo.io/prodotti.html">Prodotti</a>
+      <a href="https://sicurissimo.io/safe.html">DIGITAL</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legale e contatti</h4>
+      <a href="privacy.html">Privacy e Cookie</a>
+      <a href="privacy.html#disclaimer">Disclaimer</a>
+      <a href="condizioni-vendita.html">Condizioni di Vendita</a>
+      <a href="https://api.whatsapp.com/send?phone=393388771737">WhatsApp 338 877 1737</a>
+      <a href="mailto:info@81plus.net">info@81plus.net</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    81+ è un progetto di Sicurissimo, marchio di Labo Tecnic Studio. P.IVA IT01504180298. Tutti i dati e i recapiti su sicurissimo.online e sicurissimo.io. I corsi di formazione sono erogati in modalità e-learning tramite piattaforme di enti accreditati. Gli attestati sono rilasciati dall'ente accreditato erogatore e sono validi a norma di legge ai sensi del D.Lgs. 81/08 e degli Accordi Stato Regioni vigenti. DIGITAL è un progetto di innovazione in fase di sviluppo e non costituisce offerta al pubblico di strumenti finanziari. Tutti i prezzi sono IVA esclusa. © 2026 Labo Tecnic Studio. Tutti i diritti riservati.
+  </div>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a class="wa-float" href="https://api.whatsapp.com/send?phone=393388771737" target="_blank" rel="noopener" aria-label="Assistenza WhatsApp">
+  <span class="wa-float-label">Serve aiuto? Scrivici</span>
+  <span class="wa-float-btn">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 .5C7.4.5.5 7.4.5 16c0 2.8.7 5.5 2 7.8L.4 31.6l8-2.1c2.2 1.2 4.8 1.9 7.6 1.9 8.6 0 15.5-6.9 15.5-15.5S24.6.5 16 .5zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5c-1.3-2.1-2-4.6-2-7.3C3.1 8.8 8.8 3.1 16 3.1S28.9 8.8 28.9 16 23.2 28.9 16 28.9zm7.1-9.6c-.4-.2-2.3-1.1-2.6-1.3-.4-.1-.6-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.5-.7.2-.2.2-.4.3-.7.1-.2.1-.5 0-.7-.1-.2-.9-2.2-1.3-3-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.5z"/></svg>
+  </span>
+</a>
+
+<script>
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(q => {
+    q.addEventListener('click', () => {
+      const item = q.parentElement;
+      const wasOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!wasOpen) item.classList.add('open');
+    });
+  });
+
+  // Smooth scroll offset for fixed nav
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        window.scrollTo({ top: el.offsetTop - 110, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // Intersection observer for subtle fade-in
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.eco-card, .plan-card, .step-card').forEach(el => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+    observer.observe(el);
+  });
+</script>
+
+<!-- PAYPAL SDK, caricato una volta sola per tutti e tre i piani -->
+<script src="https://www.paypal.com/sdk/js?client-id=Aa-tHP9SEUA8lWzpvvaUiIBYKdjlcTIYwRq2_HBOjNuLYrRki0x0B2pp_HxBOJFBSjGF3Jr43jj3j-E9&vault=true&intent=subscription&currency=EUR" data-sdk-integration-source="button-factory"></script>
+<script>
+  var ppStile = { shape: 'pill', color: 'white', layout: 'horizontal', label: 'subscribe' };
+  if(typeof paypal!=='undefined'){
+  paypal.Buttons({
+    style: ppStile,
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({ plan_id: 'P-7KU34781272010322NIOBVWQ' });
+    },
+    onApprove: function(data, actions) {
+      window.location.href = 'grazie.html?piano=Basic';
+    }
+  }).render('#paypal-button-container-P-7KU34781272010322NIOBVWQ');
+
+  paypal.Buttons({
+    style: ppStile,
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({ plan_id: 'P-18S852181A4091429NIOBX3Q' });
+    },
+    onApprove: function(data, actions) {
+      window.location.href = 'grazie.html?piano=Pro';
+    }
+  }).render('#paypal-button-container-P-18S852181A4091429NIOBX3Q');
+
+  paypal.Buttons({
+    style: ppStile,
+    createSubscription: function(data, actions) {
+      return actions.subscription.create({ plan_id: 'P-12J223536P505601CNIOBZHY' });
+    },
+    onApprove: function(data, actions) {
+      window.location.href = 'grazie.html?piano=Elite';
+    }
+  }).render('#paypal-button-container-P-12J223536P505601CNIOBZHY');
+} else { document.querySelectorAll("[id^='paypal-button']").forEach(function(d){d.innerHTML='<a href="login.html" style="color:#FB6B00;font-weight:700">Attiva dall area riservata</a>';}); }
+</script>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:500;background:#111111;border-top:1px solid #222222;padding:18px 5%;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:space-between;">
+    <p style="margin:0;font-size:13px;color:#FFFFFF;max-width:780px;line-height:1.5;">Usiamo i cookie per far funzionare il sito e migliorare la tua esperienza. Continuando accetti il loro uso. Leggi la <a href="privacy.html" style="color:#FB6B00;">Privacy e Cookie Policy</a>.</p>
+    <button id="cookie-accept" style="background:#FB6B00;color:#080808;border:none;font-weight:700;padding:12px 28px;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;font-family:inherit;font-size:13px;">Accetta</button>
+  </div>
+</div>
+<script>
+  (function(){
+    try{
+      var b=document.getElementById('cookie-banner');
+      if(!localStorage.getItem('cookie81plus')){ b.style.display='block'; }
+      document.getElementById('cookie-accept').addEventListener('click',function(){
+        try{ localStorage.setItem('cookie81plus','1'); }catch(e){}
+        b.style.display='none';
+      });
+    }catch(e){}
+  })();
+</script>
+<script>
+  // CICLO DEL PREZZO DI LANCIO, si rinnova da solo ogni 15 giorni partendo dalla prima scadenza.
+  // CONDIZIONE LEGALE: a ogni chiusura del ciclo i prezzi devono cambiare davvero, altrimenti e falsa scarsita.
+  var CYCLE_START = new Date("2026-06-15T23:59:59"); // prima scadenza reale, poi avanza di 15 in 15 giorni
+  var CYCLE_DAYS = 15;
+  function cycleEnd(){
+    var now=new Date(), end=new Date(CYCLE_START.getTime());
+    while(end<=now){ end=new Date(end.getTime()+CYCLE_DAYS*86400000); }
+    return end;
+  }
+  (function(){
+    var t=document.getElementById("lcTimer"); if(!t) return;
+    function upd(){
+      var diff=cycleEnd()-new Date();
+      var d=Math.floor(diff/86400000), h=Math.floor(diff/3600000)%24, m=Math.floor(diff/60000)%60, sec=Math.floor(diff/1000)%60;
+      document.getElementById("lcD").textContent=d;
+      document.getElementById("lcH").textContent=("0"+h).slice(-2);
+      document.getElementById("lcM").textContent=("0"+m).slice(-2);
+      document.getElementById("lcS").textContent=("0"+sec).slice(-2);
+    }
+    upd(); setInterval(upd,1000);
+  })();
+</script>
+<script>
+  (function(){
+    var els=document.querySelectorAll(".stat-number[data-count]");
+    function fmt(n){return n.toLocaleString("it-IT");}
+    function run(el){
+      var target=parseInt(el.getAttribute("data-count"),10);
+      var suf=el.getAttribute("data-suffix")||"";
+      var start=null, dur=1500;
+      function step(ts){
+        if(!start) start=ts;
+        var p=Math.min((ts-start)/dur,1);
+        var val=Math.floor((1-Math.pow(1-p,3))*target);
+        el.textContent=fmt(val)+suf;
+        if(p<1) requestAnimationFrame(step); else el.textContent=fmt(target)+suf;
+      }
+      requestAnimationFrame(step);
+    }
+    if("IntersectionObserver" in window){
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){run(e.target);io.unobserve(e.target);}});});
+      els.forEach(function(el){io.observe(el);});
+    } else { els.forEach(run); }
+  })();
+</script>
+<script>
+  // POSTI A PREZZO DI LANCIO. Totali per ciclo e numeri di riserva manuali.
+  var LAUNCH = {
+    basic: { rimasti: 47, totali: 100 },
+    pro:   { rimasti: 28, totali: 80  },
+    elite: { rimasti: 12, totali: 40  }
+  };
+  // AUTOMATICO VERO: indirizzo del file che Make aggiorna a OGNI vendita PayPal.
+  // Quando lo imposti, i posti scendono da soli solo quando qualcuno compra davvero.
+  // Lascialo vuoto per usare i numeri manuali qui sopra.
+  var SLOTS_URL = ""; // esempio: "https://81plus.it/slots.json"
+
+  function renderSlots(data){
+    ["basic","pro","elite"].forEach(function(k){
+      var t=document.getElementById("ps-"+k), fbar=document.getElementById("psf-"+k);
+      if(!t||!fbar) return;
+      var conf=LAUNCH[k]||{};
+      var r=(data && data[k]!=null) ? data[k] : conf.rimasti;
+      var tot=conf.totali || r;
+      if(r==null){ t.parentNode.style.display="none"; return; }
+      if(r<=0){ t.textContent="Posti a prezzo di lancio esauriti"; fbar.style.width="100%"; return; }
+      t.textContent="Solo "+r+" posti a prezzo di lancio";
+      var pct=Math.max(4,Math.min(100,Math.round((tot-r)/tot*100)));
+      fbar.style.width=pct+"%";
+    });
+  }
+  (function(){
+    if(SLOTS_URL){
+      fetch(SLOTS_URL,{cache:"no-store"}).then(function(r){return r.json();}).then(renderSlots).catch(function(){renderSlots(null);});
+    } else { renderSlots(null); }
+  })();
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+
+</html>

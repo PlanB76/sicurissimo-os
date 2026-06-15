@@ -1,0 +1,92 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · Catalogo premi VIP</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>:root{--o:#E8501A;--g:#9aa0b4}*{box-sizing:border-box;margin:0;padding:0}body{background:#070710;color:#f3f3f8;font-family:'Sora',sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:26px 18px}.logo{display:inline-flex;font-family:'Anton';font-size:20px;border-radius:6px;overflow:hidden}.logo .a{background:var(--o);color:#fff;padding:3px 8px 0}.logo .b{background:#fff;color:#07070c;padding:3px 8px 0}
+h1{font-family:'Anton';font-weight:400;font-size:34px;text-transform:uppercase;margin:14px 0 4px}.lead{color:var(--g);font-size:14px;margin-bottom:16px}
+.lv{background:#0e0e1a;border:1px solid #23232f;border-radius:14px;padding:18px;margin-bottom:12px;opacity:.55}
+.lv.on{opacity:1;border-color:var(--o)}
+.lv h2{font-family:'Anton';font-weight:400;font-size:20px;text-transform:uppercase}
+.lv .soglia{font-family:'JetBrains Mono';font-size:12px;color:var(--o)}
+.lv .extra{display:inline-block;background:rgba(232,80,26,.14);color:var(--o);font-family:'JetBrains Mono';font-size:11px;padding:5px 10px;border-radius:8px;margin:8px 0}
+.it{display:flex;justify-content:space-between;align-items:center;border-top:1px solid #23232f;padding:9px 2px;font-size:13px;gap:10px}
+.it a{color:var(--o);font-size:12px;white-space:nowrap}
+.tag{font-size:10px;font-family:'JetBrains Mono';padding:3px 8px;border-radius:8px;background:rgba(243,176,22,.14);color:#f3b016;white-space:nowrap}
+.bar{height:10px;background:#14141f;border-radius:6px;overflow:hidden;margin:10px 0 4px}.bar>i{display:block;height:100%;background:linear-gradient(90deg,#E8501A,#ff8a50);width:0}
+.g{color:var(--g);font-size:12px}
+a.back{color:var(--o);font-size:13px}
+.nov{background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.3);color:#1db954;border-radius:12px;padding:12px;font-size:13px;margin-bottom:12px;display:none}
+</style><link rel="stylesheet" href="theme81.css">
+<meta name="robots" content="noindex,nofollow">
+</head>
+<body><div class="wrap">
+<a href="dashboard.html" class="logo"><span class="a">81</span><span class="b">+</span></a>
+<h1>Catalogo premi VIP</h1>
+<p class="lead">Ogni livello accredita PV EXTRA una volta sola e sblocca premi digitali. Il tuo livello si calcola sui PV totali guadagnati.</p>
+<div class="nov" id="nov"></div>
+<div class="bar"><i id="bar"></i></div><div class="g" id="barTxt">,</div>
+<div id="lvls" style="margin-top:14px"></div>
+<p style="margin-top:16px"><a class="back" href="dashboard.html">Torna alla dashboard</a></p>
+</div>
+<script>
+var CSRF='';
+var DEF=[
+ {lv:1,pv:2000,extra:250,nome:'VIP 1',premi:[
+  {t:'PV EXTRA, bonus di benvenuto nel Club',k:'extra'},
+  {t:'Kit Start Digital, check list quotidiana di sicurezza',link:'modulistica.html'},
+  {t:'SIC Card digitale con QR personale',link:'sic_card.html'},
+  {t:'Guida rapida AI Coach in PDF',link:'download/guida-rapida-ai-coach.pdf'},
+  {t:'Pacchetto nomine e informative privacy gratis',link:'modulistica.html'}]},
+ {lv:2,pv:5000,extra:500,nome:'VIP 2',premi:[
+  {t:'PV EXTRA, bonus crescita',k:'extra'},
+  {t:'Voucher sconto Academy del 20 per cento',k:'voucher'},
+  {t:'Kit procedure HACCP, registri gratis',link:'modulistica.html'},
+  {t:'Libreria 81+, cinque video lezioni sulle sanzioni',k:'soon'}]},
+ {lv:3,pv:10000,extra:1200,nome:'VIP 3',premi:[
+  {t:'PV EXTRA, bonus leader',k:'extra'},
+  {t:'DVR guidato oppure Manuale HACCP gratis, a scelta',link:'modulistica.html'},
+  {t:'Badge Azienda Protetta nel network',k:'badge'},
+  {t:'Accesso Club Preview',k:'soon'}]},
+ {lv:4,pv:25000,extra:3500,nome:'VIP 4',premi:[
+  {t:'PV EXTRA, bonus elite',k:'extra'},
+  {t:'Pass webinar VIP per sei mesi',k:'soon'},
+  {t:'Masterclass sul coinvolgimento dei dipendenti',k:'soon'},
+  {t:'Kit Cyber Awareness per il team',k:'soon'}]},
+ {lv:5,pv:50000,extra:8000,nome:'VIP 5',premi:[
+  {t:'PV EXTRA, bonus imperium',k:'extra'},
+  {t:'Elite Preview Pass per HUB3 Web3',k:'soon'},
+  {t:'Spazio brand nel Centro Opportunità',k:'soon'},
+  {t:'Archivio totale, tutta la modulistica gratis',link:'modulistica.html'}]}
+];
+function load(){
+ fetch('api/auth.php?action=me').then(r=>r.json()).then(function(m){if(!m.ok){location.href='login.html';return;}CSRF=m.csrf;
+  return fetch('api/gamify.php?action=progress').then(r=>r.json());}).then(function(p){if(!p)return;
+  return fetch('api/gamify.php?action=stato').then(r=>r.json()).then(function(st){render(st,p);});
+ }).catch(function(){document.getElementById('barTxt').textContent='anteprima senza backend';});
+}
+function render(st,p){
+ if(p.novità&&p.novità.length){var n=document.getElementById('nov');n.style.display='block';n.textContent='Novità per te. '+p.novità.join('. ')+'.';}
+ var next=st.prossimo;var pv=st.pv;
+ var target=next?next.pv:50000;var prev=0;
+ DEF.forEach(function(d){if(pv>=d.pv)prev=d.pv;});
+ var pct=next?Math.min(100,Math.round((pv-prev)/(target-prev)*100)):100;
+ document.getElementById('bar').style.width=pct+'%';
+ document.getElementById('barTxt').textContent='Hai '+pv+' PV. '+(next?('Te ne mancano '+st.mancanti+' per il '+next.nome+'.'):'Sei al vertice, VIP 5.');
+ document.getElementById('lvls').innerHTML=DEF.map(function(d){
+  var on=pv>=d.pv;
+  var items=d.premi.map(function(x){
+   var right='';
+   if(x.k==='extra')right=on?'<span class="tag" style="background:rgba(29,185,84,.14);color:#1db954">accreditati</span>':'<span class="tag">+'+d.extra+' PV</span>';
+   else if(x.k==='voucher')right=(on&&p.voucher20)?('<span class="tag" style="background:rgba(29,185,84,.14);color:#1db954">codice '+p.voucher20+'</span>'):'<span class="tag">a VIP 2</span>';
+   else if(x.k==='soon')right='<span class="tag">in attivazione dalla direzione</span>';
+   else if(x.k==='badge')right='<span class="tag">automatico</span>';
+   else if(x.link)right=on?('<a href="'+x.link+'">apri</a>'):'<span class="tag">bloccato</span>';
+   return '<div class="it"><span>'+x.t+'</span>'+right+'</div>';}).join('');
+  return '<div class="lv'+(on?' on':'')+'"><h2>'+d.nome+' <span class="soglia">'+d.pv+' PV</span></h2><span class="extra">PV EXTRA +'+d.extra+'</span>'+items+'</div>';
+ }).join('');
+}
+load();
+</script><script src="theme81.js"></script>
+<script src="lang81.js"></script>
+<script src="sito81.js" defer></script>
+</body></html>

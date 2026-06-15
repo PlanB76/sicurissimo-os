@@ -1,0 +1,265 @@
+{
+ "name": "81plus TEAM AI, Claude orchestratore",
+ "nodes": [
+  {
+   "parameters": {
+    "httpMethod": "POST",
+    "path": "team-ai",
+    "options": {}
+   },
+   "name": "Webhook domanda",
+   "type": "n8n-nodes-base.webhook",
+   "typeVersion": 1,
+   "position": [
+    0,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "x-api-key",
+       "value": "={{$env.ANTHROPIC_API_KEY}}"
+      },
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\"model\":\"claude-sonnet-4-6\",\"max_tokens\":900,\"messages\":[{\"role\":\"user\",\"content\":\"Sei Graziella, capo del TEAM AI 81+. Scomponi questo problema in 2 domande precise, una per il consulente A e una per il consulente B, rispondi SOLO in JSON {\\\"a\\\":\\\"...\\\",\\\"b\\\":\\\"...\\\"}. Problema: {{$json.body.domanda}}\"}]}"
+   },
+   "name": "1 Claude scompone",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4,
+   "position": [
+    220,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "jsCode": "const t=$json.content?.[0]?.text||'{}';const q=JSON.parse(t.replace(/```json|```/g,''));return [{json:{domanda:$('Webhook domanda').first().json.body.domanda,qa:q.a,qb:q.b}}];"
+   },
+   "name": "2 Estrai domande",
+   "type": "n8n-nodes-base.code",
+   "typeVersion": 2,
+   "position": [
+    440,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.openai.com/v1/chat/completions",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "Authorization",
+       "value": "=Bearer {{$env.OPENAI_API_KEY}}"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\"model\":\"gpt-4o\",\"messages\":[{\"role\":\"user\",\"content\":\"Consulente del TEAM AI 81+. Rispondi conciso e operativo in italiano. {{$json.qa}}\"}]}"
+   },
+   "name": "3a ChatGPT",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4,
+   "position": [
+    660,
+    -120
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={{$env.GEMINI_API_KEY}}",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\"contents\":[{\"parts\":[{\"text\":\"Consulente del TEAM AI 81+. Rispondi conciso e operativo in italiano. {{$json.qb}}\"}]}]}"
+   },
+   "name": "3b Gemini",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4,
+   "position": [
+    660,
+    120
+   ]
+  },
+  {
+   "parameters": {
+    "mode": "combine",
+    "combineBy": "combineAll",
+    "options": {}
+   },
+   "name": "4 Unisci",
+   "type": "n8n-nodes-base.merge",
+   "typeVersion": 3,
+   "position": [
+    880,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "https://api.anthropic.com/v1/messages",
+    "sendHeaders": true,
+    "headerParameters": {
+     "parameters": [
+      {
+       "name": "x-api-key",
+       "value": "={{$env.ANTHROPIC_API_KEY}}"
+      },
+      {
+       "name": "anthropic-version",
+       "value": "2023-06-01"
+      },
+      {
+       "name": "content-type",
+       "value": "application/json"
+      }
+     ]
+    },
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\"model\":\"claude-sonnet-4-6\",\"max_tokens\":1200,\"messages\":[{\"role\":\"user\",\"content\":\"Sei Graziella, capo del TEAM AI 81+. Problema originale: {{$('2 Estrai domande').first().json.domanda}}. Parere ChatGPT: {{JSON.stringify($json.choices?.[0]?.message?.content||'')}}. Parere Gemini: {{JSON.stringify($json.candidates?.[0]?.content?.parts?.[0]?.text||'')}}. Sintetizza la SOLUZIONE FINALE per l Ammiraglio, decisa, in italiano, frasi brevi, con i passi operativi numerati.\"}]}"
+   },
+   "name": "5 Claude decide",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4,
+   "position": [
+    1100,
+    0
+   ]
+  },
+  {
+   "parameters": {
+    "method": "POST",
+    "url": "=https://api.telegram.org/bot{{$env.TELEGRAM_BOT_TOKEN}}/sendMessage",
+    "sendBody": true,
+    "specifyBody": "json",
+    "jsonBody": "={\"chat_id\":\"{{$env.TELEGRAM_ADMIN_CHAT}}\",\"text\":\"\ud83e\udde0 TEAM AI\\n{{$json.content?.[0]?.text}}\"}"
+   },
+   "name": "6 Risposta su Telegram",
+   "type": "n8n-nodes-base.httpRequest",
+   "typeVersion": 4,
+   "position": [
+    1320,
+    0
+   ]
+  }
+ ],
+ "connections": {
+  "Webhook domanda": {
+   "main": [
+    [
+     {
+      "node": "1 Claude scompone",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "1 Claude scompone": {
+   "main": [
+    [
+     {
+      "node": "2 Estrai domande",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "2 Estrai domande": {
+   "main": [
+    [
+     {
+      "node": "3a ChatGPT",
+      "type": "main",
+      "index": 0
+     },
+     {
+      "node": "3b Gemini",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3a ChatGPT": {
+   "main": [
+    [
+     {
+      "node": "4 Unisci",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "3b Gemini": {
+   "main": [
+    [
+     {
+      "node": "4 Unisci",
+      "type": "main",
+      "index": 1
+     }
+    ]
+   ]
+  },
+  "4 Unisci": {
+   "main": [
+    [
+     {
+      "node": "5 Claude decide",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  },
+  "5 Claude decide": {
+   "main": [
+    [
+     {
+      "node": "6 Risposta su Telegram",
+      "type": "main",
+      "index": 0
+     }
+    ]
+   ]
+  }
+ }
+}

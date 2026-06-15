@@ -1,0 +1,10 @@
+{
+ "youtube":"https://www.youtube.com/@sicurissimo",
+ "youtube_live":"https://www.youtube.com/@sicurissimo/streams",
+ "telegram_gruppi":[
+  {"id":"community","nome":"Community 81+ Sicurissimo","desc":"Avvisi delle dirette, novità e confronto tra imprenditori.","link":""},
+  {"id":"sicurezza","nome":"Sicurezza sul lavoro","desc":"Domande e risposte su 81/08, scadenze e sanzioni.","link":""},
+  {"id":"haccp","nome":"HACCP e igiene alimentare","desc":"Per bar, ristorazione e alimentari.","link":""}
+ ],
+ "nota":"Inserisci i link di invito t.me dei tuoi gruppi nel campo link. Finche il link e vuoto, il bottone porta al contatto WhatsApp per chiedere l’accesso."
+}

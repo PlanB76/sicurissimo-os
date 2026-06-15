@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81X · Whitepaper di utilità</title>
+<meta name="description" content="Whitepaper del token di utilità 81X. Architettura, tokenomics, fasi di migrazione Web2 a Web3, trasparenza e conformità.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#FB6B00;--v:#3FBF6B;--cy:#00D9FF;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.7}
+a{color:var(--cy);text-decoration:none}
+.w{max-width:760px;margin:0 auto;padding:0 22px}
+.hero{padding:44px 0 20px;text-align:center;border-bottom:1px solid var(--bd)}
+.tag{display:inline-block;background:rgba(0,217,255,.1);border:1px solid var(--cy);color:var(--cy);font-size:12px;font-weight:700;padding:5px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1px}
+h1{font-family:'Anton';font-size:clamp(30px,6vw,52px);color:#fff;margin:14px 0 6px}
+.hero p{color:var(--mu);font-size:15px}
+h2{font-family:'Anton';color:#fff;font-size:24px;margin:30px 0 10px;padding-top:10px}
+h3{color:var(--o2);font-size:17px;margin:18px 0 6px}
+p{margin-bottom:12px;font-size:15px}
+ul{margin:0 0 12px 20px}
+li{margin-bottom:6px;font-size:15px}
+.box{background:var(--c);border:1px solid var(--bd);border-left:3px solid var(--o);border-radius:10px;padding:16px 18px;margin:16px 0;font-size:14px}
+.warn{border-left-color:var(--o2)}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--bd)}
+th{color:var(--mu);font-size:12px;text-transform:uppercase}
+td.n{font-family:'JetBrains Mono';color:#fff;text-align:right}
+.toc{background:var(--c);border:1px solid var(--bd);border-radius:12px;padding:18px;margin:24px 0}
+.toc a{display:block;padding:4px 0;color:var(--tx)}
+.toc a:hover{color:var(--cy)}
+.foot{border-top:1px solid var(--bd);margin-top:40px;padding:24px 0;font-size:12px;color:var(--mu);text-align:center}
+.dl{text-align:center;margin:20px 0}
+.dl a{display:inline-block;background:var(--o);color:#fff;font-weight:700;padding:12px 26px;border-radius:10px}
+</style>
+</head>
+<body>
+<div class="w">
+<section class="hero">
+  <span class="tag">Whitepaper</span>
+  <h1>81X</h1>
+  <p>Token di utilità e accesso dell'ecosistema 81+. Versione 1.0, documento informativo.</p>
+</section>
+
+<div class="box warn">
+Questo documento ha finalità informative e descrive un token di utilità. 81X non è uno strumento finanziario, non rappresenta una quota, non promette né garantisce alcun rendimento e non costituisce sollecitazione all'investimento. Le funzioni on-chain, la prevendita e l'airdrop saranno attivate solo dopo le necessarie autorizzazioni di legge e la validazione MiCA. I saldi attuali sono crediti interni dell'ecosistema, non convertibili in denaro.
+</div>
+
+<div class="toc">
+  <strong style="color:#fff">Indice</strong>
+  <a href="#visione">1. Visione</a>
+  <a href="#pix">2. PIX81+ e Bridge81+</a>
+  <a href="#token">3. Il token 81X</a>
+  <a href="#tokenomics">4. Tokenomics</a>
+  <a href="#mining">5. Mining di attività</a>
+  <a href="#fasi">6. Fasi di migrazione</a>
+  <a href="#trasparenza">7. Trasparenza</a>
+  <a href="#conformita">8. Conformità</a>
+</div>
+
+<h2 id="visione">1. Visione</h2>
+<p>L'ecosistema 81+ unisce conformità d'impresa, formazione, community e una dimensione digitale chiamata Metaverso 81+. 81X è il token di utilità che dà accesso ai servizi premium, alla prenotazione di spazi e alla governance della community.</p>
+<p>Il principio guida è semplice. Si entra dal Web2, dove tutto è veloce e accessibile. Si cresce con la propria attività reale. Si passa al Web3 in modo progressivo e dichiarato, quando le condizioni di legge lo permettono.</p>
+
+<h2 id="pix">2. PIX81+ e Bridge81+</h2>
+<p>PIX81+ è il Founding Node dell'ecosistema, una posizione permanente nel Metaverso 81+. Esistono solo 1000 PIX, legati al codice identitario SIC-ID.</p>
+<p>Bridge81+ è il ponte che porta l'utente dal Web2 al Web3. Chi possiede almeno un PIX81+ ottiene:</p>
+<ul>
+  <li>uno spazio riservato Elite Space nel Metaverso</li>
+  <li>l'ingresso in whitelist per la prevendita del token 81X</li>
+  <li>il diritto all'airdrop del primo rilascio 81X</li>
+</ul>
+
+<h2 id="token">3. Il token 81X</h2>
+<p>81X è un token di utilità e accesso. Serve per accedere alle aree premium del Metaverso, prenotare spazi, partecipare al launchpad, votare nella governance DAO e ottenere sconti sui servizi dell'ecosistema.</p>
+<p>La rete target è BSC nello standard BEP-20. La supply massima è fissa a 21 milioni, come Bitcoin. Non sono previste emissioni oltre il tetto massimo.</p>
+
+<h2 id="tokenomics">4. Tokenomics</h2>
+<table>
+  <tr><th>Categoria</th><th>Quantità</th><th>Quota</th></tr>
+  <tr><td>Base Emission, mining attività</td><td class="n">5.000.000</td><td class="n">23,8%</td></tr>
+  <tr><td>Founder, vesting</td><td class="n">5.000.000</td><td class="n">23,8%</td></tr>
+  <tr><td>ICO, vendita pubblica</td><td class="n">4.000.000</td><td class="n">19,0%</td></tr>
+  <tr><td>Liquidità DEX</td><td class="n">3.000.000</td><td class="n">14,3%</td></tr>
+  <tr><td>Airdrop early PIX81+</td><td class="n">1.500.000</td><td class="n">7,1%</td></tr>
+  <tr><td>Treasury</td><td class="n">2.500.000</td><td class="n">11,9%</td></tr>
+  <tr><td><strong>Totale</strong></td><td class="n"><strong>21.000.000</strong></td><td class="n"><strong>100%</strong></td></tr>
+</table>
+<h3>Vesting e cliff</h3>
+<ul>
+  <li>Founder, cliff 12 mesi, vesting lineare 48 mesi</li>
+  <li>ICO, cliff 3 mesi, vesting 12-18 mesi</li>
+  <li>Mining, nessun cliff, rilascio giornaliero con cap per wallet</li>
+  <li>Liquidità, LP bloccati 12-24 mesi</li>
+  <li>Treasury, cliff 6 mesi, governato dalla DAO</li>
+</ul>
+<h3>Anti inflazione</h3>
+<ul>
+  <li>Burn dello 0,5% sui trasferimenti</li>
+  <li>Cap giornaliero globale di emissione</li>
+  <li>Halving della base emission ogni 4 anni</li>
+  <li>Controllo anti farming tramite SIC-ID</li>
+</ul>
+
+<h2 id="mining">5. Mining di attività</h2>
+<p>Il mining 81X non è estrazione di criptovaluta e non richiede hardware. È un sistema di reward basato sulla proof of engagement, cioè sull'attività reale dell'utente nell'ecosistema, come completare audit, generare documenti, seguire corsi, invitare nuovi membri.</p>
+<p>I reward sono calcolati dal punteggio di attività giornaliero, ridotti da un punteggio di rischio anti frode e limitati da un tetto per wallet. Questo serve a tenere l'emissione sostenibile e a scoraggiare gli abusi.</p>
+<div class="box">La base emission di 5 milioni di 81X è distribuita in quattro anni, con quote decrescenti, 35% il primo anno, 30% il secondo, 20% il terzo, 15% il quarto, poi halving.</div>
+
+<h2 id="fasi">6. Fasi di migrazione</h2>
+<p>Il passaggio da Web2 a Web3 è progressivo e dichiarato.</p>
+<ul>
+  <li><strong>Fase 1, Web2 Core.</strong> Mining ledger off-chain, wallet 81X interno, identità SIC-ID. I saldi sono crediti interni.</li>
+  <li><strong>Fase 2, Trasparenza Hybrid.</strong> Hash giornalieri del ledger pubblicati per verifica. Proof of emission, nessun token reale ancora.</li>
+  <li><strong>Fase 3, Migrazione Web3.</strong> Dopo i 5 milioni di base emission, snapshot del ledger e claim del token 81X reale BEP-20. Solo previa validazione MiCA.</li>
+  <li><strong>Fase 4, Full Web3.</strong> 81X on-chain, DAO, staking di governance, DEX.</li>
+</ul>
+
+<h2 id="trasparenza">7. Trasparenza</h2>
+<p>Ogni giorno il sistema calcola un hash del ledger 81X, che riassume il totale emesso, il circolante e gli utenti attivi. Questi hash possono essere ancorati su blockchain pubblica, creando una prova verificabile e non manipolabile dell'emissione, anche prima che il token sia reale on-chain.</p>
+
+<h2 id="conformita">8. Conformità</h2>
+<p>L'ecosistema opera nel rispetto della normativa vigente. La struttura di rete segue la L.173/2005, dove le commissioni derivano solo da vendite reali. Il franchising segue la L.129/2004. Per token e cripto si fa riferimento al quadro MiCA.</p>
+<div class="box warn">Nessuna offerta pubblica reale del token, nessuna prevendita e nessun airdrop on-chain saranno attivati senza le necessarie autorizzazioni e una validazione legale specifica. Fino a quel momento 81X resta un sistema interno di reward e accesso, descritto in modo trasparente.</div>
+
+<div class="foot">
+  Labo Tecnic Studio · P.IVA IT01504180298 · Porto Viro (RO) · info@81plus.net<br>
+  Documento informativo, versione 1.0. Non costituisce offerta, sollecitazione all'investimento o consulenza finanziaria.
+</div>
+</div>
+<script src="sito81.js" defer></script>
+</body>
+</html>

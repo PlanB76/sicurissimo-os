@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ · I miei PIX81+, gestisci logo e link</title>
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#FB6B00;--v:#3FBF6B;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.6}
+.w{max-width:880px;margin:0 auto;padding:0 20px}
+a{color:inherit;text-decoration:none}
+.hero{padding:38px 0 14px;text-align:center}
+.tag{display:inline-block;background:rgba(232,80,26,.12);border:1px solid var(--o);color:var(--o);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;text-transform:uppercase}
+h1{font-family:'Anton';font-size:clamp(28px,5vw,44px);color:#fff;margin:12px 0 8px}
+.hero p{color:var(--mu);font-size:15px}
+.pix-card{background:var(--c);border:1px solid var(--bd);border-radius:16px;padding:20px;margin:16px 0;display:flex;gap:18px;align-items:flex-start;flex-wrap:wrap}
+.pix-prev{width:110px;height:110px;border-radius:12px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:24px;color:#fff;flex-shrink:0;border:1px solid var(--bd)}
+.pix-body{flex:1;min-width:240px}
+.pix-body .pos{font-family:'JetBrains Mono';font-size:12px;color:var(--mu)}
+.pix-body h3{color:#fff;font-size:18px;margin:2px 0 8px}
+.campo{margin-bottom:10px}
+.campo label{display:block;font-size:12px;margin-bottom:4px;color:var(--mu)}
+.campo input{width:100%;background:#0e0e14;border:1px solid var(--bd);color:#ececf2;padding:9px 11px;border-radius:8px;font-size:13px;font-family:Sora}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.link-uni{background:#0e0e14;border:1px solid var(--bd);border-radius:8px;padding:10px;margin:10px 0;font-family:'JetBrains Mono';font-size:12px;color:var(--o2);word-break:break-all;display:flex;justify-content:space-between;gap:8px;align-items:center}
+.link-uni button{background:var(--o);color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:12px;cursor:pointer;white-space:nowrap}
+.azioni{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.btn{padding:10px 16px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;border:none}
+.btn-up{background:var(--v);color:#062e16}
+.btn-save{background:var(--o);color:#fff}
+.vuoto{text-align:center;padding:50px 20px;color:var(--mu)}
+.vuoto a{color:var(--o)}
+.kb{font-size:11px;color:var(--mu);margin-top:4px}
+.toast{position:fixed;top:18px;left:50%;transform:translateX(-50%);z-index:80;background:var(--c);border:1px solid var(--v);color:#fff;padding:12px 22px;border-radius:12px;font-size:14px;font-weight:600;display:none}
+.toast.err{border-color:var(--o)}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div class="w">
+<section class="hero">
+  <span class="tag">I miei PIX81+</span>
+  <h1>Gestisci i tuoi spazi</h1>
+  <p>Carica il logo, cambialo quando vuoi, copia il tuo link che porta clienti e iscritti.</p>
+</section>
+<div id="lista"></div>
+</div>
+
+<script>
+async function carica(){
+  try{
+    const r=await fetch('api/pixel.php?az=miei'); const d=await r.json();
+    if(!d.ok){ document.getElementById('lista').innerHTML='<div class="vuoto">Accedi dalla <a href="login.html">dashboard</a> per gestire i tuoi PIX.</div>'; return; }
+    if(!d.pix.length){ document.getElementById('lista').innerHTML='<div class="vuoto">Non hai ancora nessun PIX.<br><a href="https://81plus.place">Prendi il tuo primo PIX81+</a></div>'; return; }
+    render(d.pix);
+  }catch(e){ document.getElementById('lista').innerHTML='<div class="vuoto">Backend non raggiungibile in anteprima.</div>'; }
+}
+function render(pix){
+  document.getElementById('lista').innerHTML=pix.map(p=>{
+    const link='https://81plus.net/signup.html?ref='+p.link_univoco?.split('-')[1]+'&px='+p.link_univoco;
+    const prev=p.img_path?`background-image:url(${p.img_path})`:`background:${p.colore||'#E8501A'}`;
+    return `<div class="pix-card">
+      <div class="pix-prev" style="${prev}">${p.img_path?'':(p.logo||'81+')}</div>
+      <div class="pix-body">
+        <div class="pos">PIX numero ${p.pos}${p.regalato_da?' · regalato da '+p.regalato_da:''}</div>
+        <h3>${p.azienda||'Il tuo PIX'}</h3>
+        <div class="campo"><label>Nome azienda</label><input id="az-${p.pos}" value="${p.azienda||''}" maxlength="40"></div>
+        <div class="campo"><label>Link pubblicitario</label><input id="url-${p.pos}" value="${p.url||''}" maxlength="120" placeholder="https://..."></div>
+        <div class="row2">
+          <div class="campo"><label>Colore</label><input id="col-${p.pos}" type="color" value="${p.colore||'#E8501A'}" style="height:38px;padding:3px"></div>
+          <div class="campo"><label>Logo testo</label><input id="logo-${p.pos}" value="${p.logo||''}" maxlength="4"></div>
+        </div>
+        <div class="link-uni"><span>${link}</span><button onclick="copiaLink('${link}')">Copia</button></div>
+        <div class="azioni">
+          <label class="btn btn-up">Carica logo
+            <input type="file" accept=".jpg,.jpeg,.pdf,.tiff,.svg,image/jpeg,application/pdf,image/tiff,image/svg+xml" style="display:none" onchange="upload(${p.pos},this)">
+          </label>
+          <button class="btn btn-save" onclick="salva(${p.pos})">Salva modifiche</button>
+        </div>
+        <div class="kb" id="kb-${p.pos}">${p.img_path?'Immagine caricata':'Nessuna immagine, usa il logo testo o carica una grafica quadrata'}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function copiaLink(l){ navigator.clipboard.writeText(l).then(()=>toast('Link copiato')).catch(()=>{}); }
+
+async function salva(pos){
+  const body={pos, azienda:val('az-'+pos), url:val('url-'+pos), colore:val('col-'+pos), logo:val('logo-'+pos)};
+  const r=await fetch('api/pixel.php?az=aggiorna',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+  const d=await r.json(); toast(d.ok?'Salvato':d.err||'Errore', d.ok?'':'err');
+}
+function val(id){ return document.getElementById(id)?.value||''; }
+
+async function upload(pos,inp){
+  const f=inp.files[0]; if(!f) return;
+  if(f.size>5*1024*1024){ toast('File oltre i 5 MB','err'); return; }
+  const fd=new FormData(); fd.append('pos',pos); fd.append('logo',f);
+  document.getElementById('kb-'+pos).textContent='Carico e comprimo...';
+  try{
+    const r=await fetch('api/pixel_upload.php',{method:'POST',body:fd});
+    const d=await r.json();
+    if(d.ok){ document.getElementById('kb-'+pos).textContent=d.nota||('Caricata, '+d.kb+' KB'); toast('Immagine caricata'); carica(); }
+    else { document.getElementById('kb-'+pos).textContent=d.err; toast(d.err||'Errore','err'); }
+  }catch(e){ toast('Upload non riuscito','err'); }
+}
+function toast(m,t){ const e=document.getElementById('toast'); e.textContent=m; e.className='toast'+(t==='err'?' err':''); e.style.display='block'; setTimeout(()=>e.style.display='none',3000); }
+carica();
+</script>
+<script src="sito81.js" defer></script>
+</body>
+</html>

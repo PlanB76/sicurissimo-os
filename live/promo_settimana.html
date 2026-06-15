@@ -1,0 +1,58 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ · La promo della settimana</title><link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme81.css">
+<style>:root{--o:#E8501A;--au:#f3b016}*{box-sizing:border-box;margin:0;padding:0}body{background:#070710;color:#f3f3f8;font-family:'Sora',sans-serif}
+.wrap{max-width:900px;margin:0 auto;padding:30px 18px 60px}.logo{display:inline-flex;font-family:'Anton';font-size:20px;border-radius:6px;overflow:hidden}.logo .a{background:var(--o);color:#fff;padding:3px 8px 0}.logo .b{background:#fff;color:#07070c;padding:3px 8px 0}
+h1{font-family:'Anton';font-weight:400;font-size:36px;text-transform:uppercase;margin:16px 0 6px}
+.sub{color:#bcbcc8;font-size:14.5px;max-width:640px}
+.cd{display:inline-flex;align-items:center;gap:10px;background:#14110a;border:1px solid var(--au);border-radius:12px;padding:12px 18px;margin:18px 0}
+.cd b{font-family:'JetBrains Mono';font-size:28px;color:var(--au)}
+.cd span{font-size:11px;color:#9aa0b4;text-transform:uppercase;letter-spacing:1px}
+.off{background:#0e0e1a;border:1px solid #23232f;border-radius:14px;padding:20px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+.off h2{font-family:'Anton';font-weight:400;font-size:19px;text-transform:uppercase;margin-bottom:4px}
+.off p{color:#bcbcc8;font-size:13px;max-width:520px}
+.bonus{font-family:'JetBrains Mono';font-size:12px;color:#1db954;margin-top:6px}
+.btn{background:linear-gradient(180deg,#ff7a3d,#E8501A 55%,#c23f12);border:none;color:#fff;border-radius:10px;padding:13px 20px;font-weight:700;cursor:pointer;font-family:'Sora';text-decoration:none;font-size:13.5px;white-space:nowrap}
+.chiusa{background:#0e0e1a;border:1px solid #23232f;border-radius:14px;padding:26px;text-align:center}
+.g{color:#9aa0b4;font-size:13px}
+.onesta{font-size:11.5px;color:#6b7180;margin-top:16px;line-height:1.6}
+</style><link rel="canonical" href="https://81plus.net/promo_settimana.html">
+<meta name="description" content="Cinque giorni di bonus reali su membership, Sigilli e formazione certificata. Da lunedì a venerdì, poi riparte.">
+<meta property="og:type" content="website"><meta property="og:title" content="La promo della settimana · 81+"><meta property="og:description" content="Cinque giorni di bonus reali su membership, Sigilli e formazione certificata. Da lunedì a venerdì, poi riparte."><meta property="og:url" content="https://81plus.net/promo_settimana.html"><meta property="og:image" content="https://81plus.net/og_cover.png"><meta property="og:locale" content="it_IT"><meta property="og:site_name" content="81+ Sicurissimo Global">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="La promo della settimana · 81+"><meta name="twitter:description" content="Cinque giorni di bonus reali su membership, Sigilli e formazione certificata. Da lunedì a venerdì, poi riparte."><meta name="twitter:image" content="https://81plus.net/og_cover.png">
+</head>
+<body><div class="wrap">
+<a href="index.html" class="logo"><span class="a">81</span><span class="b">+</span></a>
+<div id="box"><div class="chiusa g">Carico la promo...</div></div>
+<p class="onesta">Come funziona la promo, in chiaro. La finestra apre il lunedì e chiude il venerdì sera, il countdown è reale e quando arriva a zero la promo chiude davvero, poi riparte il lunedì successivo. I bonus sono punti PV reali accreditati nel tuo wallet quando completi l'azione dentro la finestra. I PV valgono come sconto dentro l'ecosistema, non sono denaro e non si convertono in contanti. I corsi sono erogati da piattaforme partner accreditate e riconosciute, MIM e Regione Lazio, con attestato a tuo nome.</p>
+</div>
+<script>
+function quando(iso){var t=new Date(iso).getTime()-Date.now();if(t<0)t=0;
+ var g=Math.floor(t/86400000),h=Math.floor(t%86400000/3600000),m=Math.floor(t%3600000/60000),s=Math.floor(t%60000/1000);
+ return (g>0?g+'g ':'')+String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');}
+fetch('api/promo_week.php').then(r=>r.json()).then(function(p){
+ var b=document.getElementById('box');
+ if(!p.ok){b.innerHTML='<div class="chiusa g">Promo non disponibile ora.</div>';return;}
+ if(!p.attiva){
+  b.innerHTML='<h1>La promo riapre lunedì</h1><p class="sub">La finestra di questa settimana è chiusa. La prossima apre '
+   +(p.prossima_apertura?('tra <b style="font-family:JetBrains Mono;color:#f3b016" id="t2"></b>'):'lunedì alle 00:00')
+   +'. Intanto puoi fare l\u2019audit gratuito e completare il profilo, i bonus di benvenuto non scadono.</p>'
+   +'<a class="btn" href="audit.html" style="display:inline-block;margin-top:14px">Fai l\u2019audit gratuito</a>';
+  if(p.prossima_apertura){(function t(){var e=document.getElementById('t2');if(!e)return;e.textContent=quando(p.prossima_apertura);setTimeout(t,1000);})();}
+  return;
+ }
+ b.innerHTML='<h1>'+p.titolo+'</h1><p class="sub">'+p.sottotitolo+'</p>'
+  +'<div class="cd"><b id="t1"></b><span>alla chiusura<br>poi riparte lunedì</span></div>'
+  +(p.offerte||[]).map(function(o){
+    return '<div class="off"><div><h2>'+o.nome+'</h2><p>'+o.desc+'</p>'
+     +(o.bonus_pv>0?('<div class="bonus">Bonus reale di questa settimana, +'+o.bonus_pv+' PV nel tuo wallet</div>'):'')
+     +'</div><a class="btn" href="'+o.url+'"'+(o.url.indexOf('http')===0||o.url.indexOf('track')>=0?' target="_blank" rel="noopener"':'')+'>'+o.cta+'</a></div>';
+   }).join('');
+ (function t(){var e=document.getElementById('t1');if(!e)return;e.textContent=quando(p.fine_finestra);
+  if(new Date(p.fine_finestra)>new Date())setTimeout(t,1000);else location.reload();})();
+}).catch(function(){document.getElementById('box').innerHTML='<div class="chiusa g">Promo non raggiungibile in anteprima.</div>';});
+</script>
+<script src="theme81.js"></script>
+<script src="lang81.js"></script>
+</body></html>

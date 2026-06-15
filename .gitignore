@@ -1,7 +1,18 @@
-# Documenti fiscali e personali
+
+# Documenti personali e fiscali — mai nel repo pubblico
 *.pdf
 *.zip
+Ricevuta_*
+Ricevute_*
 
 # File temporanei
 *.tmp
 *.log
+
+# Live site — file da non committare mai
+live/.env
+live/.env.local
+live/.env.production
+live/uploads/*
+!live/uploads/.gitkeep
+live/installer.php

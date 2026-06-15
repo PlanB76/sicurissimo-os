@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Fabbrica documenti · 81+</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070709;color:#ececf2;font-family:Sora,Arial,sans-serif;min-height:100vh}
+header{padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid #17171f}
+header h1{font-family:Anton,Arial;font-size:22px;letter-spacing:1px;text-transform:uppercase;color:#E8501A}
+header .sub{font-size:11.5px;color:#9aa0b4;max-width:520px}
+.btn{background:#E8501A;color:#fff;border:0;padding:10px 16px;border-radius:9px;font-weight:700;cursor:pointer;font-size:13px;font-family:Sora;text-decoration:none;display:inline-block}
+.btn.ghost{background:#16161e;border:1px solid #2a2a35;color:#cfd2dd}
+main{max-width:1150px;margin:0 auto;padding:18px;display:grid;grid-template-columns:340px 1fr;gap:16px}
+@media(max-width:880px){main{grid-template-columns:1fr}}
+#colonna{background:#0d0d12;border:1px solid #1d1d26;border-radius:14px;padding:14px;max-height:78vh;overflow:auto}
+#colonna input{width:100%;background:#101016;border:1px solid #2a2a35;color:#ececf2;padding:9px 12px;border-radius:8px;font-size:13px;margin-bottom:10px}
+.catTit{font-family:Anton,Arial;font-size:13px;letter-spacing:1px;text-transform:uppercase;color:#ffb38a;margin:12px 0 6px}
+.voce{padding:9px 10px;border:1px solid #1c1c25;border-radius:9px;margin-bottom:6px;cursor:pointer;font-size:12.5px}
+.voce:hover{border-color:#E8501A}
+.voce.attiva{border-color:#E8501A;background:#16100c}
+.voce .n{color:#7c8195;font-size:10.5px}
+#lavoro{background:#0d0d12;border:1px solid #1d1d26;border-radius:14px;padding:18px;min-height:60vh}
+#lavoro h2{font-family:Anton,Arial;font-size:19px;color:#E8501A;text-transform:uppercase}
+#lavoro .norma{font-size:11.5px;color:#9aa0b4;margin:4px 0 14px}
+label{display:block;font-size:11.5px;color:#aeb3c4;margin:10px 0 4px}
+.campo input,.campo textarea{width:100%;background:#101016;border:1px solid #2a2a35;color:#ececf2;padding:9px 12px;border-radius:8px;font-size:13px;font-family:Sora}
+.campo textarea{min-height:64px;resize:vertical}
+.campo .pre{border-color:#2c4a2c}
+#azioni{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+#anteprima{margin-top:16px;display:none}
+#anteprima iframe{width:100%;height:62vh;border:1px solid #2a2a35;border-radius:10px;background:#fff}
+.benv{color:#9aa0b4;font-size:13.5px;line-height:1.8}
+.benv b{color:#ececf2}
+#contadoc{font-family:JetBrains Mono,monospace;font-size:11px;color:#7c8195;margin-left:auto}
+</style>
+</head>
+<body>
+<header>
+  <h1>Fabbrica documenti</h1>
+  <span class="sub">Scegli il documento, i tuoi dati sono già al loro posto, completa i campi e scarica. I campi verdi arrivano dal tuo profilo. I documenti salvati in archivio si riaprono e si revisionano quando vuoi.</span>
+  <span id="contadoc"></span>
+  <a class="btn ghost" href="dashboard.html">Dashboard</a>
+</header>
+<main>
+  <div id="colonna">
+    <input id="filtro" placeholder="cerca, DVR, HACCP, nomina, privacy..." oninput="disegnaLista()">
+    <div id="archivio"></div><div id="lista">Carico il catalogo...</div>
+  </div>
+  <div id="lavoro">
+    <div class="benv" id="benvenuto">
+      <b>Come funziona.</b><br>
+      A sinistra trovi 32 documenti su cinque famiglie, sicurezza 81/08, cantiere, valutazioni dei rischi specifici, HACCP e privacy GDPR, costruiti sulla struttura delle norme vigenti, articolo per articolo.<br><br>
+      Scegline uno. La fabbrica precompila ragione sociale, indirizzo, ATECO e gli altri dati dal tuo profilo, tu completi quello che manca, guardi l'anteprima e scarichi il <b>PDF</b> o lo salvi in <b>archivio</b> per revisionarlo quando vuoi.<br><br>
+      Le parti tra parentesi quadre sono i punti dove serve la mano tua o del tecnico. Prima della firma il documento va verificato con i professionisti abilitati, qui si fa il novanta per cento della fatica, il dieci che conta lo firma una persona.<br><br>
+      L'anteprima è gratuita col timbro di prova. Il documento finale costa PV secondo il listino, dai 5 dei registri ai 25 del DVR, le revisioni della stessa pratica sono comprese. La prima missione documento ti regala <b style="color:#E8501A">15 PV</b>, e i PV si ricaricano <a href="ricarica_pv.html" style="color:#E8501A">qui</a>.
+    </div>
+    <div id="modulo" style="display:none">
+      <h2 id="dTit"></h2>
+      <div class="norma" id="dNorma"></div>
+      <div id="dCampi"></div>
+      <div id="azioni">
+        <button class="btn" onclick="genera('anteprima')">Anteprima</button>
+        <button class="btn ghost" onclick="scaricaPdf()">Documento finale PDF</button><button class="btn ghost" onclick="salvaArchivio()">Salva in archivio</button>
+        <button class="btn ghost" onclick="genera('stampa')">Stampa PDF</button>
+      </div>
+      <div id="anteprima"><iframe id="frameDoc" title="anteprima documento"></iframe></div>
+    </div>
+  </div>
+</main>
+<form id="formDoc" method="post" target="_blank" style="display:none">
+  <input type="hidden" name="id" id="fId"><input type="hidden" name="campi" id="fCampi"><input type="hidden" name="fmt" id="fFmt">
+</form>
+<script>
+var CAT={},DOCS=[],sel=null;
+fetch('api/documenti.php?az=catalogo').then(function(r){return r.json();}).then(function(d){
+  if(!d.ok){document.getElementById('lista').innerHTML='<div style="font-size:12px;color:#9aa0b4">Accedi dalla <a href="login.html" style="color:#E8501A">dashboard</a> per usare la fabbrica.</div>';return;}
+  CAT=d.categorie; DOCS=d.documenti; window.SALDOPV=d.saldo_pv||0;
+  document.getElementById('contadoc').textContent=DOCS.length+' documenti a catalogo';
+  disegnaLista();
+}).catch(function(){document.getElementById('lista').textContent='Backend non raggiungibile in anteprima.';});
+function disegnaLista(){
+  var q=(document.getElementById('filtro').value||'').toLowerCase();
+  var h='';
+  Object.keys(CAT).forEach(function(c){
+    var voci=DOCS.filter(function(x){return x.categoria===c&&(q===''||x.titolo.toLowerCase().indexOf(q)>=0||x.norma.toLowerCase().indexOf(q)>=0);});
+    if(!voci.length)return;
+    h+='<div class="catTit">'+CAT[c]+'</div>';
+    voci.forEach(function(x){
+      h+='<div class="voce'+(sel&&sel.id===x.id?' attiva':'')+'" onclick="apri(\''+x.id+'\')"><b>'+x.titolo+'</b><div class="n">'+x.norma+'</div></div>';
+    });
+  });
+  document.getElementById('lista').innerHTML=h||'<div style="font-size:12px;color:#9aa0b4">Niente con questa ricerca.</div>';
+}
+function apri(id){
+  SALVATO=null;
+  sel=DOCS.find(function(x){return x.id===id;}); if(!sel)return;
+  document.getElementById('benvenuto').style.display='none';
+  document.getElementById('modulo').style.display='block';
+  document.getElementById('anteprima').style.display='none';
+  document.getElementById('dTit').textContent=sel.titolo;
+  document.getElementById('dNorma').textContent=sel.norma+' · documento finale '+sel.costo_pv+' PV, anteprima gratuita, revisioni della stessa pratica comprese';
+  var h='';
+  sel.campi.forEach(function(c){
+    var lungo=/descrizione|elenco|presenti|squadra|lavoraz|istruz|aree|prodotti|compiti|misure|contesto|decisioni|fornitori|locali|imprese/i.test(c.l+c.k);
+    h+='<div class="campo"><label>'+c.l+(c.val?' <span style="color:#3fae5a">· dal profilo</span>':'')+'</label>'
+      +(lungo?'<textarea data-k="'+c.k+'" class="'+(c.val?'pre':'')+'">'+(c.val||'')+'</textarea>'
+             :'<input data-k="'+c.k+'" class="'+(c.val?'pre':'')+'" value="'+(c.val||'').replace(/"/g,'&quot;')+'">');
+    h+='</div>';
+  });
+  document.getElementById('dCampi').innerHTML=h;
+  disegnaLista();
+  if(window.innerWidth<880)document.getElementById('lavoro').scrollIntoView({behavior:'smooth'});
+}
+function raccogli(){
+  var v={};
+  document.querySelectorAll('#dCampi [data-k]').forEach(function(el){v[el.getAttribute('data-k')]=el.value;});
+  return v;
+}
+function genera(modo){
+  if(!sel)return;
+  if(modo==='doc'||modo==='stampa'){
+    document.getElementById('fId').value=sel.id;
+    document.getElementById('fCampi').value=JSON.stringify(raccogli());
+    document.getElementById('fFmt').value=modo==='doc'?'doc':'html';
+    var f=document.getElementById('formDoc');
+    f.action='api/documenti.php?az=genera'+(modo==='doc'?'&fmt=doc':'&fmt=html');
+    f.submit();
+    return;
+  }
+  fetch('api/documenti.php?az=genera',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sel.id,campi:raccogli()})})
+   .then(function(r){return r.json();})
+   .then(function(d){
+     if(!d.ok){alert(d.err||'Errore');return;}
+     var fr=document.getElementById('frameDoc');
+     fr.srcdoc=d.html;
+     document.getElementById('anteprima').style.display='block';
+     fr.scrollIntoView({behavior:'smooth'});
+   }).catch(function(){alert('Backend non raggiungibile in anteprima.');});
+}
+
+var SALVATO=null;
+function caricaArchivio(){
+  fetch('api/documenti.php?az=miei').then(function(r){return r.json();}).then(function(d){
+    if(!d.ok||!d.salvati.length){document.getElementById('archivio').innerHTML='';return;}
+    var h='<div class="catTit">Il mio archivio, '+d.salvati.length+'</div>';
+    d.salvati.forEach(function(s){
+      h+='<div class="voce" onclick="riapri('+s.id+')"><b>'+s.titolo+'</b><div class="n">revisione del '+(s.updated_at||'').slice(0,10)+' · <span onclick="event.stopPropagation();cancellaArch('+s.id+')" style="color:#e24b4a;cursor:pointer">elimina</span></div></div>';
+    });
+    document.getElementById('archivio').innerHTML=h;
+  }).catch(function(){});
+}
+function riapri(id){
+  fetch('api/documenti.php?az=carica&id='+id).then(function(r){return r.json();}).then(function(d){
+    if(!d.ok){alert(d.err||'Errore');return;}
+    apri(d.salvato.doc);
+    SALVATO=d.salvato.id;
+    Object.keys(d.salvato.campi||{}).forEach(function(k){
+      var el=document.querySelector('#dCampi [data-k="'+k+'"]'); if(el&&d.salvato.campi[k])el.value=d.salvato.campi[k];
+    });
+  });
+}
+function cancellaArch(id){
+  if(!confirm('Eliminare questa revisione dall\'archivio?'))return;
+  fetch('api/documenti.php?az=archivio_cancella',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}).then(function(){caricaArchivio();});
+}
+function salvaArchivio(){
+  if(!sel)return;
+  fetch('api/documenti.php?az=salva',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({doc:sel.id,campi:raccogli(),salvato_id:SALVATO})})
+   .then(function(r){return r.json();})
+   .then(function(d){ if(!d.ok){alert(d.err||'Errore');return;} SALVATO=d.salvato_id; caricaArchivio(); alert(d.revisione?'Revisione salvata.':'Salvato in archivio, lo ritrovi a sinistra.'); });
+}
+function scaricaPdf(){
+  if(!sel)return;
+  fetch('api/documenti.php?az=finale',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:sel.id,campi:raccogli(),salvato_id:SALVATO})})
+   .then(function(r){return r.json();})
+   .then(function(d){
+     if(!d.ok){ if(d.err==='pv_insufficienti'){ if(confirm('Ti servono '+d.costo+' PV e ne hai '+d.saldo+'. Vuoi ricaricare ora?'))location.href='ricarica_pv.html'; } else alert(d.err||'Errore'); return; }
+     SALVATO=d.salvato_id; caricaArchivio();
+     var box=document.createElement('div'); box.style.cssText='position:absolute;left:-9999px;top:0;width:794px;background:#fff';
+     box.innerHTML=d.html.replace(/^[\s\S]*<body>/,'').replace(/<\/body>[\s\S]*$/,'');
+     var st=d.html.match(/<style>([\s\S]*?)<\/style>/); if(st){var se=document.createElement('style');se.textContent=st[1];box.prepend(se);}
+     document.body.appendChild(box);
+     html2pdf().set({margin:8,filename:'81plus_'+sel.id+'_'+new Date().toISOString().slice(0,10)+'.pdf',html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4'}}).from(box).save().then(function(){box.remove();});
+   }).catch(function(){alert('Backend non raggiungibile in anteprima.');});
+}
+caricaArchivio();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

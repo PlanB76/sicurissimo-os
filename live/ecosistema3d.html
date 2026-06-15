@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ Ecosistema · 3D Navigabile</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;overflow:hidden;font-family:system-ui,sans-serif}
+#c{display:block;width:100vw;height:100vh}
+#panel{position:fixed;right:0;top:0;width:340px;height:100vh;background:rgba(10,10,15,0.95);border-left:1px solid #1a1a22;overflow-y:auto;transform:translateX(100%);transition:transform .3s;z-index:10;padding:16px;color:#c8c8d2}
+#panel.open{transform:translateX(0)}
+#panel h2{font-size:16px;color:#fff;margin-bottom:4px}
+#panel .close{position:absolute;right:12px;top:12px;cursor:pointer;font-size:20px;color:#666}
+#panel .tag{display:inline-block;font-size:9px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px}
+#panel h3{font-size:11px;margin:12px 0 4px;padding-bottom:4px;border-bottom:1px solid #1a1a22}
+#panel .prod{background:#111118;border:1px solid #1a1a22;border-radius:6px;padding:6px 8px;margin:3px 0;font-size:10px}
+#panel .pn{color:#fff;font-weight:600}
+#panel .pp{font-weight:700}
+#panel .pd{font-size:8px;color:#666;margin-top:2px}
+#panel .row{display:flex;justify-content:space-between;padding:3px 0;font-size:10px;border-bottom:1px solid #0a0a0f}
+#hud{position:fixed;left:16px;top:16px;z-index:5;color:#888;font-size:11px;pointer-events:none}
+#hud h1{font-size:20px;color:#fff;pointer-events:auto}
+#hud h1 span{color:#E8501A}
+#hud .inst{margin-top:8px;font-size:9px;line-height:1.6}
+#legend{position:fixed;left:16px;bottom:16px;z-index:5;display:flex;gap:12px}
+.leg{font-size:9px;display:flex;align-items:center;gap:4px}
+.leg .dot{width:8px;height:8px;border-radius:50%}
+#stats{position:fixed;right:16px;bottom:16px;z-index:5;font-size:9px;color:#555;text-align:right}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <h1>81+ <span>ECOSISTEMA</span></h1>
+  <div class="inst">
+    🖱️ Trascina per ruotare<br>
+    🔍 Scroll per zoom<br>
+    👆 Click su un nodo per i dettagli<br>
+    ⌨️ Frecce per navigare<br>
+    R per reset camera
+  </div>
+</div>
+<div id="legend">
+  <div class="leg"><div class="dot" style="background:#E8501A"></div>HUB1</div>
+  <div class="leg"><div class="dot" style="background:#3FBF6B"></div>HUB2 Web2</div>
+  <div class="leg"><div class="dot" style="background:#00D9FF"></div>HUB3 Web3</div>
+  <div class="leg"><div class="dot" style="background:#FFD24A"></div>Ranking</div>
+  <div class="leg"><div class="dot" style="background:#8A4AE8"></div>Elite</div>
+</div>
+<div id="stats"></div>
+<div id="panel"><span class="close" onclick="closePanel()">✕</span><div id="panelContent"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// ===== DATA =====
+const NODES=[
+// HUB1
+{id:'hub1',name:'81plus.net',hub:1,icon:'🚪',tipo:'PORTA ECOSISTEMA',x:0,y:3,z:0,size:1.8,
+ why:'Dare a tutti un punto di partenza sicuro',how:'Audit 30 normative, SIC-ID, 100 PV bonus, welcome email',what:'Identità, dashboard Genesi, chat Mirco AI, SSO',users:'Tutti i visitatori',status:'COSTRUITO',
+ products:[]},
+// HUB2
+{id:'it',name:'81plus.it',hub:2,icon:'🛡️',tipo:'MEMBER PRO 5 liv',x:-6,y:0,z:-3,size:1.4,
+ why:'Ogni azienda deve essere in regola',how:'Membership PV, pack, sigilli, servizi compliance',what:'DVR, HACCP, privacy, monitor, webinar',users:'Aziende 1-50+ dip',status:'COSTRUITO',
+ products:[{n:'Basic+',p:'49 PV/m'},{n:'Pro+',p:'99 PV/m'},{n:'Elite+',p:'149 PV/m'},{n:'Start Pack',p:'990 PV'},{n:'Business Pack',p:'1.900 PV'},{n:'Sigillo Bronze',p:'990 PV'},{n:'Sigillo Silver',p:'1.490 PV'},{n:'Sigillo Gold',p:'1.990 PV'},{n:'DVR',p:'300 PV'},{n:'Monitor Scadenze',p:'9 PV/m'},{n:'Report AI SAFE',p:'149 PV/a'},{n:'Supporto Premium',p:'29 PV/m'}]},
+{id:'net',name:'81plus.network',hub:2,icon:'🌐',tipo:'NETWORKER VIP 8 liv',x:-3,y:0,z:-6,size:1.4,
+ why:'Guadagnare vendendo compliance',how:'SDK+ 199 PV, SDP+ 49-999 PV/m, commissioni L.173',what:'Rete vendita, piano compensi 33%+override, EQUILIBRIO',users:'Venditori, consulenti',status:'COSTRUITO LEGALE OK',
+ products:[{n:'SDK+',p:'199 PV'},{n:'IGNITE',p:'49 PV/m'},{n:'RISE',p:'99 PV/m'},{n:'DRIVE',p:'149 PV/m'},{n:'SCALE',p:'249 PV/m'},{n:'PEAK',p:'399 PV/m'},{n:'SUMMIT',p:'599 PV/m'},{n:'LEGACY',p:'799 PV/m'},{n:'CROWN',p:'999 PV/m'},{n:'Team Builder',p:'490 PV'},{n:'Leader Pack',p:'990 PV'}],
+ ranking:'STARTER→BUILDER→PERFORMER(floor)→ACHIEVER→LEADER→DIRECTOR(3 carriere)→EXECUTIVE→AMBASSADOR'},
+{id:'aca',name:'81plus.academy',hub:2,icon:'🎓',tipo:'FORMAZIONE',x:-8,y:0,z:0,size:1.2,
+ why:'Formazione obbligatoria = motore stabile',how:'ANFOS white-label 20-50%, Lezione-online 15%, euro diretto',what:'63 corsi sicurezza, crescita personale, masterclass',users:'Aziende, networker, elite',status:'STRUTTURA OK',
+ products:[{n:'Corsi ANFOS',p:'45-600 EUR'},{n:'Lezione-online',p:'0-89+ EUR'},{n:'Illimitato',p:'490 PV/a'},{n:'Mentoring 1:1',p:'199 PV'},{n:'Masterclass',p:'390 PV'}]},
+{id:'club',name:'81plus.club',hub:2,icon:'👑',tipo:'CLUB ELITE 5 liv',x:-5,y:0,z:3,size:1.3,
+ why:'Top performer meritano esperienze esclusive',how:'Membership Elite da LIV 6, eventi, viaggi, concierge',what:'PALLADIUM, IRIDIUM, RHODIUM, OSMIUM, RHENIUM',users:'Imprenditori top, LIV 6+',status:'LANDING OK',
+ products:[{n:'PALLADIUM',p:'1.990 PV/m'},{n:'IRIDIUM',p:'4.990 PV/m'},{n:'RHODIUM',p:'9.990 PV/m'},{n:'OSMIUM',p:'Invito'},{n:'RHENIUM',p:'Invito'},{n:'Evento Club',p:'490 PV'},{n:'Mastermind',p:'490 PV/m'}],
+ ranking:'PALLADIUM→IRIDIUM→RHODIUM(floor)→OSMIUM→RHENIUM'},
+{id:'shop',name:'81plus.shop',hub:2,icon:'🛒',tipo:'SHOP FISICO',x:-8,y:0,z:4,size:1.1,
+ why:'Il brand deve essere visibile e indossabile',how:'POD Printful, BigBuy dropshipping, euro + PV sconto 20%',what:'Wear, gadget, DPI, kit speciali',users:'Tutti i membri',status:'API OK',
+ products:[{n:'T-shirt',p:'29-45 EUR'},{n:'Felpa',p:'59 EUR'},{n:'Gadget',p:'5-49 EUR'},{n:'DPI',p:'19-49 EUR'},{n:'Kit Onboarding',p:'69 EUR'},{n:'Kit Networker',p:'89 EUR'},{n:'Kit Elite',p:'149 EUR'}]},
+{id:'zone',name:'81plus.zone',hub:2,icon:'📍',tipo:'FRANCHISING 8 liv',x:-2,y:0,z:5,size:1.5,
+ why:'7.900 comuni hanno bisogno di un punto compliance',how:'POINT81+ 3 formati, sedi prov/reg, modello McDonald\'s, L.129',what:'SATELLITE 14.900€, STATION 29.900€, COMMAND 49.900€',users:'Professionisti LIV 6+',status:'COSTRUITO LEGALE OK',
+ products:[{n:'SATELLITE81+',p:'14.900 EUR'},{n:'STATION81+',p:'29.900 EUR'},{n:'COMMAND81+',p:'49.900 EUR'},{n:'Sede Prov',p:'100.000 EUR'},{n:'Sede Reg',p:'250.000 EUR'},{n:'SPARK Royal',p:'990 EUR/m'},{n:'FORGE Royal',p:'1.490 EUR/m'},{n:'BLADE Royal',p:'2.490 EUR/m'},{n:'SHIELD Royal',p:'3.990 EUR/m'},{n:'TOWER Royal',p:'5.990 EUR/m'},{n:'CITADEL Royal',p:'7.990 EUR/m'},{n:'FORTRESS Royal',p:'9.990 EUR/m'},{n:'DOMINION Royal',p:'14.990 EUR/m'}],
+ ranking:'PIONEER→GUARDIAN→SENTINEL(floor)→CAPTAIN→COMMANDER→ADMIRAL(prov)→COMMODORE(reg)→FLEET ADMIRAL(naz)',
+ extra:'Guadagno: POINT 60%, Prov 70%+8%, Reg 80%+5%+3%. PV bonus gamification (20%). Max 3 POINT/comune.'},
+// HUB3
+{id:'dig',name:'81plus.digital',hub:3,icon:'💎',tipo:'DAPP 8 liv DIGITAL',x:4,y:0,z:-5,size:1.3,
+ why:'Web3 è il futuro della certificazione',how:'Membership SAF, swap PV→SAF 1:1, blocco utilità',what:'DAPP, wallet MetaMask, ranking NO retrocessione',users:'Utenti Web3, holder',status:'LANDING OK',
+ products:[{n:'Digital Basic',p:'29 SAF/m'},{n:'Digital Pro',p:'99 SAF/m'},{n:'Digital Elite',p:'249 SAF/m'},{n:'SDK+ Web3',p:'149 SAF'},{n:'NFT Membership',p:'49 81X'},{n:'NFT Achievement',p:'19 81X'}],
+ ranking:'Explorer→Navigator→Architect(floor)→Builder→Master→Sage→Oracle→Sovereign · NO retrocessione'},
+{id:'dex',name:'81plus.exchange',hub:3,icon:'🔄',tipo:'DEX on-chain',x:7,y:0,z:-3,size:1.2,
+ why:'L ecosistema ha bisogno del suo exchange',how:'AMM, pool liquidità, fee 0.3% in 81X, non-custodial',what:'Swap SAF/81X/USDT/top20, vault, trading',users:'Trader, LP',status:'LANDING OK',
+ products:[{n:'Swap',p:'Fee 0.3%'},{n:'Trader Pro',p:'49 SAF/m'},{n:'Trader Elite',p:'149 SAF/m'},{n:'NFT Badge',p:'29 81X'}]},
+{id:'world',name:'81plus.world',hub:3,icon:'🌍',tipo:'METAVERSO',x:8,y:0,z:0,size:1.3,
+ why:'La compliance può essere vissuta, non solo letta',how:'Three.js, NFT Land, avatar Ready Player Me',what:'Safe City, Marina, land, oggetti, eventi',users:'Esploratori, builder, aziende',status:'2 MONDI 3D OK',
+ products:[{n:'NFT Land',p:'1PIX=1LAND'},{n:'NFT Oggetti',p:'9-99 81X'},{n:'Explorer',p:'19 SAF/m'},{n:'Builder',p:'49 SAF/m'},{n:'Architect',p:'149 SAF/m'},{n:'Evento Corp',p:'99 SAF'},{n:'Showroom',p:'490 SAF/a'},{n:'RWA',p:'da 100 81X'}]},
+{id:'dao',name:'81plus.org',hub:3,icon:'🏛️',tipo:'DAO',x:6,y:0,z:3,size:1.1,
+ why:'La community decide',how:'Governance SAF bloccato, voto on-chain',what:'Proposte, voto, delegati',users:'Holder SAF',status:'LANDING OK',
+ products:[{n:'Proposta',p:'9 SAF'},{n:'Premium',p:'49 SAF'},{n:'NFT Delegato',p:'99 81X'},{n:'NFT Fondatore',p:'499 81X'}]},
+{id:'store',name:'81plus.store',hub:3,icon:'🏪',tipo:'MARKETPLACE',x:3,y:0,z:5,size:1.2,
+ why:'NFT e RWA hanno bisogno di un marketplace',how:'Listing on-chain, 81X + USDT, fee 2.5-5%',what:'NFT, RWA, land, contenuti digitali',users:'Creator, collezionisti',status:'LANDING OK',
+ products:[{n:'Seller Basic',p:'Gratuito'},{n:'Seller Pro',p:'29 SAF/m'},{n:'Seller Elite',p:'99 SAF/m'}]},
+{id:'credit',name:'81plus.credit',hub:3,icon:'🏦',tipo:'BANKING DUBAI',x:7,y:0,z:5,size:1.2,
+ why:'Ponte euro↔crypto con servizi finanziari',how:'Licenze Dubai, on/off-ramp, swap',what:'Wallet, conversioni, credito crypto',users:'Tutti Web3, corporate',status:'LICENZE OK',
+ products:[{n:'Credit Pro',p:'49 SAF/m'},{n:'Institutional',p:'499 SAF/m'},{n:'On-ramp',p:'Fee 1.5%'},{n:'Off-ramp',p:'Fee 2%'}]},
+{id:'bond',name:'81plus.bond',hub:3,icon:'🔒',tipo:'ASSICURAZIONI DUBAI',x:5,y:-1,z:7,size:1.1,
+ why:'Smart contract e wallet servono protezione',how:'Polizze tokenizzate, licenze Dubai',what:'Polizze SC, wallet, eventi, bond',users:'Developer, holder, aziende',status:'LICENZE OK',
+ products:[{n:'Polizza SC',p:'49 81X/a'},{n:'Polizza Wallet',p:'29 81X/a'},{n:'Bond Pro',p:'29 SAF/m'}]},
+{id:'place',name:'81plus.place',hub:3,icon:'🏢',tipo:'SEDE VIRTUALE',x:2,y:-1,z:7,size:1.0,
+ why:'Riunioni brandizzate e professionali',how:'Jitsi self-hosted, NFT arredamenti',what:'Sale virtuali, videoconferenze, NFT tools',users:'Aziende, team, POINT',status:'LANDING OK',
+ products:[{n:'Sala Pro',p:'19 SAF/m'},{n:'Enterprise',p:'99 SAF/m'},{n:'NFT Arredi',p:'4-29 81X'},{n:'NFT Tools',p:'9-49 81X'}]},
+{id:'space',name:'81plus.space',hub:3,icon:'🌐',tipo:'PIX81+ PONTE',x:0,y:0,z:0,size:1.6,
+ why:'Pubblicità permanente e ponte Web2↔Web3',how:'Globo 3D 1000 pixel, checkout PayPal, whitelist 81X',what:'PIX, promo settimanale, 1PIX=1 NFT LAND',users:'Aziende, brand, early adopter',status:'FUNZIONANTE ✅',
+ products:[{n:'PIX81+',p:'1.000 PV'},{n:'PIX Promo',p:'800 PV'},{n:'Pack 3',p:'2.700 PV'},{n:'Pack 5',p:'4.200 PV'},{n:'Boost',p:'49 PV'},{n:'Whitelist 81X',p:'Inclusa'}],
+ extra:'PRODOTTO PIÙ COMPLETO. Globo funzionante, checkout, promo, profilo, card.'},
+{id:'cloud',name:'81plus.cloud',hub:3,icon:'☁️',tipo:'IPFS',x:-1,y:-1,z:6,size:1.0,
+ why:'Documenti immutabili e verificabili',how:'Hostinger + IPFS Pinata, CID su BSC',what:'Upload, certificazione, attestati NFT',users:'Aziende, consulenti',status:'LANDING OK',
+ products:[{n:'Cloud Base',p:'Incl Pro+'},{n:'Cloud Plus',p:'9 PV/m'},{n:'Aziendale',p:'49 PV/m'},{n:'Certif IPFS',p:'4 PV'},{n:'Attestato NFT',p:'19 PV'}]},
+{id:'cards',name:'81plus.cards',hub:3,icon:'💳',tipo:'CARD DIGITALI',x:-3,y:-1,z:5,size:1.0,
+ why:'Identità digitale professionale',how:'SVG da API, QR, badge ranking, export PNG',what:'Card base gratuita, premium, NFC fisica',users:'Tutti i membri',status:'API OK',
+ products:[{n:'Card Base',p:'Gratuita'},{n:'Premium',p:'49 PV'},{n:'NFC',p:'29 EUR'},{n:'Team 5x',p:'119 EUR'}]},
+{id:'xmas',name:'XMAS81',hub:3,icon:'🎄',tipo:'NATALE TUTTO L ANNO',x:-4,y:-1,z:3,size:1.0,
+ why:'Regalare crea legame e nuovi utenti',how:'PV regalo, Treedom, box fisici, NFT edizione',what:'Regali digitali e fisici per ogni occasione',users:'Tutti, anche non membri',status:'LANDING OK',
+ products:[{n:'Regala PV',p:'da 10 EUR'},{n:'Albero',p:'29 EUR'},{n:'Box XMAS81',p:'149 EUR'},{n:'Gift Card',p:'50-500 PV'},{n:'NFT XMAS',p:'da 49 81X'}]},
+];
+
+const EDGES=[
+['hub1','it'],['hub1','dig'],['hub1','space'],
+['it','net'],['it','aca'],['net','zone'],['net','club'],['it','shop'],
+['dig','dex'],['dex','world'],['dig','dao'],['dex','credit'],
+['store','world'],['store','credit'],['credit','bond'],
+['space','world'],['cloud','dig'],['cards','hub1'],['xmas','shop'],
+['zone','net'],['club','net'],['place','world'],
+];
+
+const COLORS={1:'#E8501A',2:'#3FBF6B',3:'#00D9FF'};
+
+// ===== THREE.JS SETUP =====
+const canvas=document.getElementById('c');
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});
+renderer.setSize(window.innerWidth,window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+
+const scene3=new THREE.Scene();
+scene3.background=new THREE.Color(0x050508);
+scene3.fog=new THREE.FogExp2(0x050508,0.02);
+
+const camera=new THREE.PerspectiveCamera(60,window.innerWidth/window.innerHeight,0.1,100);
+camera.position.set(0,8,16);camera.lookAt(0,0,0);
+
+// Lights
+const amb=new THREE.AmbientLight(0x222233,0.5);scene3.add(amb);
+const dir=new THREE.DirectionalLight(0xffffff,0.8);dir.position.set(5,10,5);scene3.add(dir);
+const pt=new THREE.PointLight(0xE8501A,1,30);pt.position.set(0,5,0);scene3.add(pt);
+
+// Grid
+const grid=new THREE.GridHelper(30,30,0x111122,0x0a0a15);scene3.add(grid);
+
+// ===== CREATE NODES =====
+const meshes={};const labels=[];const raycaster=new THREE.Raycaster();const mouse=new THREE.Vector2();
+
+NODES.forEach(n=>{
+  const col=new THREE.Color(COLORS[n.hub]);
+  // Sphere
+  const geo=new THREE.IcosahedronGeometry(n.size*0.4,1);
+  const mat=new THREE.MeshPhongMaterial({color:col,emissive:col,emissiveIntensity:0.3,transparent:true,opacity:0.85,wireframe:false});
+  const mesh=new THREE.Mesh(geo,mat);
+  mesh.position.set(n.x,n.y,n.z);
+  mesh.userData=n;
+  scene3.add(mesh);
+  meshes[n.id]=mesh;
+
+  // Glow ring
+  const ring=new THREE.RingGeometry(n.size*0.5,n.size*0.55,32);
+  const rmat=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.3,side:THREE.DoubleSide});
+  const rmesh=new THREE.Mesh(ring,rmat);
+  rmesh.position.copy(mesh.position);
+  rmesh.rotation.x=-Math.PI/2;
+  scene3.add(rmesh);
+
+  // Label sprite
+  const cv=document.createElement('canvas');cv.width=256;cv.height=64;
+  const ctx=cv.getContext('2d');
+  ctx.fillStyle='rgba(0,0,0,0)';ctx.fillRect(0,0,256,64);
+  ctx.font='bold 18px system-ui';ctx.fillStyle='#ffffff';ctx.textAlign='center';
+  ctx.fillText(n.name.replace('81plus.',''),128,24);
+  ctx.font='12px system-ui';ctx.fillStyle='#888888';
+  ctx.fillText(n.tipo.substring(0,25),128,44);
+  const tex=new THREE.CanvasTexture(cv);
+  const smat=new THREE.SpriteMaterial({map:tex,transparent:true});
+  const sprite=new THREE.Sprite(smat);
+  sprite.position.set(n.x,n.y+n.size*0.6+0.5,n.z);
+  sprite.scale.set(3,0.75,1);
+  scene3.add(sprite);
+  labels.push(sprite);
+});
+
+// ===== CREATE EDGES =====
+EDGES.forEach(([a,b])=>{
+  const ma=meshes[a],mb=meshes[b];if(!ma||!mb)return;
+  const points=[ma.position.clone(),mb.position.clone()];
+  const geo=new THREE.BufferGeometry().setFromPoints(points);
+  const hub=NODES.find(n=>n.id===a)?.hub||1;
+  const col=new THREE.Color(COLORS[hub]);
+  const mat=new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0.15});
+  const line=new THREE.Line(geo,mat);
+  scene3.add(line);
+});
+
+// ===== PARTICLES on edges =====
+const particles=[];
+EDGES.forEach(([a,b])=>{
+  const ma=meshes[a],mb=meshes[b];if(!ma||!mb)return;
+  const hub=NODES.find(n=>n.id===a)?.hub||1;
+  const geo=new THREE.SphereGeometry(0.04,4,4);
+  const mat=new THREE.MeshBasicMaterial({color:COLORS[hub]});
+  const p=new THREE.Mesh(geo,mat);
+  p.userData={from:ma.position,to:mb.position,t:Math.random(),speed:0.002+Math.random()*0.003};
+  scene3.add(p);
+  particles.push(p);
+});
+
+// ===== ORBIT CONTROLS (manual) =====
+let isDragging=false,prevX=0,prevY=0;
+let camTheta=0,camPhi=0.5,camDist=18,camTarget=new THREE.Vector3(0,1,0);
+
+canvas.addEventListener('mousedown',e=>{isDragging=true;prevX=e.clientX;prevY=e.clientY});
+canvas.addEventListener('mousemove',e=>{
+  if(!isDragging)return;
+  camTheta-=(e.clientX-prevX)*0.005;
+  camPhi=Math.max(0.1,Math.min(Math.PI/2-0.1,camPhi-(e.clientY-prevY)*0.005));
+  prevX=e.clientX;prevY=e.clientY;
+});
+canvas.addEventListener('mouseup',()=>isDragging=false);
+canvas.addEventListener('mouseleave',()=>isDragging=false);
+canvas.addEventListener('wheel',e=>{camDist=Math.max(5,Math.min(40,camDist+e.deltaY*0.02))});
+
+// Touch
+canvas.addEventListener('touchstart',e=>{if(e.touches.length===1){isDragging=true;prevX=e.touches[0].clientX;prevY=e.touches[0].clientY}},{passive:true});
+canvas.addEventListener('touchmove',e=>{
+  if(!isDragging||e.touches.length!==1)return;
+  camTheta-=(e.touches[0].clientX-prevX)*0.005;
+  camPhi=Math.max(0.1,Math.min(Math.PI/2-0.1,camPhi-(e.touches[0].clientY-prevY)*0.005));
+  prevX=e.touches[0].clientX;prevY=e.touches[0].clientY;
+},{passive:true});
+canvas.addEventListener('touchend',()=>isDragging=false);
+
+// Click to select
+canvas.addEventListener('click',e=>{
+  mouse.x=(e.clientX/window.innerWidth)*2-1;
+  mouse.y=-(e.clientY/window.innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const hits=raycaster.intersectObjects(Object.values(meshes));
+  if(hits.length>0){
+    const node=hits[0].object.userData;
+    if(node.id)showPanel(node);
+  }
+});
+
+// Keyboard
+document.addEventListener('keydown',e=>{
+  if(e.key==='r'||e.key==='R'){camTheta=0;camPhi=0.5;camDist=18;camTarget.set(0,1,0)}
+  if(e.key==='ArrowLeft')camTheta+=0.1;
+  if(e.key==='ArrowRight')camTheta-=0.1;
+  if(e.key==='ArrowUp')camPhi=Math.min(Math.PI/2-0.1,camPhi+0.05);
+  if(e.key==='ArrowDown')camPhi=Math.max(0.1,camPhi-0.05);
+});
+
+// ===== PANEL =====
+let selectedMesh=null;
+function showPanel(node){
+  if(selectedMesh)selectedMesh.material.emissiveIntensity=0.3;
+  selectedMesh=meshes[node.id];
+  if(selectedMesh)selectedMesh.material.emissiveIntensity=0.8;
+
+  const col=COLORS[node.hub];
+  let h=`<h2 style="color:${col}">${node.icon} ${node.name}</h2>`;
+  h+=`<div class="tag" style="background:${col}22;color:${col};border:1px solid ${col}">${node.tipo}</div>`;
+  h+=`<div class="tag" style="background:#222;color:#888;border:1px solid #333">${node.status}</div>`;
+  h+=`<h3 style="color:${col}">PERCHÉ</h3><p style="font-size:10px">${node.why}</p>`;
+  h+=`<h3 style="color:${col}">COME</h3><p style="font-size:10px">${node.how}</p>`;
+  h+=`<h3 style="color:${col}">COSA</h3><p style="font-size:10px">${node.what}</p>`;
+  h+=`<h3 style="color:${col}">UTENTI</h3><p style="font-size:10px">${node.users}</p>`;
+  if(node.products.length){
+    h+=`<h3 style="color:${col}">PRODOTTI (${node.products.length})</h3>`;
+    node.products.forEach(p=>{
+      h+=`<div class="prod"><span class="pn">${p.n}</span> <span class="pp" style="color:${col}">${p.p}</span></div>`;
+    });
+  }
+  if(node.ranking)h+=`<h3 style="color:#FFD24A">RANKING</h3><p style="font-size:9px;color:#FFD24A">${node.ranking}</p>`;
+  if(node.extra)h+=`<h3 style="color:#3FBF6B">NOTE</h3><p style="font-size:9px">${node.extra}</p>`;
+
+  document.getElementById('panelContent').innerHTML=h;
+  document.getElementById('panel').classList.add('open');
+
+  // Fly camera toward node
+  camTarget.set(node.x,node.y,node.z);
+  camDist=8;
+}
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+  if(selectedMesh)selectedMesh.material.emissiveIntensity=0.3;
+  camTarget.set(0,1,0);camDist=18;
+}
+
+// ===== ANIMATE =====
+let time=0;
+function animate(){
+  requestAnimationFrame(animate);
+  time+=0.01;
+
+  // Update camera
+  if(!isDragging)camTheta+=0.001;
+  camera.position.x=camTarget.x+camDist*Math.sin(camTheta)*Math.cos(camPhi);
+  camera.position.y=camTarget.y+camDist*Math.sin(camPhi);
+  camera.position.z=camTarget.z+camDist*Math.cos(camTheta)*Math.cos(camPhi);
+  camera.lookAt(camTarget);
+
+  // Animate nodes (gentle float)
+  Object.values(meshes).forEach((m,i)=>{
+    m.position.y=m.userData.y+Math.sin(time*0.5+i)*0.15;
+    m.rotation.y+=0.005;
+  });
+
+  // Animate particles
+  particles.forEach(p=>{
+    p.userData.t+=p.userData.speed;
+    if(p.userData.t>1)p.userData.t=0;
+    const t=p.userData.t;
+    p.position.lerpVectors(p.userData.from,p.userData.to,t);
+    p.position.y+=Math.sin(t*Math.PI)*0.3;
+  });
+
+  // Point light orbit
+  pt.position.x=Math.sin(time*0.3)*5;
+  pt.position.z=Math.cos(time*0.3)*5;
+
+  renderer.render(scene3,camera);
+
+  // Stats
+  const birth=new Date(1976,2,29);const death=new Date(2076,2,29);const now=new Date();
+  const remain=Math.floor((death-now)/86400000);
+  const pct=((now-birth)/(death-birth)*100).toFixed(2);
+  document.getElementById('stats').innerHTML=`${remain.toLocaleString('it-IT')} giorni rimanenti · ${pct}% vita · 140 prodotti · 20 sub-progetti`;
+}
+
+window.addEventListener('resize',()=>{
+  camera.aspect=window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+animate();
+</script>
+</body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ Christmas · ecosistema 81+</title><meta name="description" content="Il villaggio di Natale dell ecosistema. Countdown vero alla mezzanotte del 25, promo di stagione coi bonus PV reali del motore settimanale, e la neve ">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../kit81/kit81.css"></head><body class="k-wrap">
+<script>window.K81={nome:"81+ Christmas",hub:"HUB1"};</script>
+<main class="k-hero"><h1>Il Natale è <span style="color:#1db954">più sicuro.</span></h1><p>Il villaggio di Natale dell ecosistema. Countdown vero alla mezzanotte del 25, promo di stagione coi bonus PV reali del motore settimanale, e la neve che cade davvero. Regala una membership, regala notti tranquille.</p><a class="k-cta" href="https://81plus.net/#promo">Le promo della settimana</a></main>
+<section class="k-grid"><a class="k-card" style="text-decoration:none;color:inherit;display:block" href="#"><h3>Countdown al Natale</h3><div class="dom">tempo reale</div><p><b id='cdown' style='font-family:JetBrains Mono,monospace;font-size:16px;color:#1db954'>...</b><br>Alla mezzanotte del 25 dicembre, ora vera, niente trucchi.</p><span class="stato live">Operativo</span></a><a class="k-card" style="text-decoration:none;color:inherit;display:block" href="#"><h3>Regala una membership</h3><div class="dom">idea regalo</div><p>La tranquillità è il regalo che dura tutto l anno, con 500 PV in dote.</p><span class="stato presto">In arrivo</span></a><a class="k-card" style="text-decoration:none;color:inherit;display:block" href="#"><h3>Calendario dell avvento 81+</h3><div class="dom">dicembre</div><p>Una micro missione al giorno, PV in regalo a chi la completa.</p><span class="stato presto">In arrivo</span></a></section>
+<script src="../kit81/kit81.js"></script><script>
+(function(){var c=document.createElement("canvas");c.style.cssText="position:fixed;inset:0;z-index:2;pointer-events:none";document.body.appendChild(c);
+var x=c.getContext("2d"),F=[];function d(){c.width=innerWidth;c.height=innerHeight}d();addEventListener("resize",d);
+for(var i=0;i<140;i++)F.push({x:Math.random(),y:Math.random(),r:Math.random()*2.4+.8,v:Math.random()*.0016+.0006,o:Math.random()*.5+.3,w:Math.random()*2});
+(function a(){x.clearRect(0,0,c.width,c.height);F.forEach(function(f){f.y+=f.v;f.w+=.01;if(f.y>1)f.y=-0.02;x.globalAlpha=f.o;x.fillStyle="#fff";x.beginPath();x.arc(f.x*c.width+Math.sin(f.w)*14,f.y*c.height,f.r,0,7);x.fill()});requestAnimationFrame(a)})();
+function cd(){var n=new Date(),anno=(n.getMonth()===11&&n.getDate()>25)?n.getFullYear()+1:n.getFullYear();
+var nat=new Date(anno,11,25,0,0,0),ms=nat-n,g=Math.floor(ms/864e5),h=Math.floor(ms/36e5)%24,m=Math.floor(ms/6e4)%60,s=Math.floor(ms/1e3)%60;
+var el=document.getElementById("cdown");if(el)el.textContent=g+" giorni "+("0"+h).slice(-2)+":"+("0"+m).slice(-2)+":"+("0"+s).slice(-2);setTimeout(cd,1000)}cd();
+})();</script></body></html>

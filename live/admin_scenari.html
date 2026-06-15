@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow">
+<title>Scenari · direzione 81+</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}body{background:#070709;color:#ececf2;font-family:Sora,Arial;min-height:100vh;padding-bottom:40px}
+header{padding:16px;border-bottom:1px solid #17171f;display:flex;gap:10px;align-items:center}
+h1{font-family:Anton,Arial;font-size:20px;color:#E8501A;text-transform:uppercase}
+main{max-width:720px;margin:0 auto;padding:16px}
+.card{background:#0d0d12;border:1px solid #1d1d26;border-radius:14px;padding:16px;margin-bottom:12px}
+label{display:block;font-size:11.5px;color:#aeb3c4;margin:8px 0 4px}
+input{width:100%;background:#101016;border:1px solid #2a2a35;color:#ececf2;padding:10px;border-radius:8px;font-size:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.out{font-family:'JetBrains Mono',monospace;font-size:13px;line-height:2;color:#ffb38a}
+.out b{color:#E8501A;font-size:17px}
+.micro{font-size:10.5px;color:#7c8195;line-height:1.7;margin-top:10px}
+.btn{background:#E8501A;color:#fff;border:0;padding:11px 16px;border-radius:9px;font-weight:700;cursor:pointer;font-family:Sora}
+</style>
+</head>
+<body>
+<header><h1>Scenari verso i 100 mila</h1><a href="plancia_dio.html" style="margin-left:auto;color:#9aa0b4;font-size:12px;text-decoration:none">Plancia</a></header>
+<main>
+  <div class="card">
+    <div class="g3">
+      <div><label>Lead lavorati al mese</label><input id="lead" type="number" value="600"></div>
+      <div><label>Conversione a membership %</label><input id="conv" type="number" step="0.1" value="2"></div>
+      <div><label>Ticket medio mensile €</label><input id="ticket" type="number" value="89"></div>
+    </div>
+    <div class="g3">
+      <div><label>Sigilli al mese</label><input id="sig" type="number" value="3"></div>
+      <div><label>Valore medio sigillo €</label><input id="sigv" type="number" value="1490"></div>
+      <div><label>Ricariche PV al mese €</label><input id="ric" type="number" value="800"></div>
+    </div>
+    <div class="g3">
+      <div><label>Abbandono mensile %</label><input id="churn" type="number" step="0.1" value="4"></div>
+      <div><label>Mesi rimasti nel 2026</label><input id="mesi" type="number" value="6"></div>
+      <div><label>&nbsp;</label><button class="btn" onclick="calc()" style="width:100%">Calcola scenario</button></div>
+    </div>
+  </div>
+  <div class="card"><div class="out" id="out">Imposta i numeri e calcola.</div>
+    <div class="micro">Strumento interno di pianificazione della direzione. Sono ipotesi su numeri che inserisci tu, non previsioni garantite e non vanno mai mostrate come promesse di guadagno a lead o partner. I compensi della rete restano regolati dalla L.173 2005.</div>
+  </div>
+</main>
+<script>
+function calc(){
+  var L=+document.getElementById('lead').value,C=+document.getElementById('conv').value/100,T=+document.getElementById('ticket').value;
+  var S=+document.getElementById('sig').value,SV=+document.getElementById('sigv').value,R=+document.getElementById('ric').value;
+  var CH=+document.getElementById('churn').value/100,M=+document.getElementById('mesi').value;
+  var attivi=0,tot=0,righe=[];
+  for(var m=1;m<=M;m++){
+    attivi=attivi*(1-CH)+L*C;
+    var mese=attivi*T+S*SV+R;
+    tot+=mese;
+    righe.push('Mese '+m+', abbonati attivi '+attivi.toFixed(0)+', incasso '+mese.toLocaleString('it-IT',{maximumFractionDigits:0})+' €');
+  }
+  document.getElementById('out').innerHTML=righe.join('<br>')+'<br><br>Totale periodo <b>'+tot.toLocaleString('it-IT',{maximumFractionDigits:0})+' €</b> · obiettivo 100.000 € '+(tot>=100000?'raggiunto in questo scenario':'distante '+(100000-tot).toLocaleString('it-IT',{maximumFractionDigits:0})+' €, alza conversione o lead');
+}
+calc();
+</script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

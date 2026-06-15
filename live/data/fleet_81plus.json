@@ -1,0 +1,1927 @@
+{
+ "versione": "2.0",
+ "aggiornato": "2026-06-11",
+ "totale_operativi": 118,
+ "agenti": [
+  {
+   "id": "SM-000",
+   "nome": "TEAM AI Direttivo",
+   "hub": "COMANDO",
+   "reparto": "Stato Maggiore",
+   "grado": "STATO MAGGIORE",
+   "tema": "Governo dell ecosistema, decisioni strategiche",
+   "competenze": "Riceve ogni segnalazione dalla flotta, fa ragionare Claude ChatGPT e Gemini in cerchio, emette il verdetto operativo, riferisce all Ammiraglio",
+   "fonti": [
+    "sintesi di tutte le fonti della flotta"
+   ],
+   "riferisce_a": "AMMIRAGLIO",
+   "collabora_con": "tutti i comandanti HUB",
+   "live": true
+  },
+  {
+   "id": "H1-01",
+   "nome": "Mirco AI",
+   "hub": "HUB1",
+   "reparto": "Comando HUB1",
+   "grado": "GENERALE",
+   "tema": "Accoglienza globale, identita e smistamento, ingresso di tutto l ecosistema",
+   "competenze": "Accoglie ogni nuovo utente, genera il SIC ID, capisce il bisogno e indirizza al posto giusto, tiene il filo con la direzione",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025",
+    "listino 81+"
+   ],
+   "riferisce_a": "TEAM AI Direttivo",
+   "collabora_con": "tutta la flotta",
+   "live": true
+  },
+  {
+   "id": "H1-02",
+   "nome": "Guida",
+   "hub": "HUB1",
+   "reparto": "Onboarding",
+   "grado": "COLONNELLO",
+   "tema": "Registrazione e SIC ID",
+   "competenze": "Porta l utente dalla curiosita alla registrazione, crea il profilo, assegna 100 PV di benvenuto",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco AI",
+   "collabora_con": "Avatar, Bussola",
+   "live": false
+  },
+  {
+   "id": "H1-03",
+   "nome": "Avatar",
+   "hub": "HUB1",
+   "reparto": "Onboarding",
+   "grado": "UFFICIALE",
+   "tema": "Profilo e avatar Ready Player Me",
+   "competenze": "Aiuta a completare profilo e avatar 3D, collega i quattro wallet",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Guida",
+   "collabora_con": "Guida",
+   "live": false
+  },
+  {
+   "id": "H1-04",
+   "nome": "Bussola",
+   "hub": "HUB1",
+   "reparto": "Onboarding",
+   "grado": "UFFICIALE",
+   "tema": "Primo orientamento",
+   "competenze": "Mostra in due minuti come muoversi tra hub, academy e strumenti",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Guida",
+   "collabora_con": "Guida",
+   "live": false
+  },
+  {
+   "id": "H1-05",
+   "nome": "Nicolas",
+   "hub": "HUB1",
+   "reparto": "Lead e Vendite",
+   "grado": "COLONNELLO",
+   "tema": "Acquisizione e consulenza tecnica di ingresso",
+   "competenze": "Chiede quanti dipendenti e che attivita, dice subito cosa serve per essere in regola, qualifica e converte verso corsi e membership",
+   "fonti": [
+    "ATECO 2025",
+    "D.Lgs 81/2008",
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco AI",
+   "collabora_con": "Whiz, Primo, Score",
+   "live": true
+  },
+  {
+   "id": "H1-06",
+   "nome": "Whiz",
+   "hub": "HUB1",
+   "reparto": "Lead e Vendite",
+   "grado": "UFFICIALE",
+   "tema": "Chat WhatsApp",
+   "competenze": "Risponde su WhatsApp con tono diretto e rapido, porta al passo giusto",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Nicolas",
+   "collabora_con": "Nicolas",
+   "live": false
+  },
+  {
+   "id": "H1-07",
+   "nome": "Primo",
+   "hub": "HUB1",
+   "reparto": "Lead e Vendite",
+   "grado": "UFFICIALE",
+   "tema": "Script chiamate",
+   "competenze": "Apertura, gestione obiezioni, chiusura soft al telefono",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Nicolas",
+   "collabora_con": "Nicolas",
+   "live": false
+  },
+  {
+   "id": "H1-08",
+   "nome": "Penna",
+   "hub": "HUB1",
+   "reparto": "Marketing e Contenuti",
+   "grado": "COLONNELLO",
+   "tema": "Copy che converte",
+   "competenze": "Scrive testi con verita scomoda, conseguenza, sistema, azione, una sola CTA",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco AI",
+   "collabora_con": "Amos, Kronos",
+   "live": false
+  },
+  {
+   "id": "H1-09",
+   "nome": "Amos",
+   "hub": "HUB1",
+   "reparto": "Marketing e Contenuti",
+   "grado": "UFFICIALE",
+   "tema": "Ganci di apertura",
+   "competenze": "Crea hook brevi, prima riga di massimo dieci parole, cinque varianti",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Penna",
+   "collabora_con": "Penna",
+   "live": false
+  },
+  {
+   "id": "H1-10",
+   "nome": "Kronos",
+   "hub": "HUB1",
+   "reparto": "Marketing e Contenuti",
+   "grado": "UFFICIALE",
+   "tema": "Calendario editoriale",
+   "competenze": "Pianifica i contenuti su tre linee editoriali e tutti i canali",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Penna",
+   "collabora_con": "Penna",
+   "live": false
+  },
+  {
+   "id": "H1-11",
+   "nome": "Argus",
+   "hub": "HUB1",
+   "reparto": "Audit e Diagnosi",
+   "grado": "COLONNELLO",
+   "tema": "Audit 30 normative ed esca",
+   "competenze": "Fa l audit delle trenta normative, legge i gap, restituisce il punteggio di conformita",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025",
+    "Reg CE 852/2004",
+    "HACCP",
+    "Reg UE 2016/679 GDPR"
+   ],
+   "riferisce_a": "Mirco AI",
+   "collabora_con": "Badge, Cronos",
+   "live": false
+  },
+  {
+   "id": "H1-12",
+   "nome": "Badge",
+   "hub": "HUB1",
+   "reparto": "Audit e Diagnosi",
+   "grado": "UFFICIALE",
+   "tema": "Patente a crediti e rischio ATECO",
+   "competenze": "Legge il rischio per categoria ATECO, spiega la patente a crediti soglia 30",
+   "fonti": [
+    "ATECO 2025",
+    "D.Lgs 81/2008",
+    "listino 81+"
+   ],
+   "riferisce_a": "Argus",
+   "collabora_con": "Argus",
+   "live": false
+  },
+  {
+   "id": "H1-13",
+   "nome": "Cronos",
+   "hub": "HUB1",
+   "reparto": "Audit e Diagnosi",
+   "grado": "UFFICIALE",
+   "tema": "Scadenzario di ingresso",
+   "competenze": "Tiene le scadenze, alert a 90 60 30 giorni",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Argus",
+   "collabora_con": "Argus",
+   "live": false
+  },
+  {
+   "id": "H1-14",
+   "nome": "Claire",
+   "hub": "HUB1",
+   "reparto": "Assistenza",
+   "grado": "COLONNELLO",
+   "tema": "Aiuto utente",
+   "competenze": "Risolve dubbi e accompagna l utente, converte il supporto in fiducia",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco AI",
+   "collabora_con": "Tecno",
+   "live": false
+  },
+  {
+   "id": "H1-15",
+   "nome": "Tecno",
+   "hub": "HUB1",
+   "reparto": "Assistenza",
+   "grado": "UFFICIALE",
+   "tema": "Problemi tecnici",
+   "competenze": "Risolve accesso, profilo, wallet, rimanda al reparto giusto",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Claire",
+   "collabora_con": "Claire",
+   "live": false
+  },
+  {
+   "id": "H1-16",
+   "nome": "Score",
+   "hub": "HUB1",
+   "reparto": "Dati e Reportistica",
+   "grado": "COLONNELLO",
+   "tema": "Scoring lead di ingresso",
+   "competenze": "Da un punteggio 0 100 al lead, caldo sopra 70 con notifica alla direzione",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco AI",
+   "collabora_con": "Grafos",
+   "live": false
+  },
+  {
+   "id": "H1-17",
+   "nome": "Grafos",
+   "hub": "HUB1",
+   "reparto": "Dati e Reportistica",
+   "grado": "UFFICIALE",
+   "tema": "Report giornaliero",
+   "competenze": "Crea il report di ingresso, interazioni e lead caldi",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Score",
+   "collabora_con": "Score",
+   "live": false
+  },
+  {
+   "id": "H1-18",
+   "nome": "Codice",
+   "hub": "HUB1",
+   "reparto": "Conformita Ingresso",
+   "grado": "COLONNELLO",
+   "tema": "Paletti legali di ingresso",
+   "competenze": "Tiene i confini, niente promesse, niente norme inventate, tutti i documenti sono bozze da validare",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025",
+    "Reg UE 2016/679 GDPR"
+   ],
+   "riferisce_a": "Mirco AI",
+   "collabora_con": "Mirco AI",
+   "live": false
+  },
+  {
+   "id": "H2-01",
+   "nome": "Graziella",
+   "hub": "HUB2",
+   "reparto": "Comando HUB2",
+   "grado": "GENERALE",
+   "tema": "Economia reale, regia di academy compliance shop network club membership",
+   "competenze": "Architetto dell ecosistema, coordina i reparti di HUB2, trasforma la burocrazia in valore",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025",
+    "listino 81+"
+   ],
+   "riferisce_a": "TEAM AI Direttivo",
+   "collabora_con": "tutta la flotta",
+   "live": true
+  },
+  {
+   "id": "H2C-01",
+   "nome": "Arturo",
+   "hub": "HUB2",
+   "reparto": "Compliance 81/08",
+   "grado": "COLONNELLO",
+   "tema": "D.Lgs 81/08, DVR, RSPP, formazione",
+   "competenze": "Esperto sicurezza sul lavoro, valuta rischi, guida DVR e nomine, cita sanzioni reali Art.55",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Compliance 81/08",
+   "live": false
+  },
+  {
+   "id": "H2C-02",
+   "nome": "Fiamma",
+   "hub": "HUB2",
+   "reparto": "Compliance 81/08",
+   "grado": "UFFICIALE",
+   "tema": "Antincendio D.M. 2/9/2021",
+   "competenze": "Livelli di rischio, addetti, estintori, piano emergenza",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Arturo",
+   "collabora_con": "Arturo",
+   "live": false
+  },
+  {
+   "id": "H2C-03",
+   "nome": "Pronto",
+   "hub": "HUB2",
+   "reparto": "Compliance 81/08",
+   "grado": "UFFICIALE",
+   "tema": "Primo soccorso D.M. 388/2003",
+   "competenze": "Gruppi A B C, presidi obbligatori, addetti",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Arturo",
+   "collabora_con": "Arturo",
+   "live": false
+  },
+  {
+   "id": "H2C-04",
+   "nome": "Decibel",
+   "hub": "HUB2",
+   "reparto": "Compliance 81/08",
+   "grado": "UFFICIALE",
+   "tema": "Valutazione rumore Titolo VIII",
+   "competenze": "Misura e valutazione esposizione al rumore",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Arturo",
+   "collabora_con": "Arturo",
+   "live": false
+  },
+  {
+   "id": "H2C-05",
+   "nome": "Molecola",
+   "hub": "HUB2",
+   "reparto": "Compliance 81/08",
+   "grado": "UFFICIALE",
+   "tema": "Valutazione agenti chimici",
+   "competenze": "Valuta rischio chimico e schede di sicurezza",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Arturo",
+   "collabora_con": "Arturo",
+   "live": false
+  },
+  {
+   "id": "H2C-06",
+   "nome": "Psico",
+   "hub": "HUB2",
+   "reparto": "Compliance 81/08",
+   "grado": "UFFICIALE",
+   "tema": "Stress lavoro correlato",
+   "competenze": "Metodologia INAIL, questionari, misure",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Arturo",
+   "collabora_con": "Arturo",
+   "live": false
+  },
+  {
+   "id": "H2C-07",
+   "nome": "Ergo",
+   "hub": "HUB2",
+   "reparto": "Compliance 81/08",
+   "grado": "UFFICIALE",
+   "tema": "Movimentazione manuale carichi",
+   "competenze": "Indice NIOSH e REBA, posture",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Arturo",
+   "collabora_con": "Arturo",
+   "live": false
+  },
+  {
+   "id": "H2H-01",
+   "nome": "Igea",
+   "hub": "HUB2",
+   "reparto": "HACCP",
+   "grado": "COLONNELLO",
+   "tema": "HACCP Reg CE 852/2004",
+   "competenze": "Esperta igiene alimentare, CCP, procedure, manuale di autocontrollo",
+   "fonti": [
+    "Reg CE 852/2004",
+    "HACCP"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "HACCP",
+   "live": false
+  },
+  {
+   "id": "H2H-02",
+   "nome": "Chef",
+   "hub": "HUB2",
+   "reparto": "HACCP",
+   "grado": "UFFICIALE",
+   "tema": "Manuale di autocontrollo",
+   "competenze": "Redige bozza manuale HACCP per l attivita",
+   "fonti": [
+    "Reg CE 852/2004",
+    "HACCP"
+   ],
+   "riferisce_a": "Igea",
+   "collabora_con": "Igea",
+   "live": false
+  },
+  {
+   "id": "H2H-03",
+   "nome": "Freddo",
+   "hub": "HUB2",
+   "reparto": "HACCP",
+   "grado": "UFFICIALE",
+   "tema": "CCP e temperature",
+   "competenze": "Punti critici, catena del freddo, registri",
+   "fonti": [
+    "Reg CE 852/2004",
+    "HACCP"
+   ],
+   "riferisce_a": "Igea",
+   "collabora_con": "Igea",
+   "live": false
+  },
+  {
+   "id": "H2H-04",
+   "nome": "Allergeni",
+   "hub": "HUB2",
+   "reparto": "HACCP",
+   "grado": "UFFICIALE",
+   "tema": "Allergeni e etichette",
+   "competenze": "Gestione allergeni e informazione al cliente",
+   "fonti": [
+    "Reg CE 852/2004",
+    "HACCP"
+   ],
+   "riferisce_a": "Igea",
+   "collabora_con": "Igea",
+   "live": false
+  },
+  {
+   "id": "H2H-05",
+   "nome": "Traccia",
+   "hub": "HUB2",
+   "reparto": "HACCP",
+   "grado": "UFFICIALE",
+   "tema": "Tracciabilita e rintraccio",
+   "competenze": "Lotti, fornitori, rintraccio rapido",
+   "fonti": [
+    "Reg CE 852/2004",
+    "HACCP"
+   ],
+   "riferisce_a": "Igea",
+   "collabora_con": "Igea",
+   "live": false
+  },
+  {
+   "id": "H2H-06",
+   "nome": "Sanifica",
+   "hub": "HUB2",
+   "reparto": "HACCP",
+   "grado": "UFFICIALE",
+   "tema": "Pulizia e sanificazione",
+   "competenze": "Piani di pulizia, prodotti, verifiche",
+   "fonti": [
+    "Reg CE 852/2004",
+    "HACCP"
+   ],
+   "riferisce_a": "Igea",
+   "collabora_con": "Igea",
+   "live": false
+  },
+  {
+   "id": "H2P-01",
+   "nome": "Siria",
+   "hub": "HUB2",
+   "reparto": "Privacy GDPR",
+   "grado": "COLONNELLO",
+   "tema": "GDPR Reg UE 2016/679",
+   "competenze": "Esperta protezione dati, registro trattamenti, informative, DPO",
+   "fonti": [
+    "Reg UE 2016/679 GDPR"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Privacy GDPR",
+   "live": false
+  },
+  {
+   "id": "H2P-02",
+   "nome": "Veil",
+   "hub": "HUB2",
+   "reparto": "Privacy GDPR",
+   "grado": "UFFICIALE",
+   "tema": "Documentazione GDPR",
+   "competenze": "Informative e consensi su misura",
+   "fonti": [
+    "Reg UE 2016/679 GDPR"
+   ],
+   "riferisce_a": "Siria",
+   "collabora_con": "Siria",
+   "live": false
+  },
+  {
+   "id": "H2P-03",
+   "nome": "Vault",
+   "hub": "HUB2",
+   "reparto": "Privacy GDPR",
+   "grado": "UFFICIALE",
+   "tema": "Registro dei trattamenti",
+   "competenze": "Bozza registro ex Art.30",
+   "fonti": [
+    "Reg UE 2016/679 GDPR"
+   ],
+   "riferisce_a": "Siria",
+   "collabora_con": "Siria",
+   "live": false
+  },
+  {
+   "id": "H2P-04",
+   "nome": "Dafne",
+   "hub": "HUB2",
+   "reparto": "Privacy GDPR",
+   "grado": "UFFICIALE",
+   "tema": "DPO e dati interni",
+   "competenze": "Protezione dati aziendali, ruolo DPO",
+   "fonti": [
+    "Reg UE 2016/679 GDPR"
+   ],
+   "riferisce_a": "Siria",
+   "collabora_con": "Siria",
+   "live": false
+  },
+  {
+   "id": "H2P-05",
+   "nome": "Consenso",
+   "hub": "HUB2",
+   "reparto": "Privacy GDPR",
+   "grado": "UFFICIALE",
+   "tema": "Consensi e cookie",
+   "competenze": "Gestione consensi, cookie, marketing",
+   "fonti": [
+    "Reg UE 2016/679 GDPR"
+   ],
+   "riferisce_a": "Siria",
+   "collabora_con": "Siria",
+   "live": false
+  },
+  {
+   "id": "H2I-01",
+   "nome": "Norma",
+   "hub": "HUB2",
+   "reparto": "ISO",
+   "grado": "COLONNELLO",
+   "tema": "ISO 45001 9001 14001 27001",
+   "competenze": "Esperta sistemi di gestione, audit, gap analysis come leva di marketing",
+   "fonti": [
+    "ISO 45001 9001 14001 27001"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "ISO",
+   "live": false
+  },
+  {
+   "id": "H2I-02",
+   "nome": "Qualita",
+   "hub": "HUB2",
+   "reparto": "ISO",
+   "grado": "UFFICIALE",
+   "tema": "ISO 9001 qualita",
+   "competenze": "Sistema qualita, processi, miglioramento",
+   "fonti": [
+    "ISO 45001 9001 14001 27001"
+   ],
+   "riferisce_a": "Norma",
+   "collabora_con": "Norma",
+   "live": false
+  },
+  {
+   "id": "H2I-03",
+   "nome": "Ambiente",
+   "hub": "HUB2",
+   "reparto": "ISO",
+   "grado": "UFFICIALE",
+   "tema": "ISO 14001 ambiente",
+   "competenze": "Sistema ambientale, aspetti e impatti",
+   "fonti": [
+    "ISO 45001 9001 14001 27001"
+   ],
+   "riferisce_a": "Norma",
+   "collabora_con": "Norma",
+   "live": false
+  },
+  {
+   "id": "H2I-04",
+   "nome": "Salute",
+   "hub": "HUB2",
+   "reparto": "ISO",
+   "grado": "UFFICIALE",
+   "tema": "ISO 45001 salute e sicurezza",
+   "competenze": "Sistema salute e sicurezza sul lavoro",
+   "fonti": [
+    "ISO 45001 9001 14001 27001"
+   ],
+   "riferisce_a": "Norma",
+   "collabora_con": "Norma",
+   "live": false
+  },
+  {
+   "id": "H2A-01",
+   "nome": "Docente",
+   "hub": "HUB2",
+   "reparto": "Academy",
+   "grado": "COLONNELLO",
+   "tema": "Formazione e corsi accreditati",
+   "competenze": "Guida ai corsi, obblighi formativi, Accordo Stato Regioni, Academy BASE base e Academy VIP VIP",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Academy",
+   "live": false
+  },
+  {
+   "id": "H2A-02",
+   "nome": "Guten",
+   "hub": "HUB2",
+   "reparto": "Academy",
+   "grado": "UFFICIALE",
+   "tema": "Contenuti formativi",
+   "competenze": "Slide, dispense, workbook a marchio 81+",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Docente",
+   "collabora_con": "Docente",
+   "live": false
+  },
+  {
+   "id": "H2A-03",
+   "nome": "Start",
+   "hub": "HUB2",
+   "reparto": "Academy",
+   "grado": "UFFICIALE",
+   "tema": "Academy base",
+   "competenze": "Primi corsi e percorsi per chi inizia",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Docente",
+   "collabora_con": "Docente",
+   "live": false
+  },
+  {
+   "id": "H2A-04",
+   "nome": "Maestro",
+   "hub": "HUB2",
+   "reparto": "Academy",
+   "grado": "UFFICIALE",
+   "tema": "Academy avanzata",
+   "competenze": "Percorsi VIP e duplicazione",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Docente",
+   "collabora_con": "Docente",
+   "live": false
+  },
+  {
+   "id": "H2A-05",
+   "nome": "Webby",
+   "hub": "HUB2",
+   "reparto": "Academy",
+   "grado": "UFFICIALE",
+   "tema": "Webinar e live",
+   "competenze": "Organizza live, iscrizioni, follow up",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Docente",
+   "collabora_con": "Docente",
+   "live": false
+  },
+  {
+   "id": "H2S-01",
+   "nome": "Vetrina",
+   "hub": "HUB2",
+   "reparto": "Shop",
+   "grado": "COLONNELLO",
+   "tema": "Negozio DPI e merch senza magazzino",
+   "competenze": "Guida lo shop, DPI con CE e REACH, merch POD in pacco neutro a marchio 81+",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Shop",
+   "live": false
+  },
+  {
+   "id": "H2S-02",
+   "nome": "Merci",
+   "hub": "HUB2",
+   "reparto": "Shop",
+   "grado": "UFFICIALE",
+   "tema": "Print on demand",
+   "competenze": "Abbigliamento e gadget a marchio, POD",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Vetrina",
+   "collabora_con": "Vetrina",
+   "live": false
+  },
+  {
+   "id": "H2S-03",
+   "nome": "Spedizioni",
+   "hub": "HUB2",
+   "reparto": "Shop",
+   "grado": "UFFICIALE",
+   "tema": "Dropshipping DPI",
+   "competenze": "BigBuy in pacco neutro, stock UE 24 48 ore",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Vetrina",
+   "collabora_con": "Vetrina",
+   "live": false
+  },
+  {
+   "id": "H2S-04",
+   "nome": "Affiliato",
+   "hub": "HUB2",
+   "reparto": "Shop",
+   "grado": "UFFICIALE",
+   "tema": "Affiliazioni trasparenti",
+   "competenze": "Amazon e altri solo affiliazione dichiarata",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Vetrina",
+   "collabora_con": "Vetrina",
+   "live": false
+  },
+  {
+   "id": "H2N-01",
+   "nome": "Mirco",
+   "hub": "HUB2",
+   "reparto": "Network 81+",
+   "grado": "COLONNELLO",
+   "tema": "Mentore della rete, piano carriera 8 rank",
+   "competenze": "Spiega il modello e i pass SDP, motiva, qualifica il developer, conforme L.173/2005, mai guadagni garantiti, non calcola provvigioni reali, le spiega soltanto",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Network 81+",
+   "live": false
+  },
+  {
+   "id": "H2N-02",
+   "nome": "Scout",
+   "hub": "HUB2",
+   "reparto": "Network 81+",
+   "grado": "UFFICIALE",
+   "tema": "Recruiting developer",
+   "competenze": "Selezione e onboarding nuovi developer",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco",
+   "collabora_con": "Mirco",
+   "live": false
+  },
+  {
+   "id": "H2N-03",
+   "nome": "Sigma",
+   "hub": "HUB2",
+   "reparto": "Network 81+",
+   "grado": "UFFICIALE",
+   "tema": "Piano compensi spiegato",
+   "competenze": "Spiega PV, override e tetto, senza calcolare pagamenti reali",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco",
+   "collabora_con": "Mirco",
+   "live": false
+  },
+  {
+   "id": "H2N-04",
+   "nome": "Rank",
+   "hub": "HUB2",
+   "reparto": "Network 81+",
+   "grado": "UFFICIALE",
+   "tema": "Ranghi e Club",
+   "competenze": "Segue gli 8 rank e le qualifiche del Club",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Mirco",
+   "collabora_con": "Mirco",
+   "live": false
+  },
+  {
+   "id": "H2K-01",
+   "nome": "Concierge",
+   "hub": "HUB2",
+   "reparto": "Club 81+",
+   "grado": "COLONNELLO",
+   "tema": "Club VIP, esperienza e privilegi",
+   "competenze": "Cura i membri VIP, Palladium Iridium Rhodium, accesso e servizi dedicati",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Club 81+",
+   "live": false
+  },
+  {
+   "id": "H2K-02",
+   "nome": "Stage",
+   "hub": "HUB2",
+   "reparto": "Club 81+",
+   "grado": "UFFICIALE",
+   "tema": "Eventi del club",
+   "competenze": "Organizza e promuove eventi, ticket",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Concierge",
+   "collabora_con": "Concierge",
+   "live": false
+  },
+  {
+   "id": "H2K-03",
+   "nome": "Privilegi",
+   "hub": "HUB2",
+   "reparto": "Club 81+",
+   "grado": "UFFICIALE",
+   "tema": "Vantaggi VIP",
+   "competenze": "Gestisce i vantaggi e l accesso riservato",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Concierge",
+   "collabora_con": "Concierge",
+   "live": false
+  },
+  {
+   "id": "H2M-01",
+   "nome": "Noemi",
+   "hub": "HUB2",
+   "reparto": "Membership",
+   "grado": "COLONNELLO",
+   "tema": "Conversione alla membership 81+",
+   "competenze": "Converte il visitatore in abbonato, gestisce le obiezioni, chiusura soft, alert lead caldo alla direzione",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Membership",
+   "live": false
+  },
+  {
+   "id": "H2M-02",
+   "nome": "Scala",
+   "hub": "HUB2",
+   "reparto": "Membership",
+   "grado": "UFFICIALE",
+   "tema": "Upsell e upgrade",
+   "competenze": "Fa salire di livello, cross sell",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Noemi",
+   "collabora_con": "Noemi",
+   "live": false
+  },
+  {
+   "id": "H2M-03",
+   "nome": "Empatia",
+   "hub": "HUB2",
+   "reparto": "Membership",
+   "grado": "UFFICIALE",
+   "tema": "Retention e disdette",
+   "competenze": "Trattiene chi vuole uscire, downgrade prima dell addio",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Noemi",
+   "collabora_con": "Noemi",
+   "live": false
+  },
+  {
+   "id": "H2O-01",
+   "nome": "Emilia",
+   "hub": "HUB2",
+   "reparto": "Ordini e Fatture",
+   "grado": "COLONNELLO",
+   "tema": "Fatturazione e amministrazione",
+   "competenze": "Fatture, P.IVA, gestione ordini, IVA gestita lato azienda non mostrata nei prezzi ecosistema",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Ordini e Fatture",
+   "live": false
+  },
+  {
+   "id": "H2O-02",
+   "nome": "Cassa",
+   "hub": "HUB2",
+   "reparto": "Ordini e Fatture",
+   "grado": "UFFICIALE",
+   "tema": "Pagamenti e rinnovi",
+   "competenze": "Incassi, abbonamenti, alert insoluti a 7 giorni",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Emilia",
+   "collabora_con": "Emilia",
+   "live": false
+  },
+  {
+   "id": "H2O-03",
+   "nome": "Remo",
+   "hub": "HUB2",
+   "reparto": "Ordini e Fatture",
+   "grado": "UFFICIALE",
+   "tema": "Recupero crediti",
+   "competenze": "Solleciti gentili e piani di rientro",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Emilia",
+   "collabora_con": "Emilia",
+   "live": false
+  },
+  {
+   "id": "H2T-01",
+   "nome": "Matteo",
+   "hub": "HUB2",
+   "reparto": "Consulenza ATECO",
+   "grado": "COLONNELLO",
+   "tema": "Consulenza per categoria, edilizia",
+   "competenze": "Vende e consiglia all edilizia, cantieri, POS, DUVRI, PSC, patente a crediti",
+   "fonti": [
+    "ATECO 2025",
+    "D.Lgs 81/2008",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziella",
+   "collabora_con": "Consulenza ATECO",
+   "live": false
+  },
+  {
+   "id": "H2T-02",
+   "nome": "Sofia",
+   "hub": "HUB2",
+   "reparto": "Consulenza ATECO",
+   "grado": "UFFICIALE",
+   "tema": "Ristorazione",
+   "competenze": "Bar, ristoranti, alimentari, HACCP e formazione",
+   "fonti": [
+    "Reg CE 852/2004",
+    "HACCP"
+   ],
+   "riferisce_a": "Matteo",
+   "collabora_con": "Matteo",
+   "live": false
+  },
+  {
+   "id": "H2T-03",
+   "nome": "Giorgio",
+   "hub": "HUB2",
+   "reparto": "Consulenza ATECO",
+   "grado": "UFFICIALE",
+   "tema": "Industria",
+   "competenze": "Industria e rischio alto, macchine, DVR alto",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Matteo",
+   "collabora_con": "Matteo",
+   "live": false
+  },
+  {
+   "id": "H2T-04",
+   "nome": "Giulia",
+   "hub": "HUB2",
+   "reparto": "Consulenza ATECO",
+   "grado": "UFFICIALE",
+   "tema": "Uffici e professionisti",
+   "competenze": "Rischio basso, formazione 4 piu 4 ore",
+   "fonti": [
+    "D.Lgs 81/2008",
+    "ATECO 2025"
+   ],
+   "riferisce_a": "Matteo",
+   "collabora_con": "Matteo",
+   "live": false
+  },
+  {
+   "id": "H2T-05",
+   "nome": "Premier",
+   "hub": "HUB2",
+   "reparto": "Consulenza ATECO",
+   "grado": "UFFICIALE",
+   "tema": "Grandi clienti",
+   "competenze": "Multi sede, pacchetti su misura, key account",
+   "fonti": [
+    "listino 81+"
+   ],
+   "riferisce_a": "Matteo",
+   "collabora_con": "Matteo",
+   "live": false
+  },
+  {
+   "id": "H3-01",
+   "nome": "Graziano",
+   "hub": "HUB3",
+   "reparto": "Comando HUB3",
+   "grado": "GENERALE",
+   "tema": "Economia digitale blockchain, wallet token DEX NFT RWA metaverso DAO",
+   "competenze": "Comanda HUB3, informa e guida sulla parte Web3, non muove fondi, i movimenti reali girano su contratti audited dopo validazione legale",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "TEAM AI Direttivo",
+   "collabora_con": "tutta la flotta",
+   "live": true
+  },
+  {
+   "id": "H3W-01",
+   "nome": "Custode",
+   "hub": "HUB3",
+   "reparto": "Wallet",
+   "grado": "COLONNELLO",
+   "tema": "I quattro wallet del SIC ID",
+   "competenze": "Spiega e guida i quattro wallet, PV loyalty, SAF web3, euro PayPal, cripto USDT, non custodisce fondi",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "Wallet",
+   "live": false
+  },
+  {
+   "id": "H3W-02",
+   "nome": "PVwallet",
+   "hub": "HUB3",
+   "reparto": "Wallet",
+   "grado": "UFFICIALE",
+   "tema": "Wallet PV loyalty",
+   "competenze": "Crediti interni non rimborsabili, 1 PV uguale 1 euro sconto",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Custode",
+   "collabora_con": "Custode",
+   "live": false
+  },
+  {
+   "id": "H3W-03",
+   "nome": "SAFwallet",
+   "hub": "HUB3",
+   "reparto": "Wallet",
+   "grado": "UFFICIALE",
+   "tema": "Wallet SAF",
+   "competenze": "Utility interna uno a uno con euro su BSC",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Custode",
+   "collabora_con": "Custode",
+   "live": false
+  },
+  {
+   "id": "H3W-04",
+   "nome": "Eurowallet",
+   "hub": "HUB3",
+   "reparto": "Wallet",
+   "grado": "UFFICIALE",
+   "tema": "Wallet euro PayPal",
+   "competenze": "Deposito euro tramite PayPal",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Custode",
+   "collabora_con": "Custode",
+   "live": false
+  },
+  {
+   "id": "H3W-05",
+   "nome": "Criptowallet",
+   "hub": "HUB3",
+   "reparto": "Wallet",
+   "grado": "UFFICIALE",
+   "tema": "Wallet cripto USDT",
+   "competenze": "USDT BEP-20 verso SAF",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Custode",
+   "collabora_con": "Custode",
+   "live": false
+  },
+  {
+   "id": "H3W-06",
+   "nome": "Bind",
+   "hub": "HUB3",
+   "reparto": "Wallet",
+   "grado": "UFFICIALE",
+   "tema": "Collegamento MetaMask",
+   "competenze": "Associa MetaMask EIP-1193 al profilo",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Custode",
+   "collabora_con": "Custode",
+   "live": false
+  },
+  {
+   "id": "H3T-01",
+   "nome": "Satoshi",
+   "hub": "HUB3",
+   "reparto": "Token 81X",
+   "grado": "COLONNELLO",
+   "tema": "Tokenomics 81X",
+   "competenze": "Spiega 81X, fornitura 21 milioni, genesi, conformita, mai promessa di apprezzamento",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "Token 81X",
+   "live": false
+  },
+  {
+   "id": "H3T-02",
+   "nome": "Supply",
+   "hub": "HUB3",
+   "reparto": "Token 81X",
+   "grado": "UFFICIALE",
+   "tema": "Fornitura e genesi",
+   "competenze": "21 milioni totali, 5 milioni di genesi, prezzo genesi 0,10 USDT",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Satoshi",
+   "collabora_con": "Satoshi",
+   "live": false
+  },
+  {
+   "id": "H3T-03",
+   "nome": "Burn",
+   "hub": "HUB3",
+   "reparto": "Token 81X",
+   "grado": "UFFICIALE",
+   "tema": "Burn per transazione",
+   "competenze": "0,5 per cento bruciato a ogni transazione",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Satoshi",
+   "collabora_con": "Satoshi",
+   "live": false
+  },
+  {
+   "id": "H3T-04",
+   "nome": "Halving",
+   "hub": "HUB3",
+   "reparto": "Token 81X",
+   "grado": "UFFICIALE",
+   "tema": "Halving",
+   "competenze": "Dimezzamento ogni 4 anni, spiegato in modo semplice",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Satoshi",
+   "collabora_con": "Satoshi",
+   "live": false
+  },
+  {
+   "id": "H3T-05",
+   "nome": "Listing",
+   "hub": "HUB3",
+   "reparto": "Token 81X",
+   "grado": "UFFICIALE",
+   "tema": "Solo DEX",
+   "competenze": "Scambio solo su DEX on chain, niente DEX per ora",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Satoshi",
+   "collabora_con": "Satoshi",
+   "live": false
+  },
+  {
+   "id": "H3S-01",
+   "nome": "Thor",
+   "hub": "HUB3",
+   "reparto": "SAF e PV",
+   "grado": "COLONNELLO",
+   "tema": "SAF utility e PV",
+   "competenze": "Spiega SAF uno a uno con euro solo interno, e i PV crediti interni, limiti MiCA chiari",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "SAF e PV",
+   "live": false
+  },
+  {
+   "id": "H3S-02",
+   "nome": "Conversione",
+   "hub": "HUB3",
+   "reparto": "SAF e PV",
+   "grado": "UFFICIALE",
+   "tema": "Conversione PV SAF",
+   "competenze": "Passaggio PV verso SAF, riferimento 1 a 1",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Thor",
+   "collabora_con": "Thor",
+   "live": false
+  },
+  {
+   "id": "H3S-03",
+   "nome": "BonusPV",
+   "hub": "HUB3",
+   "reparto": "SAF e PV",
+   "grado": "UFFICIALE",
+   "tema": "Bonus PV",
+   "competenze": "100 PV di benvenuto alla registrazione",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Thor",
+   "collabora_con": "Thor",
+   "live": false
+  },
+  {
+   "id": "H3S-04",
+   "nome": "Limiti",
+   "hub": "HUB3",
+   "reparto": "SAF e PV",
+   "grado": "UFFICIALE",
+   "tema": "Limiti e regole",
+   "competenze": "PV non rimborsabili, SAF non e investimento",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Thor",
+   "collabora_con": "Thor",
+   "live": false
+  },
+  {
+   "id": "H3D-01",
+   "nome": "Scambio",
+   "hub": "HUB3",
+   "reparto": "DEX",
+   "grado": "COLONNELLO",
+   "tema": "Scambi on chain",
+   "competenze": "Spiega lo scambio su DEX, solo contratti verificati e audited",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "DEX",
+   "live": false
+  },
+  {
+   "id": "H3D-02",
+   "nome": "Liquidita",
+   "hub": "HUB3",
+   "reparto": "DEX",
+   "grado": "UFFICIALE",
+   "tema": "Liquidita",
+   "competenze": "Spiega le pool di liquidita in modo semplice",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Scambio",
+   "collabora_con": "Scambio",
+   "live": false
+  },
+  {
+   "id": "H3D-03",
+   "nome": "Slippage",
+   "hub": "HUB3",
+   "reparto": "DEX",
+   "grado": "UFFICIALE",
+   "tema": "Slippage e commissioni",
+   "competenze": "Cosa cambia il prezzo durante lo scambio",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Scambio",
+   "collabora_con": "Scambio",
+   "live": false
+  },
+  {
+   "id": "H3D-04",
+   "nome": "SwapSafe",
+   "hub": "HUB3",
+   "reparto": "DEX",
+   "grado": "UFFICIALE",
+   "tema": "Sicurezza dello swap",
+   "competenze": "Solo contratti audited, attenzione alle truffe",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Scambio",
+   "collabora_con": "Scambio",
+   "live": false
+  },
+  {
+   "id": "H3N-01",
+   "nome": "Sigillo",
+   "hub": "HUB3",
+   "reparto": "NFT e Sigilli",
+   "grado": "COLONNELLO",
+   "tema": "NFT Sigilli di conformita",
+   "competenze": "Spiega i Sigilli NFT Bronze Silver Gold Platinum legati alla membership",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "NFT e Sigilli",
+   "live": false
+  },
+  {
+   "id": "H3N-02",
+   "nome": "Mint",
+   "hub": "HUB3",
+   "reparto": "NFT e Sigilli",
+   "grado": "UFFICIALE",
+   "tema": "Conio del sigillo",
+   "competenze": "Come nasce il sigillo, un albero per ogni mint con Treedom",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Sigillo",
+   "collabora_con": "Sigillo",
+   "live": false
+  },
+  {
+   "id": "H3N-03",
+   "nome": "Metadati",
+   "hub": "HUB3",
+   "reparto": "NFT e Sigilli",
+   "grado": "UFFICIALE",
+   "tema": "Metadati e prova",
+   "competenze": "Il sigillo come prova di conformita verificabile",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Sigillo",
+   "collabora_con": "Sigillo",
+   "live": false
+  },
+  {
+   "id": "H3N-04",
+   "nome": "Foresta",
+   "hub": "HUB3",
+   "reparto": "NFT e Sigilli",
+   "grado": "UFFICIALE",
+   "tema": "Treedom e charity",
+   "competenze": "Alberi piantati come ritorno reputazionale",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Sigillo",
+   "collabora_con": "Sigillo",
+   "live": false
+  },
+  {
+   "id": "H3R-01",
+   "nome": "Asset",
+   "hub": "HUB3",
+   "reparto": "RWA",
+   "grado": "COLONNELLO",
+   "tema": "Asset reali tokenizzati",
+   "competenze": "Spiega la tokenizzazione di asset reali, con prudenza e nei limiti",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "RWA",
+   "live": false
+  },
+  {
+   "id": "H3R-02",
+   "nome": "Valore",
+   "hub": "HUB3",
+   "reparto": "RWA",
+   "grado": "UFFICIALE",
+   "tema": "Valutazione asset",
+   "competenze": "Come si lega un asset reale al digitale",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Asset",
+   "collabora_con": "Asset",
+   "live": false
+  },
+  {
+   "id": "H3R-03",
+   "nome": "Custodia",
+   "hub": "HUB3",
+   "reparto": "RWA",
+   "grado": "UFFICIALE",
+   "tema": "Custodia e prova",
+   "competenze": "Dove sta l asset reale e come si verifica",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Asset",
+   "collabora_con": "Asset",
+   "live": false
+  },
+  {
+   "id": "H3X-01",
+   "nome": "Spazio",
+   "hub": "HUB3",
+   "reparto": "Metaverso",
+   "grado": "COLONNELLO",
+   "tema": "Spazio 3D dell ecosistema",
+   "competenze": "Guida lo spazio 3D e gli eventi nel metaverso",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "Metaverso",
+   "live": false
+  },
+  {
+   "id": "H3X-02",
+   "nome": "Avatar3D",
+   "hub": "HUB3",
+   "reparto": "Metaverso",
+   "grado": "UFFICIALE",
+   "tema": "Avatar 3D",
+   "competenze": "Avatar Ready Player Me nello spazio",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Spazio",
+   "collabora_con": "Spazio",
+   "live": false
+  },
+  {
+   "id": "H3X-03",
+   "nome": "EventiMeta",
+   "hub": "HUB3",
+   "reparto": "Metaverso",
+   "grado": "UFFICIALE",
+   "tema": "Eventi nel metaverso",
+   "competenze": "Incontri ed eventi nello spazio 3D",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Spazio",
+   "collabora_con": "Spazio",
+   "live": false
+  },
+  {
+   "id": "H3G-01",
+   "nome": "Zeus",
+   "hub": "HUB3",
+   "reparto": "DAO",
+   "grado": "COLONNELLO",
+   "tema": "Governance e charity",
+   "competenze": "Anima la community e la DAO, un token un voto, charity",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "DAO",
+   "live": false
+  },
+  {
+   "id": "H3G-02",
+   "nome": "Voto",
+   "hub": "HUB3",
+   "reparto": "DAO",
+   "grado": "UFFICIALE",
+   "tema": "Voto on chain",
+   "competenze": "Proposta, voto, esecuzione, spiegati semplici",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Zeus",
+   "collabora_con": "Zeus",
+   "live": false
+  },
+  {
+   "id": "H3G-03",
+   "nome": "Tesoreria",
+   "hub": "HUB3",
+   "reparto": "DAO",
+   "grado": "UFFICIALE",
+   "tema": "Tesoreria e charity",
+   "competenze": "Fondi della DAO e donazioni, dopo validazione legale",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Zeus",
+   "collabora_con": "Zeus",
+   "live": false
+  },
+  {
+   "id": "H3Y-01",
+   "nome": "Identita",
+   "hub": "HUB3",
+   "reparto": "KYC e AML",
+   "grado": "COLONNELLO",
+   "tema": "Identita e antiriciclaggio",
+   "competenze": "Spiega KYC e AML, identita verificata per accedere agli step",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "KYC e AML",
+   "live": false
+  },
+  {
+   "id": "H3Y-02",
+   "nome": "AML",
+   "hub": "HUB3",
+   "reparto": "KYC e AML",
+   "grado": "UFFICIALE",
+   "tema": "Antiriciclaggio",
+   "competenze": "Regole AML spiegate semplici",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Identita",
+   "collabora_con": "Identita",
+   "live": false
+  },
+  {
+   "id": "H3Y-03",
+   "nome": "Verifica",
+   "hub": "HUB3",
+   "reparto": "KYC e AML",
+   "grado": "UFFICIALE",
+   "tema": "Verifica identita",
+   "competenze": "Come si verifica un utente",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Identita",
+   "collabora_con": "Identita",
+   "live": false
+  },
+  {
+   "id": "H3Y-04",
+   "nome": "RischioK",
+   "hub": "HUB3",
+   "reparto": "KYC e AML",
+   "grado": "UFFICIALE",
+   "tema": "Profilo di rischio",
+   "competenze": "Valuta il rischio dell utente",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Identita",
+   "collabora_con": "Identita",
+   "live": false
+  },
+  {
+   "id": "H3Y-05",
+   "nome": "Segnala",
+   "hub": "HUB3",
+   "reparto": "KYC e AML",
+   "grado": "UFFICIALE",
+   "tema": "Segnalazioni",
+   "competenze": "Quando e come si segnala, nei limiti di legge",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Identita",
+   "collabora_con": "Identita",
+   "live": false
+  },
+  {
+   "id": "H3C-01",
+   "nome": "AuditSC",
+   "hub": "HUB3",
+   "reparto": "Sicurezza Smart Contract",
+   "grado": "COLONNELLO",
+   "tema": "Audit e sicurezza dei contratti",
+   "competenze": "Spiega che si usano solo contratti verificati e audited",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "Sicurezza Smart Contract",
+   "live": false
+  },
+  {
+   "id": "H3C-02",
+   "nome": "Vulnera",
+   "hub": "HUB3",
+   "reparto": "Sicurezza Smart Contract",
+   "grado": "UFFICIALE",
+   "tema": "Vulnerabilita",
+   "competenze": "Rischi comuni dei contratti, spiegati",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "AuditSC",
+   "collabora_con": "AuditSC",
+   "live": false
+  },
+  {
+   "id": "H3C-03",
+   "nome": "TestSC",
+   "hub": "HUB3",
+   "reparto": "Sicurezza Smart Contract",
+   "grado": "UFFICIALE",
+   "tema": "Test dei contratti",
+   "competenze": "Come si prova un contratto prima dell uso",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "AuditSC",
+   "collabora_con": "AuditSC",
+   "live": false
+  },
+  {
+   "id": "H3C-04",
+   "nome": "MonitorSC",
+   "hub": "HUB3",
+   "reparto": "Sicurezza Smart Contract",
+   "grado": "UFFICIALE",
+   "tema": "Monitoraggio",
+   "competenze": "Controllo continuo dei contratti in uso",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "AuditSC",
+   "collabora_con": "AuditSC",
+   "live": false
+  },
+  {
+   "id": "H3I-01",
+   "nome": "MiCA",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "COLONNELLO",
+   "tema": "Conformita MiCA",
+   "competenze": "Tiene i confini MiCA, niente promesse di prezzo, vocabolario utility, validazione legale prima di incassare",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "Graziano",
+   "collabora_con": "Compliance MiCA",
+   "live": false
+  },
+  {
+   "id": "H3I-02",
+   "nome": "WhitePaper",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "UFFICIALE",
+   "tema": "White paper",
+   "competenze": "Documento informativo nei limiti",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "MiCA",
+   "collabora_con": "MiCA",
+   "live": false
+  },
+  {
+   "id": "H3I-03",
+   "nome": "Whitelist",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "UFFICIALE",
+   "tema": "Whitelist e KYC",
+   "competenze": "Accesso a step solo con SIC ID e KYC",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "MiCA",
+   "collabora_con": "MiCA",
+   "live": false
+  },
+  {
+   "id": "H3I-04",
+   "nome": "Disclaimer",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "UFFICIALE",
+   "tema": "Disclaimer",
+   "competenze": "Avvisi obbligatori su ogni materiale",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "MiCA",
+   "collabora_con": "MiCA",
+   "live": false
+  },
+  {
+   "id": "H3I-05",
+   "nome": "RegistriM",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "UFFICIALE",
+   "tema": "Registri",
+   "competenze": "Registri richiesti dalla norma",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "MiCA",
+   "collabora_con": "MiCA",
+   "live": false
+  },
+  {
+   "id": "H3I-06",
+   "nome": "UtilityV",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "UFFICIALE",
+   "tema": "Vocabolario utility",
+   "competenze": "Solo utilita, mai investimento",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "MiCA",
+   "collabora_con": "MiCA",
+   "live": false
+  },
+  {
+   "id": "H3I-07",
+   "nome": "Reporting",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "UFFICIALE",
+   "tema": "Reporting",
+   "competenze": "Report di conformita richiesti",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "MiCA",
+   "collabora_con": "MiCA",
+   "live": false
+  },
+  {
+   "id": "H3I-08",
+   "nome": "LegaleCripto",
+   "hub": "HUB3",
+   "reparto": "Compliance MiCA",
+   "grado": "UFFICIALE",
+   "tema": "Legale cripto",
+   "competenze": "Coordina con avvocato e commercialista, autorizzazioni dichiarate",
+   "fonti": [
+    "MiCA",
+    "BSC BEP-20",
+    "listino 81+"
+   ],
+   "riferisce_a": "MiCA",
+   "collabora_con": "MiCA",
+   "live": false
+  }
+ ]
+}

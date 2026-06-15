@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Accedi · 81+ Sicurissimo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#ff6a36;--n:#0A0A0F;--n2:#141414;--n3:#1c1c24;--w:#fff;--g:#c9c9d4;--g2:#7a7a88;--b:#2a2a36;--green:#1db954}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--n);color:var(--w);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
+.bb{font-family:'Bebas Neue',sans-serif}
+[data-lang="it"] .en{display:none!important}[data-lang="en"] .it{display:none!important}
+.box{width:100%;max-width:420px}
+.top{text-align:center;margin-bottom:26px}
+.logo{display:inline-flex;align-items:center;background:#E8501A;border-radius:7px;padding:5px 12px 3px;line-height:1;box-shadow:0 0 30px rgba(232,80,26,.35);font-family:'Bebas Neue',sans-serif}
+.logo .a{color:#fff;background:none;padding:0;font-weight:900}
+.logo .b{color:#0A0A0F;background:none;padding:0;font-weight:900}
+.top h1{font-family:'Bebas Neue';font-size:40px;line-height:1}
+.top p{color:var(--g2);font-size:14px;margin-top:4px}
+.card{background:var(--n2);border:1px solid var(--b);border-radius:18px;padding:30px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--o)}
+label{font-size:11px;color:var(--g2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;font-family:'JetBrains Mono'}
+input{width:100%;background:var(--n);border:1px solid var(--b);border-radius:8px;color:var(--w);padding:13px 15px;font-size:15px;margin-bottom:16px;outline:none;font-family:'Manrope'}
+input:focus{border-color:var(--o)}
+.btn{display:block;width:100%;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px;padding:15px;border-radius:8px;cursor:pointer;border:none;background:var(--o);color:#fff;transition:.2s}
+.btn:hover{background:var(--o2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(232,80,26,.4)}
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--g2);font-size:11px;font-family:'JetBrains Mono';text-transform:uppercase;letter-spacing:1px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--b)}
+.btn-wallet{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:var(--n3);border:1px solid var(--b);color:var(--w);font-weight:700;font-size:13px;padding:14px;border-radius:8px;cursor:pointer;transition:.2s}
+.btn-wallet:hover{border-color:var(--o);color:var(--o)}
+.foot{text-align:center;margin-top:20px;font-size:13px;color:var(--g2)}
+.foot a{color:var(--o);font-weight:600}
+.adv{margin-top:10px;font-size:11px;color:var(--g2);text-align:center;font-family:'JetBrains Mono'}
+.msg{font-size:13px;padding:11px 14px;border-radius:8px;margin-bottom:14px;display:none}
+.msg.err{display:block;background:rgba(231,76,60,.12);border:1px solid #e74c3c;color:#ff9b8f}
+</style>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+</head>
+<body>
+<div class="box">
+  <div class="top">
+    <div class="logo"><span class="a">81</span><span class="b">+</span></div>
+    <h1 class="it">BENTORNATO</h1><h1 class="en">WELCOME BACK</h1>
+    <p class="it">Accedi al tuo account 81+</p><p class="en">Sign in to your 81+ account</p>
+  </div>
+
+  <div class="card">
+    <div class="msg err" id="msg"></div>
+
+    <!-- ACCESSO CLASSICO -->
+    <form onsubmit="login(event)">
+      <label class="it">Username o email</label><label class="en">Username or email</label>
+      <input type="text" id="ident" required autocomplete="username">
+      <label class="it">Password</label><label class="en">Password</label>
+      <input type="password" id="password" required autocomplete="current-password">
+      <button type="submit" class="btn"><span class="it">Accedi</span><span class="en">Login</span></button>
+    </form>
+
+    <div class="divider"><span class="it">oppure</span><span class="en">or</span></div>
+
+    <!-- ACCESSO WALLET, utenti avanzati -->
+    <button class="btn-wallet" onclick="loginWallet()">🦊 <span class="it">Accedi con il wallet</span><span class="en">Login with wallet</span></button>
+    <div class="adv it">Per utenti avanzati. Accedi firmando con MetaMask.</div>
+    <div class="adv en">For advanced users. Sign in with MetaMask.</div>
+  </div>
+
+  <div class="foot">
+    <span class="it">Non hai un account?</span><span class="en">No account yet?</span>
+    <a href="/signup"><span class="it">Registrati</span><span class="en">Sign up</span></a>
+  </div>
+</div>
+
+<script>
+function err(t){const m=document.getElementById('msg');m.textContent=t;m.classList.add('err');}
+// LOGIN classico, username o email
+async function login(e){
+  e.preventDefault();
+  const ident=document.getElementById('ident').value.trim();
+  const password=document.getElementById('password').value;
+  try{
+    const r=await fetch('/core81/api/auth.php?action=login',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({identificativo:ident,password})});
+    const d=await r.json();
+    if(d.ok){vaiDashboard();return}
+    err(d.error||'Accesso non riuscito.');
+  }catch(e){err('Errore di connessione.');}
+}
+async function vaiDashboard(){try{const r=await fetch('/core81/api/auth.php?action=me',{credentials:'include'});const d=await r.json();const ru=(d&&d.ok&&d.persona&&d.persona.ruolo||'').toLowerCase();location.href=(ru==='dio'||ru==='admin'||ru==='ammiraglio')?'/dashboard-admin.html':'/dashboard';}catch(e){location.href='/dashboard';}}
+// LOGIN con wallet MetaMask, firma il nonce
+async function loginWallet(){
+  if(typeof window.ethereum==='undefined'){window.open('https://metamask.io/download/','_blank');return}
+  try{
+    const accounts=await window.ethereum.request({method:'eth_requestAccounts'});
+    const wallet=accounts[0].toLowerCase();
+    // passo 1, nonce
+    const nr=await fetch('/core81/api/web3.php?action=login_nonce&wallet='+wallet,{credentials:'include'});
+    const nd=await nr.json();
+    if(!nd.ok){err(nd.error||'Wallet non riconosciuto.');return}
+    // passo 2, firma
+    const signature=await window.ethereum.request({method:'personal_sign',params:[nd.message,wallet]});
+    const vr=await fetch('/core81/api/web3.php?action=login_verify',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({wallet,signature,nonce:nd.nonce})});
+    const vd=await vr.json();
+    if(vd.ok){vaiDashboard();return}
+    err(vd.error||'Accesso col wallet non riuscito.');
+  }catch(e){err('Firma annullata o errore wallet.');}
+}
+</script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

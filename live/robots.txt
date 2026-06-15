@@ -1,0 +1,15 @@
+User-agent: *
+Disallow: /dashboard.html
+Disallow: /profilo.html
+Disallow: /benvenuto.html
+Disallow: /plancia_dio.html
+Disallow: /import_auto.html
+Disallow: /sistema_12_passi.html
+Disallow: /sic_card.html
+Disallow: /premi.html
+Disallow: /api/
+Disallow: /src/
+Disallow: /sql/
+Disallow: /data/
+
+Sitemap: https://81plus.net/sitemap.xml

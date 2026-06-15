@@ -1,0 +1,46 @@
+{
+  "nota": "SDK+ e RDP+ del network 81+, ex NETWORK81+. SDK+ è l'ingresso una tantum, RDP+ è il pass ricorrente a 8 livelli. Prezzi dal listino ufficiale 81+.",
+  "sdk": {
+    "codice": "SDK+",
+    "nome": "Start Developer Kit",
+    "prezzo": 199,
+    "tipo": "una_tantum",
+    "desc": "Il kit di ingresso nel network 81+. Formazione, materiali, strumenti e il tuo NFT di certificazione che attesta l'ingresso come developer. Con diritto di recesso.",
+    "include": [
+      "NFT SDK+ di certificazione ingresso",
+      "Formazione base sul network e sui prodotti",
+      "Kit materiali e strumenti di partenza",
+      "Link affiliato personale e area developer",
+      "Accesso al CRM base del network"
+    ]
+  },
+  "rdp": {
+    "codice": "RDP+",
+    "nome": "Recurrency Developer Pass",
+    "tipo": "ricorrente_mensile",
+    "desc": "Il pass ricorrente che tiene attivo il tuo sviluppo di rete. Otto livelli, sblocchi sempre più strumenti, lead e supporto al crescere del tuo rango.",
+    "livelli": [
+      {"nome":"IGNITE",  "prezzo":49,  "desc":"Area network, CRM base, link affiliato, materiali base. Per partire."},
+      {"nome":"RISE",    "prezzo":99,  "desc":"In più formazione avanzata, materiali premium, primi automatismi."},
+      {"nome":"DRIVE",   "prezzo":149, "desc":"In più gestione contatti, report di base, automazioni di primo livello."},
+      {"nome":"SCALE",   "prezzo":249, "desc":"In più strumenti di gestione team, report completi, automazioni complete."},
+      {"nome":"PEAK",    "prezzo":399, "desc":"In più lead qualificati, formazione da leader, strumenti avanzati di rete."},
+      {"nome":"SUMMIT",  "prezzo":599, "desc":"In più lead premium, dashboard avanzata, supporto prioritario."},
+      {"nome":"LEGACY",  "prezzo":799, "desc":"In più strumenti da leader di rete, lead top, supporto dedicato."},
+      {"nome":"CROWN",   "prezzo":999, "desc":"Il massimo. Tutto incluso, lead esclusivi, affiancamento diretto della direzione."}
+    ]
+  },
+  "ranghi_pass": [
+    {"ranghi":"1 2 3","nome":"Start, Builder, Performer","pass":"IGNITE o RISE"},
+    {"ranghi":"4 5","nome":"Leader, Manager","pass":"DRIVE o SCALE"},
+    {"ranghi":"6","nome":"Director","pass":"PEAK o SUMMIT"},
+    {"ranghi":"7 8","nome":"Executive, Elite","pass":"LEGACY o CROWN"}
+  ],
+  "regole": [
+    "Le commissioni nascono solo da vendite reali, ai sensi della L.173 del 2005.",
+    "Nessun guadagno garantito per rango, nessun autoacquisto di magazzino.",
+    "Per restare developer serve una membership 81+ attiva, usi e rappresenti ciò che vendi.",
+    "Se la membership 81+ decade, decade anche l'iscrizione alla rete.",
+    "Diritto di recesso sullo Start Developer Kit secondo legge."
+  ]
+}

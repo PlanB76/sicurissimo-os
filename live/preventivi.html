@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Preventivi e contratti · 81+</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070709;color:#ececf2;font-family:Sora,Arial,sans-serif;min-height:100vh}
+header{padding:18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;border-bottom:1px solid #17171f}
+header h1{font-family:Anton,Arial;font-size:22px;letter-spacing:1px;text-transform:uppercase;color:#E8501A}
+header .sub{font-size:11.5px;color:#9aa0b4;max-width:480px}
+.btn{background:#E8501A;color:#fff;border:0;padding:10px 16px;border-radius:9px;font-weight:700;cursor:pointer;font-size:13px;font-family:Sora;text-decoration:none;display:inline-block}
+.btn.ghost{background:#16161e;border:1px solid #2a2a35;color:#cfd2dd}
+.btn.mini{padding:6px 10px;font-size:11.5px}
+nav{display:flex;gap:8px;padding:12px 18px;flex-wrap:wrap}
+nav .tab{padding:9px 14px;border:1px solid #2a2a35;border-radius:9px;cursor:pointer;font-size:12.5px;color:#cfd2dd}
+nav .tab.attiva{border-color:#E8501A;color:#E8501A;background:#16100c}
+main{max-width:1150px;margin:0 auto;padding:0 18px 30px}
+.pannello{background:#0d0d12;border:1px solid #1d1d26;border-radius:14px;padding:18px;display:none}
+.pannello.viva{display:block}
+h2{font-family:Anton,Arial;font-size:17px;color:#E8501A;text-transform:uppercase;margin-bottom:10px}
+label{display:block;font-size:11.5px;color:#aeb3c4;margin:10px 0 4px}
+input,textarea,select{width:100%;background:#101016;border:1px solid #2a2a35;color:#ececf2;padding:9px 12px;border-radius:8px;font-size:13px;font-family:Sora}
+textarea{min-height:60px;resize:vertical}
+.griglia2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.griglia3{display:grid;grid-template-columns:2fr 1fr 1fr;gap:12px}
+@media(max-width:760px){.griglia2,.griglia3{grid-template-columns:1fr}}
+table.lst{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px}
+table.lst th,table.lst td{border-bottom:1px solid #1d1d26;padding:8px 6px;text-align:left;vertical-align:top}
+table.lst th{color:#8b90a3;font-size:11px;text-transform:uppercase}
+table.lst input,table.lst select{padding:6px 8px;font-size:12px}
+.r{text-align:right}.c{text-align:center}
+.tot{margin-left:auto;margin-top:10px;font-family:JetBrains Mono,monospace;font-size:13px;text-align:right;color:#ffb38a}
+.tot b{color:#E8501A;font-size:15px}
+.voceArch{padding:10px;border:1px solid #1c1c25;border-radius:9px;margin-bottom:7px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:12.5px}
+.tagTipo{font-size:10px;padding:2px 8px;border-radius:20px;border:1px solid #2a2a35;color:#9aa0b4;text-transform:uppercase}
+.aiuto{font-size:11.5px;color:#7c8195;margin-top:6px;line-height:1.6}
+#anteprima{margin-top:14px;display:none}
+#anteprima iframe{width:100%;height:64vh;border:1px solid #2a2a35;border-radius:10px;background:#fff}
+.extraBox{display:none}
+</style>
+</head>
+<body>
+<header>
+  <h1>Studio preventivi</h1>
+  <span class="sub">Il tuo listino, il tuo brand, i tuoi documenti. Preventivi, contratti, subappalti e dossier gara, per ogni ATECO.</span>
+  <span style="margin-left:auto"></span>
+  <a class="btn ghost" href="documenti_fabbrica.html">Fabbrica documenti</a>
+  <a class="btn ghost" href="dashboard.html">Dashboard</a>
+</header>
+<nav>
+  <div class="tab attiva" data-t="brand" onclick="tab('brand')">Il tuo brand</div>
+  <div class="tab" data-t="listino" onclick="tab('listino')">Listino prezzi</div>
+  <div class="tab" data-t="nuovo" onclick="tab('nuovo')">Nuovo documento</div>
+  <div class="tab" data-t="archivio" onclick="tab('archivio')">I miei documenti</div>
+</nav>
+<main>
+  <div class="pannello viva" id="p-brand">
+    <h2>Il tuo brand sui documenti</h2>
+    <div class="griglia3">
+      <div><label>Indirizzo https del tuo logo, png o jpg</label><input id="bLogo" placeholder="https://tuosito.it/logo.png"></div>
+      <div><label>Colore del brand</label><input id="bColore" type="color" value="#E8501A" style="height:42px;padding:4px"></div>
+      <div><label>Contatti in intestazione</label><input id="bContatti" placeholder="tel, email, sito"></div>
+    </div>
+    <div class="aiuto">Senza logo, in testa al documento esce la tua ragione sociale nel colore scelto. Ragione sociale, indirizzo e partita IVA arrivano dal profilo.</div>
+    <div style="margin-top:12px"><button class="btn" onclick="salvaBrand()">Salva il brand</button></div>
+  </div>
+
+  <div class="pannello" id="p-listino">
+    <h2>Il tuo listino prezzi</h2>
+    <div class="aiuto">Parti da un modello del tuo mestiere e poi piegalo come vuoi, oppure aggiungi le voci a mano. Le voci sono tue, il sistema le usa per comporre i documenti.</div>
+    <div style="display:flex;gap:8px;margin:10px 0;flex-wrap:wrap">
+      <button class="btn mini" onclick="modello('auto')">+ Listino dal mio ATECO</button><button class="btn ghost mini" onclick="modello('catering')">+ Modello catering</button>
+      <button class="btn ghost mini" onclick="modello('edile')">+ Modello impresa edile</button>
+      <button class="btn ghost mini" onclick="modello('professionista')">+ Modello professionista</button><button class="btn ghost mini" onclick="modello('officina')">+ Officina</button><button class="btn ghost mini" onclick="modello('trasporti')">+ Trasporti</button><button class="btn ghost mini" onclick="modello('benessere')">+ Benessere</button>
+    </div>
+    <table class="lst"><thead><tr><th style="width:24%">Voce</th><th>Descrizione</th><th style="width:9%">Unità</th><th style="width:10%">Prezzo €</th><th style="width:8%">IVA %</th><th style="width:12%"></th></tr></thead><tbody id="vociBody"></tbody></table>
+    <div style="margin-top:10px"><button class="btn ghost mini" onclick="vociNuova()">+ Aggiungi voce</button></div>
+  </div>
+
+  <div class="pannello" id="p-nuovo">
+    <h2>Nuovo documento</h2>
+    <div class="griglia3">
+      <div><label>Tipo di documento</label>
+        <select id="dTipo" onchange="mostraExtra()">
+          <option value="preventivo">Preventivo per cliente</option>
+          <option value="contratto">Contratto</option>
+          <option value="subappalto">Contratto di subappalto</option>
+          <option value="gara">Dossier gara pubblica</option>
+        </select></div>
+      <div><label id="lblCliNome">Cliente, nome o ragione sociale</label><input id="cNome"></div>
+      <div><label>Partita IVA o CF del cliente</label><input id="cPiva"></div>
+    </div>
+    <label>Indirizzo del cliente</label><input id="cInd">
+    <div class="extraBox" id="ex-contratto">
+      <label>Oggetto del contratto</label><textarea id="exOggettoC"></textarea>
+      <div class="griglia2"><div><label>Tempi di esecuzione</label><input id="exTempi"></div><div><label>Pagamenti</label><input id="exPagamenti"></div></div>
+    </div>
+    <div class="extraBox" id="ex-subappalto">
+      <label>Lavori affidati e cantiere</label><textarea id="exOggettoS" placeholder="descrizione lavori e indirizzo cantiere"></textarea>
+      <input type="hidden" id="exCantiere">
+    </div>
+    <div class="extraBox" id="ex-gara">
+      <div class="griglia3"><div><label>Oggetto della gara</label><input id="exOggettoG"></div><div><label>CIG</label><input id="exCig"></div><div><label>Scadenza presentazione</label><input id="exScadenza"></div></div>
+      <label>Importo a base di gara</label><input id="exBase">
+    </div>
+    <h2 style="margin-top:16px">Voci e prezzi</h2>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+      <select id="pesca" style="max-width:340px"></select>
+      <button class="btn ghost mini" onclick="aggiungiDalListino()">+ Dal listino</button>
+      <button class="btn ghost mini" onclick="aggiungiLibera()">+ Riga libera</button>
+    </div>
+    <table class="lst"><thead><tr><th style="width:22%">Voce</th><th>Descrizione</th><th style="width:8%">Q.tà</th><th style="width:8%">Unità</th><th style="width:10%">Prezzo €</th><th style="width:8%">Sconto %</th><th style="width:8%">IVA %</th><th style="width:6%"></th></tr></thead><tbody id="righeBody"></tbody></table>
+    <div class="tot" id="totali">Imponibile 0,00 € · IVA 0,00 € · <b>Totale 0,00 €</b></div>
+    <label>Condizioni, validità, pagamento, note</label><textarea id="dCond"></textarea>
+    <div style="display:flex;gap:10px;margin-top:14px;flex-wrap:wrap">
+      <button class="btn" onclick="salvaDoc(false)">Salva</button>
+      <button class="btn ghost" onclick="anteprimaDoc()">Anteprima libera</button>
+      <button class="btn ghost" onclick="scaricaPdf()">Documento finale PDF</button>
+    </div>
+    <div id="anteprima"><iframe id="frameP" title="anteprima documento"></iframe></div>
+  </div>
+
+  <div class="pannello" id="p-archivio">
+    <h2>I miei documenti</h2>
+    <div class="aiuto">Riapri per revisionare, cambia lo stato quando il cliente risponde, rigenera il PDF quando vuoi.</div>
+    <div id="archBox" style="margin-top:10px">Carico...</div>
+  </div>
+</main>
+<script>
+var VOCI=[],RIGHE=[],DOCID=null,NUMERO=null;
+function tab(t){
+  document.querySelectorAll('nav .tab').forEach(function(x){x.classList.toggle('attiva',x.getAttribute('data-t')===t);});
+  document.querySelectorAll('.pannello').forEach(function(x){x.classList.remove('viva');});
+  document.getElementById('p-'+t).classList.add('viva');
+  if(t==='archivio')caricaArchivio();
+}
+function mostraExtra(){
+  var t=document.getElementById('dTipo').value;
+  document.querySelectorAll('.extraBox').forEach(function(x){x.style.display='none';});
+  var b=document.getElementById('ex-'+t); if(b)b.style.display='block';
+  document.getElementById('lblCliNome').textContent=t==='gara'?'Stazione appaltante':(t==='subappalto'?'Subappaltatore, ragione sociale':'Cliente, nome o ragione sociale');
+}
+function caricaListino(){
+  fetch('api/preventivi.php?az=listino').then(function(r){return r.json();}).then(function(d){
+    if(!d.ok){document.getElementById('vociBody').innerHTML='<tr><td colspan="6" style="color:#9aa0b4">Accedi dalla dashboard per usare lo studio.</td></tr>';return;}
+    VOCI=d.voci;
+    if(d.brand){ if(d.brand.logo)document.getElementById('bLogo').value=d.brand.logo;
+      if(d.brand.colore)document.getElementById('bColore').value=d.brand.colore;
+      if(d.brand.contatti)document.getElementById('bContatti').value=d.brand.contatti; }
+    disegnaVoci(); riempiPesca();
+  }).catch(function(){document.getElementById('vociBody').innerHTML='<tr><td colspan="6" style="color:#9aa0b4">Backend non raggiungibile in anteprima.</td></tr>';});
+}
+function disegnaVoci(){
+  var b=document.getElementById('vociBody'); b.innerHTML='';
+  VOCI.forEach(function(v,i){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input value="'+esc(v.voce)+'" data-i="'+i+'" data-f="voce"></td>'
+      +'<td><input value="'+esc(v.descrizione||'')+'" data-i="'+i+'" data-f="descrizione"></td>'
+      +'<td><input value="'+esc(v.unita||'')+'" data-i="'+i+'" data-f="unita"></td>'
+      +'<td><input type="number" step="0.01" value="'+v.prezzo+'" data-i="'+i+'" data-f="prezzo"></td>'
+      +'<td><input type="number" value="'+v.iva+'" data-i="'+i+'" data-f="iva"></td>'
+      +'<td><button class="btn mini" onclick="vSalva('+i+')">Salva</button> <button class="btn ghost mini" onclick="vCanc('+i+')">×</button></td>';
+    b.appendChild(tr);
+  });
+}
+function esc(s){return String(s==null?'':s).replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+function vCampo(i,f){var el=document.querySelector('[data-i="'+i+'"][data-f="'+f+'"]');return el?el.value:'';}
+function vSalva(i){
+  var v=VOCI[i];
+  fetch('api/preventivi.php?az=listino_salva',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({id:v.id||null,voce:vCampo(i,'voce'),descrizione:vCampo(i,'descrizione'),unita:vCampo(i,'unita'),prezzo:vCampo(i,'prezzo'),iva:vCampo(i,'iva')})})
+   .then(function(r){return r.json();}).then(function(d){ if(!d.ok){alert(d.err||'Errore');return;} caricaListino(); });
+}
+function vCanc(i){ var v=VOCI[i]; if(!v.id){VOCI.splice(i,1);disegnaVoci();return;}
+  if(!confirm('Eliminare la voce dal listino?'))return;
+  fetch('api/preventivi.php?az=listino_cancella',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:v.id})}).then(function(){caricaListino();});
+}
+function vociNuova(){ VOCI.push({voce:'',descrizione:'',unita:'',prezzo:0,iva:22}); disegnaVoci(); }
+function modello(m){
+  fetch('api/preventivi.php?az=listino_modello',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({modello:m})})
+   .then(function(r){return r.json();}).then(function(d){ if(!d.ok){alert(d.err||'Errore');return;} caricaListino(); });
+}
+function salvaBrand(){
+  fetch('api/preventivi.php?az=brand_salva',{method:'POST',headers:{'Content-Type':'application/json'},
+   body:JSON.stringify({brand_logo:document.getElementById('bLogo').value.trim(),brand_colore:document.getElementById('bColore').value,brand_contatti:document.getElementById('bContatti').value})})
+   .then(function(r){return r.json();}).then(function(d){ alert(d.ok?'Brand salvato, da ora firma ogni documento.':(d.err||'Errore')); });
+}
+function riempiPesca(){
+  var s=document.getElementById('pesca');
+  s.innerHTML=VOCI.filter(function(v){return v.id;}).map(function(v,ix){return '<option value="'+v.id+'">'+esc(v.voce)+' · '+Number(v.prezzo).toFixed(2)+' €/'+esc(v.unita||'u')+'</option>';}).join('')||'<option value="">listino vuoto, crealo nella scheda Listino</option>';
+}
+function aggiungiDalListino(){
+  var id=document.getElementById('pesca').value; var v=VOCI.find(function(x){return String(x.id)===String(id);});
+  if(!v){tab('listino');return;}
+  RIGHE.push({voce:v.voce,descrizione:v.descrizione||'',qta:1,unita:v.unita||'',prezzo:Number(v.prezzo),sconto:0,iva:Number(v.iva)});
+  disegnaRighe();
+}
+function aggiungiLibera(){ RIGHE.push({voce:'',descrizione:'',qta:1,unita:'',prezzo:0,sconto:0,iva:22}); disegnaRighe(); }
+function disegnaRighe(){
+  var b=document.getElementById('righeBody'); b.innerHTML='';
+  RIGHE.forEach(function(r,i){
+    var tr=document.createElement('tr');
+    tr.innerHTML='<td><input value="'+esc(r.voce)+'" oninput="RIGHE['+i+'].voce=this.value"></td>'
+     +'<td><input value="'+esc(r.descrizione)+'" oninput="RIGHE['+i+'].descrizione=this.value"></td>'
+     +'<td><input type="number" step="0.01" value="'+r.qta+'" oninput="RIGHE['+i+'].qta=this.value;totali()"></td>'
+     +'<td><input value="'+esc(r.unita)+'" oninput="RIGHE['+i+'].unita=this.value"></td>'
+     +'<td><input type="number" step="0.01" value="'+r.prezzo+'" oninput="RIGHE['+i+'].prezzo=this.value;totali()"></td>'
+     +'<td><input type="number" value="'+r.sconto+'" oninput="RIGHE['+i+'].sconto=this.value;totali()"></td>'
+     +'<td><input type="number" value="'+r.iva+'" oninput="RIGHE['+i+'].iva=this.value;totali()"></td>'
+     +'<td class="c"><button class="btn ghost mini" onclick="RIGHE.splice('+i+',1);disegnaRighe()">×</button></td>';
+    b.appendChild(tr);
+  });
+  totali();
+}
+function totali(){
+  var imp=0,iva=0;
+  RIGHE.forEach(function(r){ var x=Number(r.qta||0)*Number(r.prezzo||0); x-=x*Number(r.sconto||0)/100; imp+=x; iva+=x*Number(r.iva||0)/100; });
+  function f(n){return n.toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});}
+  document.getElementById('totali').innerHTML='Imponibile '+f(imp)+' € · IVA '+f(iva)+' € · <b>Totale '+f(imp+iva)+' €</b>';
+}
+function corpoDoc(){
+  var t=document.getElementById('dTipo').value;
+  var extra={};
+  if(t==='contratto')extra={oggetto:document.getElementById('exOggettoC').value,tempi:document.getElementById('exTempi').value,pagamenti:document.getElementById('exPagamenti').value};
+  if(t==='subappalto')extra={oggetto:document.getElementById('exOggettoS').value,cantiere:document.getElementById('exCantiere').value};
+  if(t==='gara')extra={oggetto:document.getElementById('exOggettoG').value,cig:document.getElementById('exCig').value,scadenza:document.getElementById('exScadenza').value,base:document.getElementById('exBase').value};
+  return {id:DOCID,tipo:t,cliente:{nome:document.getElementById('cNome').value,piva:document.getElementById('cPiva').value,indirizzo:document.getElementById('cInd').value},
+          righe:RIGHE,condizioni:document.getElementById('dCond').value,extra:extra};
+}
+function salvaDoc(silenzioso){
+  return fetch('api/preventivi.php?az=salva',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(corpoDoc())})
+   .then(function(r){return r.json();})
+   .then(function(d){ if(!d.ok){alert(d.err||'Errore');throw 0;} DOCID=d.id; if(!silenzioso)alert('Documento salvato, lo ritrovi in I miei documenti.'); return d.id; });
+}
+function anteprimaDoc(){
+  salvaDoc(true).then(function(id){
+    return fetch('api/preventivi.php?az=genera&anteprima=1&id='+id).then(function(r){return r.json();});
+  }).then(function(d){
+    if(!d)return;
+    if(!d.ok){ if(d.err==='pv_insufficienti'){ if(confirm('Il documento finale costa '+d.costo+' PV e ne hai '+d.saldo+'. Ricarichi ora?'))location.href='ricarica_pv.html'; } else if(d.err)alert(d.err); return; }
+    document.getElementById('frameP').srcdoc=d.html;
+    document.getElementById('anteprima').style.display='block';
+    document.getElementById('frameP').scrollIntoView({behavior:'smooth'});
+  }).catch(function(){});
+}
+function scaricaPdf(){
+  salvaDoc(true).then(function(id){
+    return fetch('api/preventivi.php?az=genera&id='+id).then(function(r){return r.json();});
+  }).then(function(d){
+    if(!d)return;
+    if(!d.ok){ if(d.err==='pv_insufficienti'){ if(confirm('Il documento finale costa '+d.costo+' PV e ne hai '+d.saldo+'. Ricarichi ora?'))location.href='ricarica_pv.html'; } else if(d.err)alert(d.err); return; }
+    var box=document.createElement('div'); box.style.cssText='position:absolute;left:-9999px;top:0;width:794px;background:#fff';
+    box.innerHTML=d.html.replace(/^[\s\S]*<body>/,'').replace(/<\/body>[\s\S]*$/,'');
+    var st=d.html.match(/<style>([\s\S]*?)<\/style>/); if(st){var se=document.createElement('style');se.textContent=st[1];box.prepend(se);}
+    document.body.appendChild(box);
+    html2pdf().set({margin:8,filename:'81plus_'+(d.numero||'documento')+'.pdf',html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4'}}).from(box).save().then(function(){box.remove();});
+  }).catch(function(){});
+}
+function caricaArchivio(){
+  fetch('api/preventivi.php?az=miei').then(function(r){return r.json();}).then(function(d){
+    if(!d.ok){document.getElementById('archBox').textContent='Accedi per vedere i tuoi documenti.';return;}
+    if(!d.documenti.length){document.getElementById('archBox').textContent='Ancora nessun documento, crea il primo dalla scheda Nuovo documento.';return;}
+    document.getElementById('archBox').innerHTML=d.documenti.map(function(p){
+      return '<div class="voceArch"><span><span class="tagTipo">'+p.tipo+'</span> <b>'+esc(p.numero)+'</b> · '+esc(p.cliente_nome||'')+' · '+Number(p.totale).toLocaleString('it-IT',{minimumFractionDigits:2})+' €</span>'
+       +'<span style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">'
+       +'<select onchange="cambiaStato('+p.id+',this.value)" style="width:auto;padding:5px 8px;font-size:11px">'+['bozza','inviato','accettato','rifiutato'].map(function(s){return '<option '+(s===p.stato?'selected':'')+'>'+s+'</option>';}).join('')+'</select>'
+       +'<button class="btn mini" onclick="riapriDoc('+p.id+')">Revisiona</button>'
+       +'<button class="btn ghost mini" onclick="pdfDa('+p.id+')">PDF</button>'
+       +'<button class="btn ghost mini" onclick="cancDoc('+p.id+')">×</button></span></div>';
+    }).join('');
+  });
+}
+function cambiaStato(id,stato){
+  fetch('api/preventivi.php?az=carica&id='+id).then(function(r){return r.json();}).then(function(d){
+    if(!d.ok)return; var doc=d.doc;
+    return fetch('api/preventivi.php?az=salva',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({id:doc.id,tipo:doc.tipo,cliente:doc.cliente,righe:doc.righe,condizioni:doc.condizioni,extra:doc.extra,stato:stato})});
+  }).then(function(){caricaArchivio();});
+}
+function riapriDoc(id){
+  fetch('api/preventivi.php?az=carica&id='+id).then(function(r){return r.json();}).then(function(d){
+    if(!d.ok){alert(d.err||'Errore');return;}
+    var doc=d.doc; DOCID=doc.id; RIGHE=doc.righe||[];
+    document.getElementById('dTipo').value=doc.tipo; mostraExtra();
+    document.getElementById('cNome').value=doc.cliente.nome||''; document.getElementById('cPiva').value=doc.cliente.piva||''; document.getElementById('cInd').value=doc.cliente.indirizzo||'';
+    document.getElementById('dCond').value=doc.condizioni||'';
+    var ex=doc.extra||{};
+    if(doc.tipo==='contratto'){document.getElementById('exOggettoC').value=ex.oggetto||'';document.getElementById('exTempi').value=ex.tempi||'';document.getElementById('exPagamenti').value=ex.pagamenti||'';}
+    if(doc.tipo==='subappalto'){document.getElementById('exOggettoS').value=ex.oggetto||'';document.getElementById('exCantiere').value=ex.cantiere||'';}
+    if(doc.tipo==='gara'){document.getElementById('exOggettoG').value=ex.oggetto||'';document.getElementById('exCig').value=ex.cig||'';document.getElementById('exScadenza').value=ex.scadenza||'';document.getElementById('exBase').value=ex.base||'';}
+    disegnaRighe(); tab('nuovo');
+  });
+}
+function pdfDa(id){
+  fetch('api/preventivi.php?az=genera&id='+id).then(function(r){return r.json();}).then(function(d){
+    if(!d.ok)return;
+    var box=document.createElement('div'); box.style.cssText='position:absolute;left:-9999px;top:0;width:794px;background:#fff';
+    box.innerHTML=d.html.replace(/^[\s\S]*<body>/,'').replace(/<\/body>[\s\S]*$/,'');
+    var st=d.html.match(/<style>([\s\S]*?)<\/style>/); if(st){var se=document.createElement('style');se.textContent=st[1];box.prepend(se);}
+    document.body.appendChild(box);
+    html2pdf().set({margin:8,filename:'81plus_'+(d.numero||'documento')+'.pdf',html2canvas:{scale:2,useCORS:true},jsPDF:{unit:'mm',format:'a4'}}).from(box).save().then(function(){box.remove();});
+  });
+}
+function cancDoc(id){ if(!confirm('Eliminare il documento?'))return;
+  fetch('api/preventivi.php?az=cancella',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({id:id})}).then(function(){caricaArchivio();});
+}
+mostraExtra(); caricaListino(); disegnaRighe();
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

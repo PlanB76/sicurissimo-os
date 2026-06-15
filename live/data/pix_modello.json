@@ -1,0 +1,33 @@
+{
+  "nota": "PIX81+ e' un Founding Node del Metaverso 81+. Posizione permanente, Elite Space, identita digitale. Mai presentato come investimento o promessa di rendimento.",
+  "manifesto": "Non stai acquistando uno spazio pubblicitario. Stai occupando una posizione permanente nel Metaverso 81+.",
+  "payoff": "Solo 1000 posizioni. Una volta occupate, resteranno nella storia di 81+.",
+  "prezzo": 1000,
+  "totali": 1000,
+  "max_utente": 20,
+  "max_sconto_pv": 200,
+  "titoli": [
+    {"min":1,  "nome":"Builder",        "icona":"🧱","colore":"#CD7F32","desc":"Hai posato il tuo primo mattone nell'ecosistema."},
+    {"min":3,  "nome":"Founder",        "icona":"🏛️","colore":"#C0C0C0","desc":"Sei un fondatore. La tua presenza pesa."},
+    {"min":5,  "nome":"Architect",      "icona":"📐","colore":"#FFD24A","desc":"Stai disegnando un pezzo di Metaverso 81+."},
+    {"min":10, "nome":"Legend",         "icona":"👑","colore":"#FB6B00","desc":"Una leggenda dell'ecosistema. Pochi come te."},
+    {"min":25, "nome":"Master Builder", "icona":"💎","colore":"#8A4AE8","desc":"Il vertice. Hai costruito un impero digitale."}
+  ],
+  "badge_storici": [
+    {"id":"founding100","nome":"Founding 100","icona":"🏛️","range":"primi 100","desc":"Tra i primi cento Founding Node. Storia pura."},
+    {"id":"pioneer500","nome":"Pioneer 500","icona":"⚜️","range":"primi 500","desc":"Tra i primi cinquecento. Un pioniere."},
+    {"id":"original","nome":"Original Builder","icona":"🛡️","range":"primi 1000","desc":"Tra i mille fondatori originali dell'ecosistema."}
+  ],
+  "distretti": [
+    {"id":"member","nome":"Member District","metallo":"Bronzo","colore":"#CD7F32","range":"0-399","desc":"Il quartiere dei membri. Dove tutto comincia."},
+    {"id":"networker","nome":"Networker District","metallo":"Argento","colore":"#C0C0C0","range":"400-699","desc":"Il quartiere di chi costruisce rete."},
+    {"id":"elite","nome":"Elite District","metallo":"Oro","colore":"#FFD24A","range":"700-899","desc":"Il quartiere d'oro. Visibilita prioritaria."},
+    {"id":"club","nome":"Club81+ District","metallo":"Nero e Oro","colore":"#E8501A","range":"900-999","desc":"Il distretto piu esclusivo. Nero e oro."}
+  ],
+  "score_pesi": {"visite":1,"click":3,"inviti":10,"iscritti":25,"anno_anzianita":100},
+  "elite_space": {
+    "titolo":"Elite Space",
+    "desc":"Con almeno un PIX81+ sblocchi il tuo spazio riservato nel Metaverso 81+",
+    "include":["Pagina aziendale dedicata","Logo personalizzato","Descrizione attivita","Sito, contatti, social","QR personale","SCI-ID associato","Link referral","Posizione nella Digital City"]
+  }
+}

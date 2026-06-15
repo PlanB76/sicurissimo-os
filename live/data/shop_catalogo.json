@@ -1,0 +1,24 @@
+{
+  "nota": "Catalogo dimostrativo. I prodotti reali arrivano via API dai fornitori. BigBuy per DPI e sicurezza, Printify e Gelato per print on demand brandizzato 81+.",
+  "categorie": [
+    {"id":"dpi","nome":"DPI e Sicurezza","fornitore":"BigBuy","icona":"🦺","desc":"Dispositivi di protezione individuale con marcatura CE reale."},
+    {"id":"wear","nome":"Abbigliamento 81+","fornitore":"Printify","icona":"👕","desc":"Capi brandizzati stampati su richiesta."},
+    {"id":"gadget","nome":"Gadget e Ufficio","fornitore":"Gelato","icona":"🎁","desc":"Gadget, stampe e accessori print on demand."}
+  ],
+  "prodotti": [
+    {"id":"dpi-001","cat":"dpi","nome":"Casco di protezione EN 397","prezzo":18.90,"pv":19,"img":"🪖","ce":"EN 397","forn":"BigBuy","desc":"Casco da cantiere con marcatura CE, conforme EN 397."},
+    {"id":"dpi-002","cat":"dpi","nome":"Guanti antitaglio livello 5","prezzo":9.50,"pv":10,"img":"🧤","ce":"EN 388","forn":"BigBuy","desc":"Guanti da lavoro antitaglio, protezione EN 388, livello 5."},
+    {"id":"dpi-003","cat":"dpi","nome":"Occhiali di protezione","prezzo":7.20,"pv":7,"img":"🥽","ce":"EN 166","forn":"BigBuy","desc":"Occhiali antinfortunistici, protezione EN 166."},
+    {"id":"dpi-004","cat":"dpi","nome":"Scarpe antinfortunistiche S3","prezzo":42.00,"pv":42,"img":"🥾","ce":"EN ISO 20345","forn":"BigBuy","desc":"Scarpe di sicurezza S3, puntale in acciaio, EN ISO 20345."},
+    {"id":"dpi-005","cat":"dpi","nome":"Mascherina FFP2 (conf. 20)","prezzo":12.00,"pv":12,"img":"😷","ce":"EN 149","forn":"BigBuy","desc":"Confezione 20 mascherine FFP2, protezione EN 149."},
+    {"id":"dpi-006","cat":"dpi","nome":"Gilet alta visibilità","prezzo":6.80,"pv":7,"img":"🦺","ce":"EN ISO 20471","forn":"BigBuy","desc":"Gilet alta visibilita, classe 2, EN ISO 20471."},
+    {"id":"wear-001","cat":"wear","nome":"T-shirt 81+ nera","prezzo":24.90,"pv":25,"img":"👕","forn":"Printify","desc":"T-shirt premium con logo 81+ ricamato. Stampa su richiesta."},
+    {"id":"wear-002","cat":"wear","nome":"Felpa hoodie 81+","prezzo":44.90,"pv":45,"img":"🧥","forn":"Printify","desc":"Felpa con cappuccio, logo 81+. Cotone pesante."},
+    {"id":"wear-003","cat":"wear","nome":"Cappellino 81+","prezzo":19.90,"pv":20,"img":"🧢","forn":"Printify","desc":"Cappellino regolabile con ricamo 81+."},
+    {"id":"wear-004","cat":"wear","nome":"Giacca da lavoro 81+","prezzo":54.90,"pv":55,"img":"🥼","forn":"Printify","desc":"Giacca da lavoro brandizzata, resistente."},
+    {"id":"gad-001","cat":"gadget","nome":"Borraccia termica 81+","prezzo":22.00,"pv":22,"img":"🍶","forn":"Gelato","desc":"Borraccia termica in acciaio con logo 81+."},
+    {"id":"gad-002","cat":"gadget","nome":"Taccuino 81+","prezzo":12.50,"pv":13,"img":"📓","forn":"Gelato","desc":"Taccuino brandizzato per appunti di cantiere."},
+    {"id":"gad-003","cat":"gadget","nome":"Tazza 81+","prezzo":14.90,"pv":15,"img":"☕","forn":"Gelato","desc":"Tazza in ceramica con logo 81+."},
+    {"id":"gad-004","cat":"gadget","nome":"Poster sicurezza A2","prezzo":9.90,"pv":10,"img":"🖼️","forn":"Gelato","desc":"Poster informativo sicurezza, formato A2, stampa di qualita."}
+  ]
+}

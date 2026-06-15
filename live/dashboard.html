@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard 81+</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--o:#E8501A;--o2:#ff7a45;--od:rgba(232,80,26,.12);--bg:#07070c;--n:#0e0e16;--n2:#14141e;--n3:#1b1b27;--b:#24242f;--b2:#2e2e3c;--w:#f4f4f8;--g:#a8a8b8;--g2:#6a6a7a;--green:#1db954;--red:#e74c3c;--yellow:#f39c12;--usdt:#26a17b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--w);font-size:14px}
+.app{display:flex;min-height:100vh}
+.side{width:248px;background:var(--n);border-right:1px solid var(--b);position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;z-index:50}
+.side-logo{padding:18px 20px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:10px}
+.lg{display:inline-flex;font-family:'Anton';font-size:18px;border-radius:5px;overflow:hidden}
+.la{background:var(--o);color:#fff;padding:3px 8px 1px}.lb{background:#fff;color:#07070c;padding:3px 8px 1px}
+.side-sub{font-family:'JetBrains Mono';font-size:8px;color:var(--o);letter-spacing:2px;margin-top:3px}
+.side-nav{flex:1;overflow-y:auto;padding:10px 0}
+.nav-group{font-family:'JetBrains Mono';font-size:9px;color:var(--g2);letter-spacing:1.5px;padding:12px 20px 5px;text-transform:uppercase}
+.nav-item{display:flex;align-items:center;gap:11px;padding:10px 20px;color:var(--g);cursor:pointer;font-size:13px;font-weight:600;border-left:2.5px solid transparent}
+.nav-item:hover{color:var(--w);background:var(--od)}
+.nav-item.active{color:var(--o);background:var(--od);border-left-color:var(--o)}
+.nav-item .ic{font-size:15px;width:18px;text-align:center}
+.side-foot{padding:14px 20px;border-top:1px solid var(--b);display:flex;align-items:center;gap:10px}
+.side-foot img{width:38px;height:38px;border-radius:50%;border:2px solid var(--o);object-fit:cover;display:none}
+.side-foot .ph{width:38px;height:38px;border-radius:50%;border:2px dashed var(--b);display:flex;align-items:center;justify-content:center;color:var(--g2)}
+.main{flex:1;margin-left:248px}
+.topbar{height:60px;background:rgba(14,14,22,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;padding:0 26px;position:sticky;top:0;z-index:40}
+.tb-title{font-family:'Anton';font-size:19px}.tb-right{display:flex;align-items:center;gap:14px}
+.badge{display:inline-flex;align-items:center;gap:7px;font-family:'JetBrains Mono';font-size:10px;color:var(--green);background:rgba(29,185,84,.1);border:1px solid rgba(29,185,84,.3);padding:5px 11px;border-radius:20px}
+.badge .d{width:7px;height:7px;border-radius:50%;background:var(--green)}
+.content{padding:26px}
+.panel{display:none}.panel.active{display:block}
+.page-head{margin-bottom:20px}.page-head h1{font-family:'Anton';font-size:27px}.page-head p{color:var(--g);font-size:13px;margin-top:4px}
+.grid{display:grid;gap:16px}.g4{grid-template-columns:repeat(4,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g2{grid-template-columns:repeat(2,1fr)}
+.card{background:var(--n2);border:1px solid var(--b);border-radius:14px;padding:20px}
+.kpi-ic{width:38px;height:38px;border-radius:10px;background:var(--od);display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:12px}
+.kpi-v{font-family:'Anton';font-size:28px}.kpi-l{color:var(--g2);font-size:12px;font-family:'JetBrains Mono';text-transform:uppercase;letter-spacing:.5px}
+h3{font-size:15px;margin-bottom:8px}
+label{font-size:11px;color:var(--g2);display:block;margin-bottom:5px}
+input,select{width:100%;background:var(--n3);border:1px solid var(--b);border-radius:8px;color:var(--w);padding:11px;font-family:'Sora'}
+.btn{border:none;padding:12px;border-radius:8px;font-weight:700;cursor:pointer;font-family:'Sora'}
+.btn-o{background:var(--o);color:#fff}.btn-u{background:var(--usdt);color:#fff}.btn-g{background:transparent;border:1px solid var(--o);color:var(--o)}
+.addr{font-family:'JetBrains Mono';font-size:11px;color:var(--o);background:var(--n3);padding:9px;border-radius:7px;word-break:break-all;cursor:pointer}
+.hint{font-size:11px;color:var(--g2);margin-top:6px;line-height:1.5}
+.demo{font-size:10px;color:var(--yellow);font-family:'JetBrains Mono';border:1px solid rgba(243,156,18,.3);background:rgba(243,156,18,.08);padding:2px 7px;border-radius:5px;display:inline-block}
+.ladder{display:flex;flex-direction:column;gap:6px}
+.rung{display:flex;align-items:center;gap:10px;padding:8px 11px;border-radius:8px;background:var(--n3);border:1px solid var(--b)}
+.rung.on{border-color:var(--o);background:var(--od)}
+.rung .lv{font-family:'Anton';color:var(--o);width:28px}
+@media(max-width:820px){.side{transform:translateX(-100%)}.main{margin-left:0}.g4,.g3,.g2{grid-template-columns:1fr}}
+</style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+</head>
+<body><div class="app">
+<aside class="side">
+  <div class="side-logo"><span class="lg"><span class="la">81</span><span class="lb">+</span></span><div><div style="font-size:11px;font-weight:700">La tua dashboard</div><div class="side-sub">81PLUS.NET</div></div></div>
+  <nav class="side-nav">
+    <div class="nav-group">Profilo</div>
+    <div class="nav-item active" data-p="utente"><span class="ic">🪪</span> La tua area</div>
+    <div class="nav-item" data-p="azienda" data-role="is_azienda" style="display:none"><span class="ic">🏢</span> Azienda</div>
+    <div class="nav-item" data-p="networker" data-role="is_networker" style="display:none"><span class="ic">🌐</span> Networker</div>
+    <div class="nav-item" data-p="franchisor" data-role="is_franchisor" style="display:none"><span class="ic">🏪</span> Franchising</div>
+    <div class="nav-item" data-p="club" data-role="is_club" style="display:none"><span class="ic">🏅</span> Club 81+</div>
+    <div class="nav-item" data-p="portafoglio"><span class="ic">💰</span> Portafoglio</div>
+    
+  </nav>
+  <div class="side-foot">
+    <img id="av-side" src=""><div id="av-side-ph" class="ph">👤</div>
+    <div><div style="font-size:12px;font-weight:700" id="sf-nome">81+</div><div style="font-family:'JetBrains Mono';font-size:9px;color:var(--o)" id="sf-sic"></div></div>
+  </div>
+</aside>
+<main class="main">
+  <div class="topbar"><div class="tb-title">La tua area</div><div class="tb-right"><span class="badge"><span class="d"></span> online</span><span style="font-size:12px" id="tb-nome"></span></div></div>
+  <div class="content">
+<div class="panel active" id="utente">
+  <div class="page-head"><h1>LA TUA AREA</h1><p>Il tuo profilo, i documenti e la tua identita 81+.</p></div>
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card"><div class="kpi-ic">🪪</div><div class="kpi-v" id="k-sic" style="font-size:20px">SIC</div><div class="kpi-l">Il tuo SIC ID</div></div>
+    <div class="card"><div class="kpi-ic">📄</div><div class="kpi-v" id="k-doc" style="font-size:18px">—</div><div class="kpi-l">Documento</div></div>
+    <div class="card"><div class="kpi-ic">🦊</div><div class="kpi-v" id="k-wal" style="font-size:18px">—</div><div class="kpi-l">Wallet</div></div>
+    <div class="card"><div class="kpi-ic">👤</div><div class="kpi-v" id="k-av" style="font-size:18px">—</div><div class="kpi-l">Avatar</div></div>
+  </div>
+  <div class="card" style="display:flex;align-items:center;gap:18px;margin-bottom:16px;flex-wrap:wrap">
+    <img id="av-img" src="" alt="avatar" style="width:84px;height:84px;border-radius:50%;border:2px solid var(--o);object-fit:cover;display:none">
+    <div id="av-ph" style="width:84px;height:84px;border-radius:50%;border:2px dashed var(--b);display:flex;align-items:center;justify-content:center;font-size:30px;color:var(--g2)">👤</div>
+    <div style="flex:1;min-width:220px">
+      <h3>Il tuo avatar</h3>
+      <p style="color:var(--g);font-size:13px">La tua tessera virtuale, legata al SIC ID e al MetaMask. Carica una foto, crea l avatar 3D gratis, o usa l avatar blockchain del wallet.</p>
+      <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+        <label class="btn btn-o" style="font-size:12px">Carica foto<input type="file" accept="image/*" style="display:none" onchange="avFoto(this)"></label>
+        <button class="btn btn-g" style="font-size:12px" onclick="avRPM()">Crea avatar 3D</button>
+        <button class="btn btn-g" style="font-size:12px" onclick="avChain()">⬢ Avatar blockchain</button>
+      </div>
+      <div id="av-msg" class="hint"></div>
+    </div>
+  </div>
+  <div class="card" style="margin-bottom:16px">
+    <h3>Il tuo link invito</h3>
+    <p style="color:var(--g);font-size:13px">Invita persone con il tuo link. Chi entra da qui diventa parte della tua rete e ti porta benefici, sconti e PV bonus.</p>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">
+      <div class="addr" id="ref-link" onclick="copiaRef()" style="flex:1;min-width:240px">…</div>
+      <button class="btn btn-o" onclick="copiaRef()">Copia</button>
+    </div>
+    <div id="ref-msg" class="hint"></div>
+  </div>
+  <div class="card" id="kyc-card" style="display:none">
+    <h3>Verifica la tua identita</h3>
+    <p style="color:var(--g);font-size:13px">Carica il documento di identita, fronte e retro. Resta al sicuro, fuori dalle pagine pubbliche.</p>
+    <div class="grid g2" style="margin-top:10px">
+      <div><label>Fronte</label><input type="file" id="kyc-fronte" accept="image/*,application/pdf"></div>
+      <div><label>Retro</label><input type="file" id="kyc-retro" accept="image/*,application/pdf"></div>
+    </div>
+    <button class="btn btn-o" style="margin-top:10px" onclick="kycSend()">Invia documento</button>
+    <div id="kyc-msg" class="hint"></div>
+  </div>
+
+</div>
+<div class="panel" id="azienda">
+  <div class="page-head"><h1>LA TUA AZIENDA <span class="demo">dati dimostrativi</span></h1><p>Conformita, documenti, scadenze e fatturazione.</p></div>
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card"><div class="kpi-ic">🛡️</div><div class="kpi-v" style="font-size:18px">da valutare</div><div class="kpi-l">Conformita</div></div>
+    <div class="card"><div class="kpi-ic">📄</div><div class="kpi-v">0</div><div class="kpi-l">Documenti</div></div>
+    <div class="card"><div class="kpi-ic">⏰</div><div class="kpi-v">0</div><div class="kpi-l">Scadenze 60g</div></div>
+    <div class="card"><div class="kpi-ic">👷</div><div class="kpi-v">0</div><div class="kpi-l">Dipendenti</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Scadenze nei prossimi mesi</h3><canvas id="ch-az" height="120"></canvas></div>
+    <div class="card"><h3>Fatturazione</h3><p style="color:var(--g);font-size:13px">Ragione sociale, P.IVA, PEC e codice destinatario. Qui le proforma e le fatture dei tuoi acquisti.</p><a href="/core81/api/proforma.php" class="btn btn-g" style="display:inline-block;margin-top:8px;text-decoration:none">Vedi proforma</a></div>
+  </div>
+
+</div>
+<div class="panel" id="networker">
+  <div class="page-head"><h1>LA TUA RETE <span class="demo">dati dimostrativi</span></h1><p>Downline, provvigioni e carriera.</p></div>
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card"><div class="kpi-ic">👥</div><div class="kpi-v">0</div><div class="kpi-l">Persone in rete</div></div>
+    <div class="card"><div class="kpi-ic">💶</div><div class="kpi-v">€ 0</div><div class="kpi-l">Provvigioni mese</div></div>
+    <div class="card"><div class="kpi-ic">🎖️</div><div class="kpi-v" id="k-carriera" style="font-size:18px">liv 0</div><div class="kpi-l">Carriera</div></div>
+    <div class="card"><div class="kpi-ic">🔗</div><div class="kpi-v" style="font-size:15px">referral</div><div class="kpi-l">Invita</div></div>
+  </div>
+  <div class="grid g2">
+    <div class="card"><h3>Crescita rete</h3><canvas id="ch-net" height="120"></canvas></div>
+    <div class="card"><h3>Carriera, 8 livelli</h3><div class="ladder" id="ladder"></div></div>
+  </div>
+<div class="card" style="margin-top:16px"><h3>Il tuo territorio di rete</h3><div class="grid g4" style="margin:8px 0 12px"><div class="card" style="padding:13px"><div class="kpi-l">Negozi</div><div class="kpi-v" id="nw-neg" style="font-size:22px">0</div></div><div class="card" style="padding:13px"><div class="kpi-l">Fatturato mese</div><div class="kpi-v" id="nw-fatt" style="font-size:18px">€ 0</div></div><div class="card" style="padding:13px"><div class="kpi-l">Utenti</div><div class="kpi-v" id="nw-ut" style="font-size:22px">0</div></div><div class="card" style="padding:13px"><div class="kpi-l">Comuni</div><div class="kpi-v" id="nw-com" style="font-size:22px">0</div></div></div><div style="display:grid;grid-template-columns:280px 1fr;gap:14px"><div><div id="nw-crumb" style="font-family:JetBrains Mono;font-size:11px;color:var(--o);margin-bottom:8px"></div><div id="nw-list" style="max-height:380px;overflow-y:auto"></div></div><div style="border-radius:12px;overflow:hidden"><div id="nw-map" style="width:100%;height:420px;background:var(--n3)"></div></div></div><div class="hint">Mappa demo della tua zona. Diventa reale quando colleghiamo i dati.</div></div>
+
+
+<div class="card" style="margin-top:16px">
+  <h3>La tua rete, leader e downline</h3>
+  <p style="color:var(--g);font-size:13px">In alto il tuo leader di riferimento. Sotto tutta la tua rete. Clicca una persona per aprire la sua scheda e la sua sotto rete. Verde attivo, grigio inattivo.</p>
+  <div id="net-upline" style="margin:10px 0"></div>
+  <div style="display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap">
+    <button class="btn btn-o" id="net-bt" onclick="netView('tree')" style="font-size:12px">Albero</button>
+    <button class="btn btn-g" id="net-bm" onclick="netView('map')" style="font-size:12px">Mappa DNA Italia</button>
+    <span style="margin-left:auto;font-size:11px;color:var(--g2);align-self:center">Trascina per spostare, rotella per zoom.</span>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 290px;gap:14px">
+    <div>
+      <div id="net-tree-wrap" style="height:460px;overflow:hidden;border:1px solid var(--b);border-radius:12px;background:var(--n3);position:relative;cursor:grab"><div id="net-tree" style="position:absolute;left:18px;top:18px;transform-origin:0 0"></div></div>
+      <div id="net-map" style="height:460px;border-radius:12px;display:none;background:var(--n3);overflow:hidden"></div>
+    </div>
+    <div class="card" id="net-detail" style="overflow-y:auto;max-height:460px;padding:16px"><div style="color:var(--g2);font-size:13px">Clicca una persona della rete per vederne i dati.</div></div>
+  </div>
+  <div class="hint">Rete dimostrativa finche non arrivano i tuoi iscritti reali, poi qui vedi la tua rete vera.</div>
+</div>
+
+</div>
+<div class="panel" id="franchisor">
+  <div class="page-head"><h1>FRANCHISING <span class="demo">dati dimostrativi</span></h1><p>Il tuo territorio in esclusiva, punti e ricavi area.</p></div>
+  <div class="grid g4" style="margin-bottom:16px">
+    <div class="card"><div class="kpi-ic">📍</div><div class="kpi-v">0</div><div class="kpi-l">Punti attivi</div></div>
+    <div class="card"><div class="kpi-ic">💶</div><div class="kpi-v">€ 0</div><div class="kpi-l">Ricavi area</div></div>
+    <div class="card"><div class="kpi-ic">🏢</div><div class="kpi-v">0</div><div class="kpi-l">Aziende gestite</div></div>
+    <div class="card"><div class="kpi-ic">🤝</div><div class="kpi-v">0</div><div class="kpi-l">Networker area</div></div>
+  </div>
+  <div class="card" style="margin-top:16px"><h3>La tua regione, province e comuni</h3><div class="grid g4" style="margin:8px 0 12px"><div class="card" style="padding:13px"><div class="kpi-l">Negozi</div><div class="kpi-v" id="fr-neg" style="font-size:22px">0</div></div><div class="card" style="padding:13px"><div class="kpi-l">Fatturato mese</div><div class="kpi-v" id="fr-fatt" style="font-size:18px">€ 0</div></div><div class="card" style="padding:13px"><div class="kpi-l">Utenti</div><div class="kpi-v" id="fr-ut" style="font-size:22px">0</div></div><div class="card" style="padding:13px"><div class="kpi-l">Comuni</div><div class="kpi-v" id="fr-com" style="font-size:22px">0</div></div></div><div style="display:grid;grid-template-columns:280px 1fr;gap:14px"><div><div id="fr-crumb" style="font-family:JetBrains Mono;font-size:11px;color:var(--o);margin-bottom:8px"></div><div id="fr-list" style="max-height:380px;overflow-y:auto"></div></div><div style="border-radius:12px;overflow:hidden"><div id="fr-map" style="width:100%;height:420px;background:var(--n3)"></div></div></div><div class="hint">Mappa demo della tua zona. Diventa reale quando colleghiamo i dati.</div></div>
+
+</div>
+<div class="panel" id="club">
+  <div class="page-head"><h1>CLUB 81+</h1><p>Il tuo stato nel club e i tuoi vantaggi.</p></div>
+  <div class="grid g3" style="margin-bottom:16px">
+    <div class="card glow"><div class="kpi-ic">🏅</div><div class="kpi-v" id="k-club" style="color:var(--o)">liv 0</div><div class="kpi-l">Livello club NETWORK81+</div></div>
+    <div class="card glow"><div class="kpi-ic">⭐</div><div class="kpi-v" id="k-vip" style="color:var(--o)">—</div><div class="kpi-l">Livello VIP</div></div>
+    <div class="card"><div class="kpi-ic">🎁</div><div class="kpi-v" style="font-size:18px">attivi</div><div class="kpi-l">Vantaggi</div></div>
+  </div>
+  <div class="card"><h3>I tuoi vantaggi</h3><p style="color:var(--g);font-size:13px">Al livello massimo del club hai priorita, condizioni dedicate e accesso anticipato alle novita dell ecosistema. Piu sali, piu il club ti paga.</p></div>
+
+</div>
+<div class="panel" id="portafoglio">
+  <div class="page-head"><h1>PORTAFOGLIO 81+</h1><p>Wallet interno, deposito, acquisto USDT, swap e MetaMask.</p></div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><div class="kpi-ic">💰</div><div class="kpi-l">Saldo</div><div class="kpi-v" id="saldo" style="color:var(--o)">€ 0,00</div></div>
+    <div class="card"><div class="kpi-ic">🦊</div><h3>Collega MetaMask</h3><p style="color:var(--g);font-size:13px">Lega il wallet al SIC ID e chiudi il cerchio dell identita.</p><button class="btn btn-g" style="margin-top:10px" onclick="bindMM()">Collega il wallet</button><div id="mm-msg" class="hint"></div></div>
+  </div>
+  <div class="grid g2" style="margin-bottom:16px">
+    <div class="card"><h3>Deposita cripto</h3><div class="hint" style="margin:6px 0">Indirizzo unico rete BSC, USDT, USDC e Bitcoin BTCB.</div><div class="addr" id="addr" onclick="copia()">0x3C320B3a0917fF44BF6551CDdee44402AFcF250C</div><div class="hint">Tocca per copiare.</div></div>
+    <div class="card"><h3>Compra USDT con carta</h3><label>Importo in euro</label><input type="number" id="eur-amt" value="49" min="10" oninput="conv()"><div id="conv-out" class="hint"></div><button class="btn" style="width:100%;margin-top:8px;background:#0070ba;color:#fff" onclick="alert('PayPal da collegare in fase di messa online.')">PayPal, paga con carta</button></div>
+  </div>
+  <div class="card"><h3>Swap interno verso USDT</h3>
+    <div class="grid g3" style="margin-top:10px">
+      <div><label>Da</label><select id="sw-da" onchange="swPrev()"><option value="BTC">Bitcoin BTCB</option><option value="USDC">USDC</option></select></div>
+      <div><label>Importo</label><input type="number" id="sw-amt" value="0.01" step="any" min="0" oninput="swPrev()"></div>
+      <div><label>Ricevi</label><div style="padding:11px;font-family:'JetBrains Mono';color:var(--usdt);font-weight:700" id="sw-out">…</div></div>
+    </div>
+    <button class="btn btn-u" style="width:100%;margin-top:10px" onclick="swDo()">Converti in USDT</button>
+    <div id="sw-msg" class="hint"></div>
+  </div>
+</div>
+</div>
+</main></div>
+<div id="rpm-ov" style="position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;display:none;align-items:center;justify-content:center;padding:16px">
+  <div style="width:100%;max-width:520px;height:80vh;background:#141414;border:1px solid #2a2a36;border-radius:16px;overflow:hidden;position:relative">
+    <button onclick="document.getElementById('rpm-ov').style.display='none'" style="position:absolute;top:10px;right:14px;z-index:2;background:#E8501A;color:#fff;border:none;width:32px;height:32px;border-radius:50%;cursor:pointer;font-size:18px">&times;</button>
+    <iframe id="rpm-frame" allow="camera *; microphone *" style="width:100%;height:100%;border:0"></iframe>
+  </div>
+</div>
+
+<script>
+// NAVIGAZIONE A SCHEDE
+var titles={utente:'La tua area',azienda:'Azienda',networker:'Networker',franchisor:'Franchising',club:'Club 81+',portafoglio:'Portafoglio'};
+document.querySelectorAll('.nav-item').forEach(function(it){it.addEventListener('click',function(){
+  document.querySelectorAll('.nav-item').forEach(x=>x.classList.remove('active'));it.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  var p=it.getAttribute('data-p');var el=document.getElementById(p);if(el)el.classList.add('active');
+  document.querySelector('.tb-title').textContent=titles[p]||'';window.scrollTo(0,0);
+  if(p==='franchisor')showScoped('fr',window.__scopeFr);
+  if(p==='networker'){showScoped('nw',window.__scopeNw);netInit();}
+});});
+// AVATAR
+function avMsg(t,ok){var m=document.getElementById('av-msg');if(!m)return;m.style.color=ok?'#1db954':'#ff9b8f';m.textContent=t;}
+function avShow(u){var i=document.getElementById('av-img'),p=document.getElementById('av-ph'),s=document.getElementById('av-side'),sp=document.getElementById('av-side-ph');if(u){if(i){i.src=u;i.style.display='block';}if(p)p.style.display='none';if(s){s.src=u;s.style.display='inline-block';}if(sp)sp.style.display='none';}}
+async function avFoto(inp){var f=inp.files[0];if(!f)return;var fd=new FormData();fd.append('foto',f);avMsg('Carico...',true);try{var r=await fetch('/core81/api/avatar.php',{method:'POST',credentials:'include',body:fd});var d=await r.json();if(d.ok){avShow(d.avatar_url);avMsg('Avatar aggiornato.',true);document.getElementById('k-av').textContent='foto';}else avMsg(d.error||'Errore.',false);}catch(e){avMsg('Errore di connessione.',false);}}
+function avRPM(){document.getElementById('rpm-frame').src='https://81plus.readyplayer.me/avatar?frameApi&clearCache';document.getElementById('rpm-ov').style.display='flex';}
+window.addEventListener('message',async function(ev){var url='';try{var j=typeof ev.data==='string'?JSON.parse(ev.data):ev.data;if(j&&j.eventName==='v1.avatar.exported')url=j.data.url;}catch(e){if(typeof ev.data==='string'&&ev.data.indexOf('.glb')>0)url=ev.data;}if(!url)return;var png=url.replace('.glb','.png')+'?scene=portrait-v1';document.getElementById('rpm-ov').style.display='none';try{var r=await fetch('/core81/api/avatar.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({tipo:'readyplayerme',url:png})});var d=await r.json();if(d.ok){avShow(d.avatar_url);avMsg('Avatar 3D collegato.',true);document.getElementById('k-av').textContent='3D';}}catch(e){}});
+function blockies(addr){var rs=[0,0,0,0];function sr(s){for(var i=0;i<4;i++)rs[i]=0;for(i=0;i<s.length;i++)rs[i%4]=((rs[i%4]<<5)-rs[i%4])+s.charCodeAt(i);}function rnd(){var t=rs[0]^(rs[0]<<11);rs[0]=rs[1];rs[1]=rs[2];rs[2]=rs[3];rs[3]=(rs[3]^(rs[3]>>19)^t^(t>>8));return(rs[3]>>>0)/((1<<31)>>>0);}function col(){return'hsl('+Math.floor(rnd()*360)+','+(rnd()*60+40)+'%,'+(rnd()*55+25)+'%)';}sr(addr.toLowerCase());var main=col(),bg=col(),spot=col(),sz=8,sc=14;var data=[];for(var y=0;y<sz;y++){var row=[];for(var x=0;x<sz/2;x++)row[x]=Math.floor(rnd()*2.3);var rr=row.slice();rr.reverse();data.push(row.concat(rr));}var c=document.createElement('canvas');c.width=c.height=sz*sc;var x2=c.getContext('2d');x2.fillStyle=bg;x2.fillRect(0,0,c.width,c.height);for(var i=0;i<sz;i++)for(var j=0;j<sz;j++){if(data[i][j]){x2.fillStyle=data[i][j]===1?main:spot;x2.fillRect(j*sc,i*sc,sc,sc);}}return c.toDataURL();}
+async function avChain(){var w=window.__wallet;if(!w&&typeof window.ethereum!=='undefined'){try{var a=await window.ethereum.request({method:'eth_requestAccounts'});w=a[0];}catch(e){}}if(!w){avMsg('Collega prima MetaMask.',false);return;}var data=blockies(w);avShow(data);try{var r=await fetch('/core81/api/avatar.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({tipo:'blockchain',url:data})});var d=await r.json();avMsg(d.ok?'Avatar blockchain impostato.':(d.error||'Errore.'),d.ok);if(d.ok)document.getElementById('k-av').textContent='blockchain';}catch(e){avMsg('Errore di connessione.',false);}}
+// WALLET
+function copia(){var t=document.getElementById('addr').textContent;navigator.clipboard&&navigator.clipboard.writeText(t);var e=document.getElementById('addr');var o=e.style.color;e.style.color='#1db954';setTimeout(()=>e.style.color=o,800);}
+async function conv(){var eur=parseFloat(document.getElementById('eur-amt').value||0);var o=document.getElementById('conv-out');if(eur<=0){o.textContent='';return}try{var r=await fetch('/core81/api/price.php?eur='+eur);var d=await r.json();o.textContent=d.ok&&d.conversione?('circa '+d.conversione.usdt+' USDT'):'cambio non disponibile';}catch(e){o.textContent='cambio non disponibile';}}
+var SW=null;fetch('/core81/api/price.php').then(r=>r.json()).then(d=>{if(d.ok){SW=d.rates;swPrev();}}).catch(function(){});
+function swPrev(){var o=document.getElementById('sw-out');if(!o)return;var da=document.getElementById('sw-da').value;var a=parseFloat(document.getElementById('sw-amt').value||0);if(!SW||a<=0){o.textContent='…';return}var ep=da==='BTC'?SW.eur_per_btc:SW.eur_per_usdc;o.textContent=(a*ep/SW.eur_per_usdt).toLocaleString('it-IT',{maximumFractionDigits:2})+' USDT';}
+async function swDo(){var da=document.getElementById('sw-da').value;var a=parseFloat(document.getElementById('sw-amt').value||0);var m=document.getElementById('sw-msg');if(a<=0){m.style.color='#ff9b8f';m.textContent='Importo non valido.';return}m.style.color='#a8a8b8';m.textContent='Invio...';try{var r=await fetch('/core81/api/swap.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({da,importo:a})});var d=await r.json();m.style.color=d.ok?'#1db954':'#ff9b8f';m.textContent=d.ok?d.messaggio:(d.error||'Swap non riuscito.');}catch(e){m.style.color='#ff9b8f';m.textContent='Errore di connessione.';}}
+async function bindMM(){var m=document.getElementById('mm-msg');if(typeof window.ethereum==='undefined'){window.open('https://metamask.io/download/','_blank');return}try{var acc=await window.ethereum.request({method:'eth_requestAccounts'});var w=acc[0].toLowerCase();var nr=await fetch('/core81/api/web3.php?action=nonce',{credentials:'include'});var nd=await nr.json();if(!nd.ok){m.style.color='#ff9b8f';m.textContent=nd.error||'Accedi e riprova.';return}var sig=await window.ethereum.request({method:'personal_sign',params:[nd.message,w]});var vr=await fetch('/core81/api/web3.php?action=link',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify({wallet:w,signature:sig,nonce:nd.nonce})});var vd=await vr.json();m.style.color=vd.ok?'#1db954':'#ff9b8f';m.textContent=vd.ok?'Wallet collegato.':(vd.error||'Firma non valida.');if(vd.ok){document.getElementById('k-wal').textContent='collegato';window.__wallet=w;}}catch(e){m.style.color='#ff9b8f';m.textContent='Firma annullata.';}}
+// CARICA PERSONA E ADATTA LE SCHEDE
+(async function(){try{var r=await fetch('/core81/api/auth.php?action=me',{credentials:'include'});var d=await r.json();if(!d||!d.ok||!d.persona)return;var P=d.persona;window.__wallet=P.wallet||'';
+  var nome=((P.nome||'')+' '+(P.cognome||'')).trim()||P.username||'';
+  var S=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
+  S('tb-nome',nome);S('sf-nome',nome);S('sf-sic',P.sic_id?('SIC '+P.sic_id):'');
+  S('k-sic',P.sic_id||'—');S('k-doc',P.documento_verificato?'verificato':'da caricare');S('k-wal',P.wallet?'collegato':'da collegare');S('k-av',P.avatar_tipo||'da impostare');
+  if(P.avatar_url)avShow(P.avatar_url);
+  if(!P.documento_verificato){var kc=document.getElementById('kyc-card');if(kc)kc.style.display='block';}
+  S('saldo','€ '+parseFloat(P.saldo_deposito||0).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2}));
+  // mostra schede in base ai ruoli
+  document.querySelectorAll('.nav-item[data-role]').forEach(function(it){if(parseInt(P[it.getAttribute('data-role')]||0))it.style.display='flex';});
+  // carriera
+  S('k-carriera','liv '+(P.carriera_livello||0));
+  var gradi=['Allievo','Caporale','Sergente','Maresciallo','Tenente','Capitano','Maggiore','Colonnello'];
+  var lad=document.getElementById('ladder');if(lad){for(var i=1;i<=8;i++){var on=(P.carriera_livello||0)>=i;var rg=document.createElement('div');rg.className='rung'+(on?' on':'');rg.innerHTML='<span class="lv">'+i+'</span><span>'+gradi[i-1]+'</span>'+(i>=5?'<span style="margin-left:auto;font-size:11px;color:var(--g2)">+ Agente AI</span>':'');lad.appendChild(rg);}}
+  // club
+  S('k-club','liv '+(P.club_livello||0));S('k-vip',P.vip_livello||'—');
+  // grafici demo
+  if(window.Chart){var opt={responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#6a6a7a'},grid:{display:false}},y:{ticks:{color:'#6a6a7a'},grid:{color:'#24242f'}}}};var mesi=['Gen','Feb','Mar','Apr','Mag','Giu'];
+   var mk=function(id,vals,type){var c=document.getElementById(id);if(c)new Chart(c,{type:type||'line',data:{labels:mesi,datasets:[{data:vals,borderColor:'#E8501A',backgroundColor:'rgba(232,80,26,.18)',fill:true,tension:.35}]},options:opt});};
+   mk('ch-az',[2,3,1,4,2,5],'bar');mk('ch-net',[5,9,14,20,28,35]);}
+  window.__persona=P;
+  window.__scopeFr={regione:P.regione_gestita};
+  var lvl=(P.livello_territorio||'regione');
+  window.__scopeNw=(lvl==='comune')?{regione:P.regione_gestita,provincia:P.provincia_gestita,comune:P.comune_gestito}:((lvl==='provincia')?{regione:P.regione_gestita,provincia:P.provincia_gestita}:{regione:P.regione_gestita});
+}catch(e){}})();
+</script>
+
+
+<script>
+// ===== MAPPE SCALATE PER TERRITORIO =====
+var FDATA2=null,FMAPS={},FLAY={};
+function fEuro2(v){return '€ '+Number(v).toLocaleString('it-IT');}
+function fColor2(s){return s==='attivo'?'#1db954':(s==='in crescita'?'#E8501A':(s==='da seguire'?'#f39c12':'#4da6ff'));}
+function fPopup2(n){return '<div style="font-family:Sora,sans-serif;min-width:210px;color:#1a1a1a"><div style="font-weight:800;color:#E8501A">'+n.negozio+'</div><div style="font-size:12px;color:#666">'+n.comune+' ('+n.provincia+')</div><div style="font-size:12px;margin-top:5px"><b>'+n.capo.nome+' '+n.capo.cognome+'</b> liv '+n.capo.livello+'</div><div style="font-family:monospace;color:#E8501A;font-size:12px">SIC '+n.capo.sic_id+'</div><div style="font-size:12px;margin-top:4px">'+fEuro2(n.fatturato)+' mese · '+n.utenti+' utenti · '+n.contratti+' contratti</div><div style="font-size:12px">Stato <b style="color:'+fColor2(n.stato)+'">'+n.stato+'</b></div></div>';}
+function showScoped(prefix,scope){
+  var listEl=document.getElementById(prefix+'-list');
+  if(!scope||!scope.regione){if(listEl)listEl.innerHTML='<div class="hint">Nessuna zona assegnata al tuo profilo. Quando ti viene affidato un territorio, qui compare la tua mappa.</div>';return;}
+  if(!FDATA2){fetch('/assets/franchise_demo.json').then(function(r){return r.json();}).then(function(d){FDATA2=d;drawScoped(prefix,scope);}).catch(function(){if(listEl)listEl.innerHTML='<div class="hint" style="color:#ff9b8f">Dati mappa non disponibili.</div>';});}
+  else drawScoped(prefix,scope);
+}
+function ensureMap(prefix){
+  if(FMAPS[prefix]){setTimeout(function(){FMAPS[prefix].invalidateSize();},80);return FMAPS[prefix];}
+  if(typeof L==='undefined')return null;
+  var m=L.map(prefix+'-map',{zoomControl:true,attributionControl:false}).setView([42.4,12.6],5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:18,subdomains:'abcd'}).addTo(m);
+  FMAPS[prefix]=m;FLAY[prefix]=L.layerGroup().addTo(m);setTimeout(function(){m.invalidateSize();},80);return m;
+}
+function drawScoped(prefix,scope){
+  var m=ensureMap(prefix);if(!m)return;
+  var ns=FDATA2.negozi.filter(function(n){return n.regione===scope.regione&&(!scope.provincia||n.provincia===scope.provincia)&&(!scope.comune||n.comune===scope.comune);});
+  // KPI
+  var fatt=0,ut=0,com={};ns.forEach(function(n){fatt+=n.fatturato;ut+=n.utenti;com[n.comune]=1;});
+  var S=function(id,v){var e=document.getElementById(id);if(e)e.textContent=v;};
+  S(prefix+'-neg',ns.length);S(prefix+'-fatt',fEuro2(fatt));S(prefix+'-ut',ut);S(prefix+'-com',Object.keys(com).length);
+  // crumb
+  var cr=scope.regione.toUpperCase()+(scope.provincia?(' › '+scope.provincia):'')+(scope.comune?(' › '+scope.comune):'');
+  var crEl=document.getElementById(prefix+'-crumb');if(crEl)crEl.textContent=cr;
+  // marker
+  FLAY[prefix].clearLayers();var pts=[];
+  ns.forEach(function(n){var mk=L.circleMarker([n.lat,n.lng],{radius:8,color:'#fff',weight:1.5,fillColor:fColor2(n.stato),fillOpacity:.9});mk.bindPopup(fPopup2(n));mk.addTo(FLAY[prefix]);n.__mk=mk;pts.push([n.lat,n.lng]);});
+  if(pts.length===1)m.setView(pts[0],11);else if(pts.length>1)m.fitBounds(pts,{padding:[35,35]});
+  // lista, drill nello scope
+  var L0=document.getElementById(prefix+'-list');L0.innerHTML='';
+  var row=function(html,fn){var d=document.createElement('div');d.innerHTML=html;d.style.cssText='padding:9px 10px;border:1px solid var(--b);border-radius:8px;margin-bottom:7px;cursor:pointer';d.onmouseover=function(){d.style.borderColor='var(--o)';};d.onmouseout=function(){d.style.borderColor='var(--b)';};if(fn)d.onclick=fn;return d;};
+  if(scope.provincia||scope.comune){
+    if(scope.provincia&&!scope.comune){var b=document.createElement('div');b.textContent='‹ Torna alla regione';b.style.cssText='color:var(--o);cursor:pointer;font-size:12px;margin-bottom:8px;font-weight:700';b.onclick=function(){showScoped(prefix,{regione:scope.regione});};L0.appendChild(b);}
+    ns.forEach(function(n){L0.appendChild(row('<div style="display:flex;justify-content:space-between"><b>'+n.negozio+'</b><span style="color:'+fColor2(n.stato)+';font-size:11px;font-weight:700">'+n.stato+'</span></div><div style="font-size:12px;color:var(--g)">Capo liv '+n.capo.livello+' · '+n.capo.nome+' '+n.capo.cognome+' · SIC '+n.capo.sic_id+'</div><div style="font-size:12px;color:var(--g2)">'+fEuro2(n.fatturato)+' mese · '+n.utenti+' utenti</div>',function(){m.setView([n.lat,n.lng],12);if(n.__mk)n.__mk.openPopup();}));});
+  } else {
+    var byProv={};ns.forEach(function(n){(byProv[n.provincia]=byProv[n.provincia]||[]).push(n);});
+    Object.keys(byProv).forEach(function(pr){var arr=byProv[pr];var ff=0,uu=0;arr.forEach(function(n){ff+=n.fatturato;uu+=n.utenti;});var rp=arr[0].resp_prov;L0.appendChild(row('<div style="display:flex;justify-content:space-between"><b>Provincia di '+pr+'</b><span style="color:var(--o);font-weight:700">'+arr.length+'</span></div><div style="font-size:12px;color:var(--g)">Resp. prov. liv 7 · '+rp.nome+' '+rp.cognome+'</div><div style="font-size:12px;color:var(--g2)">'+fEuro2(ff)+' mese · '+uu+' utenti</div>',function(){showScoped(prefix,{regione:scope.regione,provincia:pr});}));});
+  }
+}
+</script>
+
+<script>
+async function kycSend(){var f=document.getElementById('kyc-fronte').files[0],r=document.getElementById('kyc-retro').files[0],m=document.getElementById('kyc-msg');if(!f||!r){m.style.color='#ff9b8f';m.textContent='Servono sia il fronte sia il retro.';return}var fd=new FormData();fd.append('fronte',f);fd.append('retro',r);m.style.color='#a8a8b8';m.textContent='Invio in corso...';try{var res=await fetch('/core81/api/kyc.php',{method:'POST',credentials:'include',body:fd});var d=await res.json();m.style.color=d.ok?'#1db954':'#ff9b8f';m.textContent=d.ok?'Documento ricevuto, lo verifichiamo a breve.':(d.error||'Invio non riuscito.');if(d.ok){var k=document.getElementById('k-doc');if(k)k.textContent='in verifica';}}catch(e){m.style.color='#ff9b8f';m.textContent='Errore di connessione.';}}
+var REFLINK='';
+function copiaRef(){if(!REFLINK)return;navigator.clipboard&&navigator.clipboard.writeText(REFLINK);var m=document.getElementById('ref-msg');m.style.color='#1db954';m.textContent='Link copiato.';}
+fetch('/core81/api/referral.php',{credentials:'include'}).then(r=>r.json()).then(d=>{if(d.ok){REFLINK=d.link;var e=document.getElementById('ref-link');if(e)e.textContent=d.link;}}).catch(function(){});
+</script>
+
+<script>
+// ===== STRUMENTO RETE DEL NETWORKER =====
+var NETDATA=null,NETMAP=null,NETLAY=null,netScale=1,netX=0,netY=0;
+function statusColor(a){return a?'#1db954':'#6a6a7a';}
+function netInit(){
+  if(NETDATA)return;
+  fetch('/core81/api/network.php',{credentials:'include'}).then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.ok)return;NETDATA=d;renderUpline(d.upline);renderTree(d.downline);enablePanZoom();
+  }).catch(function(){});
+}
+function renderUpline(u){var box=document.getElementById('net-upline');if(!box)return;box.innerHTML='';if(!u){box.innerHTML='<span style="color:var(--g2);font-size:12px">Sei al vertice della tua rete.</span>';return;}
+  var lab=document.createElement('span');lab.textContent='Leader di riferimento  ';lab.style.cssText='color:var(--g2);font-size:12px';
+  var c=document.createElement('span');c.style.cssText='display:inline-flex;align-items:center;gap:9px;background:var(--od);border:1px solid var(--o);border-radius:10px;padding:9px 13px;cursor:pointer';
+  c.innerHTML='<span style="width:12px;height:12px;border-radius:50%;background:'+statusColor(u.attivo)+'"></span><b>'+u.nome+' '+u.cognome+'</b><span style="color:var(--o);font-family:JetBrains Mono;font-size:11px">SIC '+u.sic_id+'</span>';
+  c.onclick=function(){openDetail(u);};box.appendChild(lab);box.appendChild(c);
+}
+function nodeRow(node,depth){
+  var wrap=document.createElement('div');wrap.style.cssText='margin-left:'+(depth>0?20:0)+'px;border-left:'+(depth>0?'1px solid var(--b)':'none')+';padding-left:'+(depth>0?12:0)+'px';
+  var row=document.createElement('div');row.style.cssText='display:flex;align-items:center;gap:8px;padding:4px 0;white-space:nowrap';
+  var kids=node.children&&node.children.length;
+  var car=document.createElement('span');car.textContent=kids?'▸':'·';car.style.cssText='cursor:pointer;color:var(--o);width:13px;display:inline-block;text-align:center';
+  var dot=document.createElement('span');dot.style.cssText='width:11px;height:11px;border-radius:50%;background:'+statusColor(node.attivo)+';display:inline-block;'+(node.tipo==='networker'?'box-shadow:0 0 0 2px var(--o)':'');
+  var lab=document.createElement('span');lab.style.cssText='cursor:pointer;font-size:13px';lab.innerHTML='<b>'+node.nome+' '+node.cognome+'</b> <span style="color:var(--g2);font-size:11px">'+(node.tipo==='networker'?('NET liv '+node.carriera):'utente')+' · '+node.citta+'</span>';
+  row.appendChild(car);row.appendChild(dot);row.appendChild(lab);wrap.appendChild(row);
+  if(kids){var box=document.createElement('div');box.style.display='none';node.children.forEach(function(ch){box.appendChild(nodeRow(ch,depth+1));});wrap.appendChild(box);
+    car.onclick=function(){var o=box.style.display==='block';box.style.display=o?'none':'block';car.textContent=o?'▸':'▾';};}
+  lab.onclick=function(){openDetail(node);};dot.onclick=function(){openDetail(node);};
+  return wrap;
+}
+function renderTree(downline){var t=document.getElementById('net-tree');if(!t)return;t.innerHTML='';
+  var root=document.createElement('div');root.style.cssText='display:inline-flex;align-items:center;gap:8px;padding:6px 11px;background:var(--o);color:#fff;border-radius:8px;margin-bottom:8px;font-weight:700';
+  var nm=window.__persona?(((window.__persona.nome||'')+' '+(window.__persona.cognome||'')).trim()||'Tu'):'Tu';root.textContent=nm+'  ·  TU';t.appendChild(root);
+  (downline||[]).forEach(function(n){t.appendChild(nodeRow(n,0));});
+}
+function enablePanZoom(){var wrap=document.getElementById('net-tree-wrap'),t=document.getElementById('net-tree');if(!wrap||!t)return;var drag=false,sx,sy;
+  function apply(){t.style.transform='translate('+netX+'px,'+netY+'px) scale('+netScale+')';}
+  wrap.addEventListener('wheel',function(e){e.preventDefault();var f=e.deltaY<0?1.1:0.9;netScale=Math.min(2.5,Math.max(0.4,netScale*f));apply();},{passive:false});
+  wrap.addEventListener('mousedown',function(e){drag=true;sx=e.clientX-netX;sy=e.clientY-netY;wrap.style.cursor='grabbing';});
+  window.addEventListener('mousemove',function(e){if(!drag)return;netX=e.clientX-sx;netY=e.clientY-sy;apply();});
+  window.addEventListener('mouseup',function(){drag=false;wrap.style.cursor='grab';});
+}
+function flattenNet(nodes,arr){(nodes||[]).forEach(function(n){arr.push(n);if(n.children)flattenNet(n.children,arr);});return arr;}
+function netMapInit(){if(NETMAP){setTimeout(function(){NETMAP.invalidateSize();},80);return;}if(typeof L==='undefined'||!NETDATA)return;
+  NETMAP=L.map('net-map',{zoomControl:true,attributionControl:false}).setView([42.4,12.6],5);
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{maxZoom:18,subdomains:'abcd'}).addTo(NETMAP);
+  NETLAY=L.layerGroup().addTo(NETMAP);var all=flattenNet(NETDATA.downline,[]);var pts=[];
+  all.forEach(function(n){if(n.lat&&n.lng){var mk=L.circleMarker([n.lat,n.lng],{radius:7,color:'#fff',weight:1,fillColor:statusColor(n.attivo),fillOpacity:.9});mk.on('click',function(){openDetail(n);});mk.addTo(NETLAY);pts.push([n.lat,n.lng]);}});
+  if(pts.length>1)NETMAP.fitBounds(pts,{padding:[35,35]});setTimeout(function(){NETMAP.invalidateSize();},80);
+}
+function openDetail(n){var d=document.getElementById('net-detail');if(!d)return;
+  var prod=(n.prodotti&&n.prodotti.length)?n.prodotti.map(function(x){return '<li>'+x+'</li>';}).join(''):'<li style="color:var(--g2)">nessuno</li>';
+  var html='<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px"><span style="width:13px;height:13px;border-radius:50%;background:'+statusColor(n.attivo)+'"></span><b style="font-size:15px">'+n.nome+' '+n.cognome+'</b></div>';
+  html+='<div style="font-family:JetBrains Mono;font-size:11px;color:var(--o)">SIC '+n.sic_id+'</div>';
+  html+='<div style="font-size:12px;color:var(--g);margin:4px 0">'+(n.tipo==='networker'?'Networker':'Utente')+' · '+(n.attivo?'attivo':'inattivo')+'</div>';
+  html+='<div style="font-size:13px;margin:6px 0">'+(n.citta||'')+(n.provincia?(' ('+n.provincia+')'):'')+(n.regione?(' · '+n.regione):'')+'</div>';
+  html+='<div style="border-top:1px solid var(--b);margin:8px 0;padding-top:8px"><div class="kpi-l">Abbonamento</div><div style="font-size:14px">'+(n.abbonamento?('attivo · '+n.abbonamento):'nessuno')+'</div></div>';
+  html+='<div class="kpi-l">Prodotti e servizi</div><ul style="margin:4px 0 8px 16px;font-size:13px">'+prod+'</ul>';
+  if(n.tipo==='networker'){html+='<div style="border-top:1px solid var(--b);padding-top:8px"><div class="kpi-l">Dati networker</div><div style="font-size:13px;line-height:1.8">Carriera livello <b>'+n.carriera+'</b><br>PV <b>'+n.pv+'</b><br>SAF <b>'+n.saf+'</b><br>81X <b>'+n.x81+'</b></div></div>';}
+  d.innerHTML=html;
+}
+function netView(m){var tw=document.getElementById('net-tree-wrap'),mp=document.getElementById('net-map'),bt=document.getElementById('net-bt'),bm=document.getElementById('net-bm');if(!tw)return;
+  if(m==='map'){tw.style.display='none';mp.style.display='block';bt.className='btn btn-g';bm.className='btn btn-o';netMapInit();}
+  else{mp.style.display='none';tw.style.display='block';bt.className='btn btn-o';bm.className='btn btn-g';}
+  bt.style.fontSize='12px';bm.style.fontSize='12px';
+}
+</script>
+<script src="lang81.js" defer></script>
+</body></html>

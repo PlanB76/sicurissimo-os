@@ -1,0 +1,18 @@
+{
+  "nota": "Eventi 81+. I ricorrenti si auto-generano nel calendario, vedi serie. I singoli sono fissi.",
+  "tipi": {
+    "youtube":  {"nome":"Live YouTube",     "colore":"#FF0000", "icona":"📺"},
+    "webinar":  {"nome":"Webinar online",   "colore":"#6aa9d7", "icona":"💻"},
+    "persona":  {"nome":"Evento in persona","colore":"#FB6B00", "icona":"📍"},
+    "vip":      {"nome":"Evento VIP",       "colore":"#FFD24A", "icona":"💎"}
+  },
+  "serie_ricorrenti": [
+    {"tipo":"youtube","titolo":"81+ Live, le novità della settimana","desc":"Ogni martedì in diretta YouTube. Aggiornamenti normativi, domande e risposte dal vivo.","giorno":2,"ora":"18:00","durata":60,"link":"https://youtube.com/@81plus","ricorrenza":"settimanale"},
+    {"tipo":"webinar","titolo":"Webinar, come metterti in regola in 30 giorni","desc":"Webinar pratico per imprese. Sicurezza, HACCP e privacy spiegate semplici.","giorno":4,"ora":"17:00","durata":90,"link":"signup.html","ricorrenza":"settimanale"},
+    {"tipo":"vip","titolo":"Cerchio VIP 81+, strategia e network","desc":"Riservato ai membri Club. Strategia, opportunità e crescita del network.","giorno":3,"ora":"21:00","durata":120,"link":"81plus.club/","ricorrenza":"mensile","settimana":1}
+  ],
+  "eventi_singoli": [
+    {"tipo":"persona","titolo":"81+ Day, il raduno nazionale","desc":"La giornata dell'ecosistema. Formazione, premiazioni, networking dal vivo.","data":"2026-09-19","ora":"09:30","luogo":"Da definire","link":"signup.html"},
+    {"tipo":"persona","titolo":"Workshop sicurezza in cantiere","desc":"Giornata pratica in presenza per imprese edili. Posti limitati.","data":"2026-07-10","ora":"14:00","luogo":"Porto Viro (RO)","link":"signup.html"}
+  ]
+}

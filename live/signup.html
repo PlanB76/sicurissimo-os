@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Registrati · 81+</title>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Manrope:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#ff6a36;--n:#0A0A0F;--n2:#141414;--n3:#1c1c24;--w:#fff;--g:#c9c9d4;--g2:#7a7a88;--b:#2a2a36;--red:#e74c3c;--green:#1db954}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Manrope',sans-serif;background:var(--n);color:var(--w);min-height:100vh;padding:40px 20px}
+.bb{font-family:'Bebas Neue',sans-serif}
+[data-lang="it"] .en{display:none!important}[data-lang="en"] .it{display:none!important}
+.box{width:100%;max-width:560px;margin:0 auto}
+.top{text-align:center;margin-bottom:22px}
+.logo{display:inline-flex;align-items:center;font-family:'Bebas Neue';font-size:30px;border-radius:7px;overflow:hidden;box-shadow:0 0 30px rgba(232,80,26,.35);margin-bottom:14px}
+.logo .a{background:var(--o);color:#fff;padding:5px 12px 3px;font-weight:900}.logo .b{background:#fff;color:#0A0A0F;padding:5px 12px 3px;font-weight:900}
+.top h1{font-family:'Bebas Neue';font-size:42px;line-height:.95}.top h1 .or{color:var(--o)}
+.top p{color:var(--g);font-size:14px;margin-top:6px}
+.card{background:var(--n2);border:1px solid var(--b);border-radius:18px;padding:28px;position:relative;overflow:hidden}
+.card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--o)}
+.seg{display:flex;gap:8px;margin-bottom:18px}
+.seg button{flex:1;background:var(--n);border:1px solid var(--b);color:var(--g);padding:11px;border-radius:8px;font-weight:700;font-size:13px;cursor:pointer;font-family:'Manrope'}
+.seg button.active{border-color:var(--o);color:var(--o);background:rgba(232,80,26,.08)}
+label{font-size:11px;color:var(--g2);display:block;margin-bottom:5px;text-transform:uppercase;letter-spacing:.5px;font-family:'JetBrains Mono'}
+input,select{width:100%;background:var(--n);border:1px solid var(--b);border-radius:8px;color:var(--w);padding:12px 14px;font-size:15px;margin-bottom:14px;outline:none;font-family:'Manrope'}
+input:focus,select:focus{border-color:var(--o)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.cf-fb{font-size:11px;margin:-9px 0 14px;font-family:'JetBrains Mono';min-height:13px}
+.cf-fb.ok{color:var(--green)}.cf-fb.no{color:var(--red)}
+.sep{font-family:'JetBrains Mono';font-size:10px;color:var(--g2);text-transform:uppercase;letter-spacing:1.5px;margin:6px 0 12px}
+.azienda-only{display:none}[data-tipo="azienda"] .azienda-only{display:block}
+.btn{display:block;width:100%;font-weight:700;font-size:14px;text-transform:uppercase;letter-spacing:1px;padding:15px;border-radius:8px;cursor:pointer;border:none;background:var(--o);color:#fff;transition:.2s;margin-top:6px}
+.btn:hover{background:var(--o2);transform:translateY(-2px)}
+.note{font-size:12px;color:var(--g2);text-align:center;margin-top:12px;line-height:1.5}
+.msg{font-size:13px;padding:11px 14px;border-radius:8px;margin-bottom:14px;display:none}
+.msg.err{display:block;background:rgba(231,76,60,.12);border:1px solid var(--red);color:#ff9b8f}
+.foot{text-align:center;margin-top:18px;font-size:13px;color:var(--g2)}.foot a{color:var(--o);font-weight:600}
+.ac{position:relative}
+.ac-list{position:absolute;left:0;right:0;top:calc(100% - 10px);background:var(--n3);border:1px solid var(--b);border-radius:8px;max-height:200px;overflow-y:auto;z-index:20;display:none}
+.ac-list.open{display:block}
+.ac-item{padding:10px 14px;font-size:14px;cursor:pointer;border-bottom:1px solid var(--n2)}
+.ac-item:hover{background:var(--o);color:#fff}
+.ac-item small{color:var(--g2);font-family:'JetBrains Mono'}
+.ac-item:hover small{color:#fff}
+.lang-sw{position:fixed;top:16px;right:16px;display:flex;gap:4px}
+.lang-sw button{background:transparent;border:1px solid var(--b);color:var(--g2);font-family:'JetBrains Mono';font-size:10px;padding:4px 8px;border-radius:3px;cursor:pointer}
+.lang-sw button.active{border-color:var(--o);color:var(--o)}
+</style>
+</head>
+<body>
+<div class="lang-sw"><button class="active" onclick="L('it',this)">IT</button><button onclick="L('en',this)">EN</button></div>
+
+<div class="box" data-tipo="lavoratore" id="box">
+  <div class="top">
+    <div class="logo"><span class="a">81</span><span class="b">+</span></div>
+    <h1 class="it">CREA IL TUO <span class="or">ACCOUNT</span></h1><h1 class="en">CREATE YOUR <span class="or">ACCOUNT</span></h1>
+    <p class="it">Tessera e Portafoglio 81+ pronti subito.</p><p class="en">Your 81+ Card and Wallet, ready right away.</p>
+  </div>
+
+  <div class="card">
+    <div class="msg err" id="msg"></div>
+
+    <div class="seg">
+      <button class="active" onclick="setTipo('lavoratore',this)"><span class="it">Persona</span><span class="en">Individual</span></button>
+      <button onclick="setTipo('azienda',this)"><span class="it">Azienda</span><span class="en">Company</span></button>
+    </div>
+
+    <form onsubmit="signup(event)" autocomplete="off">
+      <div class="sep it">Dati personali</div><div class="sep en">Personal details</div>
+      <div class="row2">
+        <div><label class="it">Nome</label><label class="en">First name</label><input type="text" id="nome" required></div>
+        <div><label class="it">Cognome</label><label class="en">Last name</label><input type="text" id="cognome" required></div>
+      </div>
+      <label class="it">Data di nascita</label><label class="en">Date of birth</label>
+      <input type="date" id="datanascita" required>
+
+      <div class="sep it">Residenza</div><div class="sep en">Address</div>
+      <div class="row2">
+        <div><label class="it">Indirizzo</label><label class="en">Street</label><input type="text" id="indirizzo"></div>
+        <div><label class="it">N civico</label><label class="en">Number</label><input type="text" id="civico"></div>
+      </div>
+      <div class="ac">
+        <label class="it">Città</label><label class="en">City</label>
+        <input type="text" id="citta" oninput="acCitta()" autocomplete="off" placeholder="Inizia a scrivere...">
+        <div class="ac-list" id="ac-list"></div>
+      </div>
+      <div class="row2">
+        <div><label class="it">CAP</label><label class="en">Postal code</label><input type="text" id="cap" maxlength="5"></div>
+        <div><label class="it">Provincia</label><label class="en">Province</label><input type="text" id="provincia" readonly></div>
+      </div>
+      <input type="hidden" id="provincia_sigla">
+
+      <div class="sep it">Identità</div><div class="sep en">Identity</div>
+      <label class="it">Codice fiscale</label><label class="en">Tax code</label>
+      <input type="text" id="cf" required maxlength="16" style="text-transform:uppercase" oninput="checkCF()">
+      <div class="cf-fb" id="cffb"></div>
+
+      <div class="azienda-only">
+        <div class="sep it">Dati azienda e fatturazione</div><div class="sep en">Company and billing</div>
+        <label class="it">Ragione sociale</label><label class="en">Company name</label>
+        <input type="text" id="ragione" placeholder="Es. Rossi Costruzioni Srl">
+        <div class="row2">
+          <div><label class="it">Partita IVA</label><label class="en">VAT number</label><input type="text" id="piva" maxlength="11" placeholder="11 cifre"></div>
+          <div><label class="it">Codice fiscale azienda</label><label class="en">Company tax code</label><input type="text" id="cfaz" maxlength="16" placeholder="Se diverso da P.IVA" style="text-transform:uppercase"></div>
+        </div>
+        <label class="it">PEC</label><label class="en">Certified email (PEC)</label>
+        <input type="email" id="pec" placeholder="azienda@pec.it">
+        <label class="it">Codice destinatario SDI</label><label class="en">SDI recipient code</label>
+        <input type="text" id="coddest" maxlength="7" placeholder="7 caratteri, oppure 0000000" style="text-transform:uppercase">
+        <div class="note it" style="text-align:left;margin-top:-6px">Per la fattura elettronica serve la PEC oppure il Codice Destinatario.</div>
+        <div class="note en" style="text-align:left;margin-top:-6px">For e-invoicing you need a PEC or the SDI recipient code.</div>
+      </div>
+
+      <div class="sep it">Accesso</div><div class="sep en">Login</div>
+      <label class="it">Email</label><label class="en">Email</label>
+      <input type="email" id="email" required>
+      <div class="row2">
+        <div><label class="it">Username</label><label class="en">Username</label><input type="text" id="username" required placeholder="es. mario.rossi"></div>
+        <div><label class="it">Password</label><label class="en">Password</label><input type="password" id="password" required minlength="8"></div>
+      </div>
+
+      <button type="submit" class="btn"><span class="it">Crea account, Tessera e Wallet</span><span class="en">Create account, Card and Wallet</span></button>
+    </form>
+
+    <div class="note it">Si creano subito il tuo SIC ID, la Tessera e il Portafoglio 81+. Niente frase segreta, niente commissioni.</div>
+    <div class="note en">Your SIC ID, Card and 81+ Wallet are created instantly. No secret phrase, no fees.</div>
+  </div>
+
+  <div class="foot"><span class="it">Hai già un account?</span><span class="en">Already have one?</span> <a href="/login"><span class="it">Accedi</span><span class="en">Login</span></a></div>
+</div>
+
+<script>
+function L(l,el){document.documentElement.setAttribute('data-lang',l);document.querySelectorAll('.lang-sw button').forEach(b=>b.classList.remove('active'));el.classList.add('active')}
+function setTipo(t,el){document.getElementById('box').setAttribute('data-tipo',t);document.querySelectorAll('.seg button').forEach(b=>b.classList.remove('active'));el.classList.add('active')}
+function err(t){const m=document.getElementById('msg');m.textContent=t;m.style.display='block';window.scrollTo({top:0,behavior:'smooth'})}
+
+const DISP={'0':1,'1':0,'2':5,'3':7,'4':9,'5':13,'6':15,'7':17,'8':19,'9':21,'A':1,'B':0,'C':5,'D':7,'E':9,'F':13,'G':15,'H':17,'I':19,'J':21,'K':2,'L':4,'M':18,'N':20,'O':11,'P':3,'Q':6,'R':8,'S':12,'T':14,'U':16,'V':10,'W':22,'X':25,'Y':24,'Z':23};
+function cfsum(cf){let s=0;for(let i=0;i<15;i++){const c=cf[i];if(i%2===0)s+=DISP[c];else s+=/[0-9]/.test(c)?+c:(c.charCodeAt(0)-65)}return String.fromCharCode((s%26)+65)}
+function checkCF(){const el=document.getElementById('cf');el.value=el.value.toUpperCase();const cf=el.value;const fb=document.getElementById('cffb');
+  if(cf.length<16){fb.textContent='';fb.className='cf-fb';return}
+  const en=document.documentElement.getAttribute('data-lang')==='en';
+  if(/^[A-Z0-9]{16}$/.test(cf)&&cf[15]===cfsum(cf)){fb.textContent=en?'\u2713 Tax code valid':'\u2713 Codice fiscale valido';fb.className='cf-fb ok'}
+  else{fb.textContent=en?'\u2717 Not valid':'\u2717 Non valido';fb.className='cf-fb no'}}
+
+let COMUNI=[];
+fetch('/assets/comuni.json').then(r=>r.json()).then(d=>COMUNI=d).catch(function(){});
+function acCitta(){
+  const q=document.getElementById('citta').value.trim().toLowerCase();const box=document.getElementById('ac-list');
+  if(q.length<2||!COMUNI.length){box.classList.remove('open');return}
+  const hits=COMUNI.filter(function(c){return c.n.toLowerCase().indexOf(q)===0}).slice(0,8);
+  if(!hits.length){box.classList.remove('open');return}
+  box.innerHTML=hits.map(function(c){return '<div class="ac-item" data-c="'+encodeURIComponent(JSON.stringify(c))+'">'+c.n+' <small>'+c.s+' \u00b7 '+c.c+'</small></div>'}).join('');
+  box.classList.add('open');
+  Array.prototype.forEach.call(box.querySelectorAll('.ac-item'),function(it){it.onclick=function(){pickCitta(JSON.parse(decodeURIComponent(it.getAttribute('data-c'))))}});
+}
+function pickCitta(c){
+  document.getElementById('citta').value=c.n;
+  document.getElementById('provincia').value=c.p;
+  document.getElementById('provincia_sigla').value=c.s;
+  document.getElementById('cap').value=c.c;
+  document.getElementById('ac-list').classList.remove('open');
+}
+document.addEventListener('click',function(e){if(!e.target.closest('.ac'))document.getElementById('ac-list').classList.remove('open')});
+
+async function signup(e){
+  e.preventDefault();
+  const tipo=document.getElementById('box').getAttribute('data-tipo');
+  const p={
+    nome:nome.value.trim(),cognome:cognome.value.trim(),data_nascita:datanascita.value,
+    indirizzo:indirizzo.value.trim(),civico:civico.value.trim(),citta:citta.value.trim(),
+    cap:cap.value.trim(),provincia:provincia.value.trim(),provincia_sigla:provincia_sigla.value,
+    codice_fiscale:cf.value.trim().toUpperCase(),
+    partita_iva:tipo==='azienda'?(document.getElementById('piva').value.trim()):'',
+    ragione_sociale:tipo==='azienda'?(document.getElementById('ragione').value.trim()):'',
+    codice_fiscale_azienda:tipo==='azienda'?(document.getElementById('cfaz').value.trim().toUpperCase()):'',
+    pec:tipo==='azienda'?(document.getElementById('pec').value.trim()):'',
+    codice_destinatario:tipo==='azienda'?(document.getElementById('coddest').value.trim().toUpperCase()):'',
+    email:email.value.trim(),username:username.value.trim(),password:password.value,
+    tipo:tipo,lingua:document.documentElement.getAttribute('data-lang'),ref_by:(new URLSearchParams(location.search).get('ref')||''),px:(new URLSearchParams(location.search).get('px')||'')
+  };
+  try{
+    const r=await fetch('api/auth.php?action=register',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'include',body:JSON.stringify(p)});
+    const d=await r.json();
+    if(d.ok){
+      const next=new URLSearchParams(location.search).get('next');
+      location.href = next==='membership' ? 'https://81plus.it' : '/dashboard.html?benvenuto=1';
+      return;
+    }
+    err(d.error||'Registrazione non riuscita.');
+  }catch(e){err('Errore di connessione. Riprova.');}
+}
+// Prefill da lead, se arrivi dal pulsante della mail di benvenuto
+(function(){
+  const lead=new URLSearchParams(location.search).get('lead');
+  if(!lead)return;
+  fetch('/core81/api/lead.php?sic='+encodeURIComponent(lead)).then(r=>r.json()).then(d=>{
+    if(d&&d.ok){ if(d.nome)document.getElementById('nome').value=d.nome; if(d.email)document.getElementById('email').value=d.email; }
+  }).catch(function(){});
+})();
+</script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

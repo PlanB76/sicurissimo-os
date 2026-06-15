@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>81+ · I Mondi</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#ff7a45;--bg:#03030a;--w:#f4f4f8;--g:#9aa0b4}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden;background:var(--bg);font-family:'Sora',sans-serif;color:var(--w)}
+#app{position:fixed;inset:0}canvas{display:block;touch-action:none}
+.labels{position:absolute;inset:0;pointer-events:none;z-index:2}
+.plabel{position:absolute;transform:translate(-50%,-150%);font-family:'JetBrains Mono';font-size:10px;font-weight:700;white-space:nowrap;padding:2px 6px;border-radius:6px;background:rgba(6,6,14,.55);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(2px);transition:opacity .2s;will-change:transform}
+.hud{position:absolute;z-index:3}
+.brand{top:max(12px,env(safe-area-inset-top));left:14px}
+.logo{display:inline-flex;font-family:'Anton';font-size:20px;border-radius:6px;overflow:hidden}.logo .a{background:var(--o);color:#fff;padding:3px 9px 0}.logo .b{background:#fff;color:#07070c;padding:3px 9px 0}
+.brand .t{font-family:'JetBrains Mono';font-size:8.5px;color:var(--g);letter-spacing:2px;margin-top:5px}
+.pvtag{position:absolute;top:max(12px,env(safe-area-inset-top));right:14px;background:rgba(8,8,16,.6);border:1px solid rgba(232,80,26,.4);border-radius:9px;padding:6px 11px;font-family:'JetBrains Mono';font-size:11px;color:var(--o)}
+.switch{position:absolute;left:50%;transform:translateX(-50%);bottom:max(16px,calc(env(safe-area-inset-bottom) + 14px));z-index:5;display:flex;gap:7px;background:rgba(8,8,16,.6);border:1px solid rgba(255,255,255,.1);border-radius:14px;padding:7px;backdrop-filter:blur(8px);max-width:96vw;overflow-x:auto}
+.switch button{white-space:nowrap;background:transparent;border:1px solid transparent;color:var(--g);border-radius:9px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Sora'}
+.switch button.on{background:var(--o);color:#fff}
+.hint{bottom:max(72px,calc(env(safe-area-inset-bottom) + 70px));left:50%;transform:translateX(-50%);font-family:'JetBrains Mono';font-size:9px;color:var(--g);opacity:.7;text-align:center;width:92%}
+.demoSwitch{position:absolute;right:14px;bottom:max(72px,calc(env(safe-area-inset-bottom) + 70px));z-index:5;font-family:'JetBrains Mono';font-size:9px;color:var(--g);display:flex;align-items:center;gap:6px;background:rgba(8,8,16,.5);border:1px solid rgba(255,255,255,.1);padding:5px 8px;border-radius:8px;cursor:pointer}
+/* card */
+.panel{position:absolute;z-index:6;left:14px;bottom:max(72px,calc(env(safe-area-inset-bottom) + 70px));width:min(330px,88vw);border-radius:16px;opacity:0;transform:translateY(18px);pointer-events:none;transition:.28s}
+.panel.on{opacity:1;transform:translateY(0);pointer-events:auto}
+.metal{position:relative;border-radius:15px;padding:17px 18px;overflow:hidden;background:linear-gradient(150deg,#1b1b27,#101019 60%,#15151f);border:1px solid rgba(255,255,255,.12)}
+.metal::before{content:'';position:absolute;inset:-60%;background:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.14) 47%,rgba(232,80,26,.3) 50%,rgba(255,255,255,.14) 53%,transparent 60%);animation:sheen 4.5s linear infinite;mix-blend-mode:screen;pointer-events:none}
+@keyframes sheen{0%{transform:translate(-26%,-8%)}100%{transform:translate(26%,8%)}}
+.panel .ct{position:relative;font-family:'JetBrains Mono';font-size:9px;letter-spacing:1.4px;padding:2px 8px;border-radius:5px;display:inline-block;z-index:2;background:rgba(232,80,26,.2);color:var(--o2)}
+.panel h2{position:relative;font-family:'Anton';font-weight:400;font-size:23px;margin:9px 0 2px;z-index:2}
+.panel .dom{position:relative;font-family:'JetBrains Mono';font-size:10px;color:var(--o2);margin-bottom:7px;z-index:2}
+.panel p{position:relative;color:#c7c7d4;font-size:12.5px;line-height:1.5;z-index:2}
+.panel .go{position:relative;z-index:2;display:block;text-align:center;margin-top:13px;background:var(--o);color:#fff;border:none;border-radius:10px;padding:11px;font-weight:700;font-size:13.5px;cursor:pointer;width:100%;font-family:'Sora'}
+.panel .gift{position:relative;z-index:2;font-family:'JetBrains Mono';font-size:9.5px;color:var(--g);text-align:center;margin-top:7px}
+.panel .x{position:absolute;top:10px;right:12px;cursor:pointer;color:var(--g);font-size:17px;z-index:3}
+/* register popup */
+.ov{position:fixed;inset:0;background:rgba(3,3,10,.78);backdrop-filter:blur(5px);z-index:20;display:none;align-items:center;justify-content:center;padding:20px}
+.ov.on{display:flex}
+.reg{background:#0e0e1a;border:1px solid #2a2a38;border-radius:18px;max-width:380px;width:100%;padding:26px;text-align:center}
+.reg .big{font-family:'Anton';font-weight:400;font-size:30px;color:var(--o)}
+.reg h3{font-family:'Anton';font-weight:400;font-size:22px;margin:6px 0}
+.reg p{color:#bcbcc8;font-size:13px;line-height:1.55;margin-bottom:16px}
+.reg .pri{background:var(--o);color:#fff;border:none;border-radius:11px;padding:13px;font-weight:700;font-size:15px;width:100%;cursor:pointer;text-decoration:none;display:block}
+.reg .sec{display:inline-block;margin-top:12px;color:var(--g);font-size:12px;cursor:pointer}
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%);background:#1a1a24;border:1px solid var(--o);color:#fff;padding:11px 18px;border-radius:11px;font-size:13px;z-index:40;opacity:0;transition:.25s;pointer-events:none}
+.toast.on{opacity:1;bottom:40px}
+@media(max-width:760px){.brand .t{display:none}}
+</style>
+<link rel="canonical" href="https://81plus.net/mondi.html">
+<meta name="description" content="I tre mondi dell'ecosistema 81+, identità, economia reale e blockchain, raccontati in una mappa.">
+<meta property="og:type" content="website"><meta property="og:title" content="L'ecosistema 81+"><meta property="og:description" content="I tre mondi dell'ecosistema 81+, identità, economia reale e blockchain, raccontati in una mappa."><meta property="og:url" content="https://81plus.net/mondi.html"><meta property="og:image" content="https://81plus.net/og_cover.png"><meta property="og:locale" content="it_IT"><meta property="og:site_name" content="81+ Sicurissimo Global">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="L'ecosistema 81+"><meta name="twitter:description" content="I tre mondi dell'ecosistema 81+, identità, economia reale e blockchain, raccontati in una mappa."><meta name="twitter:image" content="https://81plus.net/og_cover.png">
+</head>
+<body>
+<div id="app"></div>
+<div class="labels" id="labels"></div>
+<div class="hud brand"><span class="logo"><span class="a">81</span><span class="b">+</span></span><div class="t">I MONDI · BASE METAVERSO</div></div>
+<div class="hud pvtag" id="pvtag">PV 0</div>
+<div class="hud hint" id="hint">trascina per ruotare, rotella per zoom, tocca un mondo</div>
+<div class="demoSwitch" onclick="toggleDemo()"><span id="demoDot" style="width:9px;height:9px;border-radius:50%;background:#5c5c6e;display:inline-block"></span> demo, simula login</div>
+<div class="switch hud" id="switch"></div>
+<div class="panel" id="panel"><div class="metal">
+ <span class="x" onclick="closeCard()">&times;</span>
+ <span class="ct" id="cTag">SUB PROGETTO</span>
+ <h2 id="cName">Nome</h2><div class="dom" id="cDom">dominio</div>
+ <p id="cFn">Funzione</p>
+ <button class="go" id="cGo" onclick="goSite()">Vai al sito</button>
+ <div class="gift">clicca e ricevi 1 PV nel tuo wallet</div>
+</div></div>
+<div class="ov" id="ov"><div class="reg">
+ <div class="big">+1 PV in regalo</div>
+ <h3 id="regName">Sblocca questo mondo</h3>
+ <p>Registrati gratis e ricevi subito il PV di questo sub progetto. In più ottieni 1000 PV di benvenuto da usare nell’ecosistema 81+.</p>
+ <a class="pri" id="regBtn" href="signup.html">Registrati e prendi i PV</a>
+ <span class="sec" id="regSkip">continua al sito senza registrarti</span>
+</div></div>
+<div class="toast" id="toast"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var MOB=innerWidth<760||('ontouchstart' in window);
+// ---- DATI SUB PROGETTI condivisi tra i 5 mondi ----
+var NODES=[
+ {nm:'81+ HUB',dom:'81plus.net',slug:'net',hub:1,url:'https://81plus.net',fn:'La porta unica. Identità SIC ID, dashboard, plancia.'},
+ {nm:'.it',dom:'81plus.it',slug:'it',hub:2,url:'https://81plus.it',fn:'Membership, corsi, documenti, scadenze, dipendenti.'},
+ {nm:'Network',dom:'81plus.network',slug:'network',hub:2,url:'https://81plus.network',fn:'La rete commerciale. Otto ranghi, vendite reali.'},
+ {nm:'Club',dom:'81plus.club',slug:'club',hub:2,url:'https://81plus.club',fn:'VIP ricorrente, eventi e benefit.'},
+ {nm:'Zone',dom:'81plus.zone',slug:'zone',hub:2,url:'https://81plus.zone',fn:'Franchising fisico su comune, provincia, regione.'},
+ {nm:'Academy',dom:'81plus.academy',slug:'academy',hub:2,url:'https://81plus.academy',fn:'Formazione, attestati reali dell ente accreditato.'},
+ {nm:'Cloud',dom:'81plus.cloud',slug:'cloud',hub:2,url:'https://81plus.cloud',fn:'Archivio sicuro, DVR e attestati.'},
+ {nm:'Shop',dom:'81plus.shop',slug:'shop',hub:2,url:'https://81plus.shop',fn:'Prodotti e DPI brandizzati, pacco neutro.'},
+ {nm:'Cards',dom:'81plus.cards',slug:'cards',hub:2,url:'https://81plus.cards',fn:'Sigilli digitali con QR, la tessera.'},
+ {nm:'Digital',dom:'81plus.digital',slug:'digital',hub:3,url:'https://81plus.digital',fn:'Certificati su blockchain, unita di utilita.'},
+ {nm:'Exchange',dom:'81plus.exchange',slug:'exchange',hub:3,url:'https://81plus.exchange',fn:'DEX e token, in sviluppo, soggetto a MiCA.'},
+ {nm:'World',dom:'81plus.world',slug:'world',hub:3,url:'https://81plus.world',fn:'Il metaverso 81+, avatar 3D.'},
+ {nm:'Online',dom:'81plus.online',slug:'online',hub:3,url:'https://81plus.online',fn:'Rete RWA, certificazioni on chain.'},
+ {nm:'DAO',dom:'81plus.org',slug:'dao',hub:3,url:'https://81plus.org',fn:'Governance, la community vota.'},
+ {nm:'Place',dom:'81plus.place',slug:'place',hub:3,url:'https://81plus.place',fn:'Meeting Web3 con avatar 3D.'},
+ {nm:'Store',dom:'81plus.store',slug:'store',hub:3,url:'https://81plus.store',fn:'Marketplace digitale, asset e certificati.'},
+ {nm:'Bond',dom:'81plus.bond',slug:'bond',hub:3,url:'https://81plus.bond',fn:'Garanzie e strumenti, utilita interna.'}
+];
+function hubCol(h){return h===1?0xE8501A:(h===2?0xdfe6ff:0xff8a3a);}
+
+var W=innerWidth,H=innerHeight,PR=Math.min(devicePixelRatio,MOB?1.6:2);
+var scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x03030a,0.0011);
+var camera=new THREE.PerspectiveCamera(58,W/H,0.1,4000);
+var renderer=new THREE.WebGLRenderer({antialias:!MOB});renderer.setSize(W,H);renderer.setPixelRatio(PR);
+document.getElementById('app').appendChild(renderer.domElement);
+scene.add(new THREE.AmbientLight(0x8890a8,0.55));
+var pl=new THREE.PointLight(0xffe0b0,2,0,1.4);scene.add(pl);
+var pl2=new THREE.PointLight(0x9ab8ff,1.3,700);scene.add(pl2);
+// starfield shader, stelle grandi e piccole con brillamenti diversi
+(function(){var N=MOB?1300:2800,pos=new Float32Array(N*3),col=new Float32Array(N*3),siz=new Float32Array(N),pha=new Float32Array(N),spd=new Float32Array(N);
+ var pal=[[1,1,1],[1,1,1],[1,.95,.85],[.7,.8,1],[1,.86,.6],[1,.72,.62],[.85,.9,1]];
+ for(var i=0;i<N;i++){var r=480+Math.random()*1600,t=Math.random()*6.283,ph=Math.acos(2*Math.random()-1);
+  pos[i*3]=r*Math.sin(ph)*Math.cos(t);pos[i*3+1]=r*Math.sin(ph)*Math.sin(t);pos[i*3+2]=r*Math.cos(ph);
+  var c=pal[(Math.random()*pal.length)|0];col[i*3]=c[0];col[i*3+1]=c[1];col[i*3+2]=c[2];
+  siz[i]=(Math.random()<0.06?3.4+Math.random()*3.2:0.8+Math.random()*1.8);pha[i]=Math.random()*6.283;spd[i]=0.4+Math.random()*2.6;}
+ var g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.BufferAttribute(pos,3));g.setAttribute('aColor',new THREE.BufferAttribute(col,3));g.setAttribute('aSize',new THREE.BufferAttribute(siz,1));g.setAttribute('aPhase',new THREE.BufferAttribute(pha,1));g.setAttribute('aSpeed',new THREE.BufferAttribute(spd,1));
+ var mat=new THREE.ShaderMaterial({uniforms:{uTime:{value:0},uPx:{value:PR}},transparent:true,depthWrite:false,blending:THREE.AdditiveBlending,
+  vertexShader:'attribute vec3 aColor;attribute float aSize;attribute float aPhase;attribute float aSpeed;uniform float uTime;uniform float uPx;varying vec3 vCol;varying float vTw;void main(){vCol=aColor;float s=sin(uTime*aSpeed+aPhase);float tw=0.3+0.7*pow(0.5+0.5*s,2.2);vTw=tw;vec4 mv=modelViewMatrix*vec4(position,1.0);gl_PointSize=aSize*uPx*(0.5+1.2*tw);gl_Position=projectionMatrix*mv;}',
+  fragmentShader:'varying vec3 vCol;varying float vTw;void main(){vec2 d=gl_PointCoord-vec2(0.5);float r=length(d);if(r>0.5)discard;float core=smoothstep(0.5,0.0,r);float ray=pow(core,3.0);float a=(core*0.7+ray*0.9)*vTw;gl_FragColor=vec4(vCol+ray*0.4,a);}'});
+ window._stars=new THREE.Points(g,mat);scene.add(window._stars);})();
+
+var labelLayer=document.getElementById('labels');
+function glow(c1){var c=document.createElement('canvas');c.width=c.height=64;var x=c.getContext('2d');var gr=x.createRadialGradient(32,32,0,32,32,32);gr.addColorStop(0,c1);gr.addColorStop(1,'rgba(0,0,0,0)');x.fillStyle=gr;x.fillRect(0,0,64,64);return new THREE.CanvasTexture(c);}
+
+// ===== costruttori dei 5 mondi, ognuno ritorna {group, clicks, tick, dist} =====
+function mat(h,emi){return new THREE.MeshStandardMaterial({color:hubCol(h),emissive:hubCol(h),emissiveIntensity:emi||0.35,roughness:.28,metalness:.72});}
+function tagMesh(m,node){m.userData=node;return m;}
+
+function buildSolar(){var g=new THREE.Group(),clicks=[];
+ var sun=new THREE.Mesh(new THREE.SphereGeometry(7,32,32),new THREE.MeshBasicMaterial({color:0xE8501A}));sun.userData=NODES[0];g.add(sun);clicks.push(sun);
+ var spr=new THREE.Sprite(new THREE.SpriteMaterial({map:glow('rgba(255,170,90,.9)'),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));spr.scale.set(26,26,1);sun.add(spr);
+ var systems=[{h:2,x:62,tilt:0.6,list:NODES.slice(1,9)},{h:3,x:-62,tilt:-0.6,list:NODES.slice(9,17)}];
+ var orbs=[];
+ systems.forEach(function(S){var sysg=new THREE.Group();sysg.position.x=S.x;sysg.rotation.z=S.tilt;g.add(sysg);
+  var s2=new THREE.Mesh(new THREE.SphereGeometry(4,24,24),new THREE.MeshBasicMaterial({color:hubCol(S.h)}));sysg.add(s2);
+  S.list.forEach(function(node,i){var a=i/S.list.length*6.28,rad=12+i*3.4;var og=new THREE.Group();og.rotation.x=(i%3-1)*0.4;sysg.add(og);
+   var ring=[];for(var k=0;k<=60;k++){var aa=k/60*6.28;ring.push(new THREE.Vector3(Math.cos(aa)*rad,0,Math.sin(aa)*rad));}
+   og.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(ring),new THREE.LineBasicMaterial({color:hubCol(S.h),transparent:true,opacity:.18})));
+   var m=tagMesh(new THREE.Mesh(new THREE.SphereGeometry(1.4+(i%4)*0.25,20,20),mat(S.h,.3)),node);m.userData.ang=a;m.userData.rad=rad;og.add(m);clicks.push(m);orbs.push(m);});
+ });
+ return {group:g,clicks:clicks,dist:165,tick:function(dt){g.rotation.y+=dt*0.05;orbs.forEach(function(m){m.userData.ang+=dt*(0.4+m.userData.rad*0.01);m.position.set(Math.cos(m.userData.ang)*m.userData.rad,0,Math.sin(m.userData.ang)*m.userData.rad);m.rotation.y+=dt;});}};
+}
+function buildGalaxy(){var g=new THREE.Group(),clicks=[],lines=[],nodesM=[];
+ var brain=tagMesh(new THREE.Mesh(new THREE.IcosahedronGeometry(8,1),new THREE.MeshStandardMaterial({color:0xE8501A,emissive:0xE8501A,emissiveIntensity:.6,flatShading:true,roughness:.4})),NODES[0]);g.add(brain);clicks.push(brain);
+ NODES.slice(1).forEach(function(node,i){var ring=Math.floor(i/8),idx=i%8;var rad=34+ring*22;var a=idx/8*6.28+ring*0.5;var y=(ring-0.5)*14+(i%2-0.5)*8;
+  var pos=new THREE.Vector3(Math.cos(a)*rad,y,Math.sin(a)*rad);
+  var m=tagMesh(new THREE.Mesh(new THREE.SphereGeometry(2.6,18,18),mat(node.hub,.5)),node);m.position.copy(pos);g.add(m);clicks.push(m);nodesM.push(m);
+  var lg=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0),pos]);var lm=new THREE.LineBasicMaterial({color:hubCol(node.hub),transparent:true,opacity:.25});var ln=new THREE.Line(lg,lm);g.add(ln);lines.push({ln:ln,ph:Math.random()*6.28});});
+ return {group:g,clicks:clicks,dist:170,tick:function(dt){g.rotation.y+=dt*0.08;brain.rotation.x+=dt*0.2;brain.rotation.y+=dt*0.15;var t=performance.now()/600;
+  lines.forEach(function(o,i){o.ln.material.opacity=0.12+0.22*(0.5+0.5*Math.sin(t+o.ph));});
+  nodesM.forEach(function(m,i){var s=1+0.12*Math.sin(t+i);m.scale.set(s,s,s);});}};
+}
+function buildCity(){var g=new THREE.Group(),clicks=[];
+ var grid=new THREE.GridHelper(220,28,0x33333f,0x1a1a24);grid.position.y=-0.2;g.add(grid);
+ var tower=tagMesh(new THREE.Mesh(new THREE.CylinderGeometry(4,5,34,8),new THREE.MeshStandardMaterial({color:0xE8501A,emissive:0xE8501A,emissiveIntensity:.5,roughness:.4})),NODES[0]);tower.position.y=17;g.add(tower);clicks.push(tower);
+ NODES.slice(1).forEach(function(node,i){var col=(i%8);var side=node.hub===2?-1:1;var x=side*(20+col*16);var z=(Math.floor(i/8)*0+ (i%4-1.5)*26);var hgt=14+(i%5)*7;
+  var b=tagMesh(new THREE.Mesh(new THREE.BoxGeometry(11,hgt,11),new THREE.MeshStandardMaterial({color:hubCol(node.hub),emissive:hubCol(node.hub),emissiveIntensity:.28,roughness:.5,metalness:.3})),node);
+  b.position.set(x,hgt/2,z);g.add(b);clicks.push(b);
+  var edge=new THREE.LineSegments(new THREE.EdgesGeometry(b.geometry),new THREE.LineBasicMaterial({color:hubCol(node.hub),transparent:true,opacity:.6}));edge.position.copy(b.position);g.add(edge);
+  var beacon=new THREE.Mesh(new THREE.SphereGeometry(1.1,10,10),new THREE.MeshBasicMaterial({color:hubCol(node.hub)}));beacon.position.set(x,hgt+2,z);g.add(beacon);});
+ g.rotation.x=0.5;
+ return {group:g,clicks:clicks,dist:185,tick:function(dt){g.rotation.y+=dt*0.06;}};
+}
+function buildGlobe(){var g=new THREE.Group(),clicks=[],pins=[];
+ var globe=new THREE.Mesh(new THREE.SphereGeometry(30,32,32),new THREE.MeshStandardMaterial({color:0x0d2240,emissive:0x0a1830,emissiveIntensity:.4,roughness:.6,wireframe:false,transparent:true,opacity:.85}));g.add(globe);
+ var wire=new THREE.Mesh(new THREE.SphereGeometry(30.3,20,16),new THREE.MeshBasicMaterial({color:0x2a6cff,wireframe:true,transparent:true,opacity:.18}));g.add(wire);
+ var core=tagMesh(new THREE.Mesh(new THREE.SphereGeometry(4,20,20),new THREE.MeshBasicMaterial({color:0xE8501A})),NODES[0]);core.position.set(0,34,0);g.add(core);clicks.push(core);
+ NODES.slice(1).forEach(function(node,i){var ph=Math.acos(-1+2*(i+0.5)/16),th=Math.PI*(1+Math.sqrt(5))*i;var R=31;
+  var pos=new THREE.Vector3(R*Math.sin(ph)*Math.cos(th),R*Math.cos(ph),R*Math.sin(ph)*Math.sin(th));
+  var pin=tagMesh(new THREE.Mesh(new THREE.ConeGeometry(1.6,5,10),mat(node.hub,.5)),node);pin.position.copy(pos);pin.lookAt(0,0,0);pin.rotateX(-Math.PI/2);g.add(pin);clicks.push(pin);pins.push(pin);
+  // arco verso il core
+  var mid=pos.clone().multiplyScalar(1.5);var curve=new THREE.QuadraticBezierCurve3(pos,mid,new THREE.Vector3(0,34,0));
+  var pts=curve.getPoints(20);g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:hubCol(node.hub),transparent:true,opacity:.2})));});
+ return {group:g,clicks:clicks,dist:120,tick:function(dt){g.rotation.y+=dt*0.12;var t=performance.now()/500;pins.forEach(function(p,i){var s=1+0.15*Math.sin(t+i);p.scale.set(s,s,s);});}};
+}
+function buildTree(){var g=new THREE.Group(),clicks=[],leaves=[];
+ var trunk=tagMesh(new THREE.Mesh(new THREE.CylinderGeometry(3,5,40,10),new THREE.MeshStandardMaterial({color:0x6b3a1a,emissive:0x3a1d0a,emissiveIntensity:.3,roughness:.8})),NODES[0]);trunk.position.y=0;g.add(trunk);clicks.push(trunk);
+ var crown=new THREE.Mesh(new THREE.SphereGeometry(7,16,16),new THREE.MeshStandardMaterial({color:0xE8501A,emissive:0xE8501A,emissiveIntensity:.5,roughness:.5}));crown.position.y=22;g.add(crown);
+ NODES.slice(1).forEach(function(node,i){var ring=Math.floor(i/8),idx=i%8;var a=idx/8*6.28+ring*0.6;var rad=18+ring*10;var y=8+ring*16+ (i%3)*4;
+  var end=new THREE.Vector3(Math.cos(a)*rad,y,Math.sin(a)*rad);
+  var branch=new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,Math.max(4,y-12),0),end]),new THREE.LineBasicMaterial({color:0x7a4a22,transparent:true,opacity:.6}));g.add(branch);
+  var leaf=tagMesh(new THREE.Mesh(new THREE.OctahedronGeometry(2.6,0),new THREE.MeshStandardMaterial({color:hubCol(node.hub),emissive:hubCol(node.hub),emissiveIntensity:.55,flatShading:true,roughness:.3,metalness:.4})),node);
+  leaf.position.copy(end);g.add(leaf);clicks.push(leaf);leaves.push(leaf);});
+ g.position.y=-18;
+ return {group:g,clicks:clicks,dist:150,tick:function(dt){g.rotation.y+=dt*0.07;var t=performance.now()/700;g.rotation.z=0.05*Math.sin(t);leaves.forEach(function(l,i){l.rotation.y+=dt*0.6;var s=1+0.1*Math.sin(t*1.5+i);l.scale.set(s,s,s);});}};
+}
+
+function buildBrain(){var g=new THREE.Group(),clicks=[],mains=[],sigs=[];
+ function lobe(side,colHex){var P=MOB?70:120,verts=[];for(var i=0;i<P;i++){var x,y,z;do{x=Math.random()*2-1;y=Math.random()*2-1;z=Math.random()*2-1;}while(x*x+y*y+z*z>1);
+   verts.push(new THREE.Vector3(side*(4+Math.abs(x)*26)+side*2, y*22+Math.cos(x*3)*2, z*24));}
+   var arr=new Float32Array(verts.length*3);verts.forEach(function(pt,i){arr[i*3]=pt.x;arr[i*3+1]=pt.y;arr[i*3+2]=pt.z;});
+   var pg=new THREE.BufferGeometry();pg.setAttribute('position',new THREE.BufferAttribute(arr,3));
+   g.add(new THREE.Points(pg,new THREE.PointsMaterial({color:colHex,size:2.1,transparent:true,opacity:.7,blending:THREE.AdditiveBlending,depthWrite:false})));return verts;}
+ var L=lobe(-1,0xE8501A),R=lobe(1,0xffd9b0),all=L.concat(R);
+ var segs=[];for(var i=0;i<all.length;i++){var c=0;for(var k=0;k<all.length&&c<2;k++){if(k===i)continue;var d=all[i].distanceTo(all[k]);if(d<9&&Math.random()<0.5){segs.push(all[i],all[k]);c++;}}}
+ var syn=new THREE.LineSegments(new THREE.BufferGeometry().setFromPoints(segs),new THREE.LineBasicMaterial({color:0xff7a45,transparent:true,opacity:.22,blending:THREE.AdditiveBlending}));g.add(syn);
+ var core=tagMesh(new THREE.Mesh(new THREE.IcosahedronGeometry(5,1),new THREE.MeshStandardMaterial({color:0xE8501A,emissive:0xE8501A,emissiveIntensity:.7,metalness:.7,roughness:.25,flatShading:true})),NODES[0]);core.position.set(0,24,0);core.userData.flash=0;g.add(core);clicks.push(core);mains.push(core);
+ NODES.slice(1).forEach(function(node,i){var side=node.hub===2?-1:1,idx=i%8,a=idx/8*6.283;
+   var m=tagMesh(new THREE.Mesh(new THREE.IcosahedronGeometry(2.6,1),new THREE.MeshStandardMaterial({color:hubCol(node.hub),emissive:hubCol(node.hub),emissiveIntensity:.5,metalness:.72,roughness:.26,flatShading:true})),node);
+   m.position.set(side*(9+(idx%4)*5),Math.sin(a)*15,Math.cos(a)*17);m.userData.flash=0;g.add(m);clicks.push(m);mains.push(m);
+   var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glow(node.hub===3?'rgba(255,140,70,.85)':'rgba(255,215,175,.85)'),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));sp.scale.set(11,11,1);m.add(sp);});
+ var targets=mains.map(function(m){return m.position;});
+ for(var s=0;s<12;s++){var i=(Math.random()*(segs.length/2))|0,toCell=Math.random()<0.5;var a=segs[i*2],b=toCell?targets[(Math.random()*targets.length)|0]:(segs[i*2+1]||segs[0]);
+   var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glow('rgba(255,240,200,1)'),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));sp.scale.set(5,5,1);g.add(sp);
+   sigs.push({sp:sp,a:a,b:b,t:Math.random(),sv:0.4+Math.random()*0.7,toCell:toCell,segs:segs,targets:targets,mains:mains});}
+ return {group:g,clicks:clicks,dist:150,noAuto:true,tick:function(dt){var t=performance.now()/600;
+   syn.material.opacity=0.14+0.16*(0.5+0.5*Math.sin(t*1.4));
+   mains.forEach(function(m,i){m.rotation.y+=dt*0.8;m.rotation.x+=dt*0.3;var s=1+0.1*Math.sin(t+i)+m.userData.flash;m.scale.setScalar(s);if(m.userData.flash>0)m.userData.flash*=0.9;});
+   sigs.forEach(function(o){o.t+=dt*o.sv;if(o.t>=1){o.t=0;if(o.toCell){for(var j=0;j<o.mains.length;j++){if(o.mains[j].position.distanceTo(o.b)<0.1){o.mains[j].userData.flash=0.55;break;}}}
+     var i=(Math.random()*(o.segs.length/2))|0;o.a=o.segs[i*2];o.toCell=Math.random()<0.5;o.b=o.toCell?o.targets[(Math.random()*o.targets.length)|0]:(o.segs[i*2+1]||o.segs[0]);}
+     o.sp.position.lerpVectors(o.a,o.b,o.t);});}};
+}
+function buildBody(){var g=new THREE.Group(),clicks=[],organs=[],chakras=[],nerves=[];
+ var skin=new THREE.MeshStandardMaterial({color:0x2a2f48,emissive:0x0f1320,emissiveIntensity:.3,transparent:true,opacity:.16,metalness:.4,roughness:.5,side:THREE.DoubleSide});
+ var head=new THREE.Mesh(new THREE.SphereGeometry(7,24,24),skin);head.position.y=46;g.add(head);
+ var neck=new THREE.Mesh(new THREE.CylinderGeometry(2.6,3.2,6,16),skin);neck.position.y=38;g.add(neck);
+ var torso=new THREE.Mesh(new THREE.CylinderGeometry(9,7,30,24),skin);torso.position.y=20;g.add(torso);
+ var hip=new THREE.Mesh(new THREE.SphereGeometry(8,20,16),skin);hip.position.y=4;hip.scale.set(1,0.7,0.8);g.add(hip);
+ [-1,1].forEach(function(s){var arm=new THREE.Mesh(new THREE.CylinderGeometry(2.2,1.8,30,12),skin);arm.position.set(s*11,22,0);arm.rotation.z=s*0.35;g.add(arm);
+  var leg=new THREE.Mesh(new THREE.CylinderGeometry(2.8,2,34,12),skin);leg.position.set(s*4,-16,0);g.add(leg);});
+ function organ(node,y,x,r,col,gcol){var m=tagMesh(new THREE.Mesh(new THREE.IcosahedronGeometry(r,2),new THREE.MeshStandardMaterial({color:col,emissive:col,emissiveIntensity:.65,metalness:.6,roughness:.28,flatShading:true})),node);
+   m.position.set(x,y,2.5);m.userData.base=r;g.add(m);clicks.push(m);organs.push(m);
+   var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glow(gcol),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));sp.scale.set(r*5,r*5,1);m.add(sp);return m;}
+ organ(NODES[0],46,0,4.4,0xE8501A,'rgba(255,150,90,.85)');
+ organ({nm:'HUB2 Web2',dom:'81plus.it',slug:'hub2',hub:2,url:'https://81plus.it',fn:'Il cuore, economia reale. Academy, shop, network, club, membership.'},24,-1.5,4.2,0xff5a3c,'rgba(255,120,90,.9)');
+ organ({nm:'HUB3 Web3',dom:'81plus.online',slug:'hub3',hub:3,url:'https://81plus.online',fn:'Lo stomaco, economia digitale. Token, wallet, DeFi, NFT, metaverso.'},13,0.5,4,0xff8a3a,'rgba(255,150,70,.9)');
+ NODES.slice(1).forEach(function(node,i){var y=43-i*2.5,off=(node.hub===3?1:-1)*((i%2)?2.4:1.2);
+   var c=tagMesh(new THREE.Mesh(new THREE.TorusGeometry(2.1,0.7,10,22),new THREE.MeshStandardMaterial({color:hubCol(node.hub),emissive:hubCol(node.hub),emissiveIntensity:.6,metalness:.72,roughness:.24})),node);
+   c.position.set(off,y,3);c.rotation.x=Math.PI/2;g.add(c);clicks.push(c);chakras.push(c);
+   var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glow(node.hub===3?'rgba(255,140,70,.9)':'rgba(220,235,255,.9)'),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));sp.scale.set(8,8,1);c.add(sp);});
+ var nsig=[];[-1.7,1.7].forEach(function(sx){var pts=[];for(var k=0;k<=44;k++){var y=47-k*0.95;pts.push(new THREE.Vector3(sx+Math.sin(k*0.5)*1.5,y,3.2));}
+   var ln=new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts),new THREE.LineBasicMaterial({color:0xff7a45,transparent:true,opacity:.5,blending:THREE.AdditiveBlending}));g.add(ln);nerves.push(ln);
+   for(var z=0;z<2;z++){var sp=new THREE.Sprite(new THREE.SpriteMaterial({map:glow('rgba(255,240,200,1)'),blending:THREE.AdditiveBlending,transparent:true,depthWrite:false}));sp.scale.set(3.6,3.6,1);g.add(sp);nsig.push({sp:sp,pts:pts,t:Math.random()});}});
+ g.position.y=-8;
+ return {group:g,clicks:clicks,dist:175,noAuto:true,tick:function(dt){var t=performance.now()/600;
+   organs.forEach(function(m,i){var s=1+0.16*Math.sin(t*1.7+i*2);m.scale.setScalar(s);m.rotation.y+=dt*0.4;});
+   chakras.forEach(function(c,i){c.rotation.z+=dt*1.3;var s=1+0.2*Math.sin(t*2.1+i);c.scale.setScalar(s);});
+   nerves.forEach(function(ln){ln.material.opacity=0.28+0.3*(0.5+0.5*Math.sin(t*2.2));});
+   nsig.forEach(function(o){o.t+=dt*0.26;if(o.t>=1)o.t=0;var idx=Math.min(o.pts.length-1,(o.t*(o.pts.length-1))|0);o.sp.position.copy(o.pts[idx]);});}};
+}
+var SCENES={},ORDER=[['solar','Solare'],['brain','Cervello'],['body','Corpo'],['galaxy','Galassia'],['city','Metropoli'],['globe','Globo'],['tree','Albero']];
+SCENES.solar=buildSolar();SCENES.galaxy=buildGalaxy();SCENES.city=buildCity();SCENES.globe=buildGlobe();SCENES.tree=buildTree();SCENES.brain=buildBrain();SCENES.body=buildBody();
+Object.keys(SCENES).forEach(function(k){SCENES[k].group.visible=false;scene.add(SCENES[k].group);});
+var active='solar',labels=[];
+// switch UI
+document.getElementById('switch').innerHTML=ORDER.map(function(o){return '<button data-s="'+o[0]+'" onclick="setScene(\''+o[0]+'\')">'+o[1]+'</button>';}).join('');
+function buildLabels(){labelLayer.innerHTML='';labels=[];SCENES[active].clicks.forEach(function(m){var d=document.createElement('div');d.className='plabel';d.textContent=m.userData.nm;d.style.color=m.userData.hub===3?'#ffb38c':(m.userData.hub===1?'#fff':'#dfe6ff');labelLayer.appendChild(d);labels.push({el:d,m:m});});}
+function setScene(k){SCENES[active].group.visible=false;active=k;SCENES[k].group.visible=true;rot={x:0.2,y:0};camDist=SCENES[k].dist;closeCard();buildLabels();
+ document.querySelectorAll('#switch button').forEach(function(b){b.classList.toggle('on',b.dataset.s===k);});}
+
+// ---- interazione ----
+var ray=new THREE.Raycaster(),mouse=new THREE.Vector2(-2,-2),hovered=null;
+var drag=false,moved=0,lx=0,ly=0,rot={x:0.2,y:0},rotC={x:0.2,y:0},camDist=165,auto=true;
+var dom=renderer.domElement;
+dom.addEventListener('pointerdown',function(e){drag=true;moved=0;lx=e.clientX;ly=e.clientY;auto=false;});
+addEventListener('pointermove',function(e){mouse.x=e.clientX/W*2-1;mouse.y=-e.clientY/H*2+1;if(drag&&!pinch){var dx=e.clientX-lx,dy=e.clientY-ly;moved+=Math.abs(dx)+Math.abs(dy);rot.y+=dx*0.005;rot.x+=dy*0.004;rot.x=Math.max(-1.2,Math.min(1.3,rot.x));lx=e.clientX;ly=e.clientY;}});
+addEventListener('pointerup',function(){if(drag&&moved<8){ray.setFromCamera(mouse,camera);var hit=ray.intersectObjects(SCENES[active].clicks,false);if(hit.length)openCard(hit[0].object.userData);else closeCard();}drag=false;setTimeout(function(){auto=true;},2500);});
+dom.addEventListener('wheel',function(e){e.preventDefault();camDist=Math.max(50,Math.min(360,camDist+(e.deltaY>0?16:-16)));},{passive:false});
+var pinch=false,pd=0;
+dom.addEventListener('touchstart',function(e){if(e.touches.length===2){pinch=true;pd=td(e);}},{passive:false});
+dom.addEventListener('touchmove',function(e){if(pinch&&e.touches.length===2){e.preventDefault();var d=td(e);camDist=Math.max(50,Math.min(360,camDist+(pd-d)*0.5));pd=d;}},{passive:false});
+dom.addEventListener('touchend',function(e){if(e.touches.length<2)pinch=false;});
+function td(e){var a=e.touches[0],b=e.touches[1];return Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY);}
+
+// ---- PV / utente ----
+var ME={logged:false,csrf:'',pv:0};
+fetch('api/auth.php?action=me').then(function(r){return r.json();}).then(function(d){if(d&&d.ok){ME.logged=true;ME.csrf=d.csrf;ME.pv=d.pv;pvTag();}}).catch(function(){});
+function pvTag(){document.getElementById('pvtag').textContent='PV '+ME.pv;}
+function toggleDemo(){ME.logged=!ME.logged;document.getElementById('demoDot').style.background=ME.logged?'#1db954':'#5c5c6e';toast(ME.logged?'demo, utente registrato simulato':'demo, utente ospite');}
+
+// ---- card ----
+var CURRENT=null,panel=document.getElementById('panel');
+function openCard(node){CURRENT=node;
+ document.getElementById('cTag').textContent=node.hub===1?'HUB CENTRALE':(node.hub===2?'WEB2':'WEB3');
+ document.getElementById('cName').textContent=node.nm;document.getElementById('cDom').textContent=node.dom;document.getElementById('cFn').textContent=node.fn;
+ panel.classList.add('on');}
+function closeCard(){panel.classList.remove('on');}
+function goSite(){if(!CURRENT)return;
+ if(ME.logged){window.open(CURRENT.url,'_blank');reward(CURRENT.slug);}
+ else{showRegister(CURRENT);}}
+function reward(slug){
+ fetch('api/pv.php?action=premia_click',{method:'POST',headers:{'Content-Type':'application/json','X-CSRF':ME.csrf},body:JSON.stringify({slug:slug,_csrf:ME.csrf})})
+  .then(function(r){return r.json();}).then(function(d){if(d&&d.ok){ME.pv=d.pv;pvTag();toast(d.già?'PV già ricevuto per questo mondo':'+1 PV nel tuo wallet');}else{ME.pv+=1;pvTag();toast('+1 PV, demo');}})
+  .catch(function(){ME.pv+=1;pvTag();toast('+1 PV, demo');});
+}
+function showRegister(node){document.getElementById('regName').textContent='Sblocca '+node.nm;
+ document.getElementById('regBtn').href='signup.html?gift='+node.slug;
+ document.getElementById('ov').classList.add('on');
+ document.getElementById('regSkip').onclick=function(){document.getElementById('ov').classList.remove('on');window.open(node.url,'_blank');};}
+document.getElementById('ov').addEventListener('click',function(e){if(e.target===this)this.classList.remove('on');});
+var _t;function toast(m){var e=document.getElementById('toast');e.textContent=m;e.classList.add('on');clearTimeout(_t);_t=setTimeout(function(){e.classList.remove('on');},2600);}
+
+// ---- loop ----
+var v=new THREE.Vector3(),clock=new THREE.Clock();
+function toScreen(m){m.getWorldPosition(v);v.project(camera);return {x:(v.x*.5+.5)*W,y:(-v.y*.5+.5)*H,vis:v.z<1};}
+function animate(){requestAnimationFrame(animate);var dt=Math.min(0.05,clock.getDelta());var t=clock.elapsedTime;if(window._stars)window._stars.material.uniforms.uTime.value=t;pl2.position.set(Math.cos(t*0.5)*150,90,Math.sin(t*0.5)*150);
+ if(auto&&!SCENES[active].noAuto)rot.y+=dt*0.04;rotC.x+=(rot.x-rotC.x)*0.08;rotC.y+=(rot.y-rotC.y)*0.08;
+ var S=SCENES[active];S.group.rotation.x=rotC.x;S.group.rotation.y=rotC.y;S.tick(dt);
+ camera.position.set(0,camDist*0.32,camDist);camera.lookAt(0,0,0);
+ ray.setFromCamera(mouse,camera);var hit=ray.intersectObjects(S.clicks,false);var nh=hit.length?hit[0].object:null;
+ if(nh!==hovered){if(hovered)hovered.scale.setScalar(hovered.userData._b||1);hovered=nh;if(hovered){hovered.userData._b=hovered.scale.x;hovered.scale.setScalar(hovered.scale.x*1.4);}dom.style.cursor=hovered?'pointer':'grab';}
+ labels.forEach(function(L){var s=toScreen(L.m);var on=L.m===hovered;L.el.style.opacity=s.vis?(on?1:.7):0;L.el.style.transform='translate(-50%,-150%) translate('+s.x+'px,'+s.y+'px)';L.el.style.fontSize=on?'12px':'10px';});
+ renderer.render(scene,camera);}
+setScene('solar');buildLabels();animate();
+addEventListener('resize',function(){W=innerWidth;H=innerHeight;camera.aspect=W/H;camera.updateProjectionMatrix();renderer.setSize(W,H);});
+</script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

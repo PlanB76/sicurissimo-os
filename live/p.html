@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="it" data-lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ · Sei stato invitato</title>
+<meta name="description" content="Sei stato invitato nell'ecosistema 81+. Registrati e ricevi 100 PV di benvenuto.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700;800&family=JetBrains+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--o:#E8501A;--o2:#FB6B00;--v:#3FBF6B;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.6;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{background:var(--c);border:1px solid var(--bd);border-radius:22px;padding:34px;max-width:440px;width:100%;text-align:center}
+.logo-px{width:120px;height:120px;border-radius:18px;margin:0 auto 18px;display:flex;align-items:center;justify-content:center;font-family:'Anton';font-size:38px;color:#fff;overflow:hidden;box-shadow:0 12px 40px rgba(232,80,26,.3)}
+.logo-px img{width:100%;height:100%;object-fit:cover}
+.tag{display:inline-block;background:rgba(232,80,26,.12);border:1px solid var(--o);color:var(--o);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;text-transform:uppercase;margin-bottom:12px}
+.az{font-family:'Anton';font-size:28px;color:#fff;margin-bottom:4px}
+.invito{font-size:14px;color:var(--mu);margin-bottom:6px}
+.bonus{background:rgba(63,191,107,.12);border:1px solid var(--v);color:var(--v);border-radius:12px;padding:14px;margin:18px 0;font-weight:700}
+.bonus .pv{font-family:'Anton';font-size:26px;display:block}
+.btn{display:block;background:linear-gradient(135deg,var(--o),var(--o2));color:#fff;font-weight:800;font-family:'Anton';letter-spacing:.5px;padding:16px;border-radius:12px;font-size:17px;text-decoration:none;margin-top:8px}
+.btn-az{display:block;background:transparent;border:1px solid var(--bd);color:var(--tx);font-weight:600;padding:13px;border-radius:11px;font-size:14px;text-decoration:none;margin-top:10px}
+.sic{font-family:'JetBrains Mono';font-size:11px;color:var(--mu);margin-top:14px}
+</style>
+</head>
+<body>
+<div class="card" id="card">
+  <div class="tag">Invito 81+</div>
+  <div class="logo-px" id="logo" style="background:#E8501A">81+</div>
+  <div class="az" id="azienda">Caricamento...</div>
+  <div class="invito">ti invita nell'ecosistema 81+</div>
+  <div class="bonus">Registrati ora e ricevi<span class="pv">100 PV</span>di benvenuto</div>
+  <a class="btn" id="btnReg" href="#">Entra e prendi i 100 PV</a>
+  <a class="btn-az" id="btnAz" href="#" target="_blank" style="display:none">Visita il sito di <span id="azNome2"></span></a>
+  <div class="sic" id="sic"></div>
+</div>
+
+<script>
+async function carica(){
+  const slug=new URLSearchParams(location.search).get('s')||location.pathname.split('/').pop();
+  try{
+    const r=await fetch('api/pixel.php?az=vai&slug='+encodeURIComponent(slug));
+    const d=await r.json();
+    if(!d.ok){ document.getElementById('azienda').textContent='Invito non valido'; return; }
+    const px=d.pixel;
+    document.getElementById('azienda').textContent=px.azienda||'Un membro 81+';
+    document.getElementById('sic').textContent='Invitato da '+px.sic;
+    const logo=document.getElementById('logo');
+    if(px.logo_img){ logo.innerHTML='<img src="'+px.logo_img+'" alt="">'; }
+    else { logo.textContent=px.logo||'81+'; logo.style.background=px.colore||'#E8501A'; }
+    // link registrazione con ref del proprietario e slug per il tracking
+    document.getElementById('btnReg').href='signup.html?ref='+encodeURIComponent(px.sic)+'&px='+encodeURIComponent(slug);
+    if(px.url){
+      const b=document.getElementById('btnAz'); b.style.display='block';
+      b.href=px.url.startsWith('http')?px.url:'https://'+px.url;
+      document.getElementById('azNome2').textContent=px.azienda||'questa azienda';
+    }
+  }catch(e){ document.getElementById('azienda').textContent='Errore di caricamento'; }
+}
+carica();
+</script>
+</body>
+</html>

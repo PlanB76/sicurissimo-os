@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ Flowchart 3D Navigabile</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000;overflow:hidden;font-family:system-ui,sans-serif;color:#ccc}
+canvas{display:block}
+#hud{position:fixed;left:16px;top:16px;z-index:5;pointer-events:none}
+#hud h1{font-size:18px;color:#fff;pointer-events:auto}#hud h1 span{color:#E8501A}
+#hud .keys{font-size:9px;color:#555;margin-top:6px;line-height:1.6}
+#info{position:fixed;right:0;top:0;width:360px;height:100vh;background:rgba(8,8,14,.96);border-left:1px solid #1a1a22;z-index:10;overflow-y:auto;padding:16px;transform:translateX(100%);transition:transform .3s}
+#info.open{transform:translateX(0)}
+#info .x{position:absolute;right:12px;top:10px;cursor:pointer;font-size:22px;color:#555}
+#info h2{font-size:15px;color:#fff;margin-bottom:2px}
+#info .tg{display:inline-block;font-size:8px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px}
+#info h3{font-size:10px;margin:10px 0 3px;padding-bottom:3px;border-bottom:1px solid #1a1a22}
+#info p{font-size:10px;margin-bottom:4px}
+#info .pr{background:#0d0d14;border:1px solid #1a1a22;border-radius:5px;padding:5px 7px;margin:2px 0;font-size:10px;display:flex;justify-content:space-between}
+#info .pr .n{color:#fff;font-weight:600}
+#minimap{position:fixed;left:16px;bottom:16px;width:180px;height:120px;background:rgba(8,8,14,.8);border:1px solid #1a1a22;border-radius:8px;z-index:5}
+#minimap canvas{width:100%;height:100%;border-radius:8px}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="hud">
+  <h1>81+ <span>FLOWCHART 3D</span></h1>
+  <div class="keys">
+    Trascina = ruota · Scroll = zoom · Click = dettagli<br>
+    W/S = avanti/indietro · A/D = sinistra/destra<br>
+    Q/E = su/giù · R = reset · SPAZIO = auto-tour
+  </div>
+</div>
+<div id="info"><span class="x" onclick="document.getElementById('info').classList.remove('open')">✕</span><div id="ic"></div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const O='#E8501A',G='#3FBF6B',C='#00D9FF',Y='#FFD24A',V='#8A4AE8',W='#ffffff';
+
+// ===== FLOWCHART BLOCKS: x=horizontal, y=vertical layer, z=depth(hub) =====
+// Z: 0=HUB1(front), -8=HUB2, -18=HUB3
+// Y: 0=entry, going down
+// Each block: {id, label, sub, color, x, y, z, w, h, type:'box'|'diamond'|'pill', products[], detail{}}
+const B=[
+// ===== LAYER 0: ENTRY =====
+{id:'visitor',label:'VISITATORE',sub:'SEO, Ads, Referral, Passaparola',color:O,x:0,y:8,z:2,w:4,h:1.2,type:'pill',
+ detail:{why:'Il visitatore arriva da Google, da un annuncio o dal passaparola',what:'Landing page con termometro normativo, recensioni 294 vere, proposta di valore',products:[]}},
+
+// ===== HUB1 FLOW =====
+{id:'audit',label:'AUDIT 30 NORMATIVE',sub:'Gratuito · Nome + Email',color:O,x:0,y:6,z:0,w:5,h:1.2,type:'box',
+ detail:{why:'Ogni azienda ha bisogno di sapere dove sta',what:'30 domande binarie, report personalizzato con non conformità',products:[]}},
+{id:'sicid',label:'REGISTRAZIONE SIC-ID',sub:'100 PV bonus · 4 wallet · Welcome x5',color:Y,x:0,y:4,z:0,w:5,h:1.2,type:'box',
+ detail:{why:'L identità universale è la chiave di tutto',what:'SIC-ID esadecimale, 4 wallet (PV, Tesoretto, SAF, Crypto), welcome email 5 messaggi in 14 giorni',products:[]}},
+{id:'dash',label:'DASHBOARD GENESI',sub:'Multi-ruolo · Finance 360 · Mirco AI',color:O,x:0,y:2,z:0,w:5,h:1.2,type:'box',
+ detail:{why:'Ogni utente ha bisogno di un centro di controllo',what:'Vista MEMBER, NETWORKER, AMMIRAGLIO DIO. MRR, ARR, albero downline, wallet, mappa Italia.',products:[]}},
+
+// ===== DECISION: quale percorso? =====
+{id:'dec1',label:'QUALE PERCORSO?',sub:'L utente sceglie',color:Y,x:0,y:0,z:-2,w:2.5,h:2.5,type:'diamond',
+ detail:{why:'Ogni utente ha un obiettivo diverso',what:'Membro (compliance), Networker (vendita), Franchisee (territorio), Elite (club), Web3 (blockchain)',products:[]}},
+
+// ===== HUB2 FLOW: MEMBER PATH =====
+{id:'member',label:'81plus.it · MEMBER81+',sub:'5 livelli PRO · Compliance',color:G,x:-8,y:-2,z:-8,w:5.5,h:1.8,type:'box',
+ detail:{why:'Ogni azienda deve essere in regola per legge',what:'Membership, pack, sigilli, DVR, monitor, consulenza',
+ products:[{n:'Basic+',p:'49 PV/m'},{n:'Pro+',p:'99 PV/m'},{n:'Elite+',p:'149 PV/m'},{n:'Start Pack',p:'990 PV'},{n:'Business',p:'1.900 PV'},{n:'Sigillo Bronze',p:'990 PV'},{n:'Sigillo Silver',p:'1.490 PV'},{n:'Sigillo Gold',p:'1.990 PV'},{n:'DVR',p:'300 PV'},{n:'Monitor',p:'9 PV/m'},{n:'Report AI',p:'149 PV/a'}]}},
+
+{id:'academy',label:'81plus.academy',sub:'ANFOS · Lezione-online · Euro diretto',color:G,x:-14,y:-4,z:-8,w:5,h:1.5,type:'box',
+ detail:{why:'Formazione obbligatoria = motore stabile',what:'63 corsi ANFOS (provv 20-50%), Lezione-online (15%), Different-Academy. Utente paga in EURO.',
+ products:[{n:'Corsi ANFOS',p:'45-600 EUR'},{n:'Lezione-online',p:'0-89 EUR'},{n:'Illimitato',p:'490 PV/a'},{n:'Mentoring',p:'199 PV'},{n:'Masterclass',p:'390 PV'}]}},
+
+{id:'shop',label:'81plus.shop',sub:'POD + BigBuy · Euro + PV sconto 20%',color:G,x:-14,y:-2,z:-6,w:4.5,h:1.3,type:'box',
+ detail:{why:'Brand visibile, DPI accessibili',what:'Wear, gadget, workwear DPI. Printful POD, BigBuy dropshipping.',
+ products:[{n:'T-shirt',p:'29-45 EUR'},{n:'Felpa',p:'59 EUR'},{n:'Gadget',p:'5-49 EUR'},{n:'DPI',p:'19-49 EUR'},{n:'Kit Onboard',p:'69 EUR'},{n:'Kit Elite',p:'149 EUR'}]}},
+
+// ===== HUB2: NETWORK PATH =====
+{id:'network',label:'81plus.network · NETWORKER81+',sub:'8 livelli VIP · SDK+ 199 · SDP+ 49-999',color:Y,x:-2,y:-2,z:-8,w:5.5,h:1.8,type:'box',
+ detail:{why:'Guadagnare vendendo compliance, conforme L.173/2005',what:'Rete vendita, commissione 33%+override 18%, Pool 3%, EQUILIBRIO 6%, tetto 60%.',
+ products:[{n:'SDK+',p:'199 PV'},{n:'IGNITE',p:'49 PV/m'},{n:'RISE',p:'99 PV/m'},{n:'DRIVE',p:'149 PV/m'},{n:'SCALE',p:'249 PV/m'},{n:'PEAK',p:'399 PV/m'},{n:'SUMMIT',p:'599 PV/m'},{n:'LEGACY',p:'799 PV/m'},{n:'CROWN',p:'999 PV/m'}]}},
+
+// ===== DECISION: LIVELLO 6 =====
+{id:'dec6',label:'LIVELLO 6 DIRECTOR',sub:'3 carriere si aprono',color:Y,x:-2,y:-5,z:-10,w:2.5,h:2.5,type:'diamond',
+ detail:{why:'Il livello 6 è la soglia strategica',what:'Da qui si può aprire un POINT81+ (franchising), entrare nel Club (Elite), o continuare nel Network (VIP). Tutte parallele.',products:[]}},
+
+// ===== FRANCHISING =====
+{id:'zone',label:'81plus.zone · FRANCHISING',sub:'8 livelli SUPER-PRO · POINT81+',color:Y,x:-8,y:-8,z:-10,w:6,h:2.2,type:'box',
+ detail:{why:'7.900 comuni hanno bisogno di compliance',what:'SATELLITE, STATION, COMMAND, Sedi Prov/Reg. Modello McDonald\'s. Guadagno 60-80%.',
+ products:[{n:'SATELLITE81+',p:'14.900 EUR'},{n:'STATION81+',p:'29.900 EUR'},{n:'COMMAND81+',p:'49.900 EUR'},{n:'Sede Prov',p:'100.000 EUR'},{n:'Sede Reg',p:'250.000 EUR'},{n:'SPARK Royal',p:'990 EUR/m'},{n:'FORGE',p:'1.490 EUR/m'},{n:'BLADE',p:'2.490 EUR/m'},{n:'SHIELD',p:'3.990 EUR/m'},{n:'TOWER',p:'5.990 EUR/m'},{n:'CITADEL',p:'7.990 EUR/m'},{n:'FORTRESS',p:'9.990 EUR/m'},{n:'DOMINION',p:'14.990 EUR/m'}]}},
+
+// ===== CLUB =====
+{id:'club',label:'81plus.club · CLUB81+',sub:'5 livelli ELITE · Esperienze',color:V,x:4,y:-8,z:-10,w:5,h:1.8,type:'box',
+ detail:{why:'Top performer meritano il meglio',what:'Eventi esclusivi, viaggi, location, concierge, networking top.',
+ products:[{n:'PALLADIUM',p:'1.990 PV/m'},{n:'IRIDIUM',p:'4.990 PV/m'},{n:'RHODIUM',p:'9.990 PV/m'},{n:'OSMIUM',p:'Invito'},{n:'RHENIUM',p:'Invito'},{n:'Mastermind',p:'490 PV/m'}]}},
+
+// ===== PIX81+ BRIDGE =====
+{id:'pix',label:'PIX81+ · PONTE WEB2↔WEB3',sub:'1000 pixel · 1PIX = 1 NFT LAND',color:O,x:6,y:-2,z:-4,w:5,h:1.5,type:'box',
+ detail:{why:'Pubblicità permanente e ponte tra i mondi',what:'Globo 3D, checkout PayPal, promo settimanale, whitelist 81X, 1PIX=1 NFT LAND.',
+ products:[{n:'PIX81+',p:'1.000 PV'},{n:'PIX Promo',p:'800 PV'},{n:'Pack 3',p:'2.700 PV'},{n:'Pack 5',p:'4.200 PV'},{n:'Boost',p:'49 PV'}]}},
+
+// ===== MONEY FLOW =====
+{id:'euro',label:'EURO',sub:'PayPal · Carta',color:G,x:12,y:8,z:-4,w:2.5,h:1,type:'pill',detail:{why:'L utente paga in euro',what:'PayPal unico processore fino a Q4 2026.',products:[]}},
+{id:'pv',label:'PV',sub:'1PV = 1EUR · Blocchi 100/300/500',color:O,x:12,y:6,z:-4,w:3,h:1,type:'box',detail:{why:'Moneta interna Web2',what:'Acquisto in blocchi. Gamification max 20% sconto. Livello 3 = pavimento.',products:[]}},
+{id:'saf',label:'SAF',sub:'Interno Web3 · 1PV=1SAF',color:C,x:12,y:4,z:-4,w:3,h:1,type:'box',detail:{why:'Token utilità interno',what:'BSC BEP-20, swap PV→SAF 1:1 irreversibile. Stesse regole sconto PV. Governance DAO.',products:[]}},
+{id:'t81x',label:'81X TOKEN',sub:'BSC BEP-20 · 21M supply · DEX',color:Y,x:12,y:2,z:-4,w:3,h:1,type:'box',detail:{why:'Token dell ecosistema',what:'Supply 21M, burn 0.5%, halving 4 anni. Solo DEX, nessun DEX. Max 20% da SAF.',products:[]}},
+{id:'usdt',label:'USDT',sub:'Stablecoin · Uscita',color:'#888',x:12,y:0,z:-4,w:2.5,h:1,type:'pill',detail:{why:'Ponte verso il mondo crypto',what:'L utente può scambiare 81X per USDT sul DEX.',products:[]}},
+
+// ===== HUB3 BLOCKS =====
+{id:'digital',label:'81plus.digital · DAPP',sub:'8 livelli · NO retrocessione',color:C,x:4,y:-2,z:-18,w:5,h:1.5,type:'box',
+ detail:{why:'Porta d ingresso al Web3',what:'Membership SAF, swap PV→SAF, blocco utilità, NFT membership. Ranking senza retrocessione.',
+ products:[{n:'Basic',p:'29 SAF/m'},{n:'Pro',p:'99 SAF/m'},{n:'Elite',p:'249 SAF/m'},{n:'SDK+ Web3',p:'149 SAF'},{n:'NFT Member',p:'49 81X'}]}},
+
+{id:'dex',label:'81plus.exchange · DEX',sub:'Swap · Pool · Fee 0.3%',color:C,x:10,y:-2,z:-18,w:4.5,h:1.3,type:'box',
+ detail:{why:'Exchange decentralizzato dell ecosistema',what:'AMM, pool liquidità, vault. SAF/81X/USDT/top20. Solo non-custodial.',
+ products:[{n:'Swap',p:'Fee 0.3%'},{n:'Trader Pro',p:'49 SAF/m'},{n:'Trader Elite',p:'149 SAF/m'}]}},
+
+{id:'metaverse',label:'81plus.world · METAVERSO',sub:'Safe City · NFT Land · Avatar',color:V,x:7,y:-5,z:-20,w:5,h:1.5,type:'box',
+ detail:{why:'La compliance vissuta, non solo letta',what:'2 mondi 3D, NFT Land (1PIX=1LAND), oggetti, eventi corporate, Ready Player Me.',
+ products:[{n:'NFT Land',p:'1PIX=1LAND'},{n:'Oggetti',p:'9-99 81X'},{n:'Explorer',p:'19 SAF/m'},{n:'Builder',p:'49 SAF/m'},{n:'Evento',p:'99 SAF'},{n:'Showroom',p:'490 SAF/a'}]}},
+
+{id:'dao',label:'81plus.org · DAO',sub:'Governance · Voto SAF',color:C,x:1,y:-5,z:-20,w:4,h:1.2,type:'box',
+ detail:{why:'La community decide',what:'Proposte, voto proporzionale SAF, prima consultiva poi esecutiva.',
+ products:[{n:'Proposta',p:'9 SAF'},{n:'NFT Delegato',p:'99 81X'},{n:'NFT Fondatore',p:'499 81X'}]}},
+
+{id:'marketplace',label:'81plus.store · MARKETPLACE',sub:'81X + USDT · NFT · RWA',color:O,x:-2,y:-5,z:-18,w:5,h:1.3,type:'box',
+ detail:{why:'NFT e RWA hanno bisogno del loro marketplace',what:'Listing on-chain, fee 2.5-5%, NFT, RWA, land, contenuti digitali.',
+ products:[{n:'Seller Basic',p:'Gratis'},{n:'Seller Pro',p:'29 SAF/m'},{n:'Seller Elite',p:'99 SAF/m'}]}},
+
+{id:'banking',label:'81plus.credit · BANKING',sub:'Dubai · Licenze · On/Off-ramp',color:C,x:12,y:-5,z:-18,w:4.5,h:1.3,type:'box',
+ detail:{why:'Ponte euro↔crypto professionale',what:'On-ramp 1.5%, off-ramp 2%, swap 81X:USDT, wallet. Licenze Dubai operative.',
+ products:[{n:'Credit Pro',p:'49 SAF/m'},{n:'Institutional',p:'499 SAF/m'},{n:'On-ramp',p:'1.5%'},{n:'Off-ramp',p:'2%'}]}},
+
+{id:'bond',label:'81plus.bond · ASSICURAZIONI',sub:'Dubai · Polizze tokenizzate',color:Y,x:12,y:-8,z:-20,w:4.5,h:1.2,type:'box',
+ detail:{why:'Protezione per smart contract e wallet',what:'Polizze SC, wallet, eventi. Bond tokenizzati. Licenze Dubai.',
+ products:[{n:'Polizza SC',p:'49 81X/a'},{n:'Polizza Wallet',p:'29 81X/a'},{n:'Bond Pro',p:'29 SAF/m'}]}},
+
+{id:'place',label:'81plus.place · SEDE',sub:'Jitsi · NFT Arredi',color:G,x:5,y:-8,z:-22,w:4,h:1.2,type:'box',
+ detail:{why:'Riunioni brandizzate',what:'Sale virtuali Jitsi, NFT arredamenti, PIX reward.',
+ products:[{n:'Sala Pro',p:'19 SAF/m'},{n:'Enterprise',p:'99 SAF/m'},{n:'NFT Arredi',p:'4-99 81X'}]}},
+
+{id:'cloud',label:'81plus.cloud · IPFS',sub:'Certificazione blockchain',color:C,x:-1,y:-8,z:-22,w:4,h:1.2,type:'box',
+ detail:{why:'Documenti immutabili',what:'IPFS Pinata, CID su BSC, attestati NFT verificabili.',
+ products:[{n:'Cloud Plus',p:'9 PV/m'},{n:'Aziendale',p:'49 PV/m'},{n:'Certif IPFS',p:'4 PV'},{n:'Attestato NFT',p:'19 PV'}]}},
+
+{id:'cards',label:'81plus.cards',sub:'SIC-ID · QR · Badge',color:O,x:-5,y:-8,z:-20,w:3.5,h:1,type:'box',
+ detail:{why:'Identità digitale professionale',what:'Card SVG, QR profilo, badge ranking, export PNG, NFC fisica.',
+ products:[{n:'Base',p:'Gratis'},{n:'Premium',p:'49 PV'},{n:'NFC',p:'29 EUR'}]}},
+
+{id:'xmas',label:'XMAS81',sub:'Regali tutto l anno',color:G,x:-5,y:-5,z:-18,w:3.5,h:1,type:'box',
+ detail:{why:'Regalare crea legame',what:'PV regalo, alberi Treedom, box fisici, NFT edizione.',
+ products:[{n:'Regala PV',p:'da 10€'},{n:'Albero',p:'29 EUR'},{n:'Box',p:'149 EUR'},{n:'NFT',p:'49 81X'}]}},
+
+{id:'treedom',label:'GREEN81+ · TREEDOM',sub:'1 albero ogni NFT/1k 81X/1k SAF/10k PV',color:G,x:-5,y:-10,z:-22,w:5,h:1,type:'pill',
+ detail:{why:'CSR reale, la foresta 81+',what:'Alberi veri piantati con Treedom. Costo a carico della direzione. Collegato a DAO charity.',products:[]}},
+];
+
+// ===== ARROWS (from→to) =====
+const A=[
+// Main flow
+['visitor','audit'],['audit','sicid'],['sicid','dash'],['dash','dec1'],
+// Decision branches
+['dec1','member'],['dec1','network'],['dec1','pix'],
+// Member sub-flows
+['member','academy'],['member','shop'],
+// Network to level 6
+['network','dec6'],
+// Level 6 branches
+['dec6','zone'],['dec6','club'],['dec6','network'],
+// PIX bridge
+['pix','digital'],['pix','metaverse'],
+// Money flow
+['euro','pv'],['pv','saf'],['saf','t81x'],['t81x','usdt'],
+// PV to SAF bridge
+['pv','member'],['saf','digital'],
+// HUB3 flows
+['digital','dex'],['digital','dao'],['digital','marketplace'],
+['dex','banking'],['dex','metaverse'],
+['banking','bond'],
+['metaverse','place'],
+['marketplace','metaverse'],
+// Supporting
+['cloud','digital'],['cards','dash'],['xmas','shop'],
+['place','cloud'],['treedom','xmas'],['treedom','dao'],
+['zone','member'],['club','academy'],
+];
+
+// ===== THREE.JS =====
+const canvas=document.getElementById('c');
+const R=new THREE.WebGLRenderer({canvas,antialias:true});
+R.setSize(innerWidth,innerHeight);R.setPixelRatio(Math.min(devicePixelRatio,2));
+const S=new THREE.Scene();S.background=new THREE.Color(0x040408);S.fog=new THREE.FogExp2(0x040408,0.008);
+const cam=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,0.1,200);
+cam.position.set(0,12,25);cam.lookAt(0,0,-8);
+
+S.add(new THREE.AmbientLight(0x334455,0.6));
+const dl=new THREE.DirectionalLight(0xffffff,0.7);dl.position.set(10,20,10);S.add(dl);
+
+// Ground grid
+const gg=new THREE.GridHelper(60,60,0x0a0a18,0x060610);gg.position.y=-12;S.add(gg);
+
+// ===== BUILD BLOCKS =====
+const meshMap={};
+const ray=new THREE.Raycaster();const mpos=new THREE.Vector2();
+
+B.forEach(b=>{
+  const col=new THREE.Color(b.color);
+  let geo;
+  if(b.type==='diamond'){
+    geo=new THREE.BoxGeometry(b.w*0.7,b.h*0.7,0.3);
+  } else if(b.type==='pill'){
+    geo=new THREE.BoxGeometry(b.w,b.h,0.25,1,1,1);
+  } else {
+    geo=new THREE.BoxGeometry(b.w,b.h,0.3);
+  }
+  const mat=new THREE.MeshPhongMaterial({color:0x0d0d16,emissive:col,emissiveIntensity:0.15,transparent:true,opacity:0.92});
+  const mesh=new THREE.Mesh(geo,mat);
+  mesh.position.set(b.x,b.y,b.z);
+  if(b.type==='diamond')mesh.rotation.z=Math.PI/4;
+  mesh.userData=b;
+  S.add(mesh);
+  meshMap[b.id]=mesh;
+
+  // Border wireframe
+  const wf=new THREE.LineSegments(new THREE.EdgesGeometry(geo),new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0.6}));
+  wf.position.copy(mesh.position);
+  if(b.type==='diamond')wf.rotation.z=Math.PI/4;
+  S.add(wf);
+
+  // Label
+  const cv2=document.createElement('canvas');cv2.width=512;cv2.height=128;
+  const cx=cv2.getContext('2d');
+  cx.fillStyle='rgba(0,0,0,0)';cx.fillRect(0,0,512,128);
+  cx.font='bold 28px system-ui';cx.fillStyle=b.color;cx.textAlign='center';
+  cx.fillText(b.label,256,40);
+  cx.font='16px system-ui';cx.fillStyle='#888888';
+  cx.fillText(b.sub.substring(0,50),256,70);
+  if(b.sub.length>50)cx.fillText(b.sub.substring(50,100),256,90);
+  const tex=new THREE.CanvasTexture(cv2);
+  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true}));
+  sp.position.set(b.x,b.y+b.h/2+0.6,b.z+0.2);
+  sp.scale.set(b.w*1.2,b.w*0.3,1);
+  S.add(sp);
+});
+
+// ===== BUILD ARROWS =====
+const arrowParticles=[];
+A.forEach(([fid,tid])=>{
+  const fm=meshMap[fid],tm=meshMap[tid];if(!fm||!tm)return;
+  const from=fm.position,to=tm.position;
+  const mid=new THREE.Vector3().addVectors(from,to).multiplyScalar(0.5);
+  mid.y+=0.8;
+
+  // Curve
+  const curve=new THREE.QuadraticBezierCurve3(from.clone(),mid,to.clone());
+  const pts=curve.getPoints(30);
+  const lg=new THREE.BufferGeometry().setFromPoints(pts);
+  const fb=B.find(x=>x.id===fid);
+  const col=new THREE.Color(fb?fb.color:'#333');
+  const lm=new THREE.LineBasicMaterial({color:col,transparent:true,opacity:0.2});
+  S.add(new THREE.Line(lg,lm));
+
+  // Arrowhead
+  const tip=pts[pts.length-1];const prev=pts[pts.length-3];
+  const dir3=new THREE.Vector3().subVectors(tip,prev).normalize();
+  const ag=new THREE.ConeGeometry(0.12,0.4,4);
+  const am=new THREE.MeshBasicMaterial({color:col,transparent:true,opacity:0.5});
+  const arrow=new THREE.Mesh(ag,am);
+  arrow.position.copy(tip);
+  arrow.lookAt(tip.clone().add(dir3));
+  arrow.rotateX(Math.PI/2);
+  S.add(arrow);
+
+  // Particle
+  const pg=new THREE.SphereGeometry(0.06,6,6);
+  const pm=new THREE.MeshBasicMaterial({color:col});
+  const particle=new THREE.Mesh(pg,pm);
+  particle.userData={curve,t:Math.random()};
+  S.add(particle);
+  arrowParticles.push(particle);
+});
+
+// ===== CAMERA CONTROLS =====
+let drag=false,px=0,py=0;
+let theta=0,phi=0.4,dist=28;
+const target=new THREE.Vector3(2,0,-8);
+let autoTour=false,tourT=0;
+
+canvas.onmousedown=e=>{drag=true;px=e.clientX;py=e.clientY};
+canvas.onmousemove=e=>{if(!drag)return;theta-=(e.clientX-px)*0.004;phi=Math.max(-0.3,Math.min(1.2,phi-(e.clientY-py)*0.004));px=e.clientX;py=e.clientY;autoTour=false};
+canvas.onmouseup=()=>drag=false;
+canvas.onmouseleave=()=>drag=false;
+canvas.onwheel=e=>{dist=Math.max(6,Math.min(60,dist+e.deltaY*0.03));autoTour=false};
+canvas.ontouchstart=e=>{if(e.touches.length===1){drag=true;px=e.touches[0].clientX;py=e.touches[0].clientY}};
+canvas.ontouchmove=e=>{if(!drag||e.touches.length!==1)return;theta-=(e.touches[0].clientX-px)*0.004;phi=Math.max(-0.3,Math.min(1.2,phi-(e.touches[0].clientY-py)*0.004));px=e.touches[0].clientX;py=e.touches[0].clientY;autoTour=false};
+canvas.ontouchend=()=>drag=false;
+
+canvas.onclick=e=>{
+  mpos.x=(e.clientX/innerWidth)*2-1;mpos.y=-(e.clientY/innerHeight)*2+1;
+  ray.setFromCamera(mpos,cam);
+  const hits=ray.intersectObjects(Object.values(meshMap));
+  if(hits.length){
+    const b=hits[0].object.userData;
+    if(b.id)showInfo(b);
+  }
+};
+
+document.onkeydown=e=>{
+  const k=e.key.toLowerCase();
+  if(k==='r'){theta=0;phi=0.4;dist=28;target.set(2,0,-8);autoTour=false}
+  if(k===' '){autoTour=!autoTour;tourT=0;e.preventDefault()}
+  if(k==='w')target.z-=1;if(k==='s')target.z+=1;
+  if(k==='a')target.x-=1;if(k==='d')target.x+=1;
+  if(k==='q')target.y+=1;if(k==='e')target.y-=1;
+  if(k!=='r'&&k!==' ')autoTour=false;
+};
+
+// ===== INFO PANEL =====
+let selMesh=null;
+function showInfo(b){
+  if(selMesh)selMesh.material.emissiveIntensity=0.15;
+  selMesh=meshMap[b.id];
+  if(selMesh)selMesh.material.emissiveIntensity=0.6;
+  target.set(b.x,b.y,b.z);dist=12;
+
+  let h=`<h2 style="color:${b.color}">${b.label}</h2><p style="color:#666">${b.sub}</p>`;
+  h+=`<div class="tg" style="background:${b.color}22;color:${b.color};border:1px solid ${b.color}">${b.type.toUpperCase()}</div>`;
+  if(b.detail){
+    h+=`<h3 style="color:${b.color}">PERCHÉ</h3><p>${b.detail.why}</p>`;
+    h+=`<h3 style="color:${b.color}">COSA</h3><p>${b.detail.what}</p>`;
+    if(b.detail.products.length){
+      h+=`<h3 style="color:${b.color}">PRODOTTI (${b.detail.products.length})</h3>`;
+      b.detail.products.forEach(p=>{
+        h+=`<div class="pr"><span class="n">${p.n}</span><span style="color:${b.color};font-weight:700">${p.p}</span></div>`;
+      });
+    }
+  }
+  document.getElementById('ic').innerHTML=h;
+  document.getElementById('info').classList.add('open');
+}
+
+// Tour waypoints
+const tourPts=[
+  {x:0,y:12,z:25,tx:0,ty:4,tz:0},   // Overview
+  {x:-2,y:6,z:8,tx:0,ty:4,tz:0},      // HUB1
+  {x:-8,y:2,z:-2,tx:-6,ty:-2,tz:-8},   // HUB2 Member
+  {x:-2,y:2,z:-2,tx:-2,ty:-2,tz:-8},   // Network
+  {x:-4,y:-2,z:-4,tx:-2,ty:-5,tz:-10}, // Decision L6
+  {x:-8,y:-4,z:-4,tx:-8,ty:-8,tz:-10}, // Franchising
+  {x:12,y:6,z:0,tx:12,ty:4,tz:-4},     // Money flow
+  {x:6,y:2,z:-12,tx:4,ty:-2,tz:-18},   // HUB3 Digital
+  {x:10,y:0,z:-12,tx:10,ty:-2,tz:-18}, // DEX
+  {x:7,y:-2,z:-14,tx:7,ty:-5,tz:-20},  // Metaverse
+  {x:0,y:8,z:20,tx:2,ty:0,tz:-8},      // Back to overview
+];
+
+// ===== RENDER LOOP =====
+let t=0;
+function loop(){
+  requestAnimationFrame(loop);t+=0.01;
+
+  if(autoTour){
+    tourT+=0.003;
+    const i=Math.floor(tourT)%tourPts.length;
+    const j=(i+1)%tourPts.length;
+    const f=tourT%1;
+    const a=tourPts[i],b=tourPts[j];
+    const smooth=f*f*(3-2*f); // smoothstep
+    cam.position.x=a.x+(b.x-a.x)*smooth;
+    cam.position.y=a.y+(b.y-a.y)*smooth;
+    cam.position.z=a.z+(b.z-a.z)*smooth;
+    const lx=a.tx+(b.tx-a.tx)*smooth;
+    const ly=a.ty+(b.ty-a.ty)*smooth;
+    const lz=a.tz+(b.tz-a.tz)*smooth;
+    cam.lookAt(lx,ly,lz);
+  } else {
+    cam.position.x=target.x+dist*Math.sin(theta)*Math.cos(phi);
+    cam.position.y=target.y+dist*Math.sin(phi);
+    cam.position.z=target.z+dist*Math.cos(theta)*Math.cos(phi);
+    cam.lookAt(target);
+  }
+
+  // Animate particles
+  arrowParticles.forEach(p=>{
+    p.userData.t=(p.userData.t+0.004)%1;
+    const pt=p.userData.curve.getPoint(p.userData.t);
+    p.position.copy(pt);
+  });
+
+  // Pulse selected
+  if(selMesh)selMesh.material.emissiveIntensity=0.4+Math.sin(t*3)*0.2;
+
+  R.render(S,cam);
+}
+
+addEventListener('resize',()=>{cam.aspect=innerWidth/innerHeight;cam.updateProjectionMatrix();R.setSize(innerWidth,innerHeight)});
+loop();
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+{
+  "nota": "Modello di crescita dell'utente. Ruota della vita a 8 aree e piramide di Maslow a 5 livelli. Tutto misurato in PV accumulati per area. Lo storico mostra progressi e regressi nel tempo.",
+  "ruota_vita": {
+    "desc": "Otto aree della vita imprenditoriale 81+. Ogni area cresce con i PV che guadagni completando azioni in quel tema.",
+    "aree": [
+      {"id":"sicurezza","nome":"Sicurezza","icona":"🛡️","colore":"#E8501A","desc":"Conformità D.Lgs 81/08, DVR, formazione lavoratori."},
+      {"id":"formazione","nome":"Formazione","icona":"🎓","colore":"#FB6B00","desc":"Corsi completati, Academy, crescita delle competenze."},
+      {"id":"compliance","nome":"Compliance","icona":"📋","colore":"#FFD24A","desc":"HACCP, privacy, documenti obbligatori in regola."},
+      {"id":"network","nome":"Network","icona":"🤝","colore":"#3FBF6B","desc":"Inviti, sviluppo rete, relazioni con altri membri."},
+      {"id":"finanza","nome":"Finanza","icona":"💰","colore":"#4AE8C0","desc":"Wallet, PV accumulati, gestione economica."},
+      {"id":"digitale","nome":"Digitale","icona":"💻","colore":"#00D9FF","desc":"Web3, NFT, presenza digitale nell'ecosistema."},
+      {"id":"community","nome":"Community","icona":"💬","colore":"#8A4AE8","desc":"Eventi, club, partecipazione alla vita 81+."},
+      {"id":"leadership","nome":"Leadership","icona":"👑","colore":"#FF6AD9","desc":"Rango, missioni guida, crescita come leader."}
+    ]
+  },
+  "maslow": {
+    "desc": "I cinque livelli di Maslow applicati al percorso 81+. Sali di livello man mano che accumuli PV totali e completi le tappe.",
+    "livelli": [
+      {"liv":1,"nome":"Sicurezza di base","icona":"🏠","colore":"#E8501A","soglia_pv":0,    "desc":"Sei in regola. DVR, formazione minima, documenti base. La tua azienda è protetta."},
+      {"liv":2,"nome":"Stabilità","icona":"🛡️","colore":"#FB6B00","soglia_pv":300,  "desc":"Hai messo ordine. Scadenze sotto controllo, processi che girano da soli."},
+      {"liv":3,"nome":"Appartenenza","icona":"🤝","colore":"#FFD24A","soglia_pv":800,  "desc":"Fai parte dell'ecosistema. Network, community, relazioni che contano."},
+      {"liv":4,"nome":"Riconoscimento","icona":"🏆","colore":"#3FBF6B","soglia_pv":2000, "desc":"Vieni riconosciuto. Rango, risultati, reputazione nella rete 81+."},
+      {"liv":5,"nome":"Realizzazione","icona":"⭐","colore":"#8A4AE8","soglia_pv":5000, "desc":"Sei un punto di riferimento. Guidi altri, costruisci valore, lasci un segno."}
+    ]
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "nota": "Gamification unificata 81+. Copre ogni livello, prodotti, servizi, bonus, membership, sigilli, network, premi, benefit, booster, missioni. Tutto misurato in PV. I PV sono crediti interni non convertibili in denaro, mai promessa di guadagno.",
+  "livelli_xp": [
+    {"liv":1,"nome":"Recluta","da":0,"icona":"🔰","colore":"#8a8a92"},
+    {"liv":2,"nome":"Operativo","da":300,"icona":"🛡️","colore":"#CD7F32"},
+    {"liv":3,"nome":"Veterano","da":800,"icona":"⚙️","colore":"#C0C0C0"},
+    {"liv":4,"nome":"Ufficiale","da":2000,"icona":"🎖️","colore":"#FFD24A"},
+    {"liv":5,"nome":"Comandante","da":5000,"icona":"⭐","colore":"#FB6B00"},
+    {"liv":6,"nome":"Ammiraglio","da":12000,"icona":"👑","colore":"#E8501A"}
+  ],
+  "missioni": [
+    {"id":"registrazione","nome":"Entra nell ecosistema","desc":"Registrati gratuitamente","pv":100,"cat":"onboarding"},
+    {"id":"profilo","nome":"Completa il profilo","desc":"Nome, telefono, indirizzo","pv":100,"cat":"onboarding"},
+    {"id":"audit","nome":"Fai l audit gratuito","desc":"30 controlli in 2 minuti","pv":25,"cat":"onboarding"},
+    {"id":"primo_documento","nome":"Genera il primo documento","desc":"Dalla Fabbrica documenti","pv":15,"cat":"prodotti"},
+    {"id":"primo_corso","nome":"Apri il primo corso","desc":"Formazione certificata","pv":10,"cat":"formazione"},
+    {"id":"prima_membership","nome":"Attiva una membership","desc":"Basic, Pro o Elite","pv":200,"cat":"membership"},
+    {"id":"primo_sigillo","nome":"Ottieni il primo Sigillo","desc":"Bronze, Silver o Gold","pv":300,"cat":"sigilli"},
+    {"id":"primo_invito","nome":"Invita il primo amico","desc":"Col tuo link o QR","pv":25,"cat":"network"},
+    {"id":"dieci_invitati","nome":"Porta 10 persone attive","desc":"Rete che cresce","pv":1000,"cat":"network"},
+    {"id":"primo_pix","nome":"Prendi il primo PIX81+","desc":"Founding Node nel Metaverso","pv":150,"cat":"metaverso"},
+    {"id":"telegram","nome":"Collega Telegram","desc":"Entra nei gruppi","pv":50,"cat":"community"},
+    {"id":"quiz","nome":"Vinci il primo quiz","desc":"Ogni giorno alle 13","pv":10,"cat":"community"},
+    {"id":"wallet_carico","nome":"Carica il wallet","desc":"Primo caricamento PV","pv":20,"cat":"wallet"},
+    {"id":"web3","nome":"Esplora il Web3","desc":"Entra nel mondo blockchain","pv":50,"cat":"web3"}
+  ],
+  "badge": [
+    {"id":"azienda_virtuosa","nome":"Azienda Virtuosa","desc":"30 giorni di attività continua","icona":"🏅","pv":100},
+    {"id":"evangelista","nome":"Evangelista 81+","desc":"5 invitati attivi","icona":"📣","pv":500},
+    {"id":"zero_sanzioni","nome":"Zero Sanzioni","desc":"Documenti chiave tutti in regola","icona":"✅","pv":200},
+    {"id":"pioniere_web3","nome":"Pioniere Web3","desc":"Primo accesso al Web3","icona":"🚀","pv":50},
+    {"id":"founder_node","nome":"Founder Node","desc":"Possiedi almeno un PIX81+","icona":"🧱","pv":0},
+    {"id":"club_member","nome":"Club 81+","desc":"Membro del Club esclusivo","icona":"💎","pv":0},
+    {"id":"formatore","nome":"Formatore","desc":"Hai completato 5 corsi","icona":"🎓","pv":150},
+    {"id":"costruttore_rete","nome":"Costruttore di Rete","desc":"Rete di almeno 25 persone","icona":"🌐","pv":1000}
+  ],
+  "booster": [
+    {"id":"founder_genesi","nome":"Booster Genesi","desc":"x2 PV a vita per i primi 100 SIC","molt":2.0,"trigger":"sic<=100"},
+    {"id":"founder_pionieri","nome":"Booster Pionieri","desc":"x1.5 PV per i primi 500 SIC","molt":1.5,"trigger":"sic<=500"},
+    {"id":"founder_early","nome":"Booster Early","desc":"x1.25 PV primo anno per i primi 1000","molt":1.25,"trigger":"sic<=1000"},
+    {"id":"streak_settimana","nome":"Booster Costanza","desc":"x1.2 PV con 7 giorni di fila","molt":1.2,"trigger":"streak>=7"},
+    {"id":"elite","nome":"Booster Elite","desc":"x1.3 PV con membership Elite","molt":1.3,"trigger":"membership=elite"}
+  ],
+  "benefit": [
+    {"liv_min":2,"nome":"Sconto 5% sui servizi","desc":"Dal livello Operativo"},
+    {"liv_min":3,"nome":"Accesso anticipato ai nuovi corsi","desc":"Dal livello Veterano"},
+    {"liv_min":4,"nome":"Badge pubblico sul profilo","desc":"Dal livello Ufficiale"},
+    {"liv_min":5,"nome":"Inviti agli eventi VIP","desc":"Dal livello Comandante"},
+    {"liv_min":6,"nome":"Voce nelle decisioni della community","desc":"Dal livello Ammiraglio"}
+  ],
+  "premi_soglia": [
+    {"pv":500,"nome":"Mese Basic in regalo","desc":"Raggiungi 500 PV totali"},
+    {"pv":1500,"nome":"Sigillo Bronze scontato 50%","desc":"Raggiungi 1500 PV"},
+    {"pv":3000,"nome":"Corso premium gratuito","desc":"Raggiungi 3000 PV"},
+    {"pv":6000,"nome":"PIX81+ scontato 200 PV","desc":"Raggiungi 6000 PV"}
+  ]
+}

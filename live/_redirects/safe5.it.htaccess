@@ -1,0 +1,5 @@
+# Redirect 301 safe5.it -> 81plus.digital
+# Decisione 7 giugno 2026. Carica questo file come .htaccess nella radice di safe5.it su Hostinger.
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(www\.)?safe5\.it$ [NC]
+RewriteRule ^(.*)$ https://81plus.digital/$1 [R=301,L]

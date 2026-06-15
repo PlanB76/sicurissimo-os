@@ -1,0 +1,292 @@
+<!DOCTYPE html><html lang="it"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NETWORK81+ | Sicurezza Community Network di 81+ Sicurissimo e DIGITAL</title>
+<meta name="description" content="NETWORK81+, la Sicurezza Community Network. La rete di professionisti di 81+ Sicurissimo e DIGITAL. Vendi prodotti reali, guadagna ogni mese, costruisci la tua carriera. Conforme alla Legge 173/2005.">
+<link rel="icon" href="favicon.png">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root{--o:#FB6B00;--bg:#080808;--card:#111;--bd:#222;--mut:#9a9a9a;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#fff;line-height:1.55;}
+a{color:var(--o);text-decoration:none;}
+.sct{max-width:1100px;margin:0 auto;padding:46px 5%;}
+.kick{color:var(--o);font-weight:700;letter-spacing:2px;font-size:12px;text-transform:uppercase;margin-bottom:14px;text-align:center;}
+.hero{text-align:center;padding:54px 5% 30px;max-width:860px;margin:0 auto;}
+.hero h1{font-size:38px;line-height:1.08;margin-bottom:16px;}.hero h1 span{color:var(--o);}
+.hero .sub{color:#cfcfcf;font-size:17px;}
+.btn{display:inline-block;background:var(--o);color:#080808;font-weight:800;padding:15px 34px;text-transform:uppercase;letter-spacing:.5px;font-size:14px;margin-top:20px;}
+.btn.gh{background:none;border:2px solid #444;color:#fff;}
+.stripe{background:#0c0c0c;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:24px 5%;}
+.stripe .row{max-width:1000px;margin:0 auto;display:flex;justify-content:space-around;flex-wrap:wrap;gap:18px;text-align:center;}
+.stripe .n{font-size:26px;font-weight:800;color:var(--o);}.stripe .l{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;}
+.sec-t{text-align:center;font-size:28px;margin-bottom:8px;}
+.sec-s{text-align:center;color:var(--mut);margin-bottom:30px;max-width:660px;margin-left:auto;margin-right:auto;}
+.earn{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;}
+.earn .c{background:var(--card);border:1px solid var(--bd);border-top:4px solid var(--o);padding:22px;}
+.earn .c .num{color:var(--o);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.earn .c h3{font-size:16px;margin-bottom:8px;}.earn .c p{font-size:13px;color:#cfcfcf;}
+.ladder{max-width:880px;margin:0 auto;}
+.rank{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid var(--bd);padding:15px 20px;margin-bottom:9px;border-left:4px solid var(--o);}
+.rank .lvl{font-size:21px;font-weight:800;color:var(--o);width:38px;flex:0 0 auto;text-align:center;}
+.rank .nm{font-weight:700;font-size:16px;}.rank .de{font-size:13px;color:var(--mut);}
+.rank .pz{margin-left:auto;font-size:12px;color:#e3c873;text-align:right;flex:0 0 auto;}
+.rank.r4{border-left-color:#d7a06a;}.rank.r5{border-left-color:#6aa9d7;}.rank.r6{border-left-color:#d76a6a;}.rank.r7{border-left-color:#e3c873;}.rank.r8{border-left-color:#fff;}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;}
+.steps .s{background:#0c0c0c;border:1px solid var(--bd);padding:20px;}
+.steps .s .b{font-size:28px;font-weight:800;color:var(--o);}.steps .s h4{margin:8px 0;font-size:15px;}.steps .s p{font-size:13px;color:#cfcfcf;}
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px;margin-top:8px;}
+.tier{background:var(--card);border:1px solid var(--bd);padding:20px;text-align:center;}
+.tier .nm{font-weight:800;font-size:17px;}.tier .pr{color:var(--o);font-size:22px;font-weight:800;margin:6px 0;}.tier p{font-size:13px;color:#cfcfcf;}
+.safebox{background:#0c0c0c;border:1px solid var(--bd);border-top:4px solid var(--o);padding:26px;max-width:880px;margin:0 auto;}
+.note{max-width:880px;margin:0 auto;color:#777;font-size:12px;text-align:center;padding:28px 5% 10px;line-height:1.7;}
+.access{background:#0c0c0c;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);padding:50px 5%;}
+.login-card{background:var(--card);border:1px solid var(--bd);border-top:4px solid var(--o);padding:32px 28px;width:100%;max-width:400px;margin:0 auto;text-align:center;}
+.login-card h3{font-size:16px;margin:6px 0 4px;font-weight:700;}.login-card .pp{color:var(--mut);font-size:13px;margin-bottom:16px;}
+.login-card input{width:100%;padding:12px;background:#0c0c0c;border:1px solid #333;color:#fff;margin-bottom:11px;font-size:15px;font-family:inherit;}
+.roles{display:flex;gap:8px;margin-bottom:13px;}
+.roles button{flex:1;background:#0c0c0c;border:1px solid #333;color:#cfcfcf;padding:9px 6px;font-size:12px;cursor:pointer;font-family:inherit;}
+.roles button.on{border-color:var(--o);color:#fff;background:#1a1206;}
+.lbtn{width:100%;background:var(--o);color:#080808;border:none;font-weight:800;padding:13px;cursor:pointer;text-transform:uppercase;letter-spacing:.5px;font-family:inherit;font-size:14px;}
+#app{display:none;}
+.appbar{background:#0c0c0c;border:1px solid var(--bd);padding:13px 18px;display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:8px;}
+.badge{background:rgba(251,107,0,.15);color:var(--o);font-weight:700;font-size:11px;text-transform:uppercase;letter-spacing:.5px;padding:5px 11px;}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:20px;}
+.kpi{background:var(--card);border:1px solid var(--bd);border-top:3px solid var(--o);padding:15px;}
+.kpi .n{font-size:24px;font-weight:800;}.kpi .l{font-size:11px;color:var(--mut);text-transform:uppercase;letter-spacing:.5px;margin-top:4px;}
+.kpi .d{font-size:11px;margin-top:4px;}.up{color:#5fd17a;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.panel{background:var(--card);border:1px solid var(--bd);padding:18px;margin-bottom:16px;}
+.panel h4{font-size:14px;margin-bottom:12px;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+th,td{text-align:left;padding:8px;border-bottom:1px solid #1e1e1e;}
+th{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.5px;}
+.pill{font-size:11px;padding:3px 9px;border-radius:20px;font-weight:700;}
+.pill.ok{background:rgba(46,160,67,.18);color:#5fd17a;}.pill.b{background:rgba(180,120,60,.2);color:#d7a06a;}
+.pill.p{background:rgba(251,107,0,.18);color:var(--o);}.pill.g{background:rgba(227,200,115,.2);color:#e3c873;}.pill.err{background:rgba(220,80,80,.2);color:#ff8080;}
+.bar{height:8px;background:#222;border-radius:4px;overflow:hidden;margin-top:8px;}.bar>i{display:block;height:100%;background:var(--o);}
+.code{font-family:Consolas,monospace;font-size:12px;background:#0c0c0c;border:1px solid #222;padding:10px;color:#9fd0a0;overflow-x:auto;}
+canvas{max-height:230px;}
+.demo{background:#2a1a00;color:#ffb066;text-align:center;font-size:12px;padding:8px;border-radius:4px;margin-bottom:16px;}
+@media(max-width:760px){.hero h1{font-size:28px;}.rank .pz{display:none;}.grid2{grid-template-columns:1fr;}}
+</style><style>
+.s81bar{position:sticky;top:0;z-index:9998;background:#080808;border-bottom:1px solid #1c1c1c;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;font-family:Arial,Helvetica,sans-serif;}
+.s81bar .s81logo{font-weight:800;font-size:20px;letter-spacing:1px;color:#fff;text-decoration:none;}
+.s81bar .s81logo span{color:#FB6B00;}
+.s81bar .s81links{display:flex;align-items:center;gap:20px;}
+.s81bar .s81links a{color:#cfcfcf;text-decoration:none;font-size:14px;}
+.s81bar .s81links a:hover{color:#fff;}
+.s81bar .s81links a.active{color:#FB6B00;}
+.s81bar .s81cta{background:#FB6B00;color:#080808 !important;font-weight:700;padding:9px 18px;text-transform:uppercase;letter-spacing:.5px;font-size:12px;}
+.s81tog{display:none;background:none;border:1px solid #333;color:#fff;font-size:20px;padding:3px 11px;cursor:pointer;}
+@media(max-width:900px){
+ .s81bar{position:relative;}
+ .s81bar .s81links{display:none;position:absolute;top:100%;left:0;right:0;background:#080808;flex-direction:column;gap:0;border-bottom:1px solid #1c1c1c;z-index:9998;}
+ .s81bar .s81links.open{display:flex;}
+ .s81bar .s81links a{padding:13px 5%;width:100%;border-top:1px solid #161616;}
+ .s81tog{display:block;}
+}
+</style>
+</head><body>
+<div class="s81bar"><a class="s81logo" href="index.html">81<span>+</span></a><button class="s81tog" onclick="var l=this.parentNode.querySelector('.s81links');l.classList.toggle('open')">&#9776;</button><div class="s81links"><a href="index.html">Home</a><a href="index.html#pricing">Membership</a><a href="libri.html">Pubblicazioni</a><a href="partners.html">Partners</a><a href="eventi.html">Eventi</a><a href="network81.html" class="active">NETWORK81+</a><a href="dashboard-utente.html">Area Riservata</a><a href="newsletter.html">Newsletter</a><a class="s81cta" href="index.html#pricing">Iscriviti</a></div></div>
+
+<div class="hero">
+  <div class="kick">NETWORK81+, Sicurezza Community Network</div>
+  <h1>La rete di <span>81+, Sicurissimo e DIGITAL.</span></h1>
+  <p class="sub">NETWORK81+ è la community di professionisti che porta la sicurezza alle aziende di tutta Italia. Vendi prodotti reali, guadagna ogni mese, costruisci la tua carriera. Tutto onesto, tutto conforme alla legge.</p>
+  <a class="btn" href="#accedi">Accedi all'area riservata</a>
+  <a class="btn gh" href="#candidati">Voglio candidarmi</a>
+</div>
+
+<div class="stripe"><div class="row">
+  <div><div class="n">4.000+</div><div class="l">Partner attivi in Italia</div></div>
+  <div><div class="n">8.000+</div><div class="l">Membership attive</div></div>
+  <div><div class="n">32.000+</div><div class="l">Aziende seguite</div></div>
+  <div><div class="n">Dal 2003</div><div class="l">Esperienza reale</div></div>
+</div></div>
+
+<div class="sct">
+  <h2 class="sec-t">Come si guadagna davvero</h2>
+  <p class="sec-s">Un modello onesto. Si guadagna vendendo a clienti veri, non reclutando. E poiché la membership è ricorrente, il lavoro di oggi paga anche domani.</p>
+  <div class="earn">
+    <div class="c"><div class="num">1. Vendita diretta</div><h3>25% ricorrente</h3><p>Sul volume mensile dei tuoi clienti, ogni mese finché restano attivi. La tua commissione ricorrente.</p></div>
+    <div class="c"><div class="num">2. Avvio rapido</div><h3>+15% una tantum</h3><p>In più sul primo mese di ogni nuova vendita. Il primo mese prendi il 40 per cento.</p></div>
+    <div class="c"><div class="num">3. Override squadra</div><h3>Fino al 5° livello</h3><p>Sul volume di vendite reali del tuo team, a profondità che si aprono salendo.</p></div>
+    <div class="c"><div class="num">4. Leadership Pool</div><h3>Dal 4° livello</h3><p>Una quota del volume di rete divisa tra i ranghi alti in base alla performance.</p></div>
+  </div>
+</div>
+
+<div class="sct" style="padding-top:10px;">
+  <h2 class="sec-t">La scala della carriera</h2>
+  <p class="sec-s">Otto livelli, sul volume di vendite reali del gruppo. Sali per quanto produci, non per chi conosci. Il rango si riconferma ogni mese.</p>
+  <div class="ladder">
+    <div class="rank"><div class="lvl">1</div><div><div class="nm">Start</div><div class="de">Attivi l'account e parti. Provvigione diretta e avvio rapido.</div></div><div class="pz">Diretta 25%</div></div>
+    <div class="rank"><div class="lvl">2</div><div><div class="nm">Builder</div><div class="de">Primi clienti stabili, si apre l'override di squadra.</div></div><div class="pz">+ Override 1° livello</div></div>
+    <div class="rank"><div class="lvl">3</div><div><div class="nm">Performer</div><div class="de">Una rete che cresce, override più profondo.</div></div><div class="pz">+ Override 2° livello</div></div>
+    <div class="rank r4"><div class="lvl">4</div><div><div class="nm">Leader</div><div class="de">Guidi un team. Si apre il Leadership Pool e i bonus.</div></div><div class="pz">Pool + Bonus Traguardo</div></div>
+    <div class="rank r5"><div class="lvl">5</div><div><div class="nm">Manager</div><div class="de">Una squadra solida e in crescita.</div></div><div class="pz">Bonus Crescita</div></div>
+    <div class="rank r6"><div class="lvl">6</div><div><div class="nm">Director</div><div class="de">Leadership su una rete ampia e stabile.</div></div><div class="pz">Bonus Stabilità</div></div>
+    <div class="rank r7"><div class="lvl">7</div><div><div class="nm">Executive</div><div class="de">Tra i volti della rete in Italia.</div></div><div class="pz">Quota Pool superiore</div></div>
+    <div class="rank r8"><div class="lvl">8</div><div><div class="nm">Elite</div><div class="de">Il vertice. Costruisci storia con noi.</div></div><div class="pz">Quota Pool massima</div></div>
+  </div>
+  <p style="text-align:center;margin-top:20px;"><a class="btn" href="81plus_Piano_Compensi.pdf" target="_blank">Scarica il piano compensi completo</a></p>
+</div>
+
+<div class="sct" style="padding-top:10px;">
+  <h2 class="sec-t">Come si parte</h2>
+  <p class="sec-s">Semplice e trasparente. Nessuna quota nascosta, nessun magazzino da comprare.</p>
+  <div class="steps">
+    <div class="s"><div class="b">1</div><h4>Candidati</h4><p>Ci racconti chi sei. Valutiamo insieme se la rete fa per te.</p></div>
+    <div class="s"><div class="b">2</div><h4>Start Developer Kit, SDK+</h4><p>Acquisti lo Starter Kit, 199 euro una tantum. Ricevi formazione, materiali, strumenti e il tuo NFT SDK+, lo Start Developer Kit, che certifica il tuo ingresso. Con diritto di recesso.</p></div>
+    <div class="s"><div class="b">3</div><h4>Developer Pass mensile</h4><p>Attivi il NETWORK81+ Developer Pass, da 49 euro al mese, per usare la piattaforma, il CRM e gli strumenti. Il livello del Pass cresce con il tuo rango.</p></div>
+    <div class="s"><div class="b">4</div><h4>Membership 81+ attiva</h4><p>Mantieni la tua membership 81+ attiva e produci vendite reali. È così che resti developer e guadagni. Nessun autoacquisto di magazzino.</p></div>
+  </div>
+  <h3 style="text-align:center;margin:30px 0 6px;font-size:20px;">SDK+ Start Developer Kit</h3>
+  <p class="sec-s" style="margin-bottom:18px;">L'ingresso una tantum nel network 81+. Formazione, materiali, strumenti e il tuo NFT di certificazione. Con diritto di recesso.</p>
+  <div class="tiers" style="grid-template-columns:1fr;max-width:520px;margin:0 auto 30px;">
+    <div class="tier" style="border:2px solid #FB6B00;"><div class="nm">SDK+</div><div class="pr">199€<span style="font-size:12px;color:#999;"> una tantum</span></div><p>NFT SDK+ di certificazione, formazione base, kit materiali e strumenti, link affiliato personale, accesso al CRM base. Con diritto di recesso.</p></div>
+  </div>
+
+  <h3 style="text-align:center;margin:30px 0 6px;font-size:20px;">RDP+ Recurrency Developer Pass, gli otto livelli</h3>
+  <p class="sec-s" style="margin-bottom:18px;">L'abbonamento mensile che tiene attivo il tuo sviluppo di rete. Più sali di livello, più strumenti, lead e supporto ricevi. Va mantenuto attivo per operare nella rete.</p>
+  <div class="tiers">
+    <div class="tier"><div class="nm">IGNITE</div><div class="pr">49€<span style="font-size:12px;color:#999;">/mese</span></div><p>Area network, CRM base, link affiliato, materiali base. Per partire.</p></div>
+    <div class="tier"><div class="nm">RISE</div><div class="pr">99€<span style="font-size:12px;color:#999;">/mese</span></div><p>In più formazione avanzata, materiali premium, primi automatismi.</p></div>
+    <div class="tier"><div class="nm">DRIVE</div><div class="pr">149€<span style="font-size:12px;color:#999;">/mese</span></div><p>In più gestione contatti, report di base, automazioni di primo livello.</p></div>
+    <div class="tier"><div class="nm">SCALE</div><div class="pr">249€<span style="font-size:12px;color:#999;">/mese</span></div><p>In più strumenti di gestione team, report completi, automazioni complete.</p></div>
+    <div class="tier"><div class="nm">PEAK</div><div class="pr">399€<span style="font-size:12px;color:#999;">/mese</span></div><p>In più lead qualificati, formazione da leader, strumenti avanzati di rete.</p></div>
+    <div class="tier"><div class="nm">SUMMIT</div><div class="pr">599€<span style="font-size:12px;color:#999;">/mese</span></div><p>In più lead premium, dashboard avanzata, supporto prioritario.</p></div>
+    <div class="tier"><div class="nm">LEGACY</div><div class="pr">799€<span style="font-size:12px;color:#999;">/mese</span></div><p>In più strumenti da leader di rete, lead top, supporto dedicato.</p></div>
+    <div class="tier" style="border:2px solid #FB6B00;"><div class="nm">CROWN</div><div class="pr">999€<span style="font-size:12px;color:#999;">/mese</span></div><p>Il massimo. Tutto incluso, lead esclusivi, affiancamento diretto della direzione.</p></div>
+  </div>
+  <div class="safebox" style="margin-top:20px;">
+    <h3 style="margin-top:0;">Quale RDP+ ti serve, in base al tuo rango</h3>
+    <p style="color:#cfcfcf;font-size:14px;">Ranghi 1, 2, 3, Start Builder Performer, ti basta <span style="color:#FB6B00;font-weight:700;">IGNITE o RISE</span>.<br>
+    Ranghi 4, 5, Leader Manager, ti serve <span style="color:#FB6B00;font-weight:700;">DRIVE o SCALE</span>.<br>
+    Rango 6, Director, ti serve <span style="color:#FB6B00;font-weight:700;">PEAK o SUMMIT</span>.<br>
+    Ranghi 7 e 8, Executive ed Elite, ti serve <span style="color:#FB6B00;font-weight:700;">LEGACY o CROWN</span>.</p>
+    <p style="color:#cfcfcf;font-size:14px;margin-top:10px;">Le commissioni nascono solo da vendite reali, ai sensi della L.173 del 2005. Nessun guadagno garantito per rango. Per essere developer devi avere anche una <span style="color:#FB6B00;font-weight:700;">membership 81+ attiva</span>. Se la tua membership 81+ decade, decade anche l'iscrizione alla rete.</p>
+  </div>
+  <p class="sec-s" style="margin-top:16px;">Per guadagnare conta la vendita reale. Il Developer Pass è l'abbonamento agli strumenti della piattaforma, non un pedaggio sul guadagno.</p>
+</div>
+
+<div class="sct" style="padding-top:10px;">
+  <h2 class="sec-t">Il tuo livello, certificato con DIGITAL</h2>
+  <p class="sec-s">Ogni rango ha il suo badge digitale DIGITAL. Certifica il tuo livello, ti dà accesso a vantaggi e convenzioni e ti riconosce come partner ufficiale.</p>
+  <div class="safebox"><p style="color:#cfcfcf;font-size:15px;">Dal badge Start al badge Elite, il tuo DIGITAL cresce con te. È uno strumento di utilità e appartenenza alla community, non un prodotto finanziario.</p></div>
+</div>
+
+<div class="access" id="accedi">
+  <div class="kick">Area riservata</div>
+  <h2 class="sec-t">Entra in NETWORK81+</h2>
+  <p class="sec-s">Accesso riservato ai partner della rete. Scegli il tuo ruolo, è una anteprima dimostrativa.</p>
+  <div id="login">
+    <div class="login-card">
+      <div style="font-weight:800;font-size:24px;letter-spacing:2px;">SICO<span style="color:var(--o);">NET</span></div>
+      <h3>Sicurezza Community Network</h3>
+      <div class="roles">
+        <button id="r-user" class="on" onclick="pick('user')">Utente</button>
+        <button id="r-developer" onclick="pick('developer')">Developer</button>
+        <button id="r-admin" onclick="pick('admin')">Admin</button>
+      </div>
+      <input type="text" id="user" placeholder="Username" value="partner.demo">
+      <input type="password" id="pass" placeholder="Password" value="demo">
+      <button class="lbtn" onclick="enter()">Entra</button>
+      <p class="pp" style="margin-top:12px;">Anteprima. Scegli un ruolo e premi Entra.</p>
+    </div>
+  </div>
+  <div id="app">
+    <div class="appbar">
+      <span style="font-weight:800;letter-spacing:1px;">SICO<span style="color:var(--o);">NET</span></span>
+      <span>
+        <span style="font-size:12px;color:var(--mut);">Vedi come
+          <select id="roleSel" onchange="setRole(this.value)" style="background:#0c0c0c;color:#fff;border:1px solid #333;padding:5px;font-family:inherit;">
+            <option value="user">Utente</option><option value="developer">Developer</option><option value="admin">Admin</option>
+          </select></span>
+        <span class="badge" id="roleBadge">Sviluppatore</span>
+        <a href="#accedi" onclick="logout();return false;" style="font-size:12px;color:#888;">Esci</a>
+      </span>
+    </div>
+    <div class="demo">Anteprima dimostrativa. I dati sono di esempio. L'accesso reale richiede l'attivazione del backend della rete.</div>
+    <div id="view"></div>
+  </div>
+</div>
+
+<div class="sct" id="candidati" style="text-align:center;">
+  <h2 class="sec-t">Vuoi entrare nella rete?</h2>
+  <p class="sec-s">Cerchiamo persone serie che vogliano costruire qualcosa di duraturo. Ti mostriamo il piano completo, senza impegno.</p>
+  <a class="btn" href="https://wa.me/393388771737?text=Voglio%20candidarmi%20a%20NETWORK81+%2081%2B" target="_blank" rel="noopener">Candidati su WhatsApp</a>
+</div>
+
+<p class="note">
+NETWORK81+, Sicurezza Community Network, è un modello di vendita diretta conforme alla Legge 173 del 2005. Le provvigioni sono riconosciute solo sulla vendita effettiva di membership e servizi a clienti reali. Nessun guadagno deriva dal solo reclutamento, nessun obbligo di magazzino per essere attivi. Il Kit di Avvio è acquisto di beni e servizi reali, con diritto di recesso entro 14 giorni. La membership operativa è facoltativa. Il programma non promette guadagni garantiti, i compensi dipendono dalle vendite effettive, secondo condizioni firmate per iscritto. Le proiezioni sono esempi illustrativi.
+</p>
+
+<script>
+var ROLE="user";
+function pick(r){ROLE=r;["user","developer","admin"].forEach(function(x){document.getElementById("r-"+x).classList.toggle("on",x===r);});}
+function enter(){document.getElementById("login").style.display="none";document.getElementById("app").style.display="block";document.getElementById("roleSel").value=ROLE;render();document.getElementById("accedi").scrollIntoView();}
+function logout(){document.getElementById("app").style.display="none";document.getElementById("login").style.display="block";}
+function setRole(r){ROLE=r;document.getElementById("roleSel").value=r;render();}
+function kpi(n,l,d,cls){return '<div class="kpi"><div class="n">'+n+'</div><div class="l">'+l+'</div>'+(d?'<div class="d '+(cls||"")+'">'+d+'</div>':'')+'</div>';}
+function toggle(to,label){return '<div style="margin-bottom:16px;"><button class="lbtn" style="width:auto;padding:11px 22px;" onclick="setRole(\''+to+'\')">'+label+'</button></div>';}
+function render(){var v=document.getElementById("view");document.getElementById("roleBadge").textContent=ROLE==="user"?"Utente":(ROLE==="developer"?"Developer":"Admin");if(ROLE==="user")userView(v);else if(ROLE==="developer")devView(v);else admView(v);}
+
+function userView(v){
+  v.innerHTML=toggle("developer","Sei anche Developer? Passa all'area Developer")+
+  '<h3 style="margin-bottom:4px;">Ciao, Mario Rossi</h3><p style="color:var(--mut);font-size:13px;margin-bottom:18px;">Area Utente • Membership Pro+ attiva</p>'+
+  '<div class="kpis">'+kpi("Pro+","Membership attiva")+kpi("3 / 5","Corsi completati")+kpi("4","Pagamenti registrati")+kpi("6","Convenzioni attive")+'</div>'+
+  '<div class="grid2">'+
+    '<div class="panel"><h4>I miei corsi</h4><table><tr><th>Corso</th><th>Stato</th></tr>'+
+    '<tr><td>Formazione Generale</td><td><span class="pill ok">Completato</span></td></tr>'+
+    '<tr><td>Aggiornamento RSPP ASR 2025</td><td><span class="pill p">In corso</span></td></tr>'+
+    '<tr><td>Primo Soccorso</td><td><span class="pill p">Da iniziare</span></td></tr></table>'+
+    '<a class="lbtn" style="width:auto;padding:10px 18px;margin-top:12px;display:inline-block;text-decoration:none;text-align:center;" href="https://corsi.elearningsicurezza.com/pid/2377#login" target="_blank">Apri la piattaforma corsi</a></div>'+
+    '<div class="panel"><h4>La mia membership</h4><p style="color:#cfcfcf;font-size:13px;">Livello Pro+, 99 euro al mese. Prossimo rinnovo tra 18 giorni.</p>'+
+    '<p style="color:var(--mut);font-size:12px;margin-top:8px;">Puoi fare upgrade a Elite o downgrade a Basic quando vuoi, senza vincoli.</p></div>'+
+  '</div>'+
+  '<div class="panel"><h4>Convenzioni partner</h4><p style="color:#cfcfcf;font-size:13px;">DPI, materiali, formazione, documenti, hotel e SPA a condizioni riservate. <a href="partners.html">Vai alle convenzioni</a></p></div>';
+}
+
+function devView(v){
+  v.innerHTML=toggle("user","Vuoi vedere la tua area Utente? Passa all'area Utente")+
+  '<h3 style="margin-bottom:4px;">Ciao, Mario Rossi</h3><p style="color:var(--mut);font-size:13px;margin-bottom:14px;">Area Developer • Rango Performer • Codice 81P-2048</p>'+
+  '<div class="kpis">'+kpi("Performer","Rango attuale","Prossimo: Leader")+kpi("3.120 PV","Volume gruppo mese","+18%","up")+kpi("€ 1.284","Provvigioni mese","+€ 210","up")+kpi("14","Team","+2 nuovi","up")+'</div>'+
+  '<div class="grid2">'+
+    '<div class="panel"><h4>Stato attivazione</h4><table>'+
+    '<tr><td>Membership 81+</td><td><span class="pill ok">Pro+ attiva</span></td></tr>'+
+    '<tr><td>NFT SDK+</td><td><span class="pill ok">Posseduto</span></td></tr>'+
+    '<tr><td>RDP+ Pass</td><td><span class="pill p">RISE attivo</span></td></tr>'+
+    '<tr><td>Pass richiesto per Performer</td><td><span class="pill ok">IGNITE o RISE, ok</span></td></tr></table>'+
+    '<p style="color:var(--mut);font-size:12px;margin-top:8px;">Per arrivare a Leader ti servirà il Pass DRIVE o SCALE.</p></div>'+
+    '<div class="panel"><h4>Provvigioni del mese</h4><table><tr><th>Fonte</th><th>Importo</th></tr>'+
+    '<tr><td>Avvio rapido</td><td>€ 360</td></tr><tr><td>Ricorrente diretti</td><td>€ 540</td></tr><tr><td>Override squadra</td><td>€ 384</td></tr>'+
+    '<tr><td style="font-weight:700;">Totale</td><td style="font-weight:700;color:var(--o);">€ 1.284</td></tr></table></div>'+
+  '</div>'+
+  '<div class="panel"><h4>Il tuo link di affiliazione</h4><div class="code">https://81plus.it/?ref=81P-2048</div></div>'+
+  '<div class="panel"><h4>La tua squadra</h4><table><tr><th>Partner</th><th>Rango</th><th>Volume</th><th>Stato</th></tr>'+
+  '<tr><td>Maria Verdi</td><td><span class="pill b">Builder</span></td><td>620 PV</td><td><span class="pill ok">Attivo</span></td></tr>'+
+  '<tr><td>Paolo Neri</td><td><span class="pill b">Start</span></td><td>240 PV</td><td><span class="pill ok">Attivo</span></td></tr>'+
+  '<tr><td>Sara Conti</td><td><span class="pill b">Start</span></td><td>0 PV</td><td><span class="pill err">Da riattivare</span></td></tr></table></div>'+
+  '<p style="text-align:center;"><a class="lbtn" style="display:inline-block;text-decoration:none;width:auto;padding:12px 24px;" href="81plus_Piano_Compensi.pdf" target="_blank">Scarica il piano compensi</a></p>';
+}
+
+function admView(v){
+  v.innerHTML='<h3 style="margin-bottom:4px;">Cruscotto Rete, Admin</h3><p style="color:var(--mut);font-size:13px;margin-bottom:18px;">Il quadro completo di NETWORK81+. Dati di esempio.</p>'+
+  '<div class="kpis">'+kpi("4.120","Developer attivi","+62 mese","up")+kpi("€ 286.000","Volume rete","+5,1%","up")+kpi("€ 71.500","Provvigioni erogate","mese")+kpi("8.142","Membership 81+","attive","up")+'</div>'+
+  '<div class="grid2"><div class="panel"><h4>Volume rete, 6 mesi</h4><canvas id="cv1"></canvas></div><div class="panel"><h4>Distribuzione ranghi</h4><canvas id="cv2"></canvas></div></div>'+
+  '<div class="grid2"><div class="panel"><h4>Top developer per volume</h4><table><tr><th>Developer</th><th>Rango</th><th>Volume</th></tr>'+
+  '<tr><td>G. Esposito</td><td><span class="pill g">Elite</span></td><td>312.000 PV</td></tr>'+
+  '<tr><td>F. Romano</td><td><span class="pill p">Director</span></td><td>78.000 PV</td></tr>'+
+  '<tr><td>A. Gallo</td><td><span class="pill p">Manager</span></td><td>42.000 PV</td></tr></table></div>'+
+  '<div class="panel"><h4>Developer Pass attivi</h4><table><tr><th>Pass</th><th>Developer</th></tr>'+
+  '<tr><td>IGNITE</td><td>1.840</td></tr><tr><td>RISE</td><td>1.120</td></tr><tr><td>SCALE</td><td>640</td></tr>'+
+  '<tr><td>APEX</td><td>360</td></tr><tr><td>LEGACY</td><td>160</td></tr></table></div></div>';
+  setTimeout(function(){var O="#FB6B00";if(!window.Chart)return;Chart.defaults.color="#9a9a9a";Chart.defaults.borderColor="#2a2a2a";
+    new Chart(document.getElementById("cv1"),{type:"line",data:{labels:["Gen","Feb","Mar","Apr","Mag","Giu"],datasets:[{data:[210,228,242,258,272,286].map(function(x){return x*1000;}),borderColor:O,backgroundColor:"rgba(251,107,0,.12)",fill:true,tension:.3}]},options:{plugins:{legend:{display:false}},scales:{y:{ticks:{callback:function(v){return (v/1000)+"k";}}}}}});
+    new Chart(document.getElementById("cv2"),{type:"doughnut",data:{labels:["Start","Builder","Performer","Leader","Manager+"],datasets:[{data:[1800,1200,720,280,120],backgroundColor:["#8a5a2a","#9aa0a6",O,"#cf8a3a","#e3c873"]}]},options:{plugins:{legend:{position:"bottom"}}}});
+  },50);
+}
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body></html>

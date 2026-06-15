@@ -1,0 +1,173 @@
+{
+  "name": "81PLUS — 1 Lead Flow",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "lead-in",
+        "httpMethod": "POST",
+        "responseMode": "onReceived"
+      },
+      "name": "Webhook Form",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        240,
+        300
+      ],
+      "id": "1aa69618-52ce-44dd-819a-262bb15b207d"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/auth.php?action=register",
+        "method": "POST",
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({nome:$json.body.nome,email:$json.body.email,password:$json.body.tmp_pass,tipo:'azienda',lingua:'it'}) }}",
+        "options": {}
+      },
+      "name": "Crea SIC ID e Persona",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        460,
+        300
+      ],
+      "id": "1f97f605-e2a6-4a01-89e1-e061ab8487d6"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/ai_router.php",
+        "method": "POST",
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({tipo:'lead_scoring',urgenza_sec:5,prompt:'Assegna un punteggio 0-100 a questo lead: '+$json.body.settore+', dipendenti '+$json.body.dipendenti}) }}",
+        "options": {}
+      },
+      "name": "Lead Scoring Groq",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        680,
+        300
+      ],
+      "id": "8db0ae36-e0cd-4227-b5f6-192bcf93a9b2"
+    },
+    {
+      "parameters": {
+        "resource": "contact",
+        "operation": "upsert",
+        "email": "={{ $json.body.email }}",
+        "additionalFields": {}
+      },
+      "name": "Sync HubSpot",
+      "type": "n8n-nodes-base.hubspot",
+      "typeVersion": 1,
+      "position": [
+        900,
+        200
+      ],
+      "id": "1492a89e-9919-4933-aea4-f4b642024e2d"
+    },
+    {
+      "parameters": {
+        "url": "https://api.brevo.com/v3/smtp/email",
+        "method": "POST",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "api-key",
+              "value": "={{ $env.BREVO_API_KEY }}"
+            }
+          ]
+        },
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({to:[{email:$json.body.email}],templateId:1}) }}",
+        "options": {}
+      },
+      "name": "Email Benvenuto Brevo",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        900,
+        400
+      ],
+      "id": "474d4d20-5bea-4910-b930-0430aa08e7b8"
+    },
+    {
+      "parameters": {
+        "url": "https://sicurissimo.io/api/whatsapp.php",
+        "method": "POST",
+        "sendBody": true,
+        "jsonBody": "={{ JSON.stringify({to:$json.body.telefono,msg:'Ciao, abbiamo ricevuto la tua richiesta. La verifica conformita parte ora.'}) }}",
+        "options": {}
+      },
+      "name": "Notifica WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 3,
+      "position": [
+        1120,
+        400
+      ],
+      "id": "f7b83d86-b925-4fa9-b401-141f0999ee79"
+    }
+  ],
+  "connections": {
+    "Webhook Form": {
+      "main": [
+        [
+          {
+            "node": "Crea SIC ID e Persona",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crea SIC ID e Persona": {
+      "main": [
+        [
+          {
+            "node": "Lead Scoring Groq",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lead Scoring Groq": {
+      "main": [
+        [
+          {
+            "node": "Sync HubSpot",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Email Benvenuto Brevo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Email Benvenuto Brevo": {
+      "main": [
+        [
+          {
+            "node": "Notifica WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "id": "3d6bbc2e-32d4-486d-9899-04d9ffafa8b2",
+  "tags": [
+    "81plus",
+    "sicurissimo"
+  ]
+}

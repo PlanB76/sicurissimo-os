@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Rete 3D · 81+</title>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#070709;color:#ececf2;font-family:Sora,Arial,sans-serif;overflow:hidden;height:100vh}
+#scena{position:absolute;inset:0}
+.hud{position:absolute;z-index:5}
+#testata{top:0;left:0;right:0;padding:14px 18px;display:flex;align-items:center;gap:14px;background:linear-gradient(180deg,rgba(7,7,9,.92),transparent);flex-wrap:wrap}
+#testata h1{font-family:Anton,Arial;font-size:20px;letter-spacing:1px;text-transform:uppercase;color:#E8501A}
+#testata .sub{font-size:11px;color:#9aa0b4}
+#cerca{margin-left:auto;display:flex;gap:8px}
+#cerca input{background:#101016;border:1px solid #2a2a35;color:#ececf2;padding:8px 12px;border-radius:8px;font-family:JetBrains Mono,monospace;font-size:12px;width:170px}
+.btn{background:#E8501A;color:#fff;border:0;padding:8px 14px;border-radius:8px;font-weight:700;cursor:pointer;font-size:12px;font-family:Sora}
+.btn.ghost{background:#16161e;border:1px solid #2a2a35;color:#cfd2dd}
+#legenda{bottom:14px;left:14px;background:rgba(13,13,18,.88);border:1px solid #23232e;border-radius:12px;padding:10px 14px;font-size:11px;color:#aeb3c4;line-height:1.7}
+.pall{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:middle}
+#scheda{top:70px;right:14px;width:300px;max-width:86vw;background:rgba(12,12,17,.95);border:1px solid #E8501A;border-radius:14px;padding:16px;display:none}
+#scheda h2{font-family:Anton,Arial;font-size:18px;color:#E8501A;letter-spacing:.5px}
+#scheda .sic{font-family:JetBrains Mono,monospace;font-size:12px;color:#ffb38a;margin:2px 0 10px}
+#scheda table{width:100%;border-collapse:collapse;font-size:12px}
+#scheda td{padding:5px 0;border-bottom:1px solid #1d1d26;color:#cfd2dd}
+#scheda td:first-child{color:#8b90a3;width:46%}
+#scheda .azioni{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+#carico{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:#070709;z-index:10;flex-direction:column;gap:14px}
+#carico .anello{width:46px;height:46px;border:3px solid #2a2a35;border-top-color:#E8501A;border-radius:50%;animation:g 1s linear infinite}
+@keyframes g{to{transform:rotate(360deg)}}
+#conta{bottom:14px;right:14px;background:rgba(13,13,18,.88);border:1px solid #23232e;border-radius:12px;padding:10px 14px;font-size:11px;color:#aeb3c4;font-family:JetBrains Mono,monospace}
+#aiuto{position:absolute;top:66px;left:14px;font-size:10.5px;color:#6e7488;max-width:240px;line-height:1.6}
+@media(max-width:720px){#aiuto{display:none}#testata h1{font-size:16px}}
+</style>
+</head>
+<body>
+<div id="carico"><div class="anello"></div><div style="font-size:12px;color:#9aa0b4">Costruisco la tua rete in tre dimensioni</div></div>
+<div id="scena"></div>
+<div class="hud" id="testata">
+  <h1>Rete 3D <span id="modo" style="color:#fff"></span></h1>
+  <span class="sub">trascina per ruotare, rotella per lo zoom, tasto destro per spostare</span>
+  <div id="cerca">
+    <input id="qsic" placeholder="cerca SIC o nome" onkeydown="if(event.key==='Enter')cercaNodo()">
+    <button class="btn ghost" onclick="cercaNodo()">Trova</button>
+    <button class="btn ghost" onclick="vistaCasa()">Centra</button>
+    <a class="btn" href="dashboard.html" id="lnkback">Dashboard</a>
+  </div>
+</div>
+<div class="hud" id="aiuto">Click su un membro per la scheda. Doppio click per aprire o chiudere la sua downline. I rami chiusi restano contati.</div>
+<div class="hud" id="legenda">
+  <span class="pall" style="background:#E8501A"></span>tu, o radice<br>
+  <span class="pall" style="background:#ffb38a"></span>diretti, livello 1<br>
+  <span class="pall" style="background:#7f77dd"></span>profondità della rete<br>
+  <span class="pall" style="background:#1db954"></span>Telegram collegato · dimensione = diretti
+</div>
+<div class="hud" id="conta"></div>
+<div class="hud" id="scheda">
+  <h2 id="snome"></h2>
+  <div class="sic" id="ssic"></div>
+  <table id="stab"></table>
+  <div class="azioni">
+    <button class="btn" id="sbtn" onclick="toggleRamo()">Apri downline</button>
+    <button class="btn ghost" onclick="document.getElementById('scheda').style.display='none'">Chiudi</button>
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+var K=new URLSearchParams(location.search).get('k')||'';
+var scena,cam,rend,raycaster,mouse,nodi=[],archi=[],mappa={},figli={},chiusi={},sel=null,gruppo;
+var rot={x:-0.5,y:0.6},dist=320,pan=new THREE.Vector3(0,0,0),drag=null;
+
+function avvio(){
+  scena=new THREE.Scene(); scena.fog=new THREE.Fog(0x070709,500,1400);
+  cam=new THREE.PerspectiveCamera(55,innerWidth/innerHeight,1,3000);
+  rend=new THREE.WebGLRenderer({antialias:true,alpha:true});
+  rend.setSize(innerWidth,innerHeight); rend.setPixelRatio(Math.min(devicePixelRatio,2));
+  document.getElementById('scena').appendChild(rend.domElement);
+  scena.add(new THREE.AmbientLight(0xffffff,.55));
+  var l=new THREE.PointLight(0xE8501A,.9,1500); l.position.set(120,260,180); scena.add(l);
+  var l2=new THREE.PointLight(0x7f77dd,.5,1500); l2.position.set(-200,-120,-160); scena.add(l2);
+  var stelle=new THREE.BufferGeometry(),sp=[];
+  for(var i=0;i<700;i++){sp.push((Math.random()-0.5)*2200,(Math.random()-0.5)*2200,(Math.random()-0.5)*2200);}
+  stelle.setAttribute('position',new THREE.Float32BufferAttribute(sp,3));
+  scena.add(new THREE.Points(stelle,new THREE.PointsMaterial({color:0x33333f,size:1.4})));
+  gruppo=new THREE.Group(); scena.add(gruppo);
+  raycaster=new THREE.Raycaster(); mouse=new THREE.Vector2();
+  controlli(); anima();
+  carica();
+}
+function carica(){
+  fetch('api/rete3d.php'+(K?('?k='+encodeURIComponent(K)):''))
+   .then(function(r){return r.json();})
+   .then(function(d){ if(!d.ok){demo();return;} costruisci(d); })
+   .catch(function(){ demo(); });
+}
+function demo(){
+  var n=[{sic:'SIC-0000001',nome:'Tu',tipo:'persona',rank:3,pv:1200,dal:'2026-01-10',tg:true,prof:0,diretti:3}],e=[];
+  for(var i=1;i<=3;i++){ n.push({sic:'SIC-DEMO'+i,nome:'Diretto '+i,tipo:'persona',rank:1,pv:200*i,dal:'2026-03-0'+i,tg:i%2===0,prof:1,diretti:i===1?2:0}); e.push(['SIC-0000001','SIC-DEMO'+i]); }
+  e.push(['SIC-DEMO1','SIC-DEMO4']); e.push(['SIC-DEMO1','SIC-DEMO5']);
+  n.push({sic:'SIC-DEMO4',nome:'Secondo livello',tipo:'azienda',rank:0,pv:100,dal:'2026-05-01',tg:false,prof:2,diretti:0});
+  n.push({sic:'SIC-DEMO5',nome:'Secondo livello',tipo:'persona',rank:0,pv:50,dal:'2026-05-12',tg:true,prof:2,diretti:0});
+  costruisci({ok:true,globale:false,nodi:n,archi:e,totale:n.length,demo:true});
+}
+function costruisci(d){
+  document.getElementById('modo').textContent=d.globale?'· plancia globale':'· la tua rete';
+  if(d.demo)document.getElementById('modo').textContent+=' · anteprima';
+  if(d.globale)document.getElementById('lnkback').href='plancia_dio.html'+(K?'?k='+encodeURIComponent(K):'');
+  nodi=d.nodi; archi=d.archi; mappa={}; figli={};
+  nodi.forEach(function(n){mappa[n.sic]=n;figli[n.sic]=[];});
+  archi.forEach(function(e){ if(figli[e[0]])figli[e[0]].push(e[1]); if(mappa[e[1]])mappa[e[1]].padre=e[0]; });
+  layout(); disegna();
+  document.getElementById('carico').style.display='none';
+}
+function layout(){
+  var radici=nodi.filter(function(n){return !n.padre;});
+  var rg=Math.ceil(Math.sqrt(radici.length));
+  radici.forEach(function(r,i){
+    var ox=(i%rg-(rg-1)/2)*260, oz=(Math.floor(i/rg)-(rg-1)/2)*260;
+    posiziona(r,ox,0,oz,0,Math.PI*2,0);
+  });
+}
+function posiziona(n,x,y,z,a0,a1,prof){
+  n.px=x;n.py=y;n.pz=z;
+  var ff=figli[n.sic]||[]; if(!ff.length)return;
+  var raggio=46+prof*8, passo=(a1-a0)/ff.length;
+  ff.forEach(function(fs,i){
+    var f=mappa[fs]; if(!f)return;
+    var ang=a0+passo*(i+0.5);
+    posiziona(f,x+Math.cos(ang)*raggio,y-44,z+Math.sin(ang)*raggio,a0+passo*i,a0+passo*(i+1),prof+1);
+  });
+}
+function colore(n){ if(n.prof===0)return 0xE8501A; if(n.prof===1)return 0xffb38a; return n.tg?0x1db954:0x7f77dd; }
+function visibile(n){ var p=n.padre; while(p){ if(chiusi[p])return false; p=mappa[p]?mappa[p].padre:null; } return true; }
+function disegna(){
+  while(gruppo.children.length)gruppo.remove(gruppo.children[0]);
+  var vis={};
+  nodi.forEach(function(n){ if(!visibile(n))return; vis[n.sic]=1;
+    var r=4+Math.min(n.diretti,12)*0.9;
+    var m=new THREE.Mesh(new THREE.SphereGeometry(r,18,14),new THREE.MeshStandardMaterial({color:colore(n),emissive:colore(n),emissiveIntensity:0.25,roughness:0.5}));
+    m.position.set(n.px,n.py,n.pz); m.userData=n; gruppo.add(m);
+    if(chiusi[n.sic]&&(figli[n.sic]||[]).length){
+      var an=new THREE.Mesh(new THREE.TorusGeometry(r+3,0.7,8,24),new THREE.MeshBasicMaterial({color:0xE8501A}));
+      an.position.copy(m.position); an.rotation.x=Math.PI/2; gruppo.add(an);
+    }
+  });
+  archi.forEach(function(e){
+    var a=mappa[e[0]],b=mappa[e[1]]; if(!a||!b||!vis[a.sic]||!vis[b.sic])return;
+    var g=new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(a.px,a.py,a.pz),new THREE.Vector3(b.px,b.py,b.pz)]);
+    gruppo.add(new THREE.Line(g,new THREE.LineBasicMaterial({color:0x3a3a4a,transparent:true,opacity:0.8})));
+  });
+  var visN=Object.keys(vis).length;
+  document.getElementById('conta').textContent='membri '+nodi.length+' · in vista '+visN+' · rami '+archi.length;
+}
+function scheda(n){
+  sel=n;
+  document.getElementById('snome').textContent=n.nome;
+  document.getElementById('ssic').textContent=n.sic;
+  var righe=[['Tipo',n.tipo],['Rank rete',n.rank],['PV',n.pv],['Diretti',n.diretti],['Downline aperta',(figli[n.sic]||[]).length?'sì':'foglia'],['Nell\'ecosistema dal',n.dal||'-'],['Telegram',n.tg?'collegato':'no']];
+  if(n.email)righe.push(['Email',n.email]);
+  if(n.stato)righe.push(['Stato',n.stato]);
+  if(n.kyc!==undefined)righe.push(['KYC livello',n.kyc]);
+  document.getElementById('stab').innerHTML=righe.map(function(r){return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>';}).join('');
+  var b=document.getElementById('sbtn');
+  if((figli[n.sic]||[]).length){ b.style.display='inline-block'; b.textContent=chiusi[n.sic]?'Apri downline':'Chiudi downline'; }
+  else b.style.display='none';
+  document.getElementById('scheda').style.display='block';
+}
+function toggleRamo(){ if(!sel)return; chiusi[sel.sic]=!chiusi[sel.sic]; disegna(); scheda(sel); }
+function cercaNodo(){
+  var q=document.getElementById('qsic').value.trim().toLowerCase(); if(!q)return;
+  var n=nodi.find(function(x){return x.sic.toLowerCase().indexOf(q)>=0||x.nome.toLowerCase().indexOf(q)>=0;});
+  if(!n){alert('Nessun membro trovato');return;}
+  var p=n.padre; while(p){ chiusi[p]=false; p=mappa[p]?mappa[p].padre:null; }
+  disegna(); pan.set(n.px,n.py,n.pz); dist=140; scheda(n);
+}
+function vistaCasa(){ pan.set(0,0,0); dist=320; rot={x:-0.5,y:0.6}; }
+function controlli(){
+  var el=rend.domElement;
+  el.addEventListener('mousedown',function(e){ drag={x:e.clientX,y:e.clientY,b:e.button}; });
+  addEventListener('mouseup',function(){drag=null;});
+  addEventListener('mousemove',function(e){
+    if(!drag)return;
+    var dx=e.clientX-drag.x,dy=e.clientY-drag.y; drag.x=e.clientX;drag.y=e.clientY;
+    if(drag.b===2){ var v=new THREE.Vector3(-dx*dist/900,dy*dist/900,0).applyQuaternion(cam.quaternion); pan.add(v); }
+    else { rot.y+=dx*0.006; rot.x+=dy*0.005; rot.x=Math.max(-1.4,Math.min(1.4,rot.x)); }
+  });
+  el.addEventListener('contextmenu',function(e){e.preventDefault();});
+  el.addEventListener('wheel',function(e){ e.preventDefault(); dist*=e.deltaY>0?1.1:0.9; dist=Math.max(40,Math.min(1400,dist)); },{passive:false});
+  var ultimo=0;
+  el.addEventListener('click',function(e){
+    var n=pesca(e); if(!n)return;
+    var ora=Date.now();
+    if(ora-ultimo<350 && sel && sel.sic===n.sic){ if((figli[n.sic]||[]).length){ chiusi[n.sic]=!chiusi[n.sic]; disegna(); } }
+    scheda(n); ultimo=ora;
+  });
+  var t0=null;
+  el.addEventListener('touchstart',function(e){ if(e.touches.length===1){ t0={x:e.touches[0].clientX,y:e.touches[0].clientY}; } },{passive:true});
+  el.addEventListener('touchmove',function(e){ if(e.touches.length===1&&t0){ rot.y+=(e.touches[0].clientX-t0.x)*0.006; rot.x+=(e.touches[0].clientY-t0.y)*0.005; t0={x:e.touches[0].clientX,y:e.touches[0].clientY}; } },{passive:true});
+  addEventListener('resize',function(){ cam.aspect=innerWidth/innerHeight; cam.updateProjectionMatrix(); rend.setSize(innerWidth,innerHeight); });
+}
+function pesca(e){
+  mouse.x=(e.clientX/innerWidth)*2-1; mouse.y=-(e.clientY/innerHeight)*2+1;
+  raycaster.setFromCamera(mouse,cam);
+  var h=raycaster.intersectObjects(gruppo.children).filter(function(i){return i.object.userData&&i.object.userData.sic;});
+  return h.length?h[0].object.userData:null;
+}
+function anima(){
+  requestAnimationFrame(anima);
+  cam.position.set(pan.x+dist*Math.cos(rot.x)*Math.sin(rot.y),pan.y+dist*Math.sin(rot.x)+60,pan.z+dist*Math.cos(rot.x)*Math.cos(rot.y));
+  cam.lookAt(pan);
+  gruppo.rotation.y+=0.0004;
+  rend.render(scena,cam);
+}
+avvio();
+</script>
+<script src="lang81.js" defer></script>
+</body>
+</html>

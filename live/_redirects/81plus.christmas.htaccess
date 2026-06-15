@@ -1,0 +1,5 @@
+# Redirect per il dominio 81plus.christmas verso la sua home in 81plus.net
+# Copia questo come .htaccess nella cartella del dominio 81plus.christmas se usi il parcheggio
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(www\.)?81plus\\.christmas$ [NC]
+RewriteRule ^(.*)$ https://81plus.net/81plus.christmas/$1 [R=301,L]

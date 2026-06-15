@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recensioni | 81+ Sicurissimo</title>
+<meta name="description" content="Le aziende che il team Sicurissimo ha messo in regola in tutta Italia. 81+ è la membership nata dalla stessa esperienza.">
+<meta name="theme-color" content="#FB6B00">
+<link rel="icon" type="image/png" href="favicon.png">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@0,300;0,400;0,500;0,700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --orange:#FB6B00; --orange-dark:#E65C00; --black:#080808; --black-soft:#111111; --black-card:#161616; --black-border:#222222; --white:#FFFFFF; --white-dim:#FFFFFF; --white-muted:#FFFFFF; }
+  *,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+  html { scroll-behavior:smooth; }
+  body { background:var(--black); color:var(--white); font-family:'DM Sans',sans-serif; font-size:16px; line-height:1.6; overflow-x:hidden; }
+  nav { position:fixed; top:0; left:0; right:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:0 5%; height:64px; background:rgba(8,8,8,0.92); backdrop-filter:blur(12px); border-bottom:1px solid var(--black-border); }
+  .nav-logo { display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .nav-logo-mark { font-family:'Bebas Neue',sans-serif; font-size:28px; color:var(--orange); letter-spacing:1px; }
+  .nav-logo-sub { font-size:11px; color:var(--white-muted); text-transform:uppercase; letter-spacing:2px; font-weight:500; }
+  .nav-links { display:flex; align-items:center; gap:26px; }
+  .nav-links a { color:var(--white-dim); text-decoration:none; font-size:13px; font-weight:500; transition:color .2s; }
+  .nav-links a:hover { color:var(--white); }
+  .nav-cta { background:var(--orange); color:var(--black); font-weight:700; font-size:13px; letter-spacing:.5px; padding:10px 22px; text-decoration:none; text-transform:uppercase; transition:background .2s; }
+  .nav-cta:hover { background:var(--orange-dark); }
+  .page-hero { padding:140px 5% 40px; position:relative; overflow:hidden; }
+  .page-hero-glow { position:absolute; top:-150px; right:-150px; width:600px; height:600px; background:radial-gradient(circle,rgba(251,107,0,0.12) 0%,transparent 70%); pointer-events:none; animation:glowFloat 9s ease-in-out infinite; }
+  @keyframes glowFloat { 0%,100% { transform:translate(0,0); } 50% { transform:translate(-30px,40px); } }
+  .label { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--orange); text-transform:uppercase; letter-spacing:4px; margin-bottom:18px; }
+  h1 { font-family:'Bebas Neue',sans-serif; font-size:clamp(46px,7vw,92px); line-height:.95; max-width:820px; }
+  h1 span { color:var(--orange); }
+  .intro { font-size:18px; color:var(--white-dim); max-width:680px; font-weight:300; margin-top:24px; }
+  .intro strong { color:var(--white); font-weight:600; }
+  .stats-row { display:flex; gap:44px; flex-wrap:wrap; margin-top:40px; padding-top:32px; border-top:1px solid var(--black-border); }
+  .stat-num { font-family:'Bebas Neue',sans-serif; font-size:44px; color:var(--orange); line-height:1; }
+  .stat-lab { font-size:12px; color:var(--white-muted); text-transform:uppercase; letter-spacing:2px; margin-top:4px; }
+  .chips { display:flex; flex-wrap:wrap; gap:10px; padding:24px 5% 0; max-width:1240px; margin:0 auto; }
+  .chip { font-size:13px; font-weight:600; color:var(--white-dim); border:1px solid var(--black-border); padding:8px 16px; cursor:pointer; transition:all .2s; }
+  .chip:hover { border-color:var(--orange); color:var(--white); }
+  .chip.active { background:var(--orange); color:var(--black); border-color:var(--orange); }
+  .reviews { padding:30px 5% 90px; max-width:1240px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+  .review-card { background:var(--black-card); border:1px solid var(--black-border); padding:26px; transition:transform .3s,border-color .3s; }
+  .review-card:hover { transform:translateY(-4px); border-color:rgba(251,107,0,0.4); }
+  .review-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; gap:10px; }
+  .review-type { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--orange); text-transform:uppercase; letter-spacing:1.5px; }
+  .stars { color:var(--orange); letter-spacing:2px; font-size:14px; flex-shrink:0; }
+  .review-text { font-size:15px; color:var(--white-dim); line-height:1.6; margin-bottom:18px; }
+  .review-author { font-size:13px; color:var(--white-muted); border-top:1px solid var(--black-border); padding-top:14px; }
+  .review-author strong { color:var(--white); font-weight:600; }
+  .collect { background:var(--black-soft); border-top:1px solid var(--black-border); border-bottom:1px solid var(--black-border); padding:70px 5%; text-align:center; }
+  .collect h2 { font-family:'Bebas Neue',sans-serif; font-size:clamp(36px,5vw,60px); line-height:1; margin-bottom:18px; }
+  .collect p { color:var(--white-dim); max-width:580px; margin:0 auto 32px; font-weight:300; }
+  .btn-primary { background:var(--orange); color:var(--black); font-weight:700; font-size:15px; padding:16px 36px; text-decoration:none; text-transform:uppercase; letter-spacing:1px; display:inline-block; transition:background .2s,transform .15s; }
+  .btn-primary:hover { background:var(--orange-dark); transform:translateY(-2px); }
+  .site-footer { background:var(--black-soft); padding:60px 5% 32px; border-top:1px solid var(--black-border); }
+  .footer-top { display:grid; grid-template-columns:1.4fr 1fr 1fr; gap:40px; max-width:1200px; margin:0 auto; }
+  .footer-col h4 { font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:3px; text-transform:uppercase; color:var(--orange); margin-bottom:18px; }
+  .footer-col a { display:block; color:var(--white-muted); text-decoration:none; font-size:14px; margin-bottom:10px; }
+  .footer-col a:hover { color:var(--white); }
+  .f-mark { font-family:'Bebas Neue',sans-serif; font-size:34px; color:var(--orange); display:block; }
+  .footer-col p { color:var(--white-muted); font-size:13px; margin:12px 0 16px; max-width:320px; }
+  .footer-sicurissimo-logo { height:36px; background:var(--white); padding:6px 10px; display:block; margin-bottom:16px; }
+  .footer-bottom { max-width:1200px; margin:36px auto 0; padding-top:24px; border-top:1px solid var(--black-border); font-size:12px; color:var(--white-muted); line-height:1.7; }
+  .wa-float { position:fixed; right:22px; bottom:22px; z-index:200; display:flex; align-items:center; gap:12px; text-decoration:none; }
+  .wa-float-label { background:var(--black-card); color:var(--white); font-size:13px; font-weight:600; padding:11px 16px; border:1px solid var(--black-border); }
+  .wa-float-btn { width:60px; height:60px; border-radius:50%; background:var(--orange); display:flex; align-items:center; justify-content:center; box-shadow:0 8px 30px rgba(251,107,0,0.45); }
+  .wa-float-btn svg { width:32px; height:32px; fill:var(--white); }
+  @media (max-width:900px) { .reviews { grid-template-columns:1fr 1fr; } .footer-top { grid-template-columns:1fr 1fr; } .nav-links { display:none; } }
+  @media (max-width:600px) { .reviews { grid-template-columns:1fr; } .footer-top { grid-template-columns:1fr; } .wa-float-label { display:none; } .stats-row { gap:28px; } }
+</style>
+<style>
+.s81bar{position:sticky;top:0;z-index:9998;background:#080808;border-bottom:1px solid #1c1c1c;display:flex;align-items:center;justify-content:space-between;padding:12px 5%;font-family:Arial,Helvetica,sans-serif;}
+.s81bar .s81logo{font-weight:800;font-size:20px;letter-spacing:1px;color:#fff;text-decoration:none;}
+.s81bar .s81logo span{color:#FB6B00;}
+.s81bar .s81links{display:flex;align-items:center;gap:20px;}
+.s81bar .s81links a{color:#cfcfcf;text-decoration:none;font-size:14px;}
+.s81bar .s81links a:hover{color:#fff;}
+.s81bar .s81links a.active{color:#FB6B00;}
+.s81bar .s81cta{background:#FB6B00;color:#080808 !important;font-weight:700;padding:9px 18px;text-transform:uppercase;letter-spacing:.5px;font-size:12px;}
+.s81tog{display:none;background:none;border:1px solid #333;color:#fff;font-size:20px;padding:3px 11px;cursor:pointer;}
+@media(max-width:900px){
+ .s81bar{position:relative;}
+ .s81bar .s81links{display:none;position:absolute;top:100%;left:0;right:0;background:#080808;flex-direction:column;gap:0;border-bottom:1px solid #1c1c1c;z-index:9998;}
+ .s81bar .s81links.open{display:flex;}
+ .s81bar .s81links a{padding:13px 5%;width:100%;border-top:1px solid #161616;}
+ .s81tog{display:block;}
+}
+</style>
+</head>
+<body>
+<div class="s81bar"><a class="s81logo" href="index.html">81<span>+</span></a><button class="s81tog" onclick="var l=this.parentNode.querySelector('.s81links');l.classList.toggle('open')">&#9776;</button><div class="s81links"><a href="index.html">Home</a><a href="index.html#pricing">Membership</a><a href="libri.html">Pubblicazioni</a><a href="partners.html">Partners</a><a href="eventi.html">Eventi</a><a href="strumenti.html">Strumenti</a><a href="network81.html">NETWORK81+</a><a href="dashboard-utente.html">Area Riservata</a><a href="newsletter.html">Newsletter</a><a class="s81cta" href="index.html#pricing">Iscriviti</a></div></div>
+
+<nav>
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-mark">81+</span>
+    <span class="nav-logo-sub">by Sicurissimo</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#how">Come funziona</a>
+    <a href="index.html#ecosistema">Ecosistema</a>
+    <a href="index.html#pricing">Membership</a>
+    <a href="recensioni.html">Recensioni</a>
+  </div>
+  <a href="index.html#pricing" class="nav-cta">Iscriviti ora</a>
+</nav>
+
+<section class="page-hero">
+  <div class="page-hero-glow"></div>
+  <div class="label">// Recensioni verificate</div>
+  <h1>Le aziende che il team <span>Sicurissimo</span> ha messo in regola.</h1>
+  <p class="intro">Recensioni reali dei clienti dei servizi Sicurissimo, da tutta Italia, per ogni tipo di attività. <strong>81+ è la membership nata dallo stesso team, dalla stessa esperienza e dagli stessi professionisti</strong> che hanno protetto queste aziende. Scegli 81+ e quella competenza lavora ogni giorno per te.</p>
+  <div class="stats-row">
+    <div><div class="stat-num">95+</div><div class="stat-lab">Recensioni reali</div></div>
+    <div><div class="stat-num">107</div><div class="stat-lab">Province coperte</div></div>
+    <div><div class="stat-num">4,9</div><div class="stat-lab">Media stelle</div></div>
+  </div>
+</section>
+
+<div class="chips">
+  <span class="chip active" data-cat="Tutte">Tutte</span>
+  <span class="chip" data-cat="Ristorazione">Ristorazione</span>
+  <span class="chip" data-cat="Alimentari">Alimentari</span>
+  <span class="chip" data-cat="Auto e officine">Auto e officine</span>
+  <span class="chip" data-cat="Artigianato e industria">Artigianato e industria</span>
+  <span class="chip" data-cat="Edilizia">Edilizia</span>
+  <span class="chip" data-cat="Turismo">Turismo</span>
+  <span class="chip" data-cat="Sanità">Sanità</span>
+  <span class="chip" data-cat="Benessere">Benessere</span>
+  <span class="chip" data-cat="Studi professionali">Studi professionali</span>
+  <span class="chip" data-cat="Commercio">Commercio</span>
+  <span class="chip" data-cat="Servizi">Servizi</span>
+  <span class="chip" data-cat="Servizi alla persona">Servizi alla persona</span>
+  <span class="chip" data-cat="Agricoltura">Agricoltura</span>
+  <span class="chip" data-cat="Trasporti e logistica">Trasporti e logistica</span>
+</div>
+
+<section class="reviews" id="grid">
+  <div class="review-card" data-cat="Ristorazione">
+    <div class="review-top">
+      <span class="review-type">Bar</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">In 48 ore avevo tutti gli attestati. Il controllo dell'ASL è arrivato e non ha trovato niente fuori posto. Professionalità assoluta.</p>
+    <p class="review-author"><strong>Marco</strong>, Milano</p>
+  </div>
+  <div class="review-card" data-cat="Ristorazione">
+    <div class="review-top">
+      <span class="review-type">Ristorante</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Finalmente qualcuno che spiega le cose in modo chiaro. Dopo anni di consulenti che cambiavano le regole, con Sicurissimo tutto è diventato semplice.</p>
+    <p class="review-author"><strong>Anna</strong>, Roma</p>
+  </div>
+  <div class="review-card" data-cat="Auto e officine">
+    <div class="review-top">
+      <span class="review-type">Officina meccanica</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Il piano HACCP era una cosa che rimandavo da anni. Ho fatto tutto in una settimana, attestati inclusi. Risultato perfetto.</p>
+    <p class="review-author"><strong>Giuseppe</strong>, Palermo</p>
+  </div>
+  <div class="review-card" data-cat="Benessere">
+    <div class="review-top">
+      <span class="review-type">Parrucchiera ed estetica</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Servizio rapido e preciso. Ho avuto un controllo a sorpresa e tutto era in ordine. Consiglio a tutti.</p>
+    <p class="review-author"><strong>Lucia</strong>, Torino</p>
+  </div>
+  <div class="review-card" data-cat="Edilizia">
+    <div class="review-top">
+      <span class="review-type">Impresa edile</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Con dieci operai le pratiche di sicurezza erano un incubo. Adesso ho tutto in ordine e dormo tranquillo. Grazie.</p>
+    <p class="review-author"><strong>Roberto</strong>, Napoli</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Tabaccheria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Ho chiamato un sabato mattina e mi hanno risposto subito. Raro trovare qualcuno così disponibile. Servizio eccellente.</p>
+    <p class="review-author"><strong>Carla</strong>, Firenze</p>
+  </div>
+  <div class="review-card" data-cat="Ristorazione">
+    <div class="review-top">
+      <span class="review-type">Pizzeria</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">DVR e HACCP completati in tempi record. Il personale ha fatto la formazione online senza problemi. Tutto facile e veloce.</p>
+    <p class="review-author"><strong>Davide</strong>, Bologna</p>
+  </div>
+  <div class="review-card" data-cat="Sanità">
+    <div class="review-top">
+      <span class="review-type">Studio dentistico</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Situazione normativa molto complessa per i nostri codici. Hanno risolto tutto con competenza e puntualità.</p>
+    <p class="review-author"><strong>Elena</strong>, Verona</p>
+  </div>
+  <div class="review-card" data-cat="Auto e officine">
+    <div class="review-top">
+      <span class="review-type">Autocarrozzeria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Avevo una ispezione imminente e non ero in regola. In meno di tre giorni hanno sistemato tutta la documentazione. Salvato.</p>
+    <p class="review-author"><strong>Francesco</strong>, Genova</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">B&B</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Per un piccolo B&B pensavo di non aver bisogno di molto. Invece mancava tantissimo. Adesso sono finalmente a norma.</p>
+    <p class="review-author"><strong>Martina</strong>, Venezia</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Falegnameria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Ho un laboratorio con macchinari pericolosi. Il DVR era arretrato. Ora tutto è aggiornato e conforme. Ottimo lavoro.</p>
+    <p class="review-author"><strong>Luca</strong>, Trento</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Supermercato</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Personale numeroso e tante pratiche arretrate. Hanno gestito tutto in modo organizzato. Rispetto delle scadenze impeccabile.</p>
+    <p class="review-author"><strong>Sara</strong>, Bari</p>
+  </div>
+  <div class="review-card" data-cat="Auto e officine">
+    <div class="review-top">
+      <span class="review-type">Officina meccanica</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Prezzi chiari, nessuna sorpresa. La formazione antincendio e il DVR fatti bene. Non potevo sperare di meglio.</p>
+    <p class="review-author"><strong>Piero</strong>, Catania</p>
+  </div>
+  <div class="review-card" data-cat="Servizi alla persona">
+    <div class="review-top">
+      <span class="review-type">Asilo nido</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Per un asilo nido la documentazione sulla sicurezza è fondamentale. Hanno capito subito le nostre esigenze specifiche.</p>
+    <p class="review-author"><strong>Chiara</strong>, Padova</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Panificio</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Lavoro con alimenti e macchinari industriali. Doppia complessità risolta in modo professionale. Consigliatissimi.</p>
+    <p class="review-author"><strong>Stefano</strong>, Brescia</p>
+  </div>
+  <div class="review-card" data-cat="Benessere">
+    <div class="review-top">
+      <span class="review-type">Palestra</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Gestire una palestra con istruttori e clienti richiede molta documentazione. Adesso ho tutto in regola. Servizio impeccabile.</p>
+    <p class="review-author"><strong>Monica</strong>, Reggio Emilia</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Carpenteria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Lavoriamo con metalli e saldatura, rischi elevati. Il DVR era completo di tutto quello che serviva. Competenza tecnica ottima.</p>
+    <p class="review-author"><strong>Gianni</strong>, Modena</p>
+  </div>
+  <div class="review-card" data-cat="Sanità">
+    <div class="review-top">
+      <span class="review-type">Farmacia</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">La burocrazia per le farmacie è enorme. Hanno gestito tutta la parte sicurezza in autonomia. Siamo finalmente sereni.</p>
+    <p class="review-author"><strong>Teresa</strong>, Salerno</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Serramentista</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Ho trovato Sicurissimo cercando online. Ho chiamato e nel giro di una settimana avevo tutto pronto. Ottimo rapporto qualità prezzo.</p>
+    <p class="review-author"><strong>Emilio</strong>, Bergamo</p>
+  </div>
+  <div class="review-card" data-cat="Ristorazione">
+    <div class="review-top">
+      <span class="review-type">Ristorante</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Cucina professionale e sala con cinquanta coperti. Hanno gestito sia il DVR che l'HACCP in modo impeccabile. Bravissimi.</p>
+    <p class="review-author"><strong>Rossella</strong>, Cagliari</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Impresa di pulizie</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Molti dipendenti part time e prodotti chimici da gestire. Documentazione complessa risolta con competenza e velocità.</p>
+    <p class="review-author"><strong>Vincenzo</strong>, Ancona</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Erboristeria</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Avevo sempre paura di un controllo. Ora non più. Tutta la documentazione è in ordine e aggiornata. Grazie mille.</p>
+    <p class="review-author"><strong>Paola</strong>, Perugia</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Officina navale</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Settore con normative specifiche e complesse. Hanno dimostrato di conoscerle bene. Professionalità rara.</p>
+    <p class="review-author"><strong>Alberto</strong>, Trieste</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Gioielleria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Piccola attività ma con obblighi importanti. Finalmente ho un consulente serio che mi segue nel tempo.</p>
+    <p class="review-author"><strong>Giovanna</strong>, Lecce</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Birrificio artigianale</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione alimentare con macchinari industriali. DVR completo e piano HACCP perfetto. Tutto come doveva essere.</p>
+    <p class="review-author"><strong>Massimo</strong>, Ravenna</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">Hotel</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Per un hotel con ristorante interno la documentazione è doppia. Hanno gestito tutto con grande organizzazione.</p>
+    <p class="review-author"><strong>Irene</strong>, Rimini</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Pescheria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Con il pesce fresco il controllo della catena del freddo è critico. Il piano HACCP fatto da Sicurissimo è perfetto.</p>
+    <p class="review-author"><strong>Sergio</strong>, Siracusa</p>
+  </div>
+  <div class="review-card" data-cat="Sanità">
+    <div class="review-top">
+      <span class="review-type">Centro medico</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Struttura sanitaria con requisiti particolari. Hanno conosciuto bene la normativa specifica. Ottimo servizio.</p>
+    <p class="review-author"><strong>Nadia</strong>, Pescara</p>
+  </div>
+  <div class="review-card" data-cat="Trasporti e logistica">
+    <div class="review-top">
+      <span class="review-type">Trasporti</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Autisti e mulettisti da formare. Tutto eseguito online con attestati validi. Risparmio enorme sui costi di trasferta.</p>
+    <p class="review-author"><strong>Bruno</strong>, Foggia</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Atelier moda</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Laboratorio sartoriale con macchinari. Non avevo idea di quanti obblighi ci fossero. Adesso sono in regola su tutto.</p>
+    <p class="review-author"><strong>Alessia</strong>, Como</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Gelateria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione e vendita gelato artigianale. DVR e HACCP fatti con grande attenzione ai dettagli. Sono molto soddisfatto.</p>
+    <p class="review-author"><strong>Tiziano</strong>, Pisa</p>
+  </div>
+  <div class="review-card" data-cat="Studi professionali">
+    <div class="review-top">
+      <span class="review-type">Studio di architettura</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Anche gli studi professionali hanno obblighi di sicurezza. Non lo sapevo. Adesso sì. Servizio puntuale e chiaro.</p>
+    <p class="review-author"><strong>Federica</strong>, Udine</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Cantina vinicola</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione vino con uso di sostanze chimiche e macchinari. La valutazione dei rischi era fondamentale. Ottimo lavoro.</p>
+    <p class="review-author"><strong>Claudio</strong>, Messina</p>
+  </div>
+  <div class="review-card" data-cat="Trasporti e logistica">
+    <div class="review-top">
+      <span class="review-type">Logistica</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Magazzino con carrelli elevatori e scaffalature alte. Il DVR ha incluso tutto quello che serviva. Molto competenti.</p>
+    <p class="review-author"><strong>Valentina</strong>, Latina</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Distributore carburanti</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Settore con normative specifiche. Hanno gestito tutto in modo preciso. Disponibili anche per domande successive.</p>
+    <p class="review-author"><strong>Renato</strong>, Livorno</p>
+  </div>
+  <div class="review-card" data-cat="Benessere">
+    <div class="review-top">
+      <span class="review-type">Centro estetico</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Ho aperto da poco e avevo bisogno di mettere tutto in regola fin dall'inizio. Fatto tutto in pochi giorni.</p>
+    <p class="review-author"><strong>Gabriella</strong>, Taranto</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Salumificio</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione di salumi con temperatura controllata. Il piano HACCP è stato fatto in modo approfondito e corretto.</p>
+    <p class="review-author"><strong>Ottavio</strong>, Parma</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Autoscuola</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Personale dipendente e locali da mettere a norma. Tutto risolto velocemente e senza stress. Consiglio vivamente.</p>
+    <p class="review-author"><strong>Simona</strong>, Reggio Calabria</p>
+  </div>
+  <div class="review-card" data-cat="Auto e officine">
+    <div class="review-top">
+      <span class="review-type">Gommista</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Ho ricevuto la comunicazione di un'ispezione con tre giorni di anticipo. Hanno sistemato tutto in tempo. Fantastico.</p>
+    <p class="review-author"><strong>Angelo</strong>, Frosinone</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Lavanderia industriale</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Prodotti chimici aggressivi e macchinari ad alta temperatura. Il DVR era essenziale. Fatto con grande cura.</p>
+    <p class="review-author"><strong>Cristina</strong>, Varese</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">Agriturismo</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Struttura ricettiva con cucina e fattoria. Normative miste complesse. Hanno gestito tutto in modo eccellente.</p>
+    <p class="review-author"><strong>Marcello</strong>, Bolzano</p>
+  </div>
+  <div class="review-card" data-cat="Sanità">
+    <div class="review-top">
+      <span class="review-type">Clinica veterinaria</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Studio veterinario con farmaci e strumentazione particolare. Documentazione sicurezza fatta in modo preciso.</p>
+    <p class="review-author"><strong>Ornella</strong>, Sassari</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Officina metalmeccanica</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Tornio, fresa e saldatura. Alta pericolosità. Il DVR includeva ogni rischio specifico. Siamo finalmente al sicuro.</p>
+    <p class="review-author"><strong>Edoardo</strong>, Ferrara</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Panificio</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Forno industriale a gas e alta temperatura. Piano HACCP e sicurezza fatti bene. Personale formato senza problemi.</p>
+    <p class="review-author"><strong>Laura</strong>, Potenza</p>
+  </div>
+  <div class="review-card" data-cat="Edilizia">
+    <div class="review-top">
+      <span class="review-type">Impresa edile</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Cantieri in diverse città. La gestione dei DURC e dei DVR era difficile. Con Sicurissimo è diventato semplice.</p>
+    <p class="review-author"><strong>Giovanni</strong>, Campobasso</p>
+  </div>
+  <div class="review-card" data-cat="Studi professionali">
+    <div class="review-top">
+      <span class="review-type">Studio legale</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Piccolo studio legale. Pensavo di non avere obblighi. Mi sbagliavo. Ora ho tutto in ordine.</p>
+    <p class="review-author"><strong>Patrizia</strong>, L'Aquila</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Calzolaio</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Laboratorio artigianale con colle e solventi. Il DVR era fondamentale. Fatto in modo professionale e dettagliato.</p>
+    <p class="review-author"><strong>Umberto</strong>, Catanzaro</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Agenzia immobiliare</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Ufficio con dipendenti e clienti. Non mi aspettavo tanti adempimenti. Adesso sono in regola su tutto.</p>
+    <p class="review-author"><strong>Daniela</strong>, Matera</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Macelleria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Tra refrigerazione, coltelli e manipolazione alimenti la documentazione era complessa. Fatta benissimo.</p>
+    <p class="review-author"><strong>Saverio</strong>, Brindisi</p>
+  </div>
+  <div class="review-card" data-cat="Benessere">
+    <div class="review-top">
+      <span class="review-type">Centro sportivo</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Piscina, palestra e spogliatoi. Tanti adempimenti diversi. Sicurissimo li ha gestiti tutti in modo organizzato.</p>
+    <p class="review-author"><strong>Morena</strong>, Terni</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Torrefazione</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione caffè artigianale con macchinari ad alta pressione. DVR completo e molto dettagliato. Ottimo.</p>
+    <p class="review-author"><strong>Dario</strong>, Viterbo</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Oreficeria</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Lavorazione metalli preziosi con sostanze chimiche. Il DVR ha incluso tutti i rischi specifici del settore.</p>
+    <p class="review-author"><strong>Enrica</strong>, Arezzo</p>
+  </div>
+  <div class="review-card" data-cat="Ristorazione">
+    <div class="review-top">
+      <span class="review-type">Ristorante</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Sessanta coperti, cucina grande, personale numeroso. HACCP e sicurezza fatti in modo impeccabile.</p>
+    <p class="review-author"><strong>Pietro</strong>, Caserta</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">B&B</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Struttura ricettiva piccola ma con tutti gli obblighi. Documentazione completa in pochissimo tempo.</p>
+    <p class="review-author"><strong>Giovanna</strong>, Agrigento</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Cantina sociale</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione vino cooperativa. Molti soci e lavoratori stagionali. Gestione complessa risolta egregiamente.</p>
+    <p class="review-author"><strong>Arnaldo</strong>, Asti</p>
+  </div>
+  <div class="review-card" data-cat="Benessere">
+    <div class="review-top">
+      <span class="review-type">Centro benessere</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Cabine estetiche, sauna e vasca idromassaggio. Normative specifiche gestite con competenza e puntualità.</p>
+    <p class="review-author"><strong>Floriana</strong>, Avellino</p>
+  </div>
+  <div class="review-card" data-cat="Agricoltura">
+    <div class="review-top">
+      <span class="review-type">Impresa agricola</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Macchine agricole e pesticidi. Il DVR era fondamentale per la sicurezza dei lavoratori stagionali.</p>
+    <p class="review-author"><strong>Ruggero</strong>, Oristano</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Macelleria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">La catena del freddo e la manipolazione carni richiedono un piano HACCP dettagliato. Fatto benissimo.</p>
+    <p class="review-author"><strong>Filomena</strong>, Nuoro</p>
+  </div>
+  <div class="review-card" data-cat="Agricoltura">
+    <div class="review-top">
+      <span class="review-type">Azienda agricola</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Serra idroponica e lavoratori stagionali. Rischi specifici del settore agricolo gestiti in modo eccellente.</p>
+    <p class="review-author"><strong>Osvaldo</strong>, Ragusa</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Pasticceria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione dolci artigianali con forno e frigorifero industriale. HACCP e sicurezza fatti alla perfezione.</p>
+    <p class="review-author"><strong>Carmela</strong>, Caltanissetta</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Cantina vinicola</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Produzione vino liquoroso. Uso di alcol e macchinari particolari. DVR completo e approfondito.</p>
+    <p class="review-author"><strong>Nino</strong>, Trapani</p>
+  </div>
+  <div class="review-card" data-cat="Sanità">
+    <div class="review-top">
+      <span class="review-type">Clinica medica</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Struttura medica complessa con reparti diversi. Sicurissimo ha gestito tutto con grande professionalità.</p>
+    <p class="review-author"><strong>Teresa</strong>, Cosenza</p>
+  </div>
+  <div class="review-card" data-cat="Auto e officine">
+    <div class="review-top">
+      <span class="review-type">Officina meccanica</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Torneria meccanica di precisione. Alta pericolosità e normative rigorose. Tutto rispettato al cento per cento.</p>
+    <p class="review-author"><strong>Ignazio</strong>, Lecco</p>
+  </div>
+  <div class="review-card" data-cat="Servizi alla persona">
+    <div class="review-top">
+      <span class="review-type">Asilo nido</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Per un asilo nido privato la sicurezza è tutto. Documentazione perfetta in ogni dettaglio. Grazie infinite.</p>
+    <p class="review-author"><strong>Rosaria</strong>, Pavia</p>
+  </div>
+  <div class="review-card" data-cat="Auto e officine">
+    <div class="review-top">
+      <span class="review-type">Autofficina</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Servizi di revisione e riparazione. DVR con valutazione su sollevatori e prodotti chimici. Fatto benissimo.</p>
+    <p class="review-author"><strong>Ciro</strong>, Avellino</p>
+  </div>
+  <div class="review-card" data-cat="Studi professionali">
+    <div class="review-top">
+      <span class="review-type">Studio di commercialisti</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Ufficio con più dipendenti. Pensavo di avere tutto in ordine. Mancava quasi tutto. Grazie per l'intervento rapido.</p>
+    <p class="review-author"><strong>Bianca</strong>, Novara</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Fonderia</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Fonderia con alte temperature e materiali pericolosi. DVR molto dettagliato e preciso. Competenza eccellente.</p>
+    <p class="review-author"><strong>Tarcisio</strong>, Alessandria</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Agenzia di viaggi</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Piccolo ufficio ma con obblighi. Tutto risolto in pochi giorni. Consiglio a tutti i colleghi del settore.</p>
+    <p class="review-author"><strong>Silvia</strong>, Mantova</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Pescheria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Pesce fresco e congelazione rapida. Il piano HACCP ha tenuto conto di tutti i punti critici del processo.</p>
+    <p class="review-author"><strong>Antonino</strong>, Crotone</p>
+  </div>
+  <div class="review-card" data-cat="Sanità">
+    <div class="review-top">
+      <span class="review-type">Farmacia</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Gestione dei farmaci e personale qualificato. Documentazione sicurezza impeccabile. Molto soddisfatta.</p>
+    <p class="review-author"><strong>Grazia</strong>, Lodi</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Ceramista</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Laboratorio ceramico con polveri e forno. Il DVR ha incluso la valutazione del rischio silice. Ottimo lavoro.</p>
+    <p class="review-author"><strong>Orazio</strong>, Siena</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">Agriturismo</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Cucina, camere e fattoria. Tre normative diverse gestite in modo coordinato e professionale.</p>
+    <p class="review-author"><strong>Marisa</strong>, Grosseto</p>
+  </div>
+  <div class="review-card" data-cat="Edilizia">
+    <div class="review-top">
+      <span class="review-type">Imbianchino</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Lavoro in quota e prodotti chimici. Il DVR ha considerato tutto. Finalmente sono in regola anche io.</p>
+    <p class="review-author"><strong>Costantino</strong>, Rieti</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Pastificio</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione pasta artigianale con essiccazione. Macchinari industriali e farina. HACCP fatto benissimo.</p>
+    <p class="review-author"><strong>Assunta</strong>, Benevento</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">Hotel termale</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Hotel termale con piscine e spa. Normative molto specifiche. Sicurissimo le conosceva tutte benissimo.</p>
+    <p class="review-author"><strong>Raniero</strong>, Vibo Valentia</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Erboristeria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Piccolo negozio con preparazioni officinali. Obblighi che non conoscevo. Adesso sono perfettamente in regola.</p>
+    <p class="review-author"><strong>Adele</strong>, Piacenza</p>
+  </div>
+  <div class="review-card" data-cat="Trasporti e logistica">
+    <div class="review-top">
+      <span class="review-type">Autotrasporti</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Flotta di camion e autisti. DVR per chi lavora su strada. Tutto eseguito in modo preciso e completo.</p>
+    <p class="review-author"><strong>Quintino</strong>, Frosinone</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Centro di formazione</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Aula corsi e laboratori. Normative per ambienti di lavoro educativi. Documentazione impeccabile.</p>
+    <p class="review-author"><strong>Lorena</strong>, Chieti</p>
+  </div>
+  <div class="review-card" data-cat="Edilizia">
+    <div class="review-top">
+      <span class="review-type">Cantiere navale</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Lavori navali e cantieristica. Normative molto rigorose. Sicurissimo ha dimostrato grande esperienza nel settore.</p>
+    <p class="review-author"><strong>Ezio</strong>, Teramo</p>
+  </div>
+  <div class="review-card" data-cat="Commercio">
+    <div class="review-top">
+      <span class="review-type">Supermercato</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Grande superficie con diversi reparti. Formazione di tutto il personale gestita in modo organizzato.</p>
+    <p class="review-author"><strong>Nunzia</strong>, Isernia</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Segheria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Lavorazione legname con macchine pericolose. DVR specifico per il rischio vibrazione e rumore. Ottimo.</p>
+    <p class="review-author"><strong>Vittorio</strong>, Belluno</p>
+  </div>
+  <div class="review-card" data-cat="Sanità">
+    <div class="review-top">
+      <span class="review-type">Laboratorio analisi</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Reagenti chimici e strumentazione di laboratorio. Normative specifiche conosciute bene da Sicurissimo.</p>
+    <p class="review-author"><strong>Elsa</strong>, Rovigo</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">Hotel</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Hotel con ristorante e spiaggia privata. Gestione multipla di adempimenti. Tutto risolto in modo professionale.</p>
+    <p class="review-author"><strong>Leandro</strong>, Imperia</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Onoranze funebri</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Settore con normative particolari. Sicurissimo conosceva ogni aspetto specifico. Servizio eccellente.</p>
+    <p class="review-author"><strong>Assuntina</strong>, Savona</p>
+  </div>
+  <div class="review-card" data-cat="Edilizia">
+    <div class="review-top">
+      <span class="review-type">Cantiere navale</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Costruzioni navali in porto. Rischi specifici e normative severe. DVR completo e dettagliato. Bravissimi.</p>
+    <p class="review-author"><strong>Epifanio</strong>, La Spezia</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Azienda casearia</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Produzione formaggio con locali refrigerati. HACCP e sicurezza completati in modo molto professionale.</p>
+    <p class="review-author"><strong>Donata</strong>, Cuneo</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Lanificio</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Industria tessile con telai e sostanze chimiche. DVR completo su ogni rischio del settore. Ottima competenza.</p>
+    <p class="review-author"><strong>Lamberto</strong>, Biella</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Riseria</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Lavorazione riso con silos e macchinari. DVR specifico per il settore risiero. Fatto con grande attenzione.</p>
+    <p class="review-author"><strong>Palmira</strong>, Vercelli</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">Hotel</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Struttura lacustre con porto e spiaggia. Normative miste. Tutto gestito in modo coordinato ed efficiente.</p>
+    <p class="review-author"><strong>Ernesto</strong>, Verbania</p>
+  </div>
+  <div class="review-card" data-cat="Turismo">
+    <div class="review-top">
+      <span class="review-type">Rifugio alpino</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Struttura in quota con cucina e ospiti. Documentazione sicurezza fatta nel rispetto delle normative alpine.</p>
+    <p class="review-author"><strong>Cosimina</strong>, Sondrio</p>
+  </div>
+  <div class="review-card" data-cat="Servizi">
+    <div class="review-top">
+      <span class="review-type">Tintoria</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Coloranti e prodotti chimici aggressivi. DVR con valutazione rischio chimico approfondita. Molto soddisfatto.</p>
+    <p class="review-author"><strong>Aldo</strong>, Varese</p>
+  </div>
+  <div class="review-card" data-cat="Artigianato e industria">
+    <div class="review-top">
+      <span class="review-type">Stamperia tessile</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Stampa tessuti con inchiostri chimici. Il DVR ha incluso la valutazione agenti chimici e cancerogeni. Perfetto.</p>
+    <p class="review-author"><strong>Nina</strong>, Como</p>
+  </div>
+  <div class="review-card" data-cat="Edilizia">
+    <div class="review-top">
+      <span class="review-type">Impresa edile</span>
+      <span class="stars">★★★★★</span>
+    </div>
+    <p class="review-text">Lavori in quota, ponteggi e demolizioni. DVR di cantiere aggiornato per ogni fase dei lavori. Eccellente.</p>
+    <p class="review-author"><strong>Biagio</strong>, Taranto</p>
+  </div>
+  <div class="review-card" data-cat="Alimentari">
+    <div class="review-top">
+      <span class="review-type">Oleificio</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Produzione olio con frantoio industriale. HACCP e sicurezza gestiti con grande competenza. Molto bravi.</p>
+    <p class="review-author"><strong>Ines</strong>, Andria</p>
+  </div>
+  <div class="review-card" data-cat="Agricoltura">
+    <div class="review-top">
+      <span class="review-type">Cooperativa agricola</span>
+      <span class="stars">★★★★☆</span>
+    </div>
+    <p class="review-text">Raccolta pomodori con lavoratori stagionali. DVR stagionale e formazione rapida per i braccianti. Perfetto.</p>
+    <p class="review-author"><strong>Quirino</strong>, Cerignola</p>
+  </div>
+</section>
+
+<section class="collect">
+  <h2>Sei un cliente. Lascia la tua recensione.</h2>
+  <p>La tua esperienza aiuta altri imprenditori a scegliere con fiducia. Ti bastano due minuti. Pubblichiamo solo recensioni reali e verificate.</p>
+  <a href="https://api.whatsapp.com/send?phone=393388771737" class="btn-primary">Lascia una recensione</a>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-top">
+    <div class="footer-col">
+      <span class="f-mark">81+</span>
+      <p>La membership Sicurissimo che trasforma la sicurezza sul lavoro nel vantaggio competitivo della tua Azienda. Per tutti i settori ATECO.</p>
+      <img class="footer-sicurissimo-logo" src="https://sicurissimo.io/images/logo-sicurissimo.jpg" alt="Sicurissimo">
+    </div>
+    <div class="footer-col">
+      <h4>81+</h4>
+      <a href="index.html#how">Come funziona</a>
+      <a href="index.html#ecosistema">Ecosistema</a>
+      <a href="index.html#pricing">Membership</a>
+      <a href="recensioni.html">Recensioni</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legale e contatti</h4>
+      <a href="privacy.html">Privacy e Cookie</a>
+      <a href="privacy.html#disclaimer">Disclaimer</a>
+      <a href="condizioni-vendita.html">Condizioni di Vendita</a>
+      <a href="https://api.whatsapp.com/send?phone=393388771737">WhatsApp 338 877 1737</a>
+      <a href="mailto:info@81plus.net">info@81plus.net</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    Recensioni raccolte dai clienti dei servizi Sicurissimo, pubblicate con nome di battesimo e città, senza cognome, a tutela della privacy. 81+ è un progetto di Sicurissimo, marchio di Labo Tecnic Studio. P.IVA IT01504180298. © 2026 Labo Tecnic Studio. Tutti i diritti riservati.
+  </div>
+</footer>
+
+<a class="wa-float" href="https://api.whatsapp.com/send?phone=393388771737" target="_blank" rel="noopener" aria-label="Assistenza WhatsApp">
+  <span class="wa-float-label">Serve aiuto? Scrivici</span>
+  <span class="wa-float-btn">
+    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><path d="M16 .5C7.4.5.5 7.4.5 16c0 2.8.7 5.5 2 7.8L.4 31.6l8-2.1c2.2 1.2 4.8 1.9 7.6 1.9 8.6 0 15.5-6.9 15.5-15.5S24.6.5 16 .5zm0 28.4c-2.5 0-4.9-.7-7-1.9l-.5-.3-4.7 1.2 1.3-4.6-.3-.5c-1.3-2.1-2-4.6-2-7.3C3.1 8.8 8.8 3.1 16 3.1S28.9 8.8 28.9 16 23.2 28.9 16 28.9zm7.1-9.6c-.4-.2-2.3-1.1-2.6-1.3-.4-.1-.6-.2-.9.2-.3.4-1 1.3-1.2 1.5-.2.2-.4.3-.8.1-.4-.2-1.6-.6-3.1-1.9-1.1-1-1.9-2.2-2.1-2.6-.2-.4 0-.6.2-.8.2-.2.4-.4.5-.7.2-.2.2-.4.3-.7.1-.2.1-.5 0-.7-.1-.2-.9-2.2-1.3-3-.3-.7-.6-.6-.9-.6h-.7c-.2 0-.6.1-.9.5-.3.4-1.2 1.2-1.2 2.9s1.2 3.4 1.4 3.6c.2.2 2.4 3.7 5.8 5.1.8.3 1.5.6 2 .7.8.3 1.6.2 2.2.1.7-.1 2.3-.9 2.6-1.8.3-.9.3-1.6.2-1.8-.1-.2-.3-.3-.7-.5z"/></svg>
+  </span>
+</a>
+
+<script>
+  const chips = document.querySelectorAll('.chip');
+  const cards = document.querySelectorAll('.review-card');
+  chips.forEach(c => c.addEventListener('click', () => {
+    chips.forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    const cat = c.getAttribute('data-cat');
+    cards.forEach(card => {
+      card.style.display = (cat === 'Tutte' || card.getAttribute('data-cat') === cat) ? '' : 'none';
+    });
+  }));
+</script>
+
+<!-- COOKIE BANNER -->
+<div id="cookie-banner" style="display:none;position:fixed;left:0;right:0;bottom:0;z-index:500;background:#111111;border-top:1px solid #222222;padding:18px 5%;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;align-items:center;gap:18px;flex-wrap:wrap;justify-content:space-between;">
+    <p style="margin:0;font-size:13px;color:#FFFFFF;max-width:780px;line-height:1.5;">Usiamo i cookie per far funzionare il sito e migliorare la tua esperienza. Continuando accetti il loro uso. Leggi la <a href="privacy.html" style="color:#FB6B00;">Privacy e Cookie Policy</a>.</p>
+    <button id="cookie-accept" style="background:#FB6B00;color:#080808;border:none;font-weight:700;padding:12px 28px;cursor:pointer;text-transform:uppercase;letter-spacing:0.5px;font-family:inherit;font-size:13px;">Accetta</button>
+  </div>
+</div>
+<script>
+  (function(){
+    try{
+      var b=document.getElementById('cookie-banner');
+      if(!localStorage.getItem('cookie81plus')){ b.style.display='block'; }
+      document.getElementById('cookie-accept').addEventListener('click',function(){
+        try{ localStorage.setItem('cookie81plus','1'); }catch(e){}
+        b.style.display='none';
+      });
+    }catch(e){}
+  })();
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+
+</html>

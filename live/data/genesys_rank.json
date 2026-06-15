@@ -1,0 +1,44 @@
+{
+ "nota":"Rank territoriali GENESYS. La carriera del nodo. Benefit in PV come bonus e sconti, crediti interni non convertibili. Mantenimento del livello a 6 mesi sugli stessi numeri, altrimenti retrocessione di un gradino. I benefit sono opportunita e PV, mai distribuzione di denaro verso l alto.",
+ "rank":[
+  {
+   "id":"communal","ordine":1,"nome":"COMMUNAL","colore":"#1db954",
+   "territorio":"un comune","posti_per_territorio":1,
+   "mantenimento_mesi":6,
+   "soglia_volume_personale":2000,"soglia_aziende_attive":3,
+   "bonus_pv_ingresso":500,"sconto_servizi_pct":5,"bonus_pv_mensile_se_attivo":50,
+   "accesso":["servizi base 81+","audit","fabbrica documenti","academy","shop"],
+   "apre_opportunita":[]
+  },
+  {
+   "id":"provincial","ordine":2,"nome":"PROVINCIAL","colore":"#4da6ff",
+   "territorio":"una provincia","posti_per_territorio":1,
+   "mantenimento_mesi":6,
+   "soglia_volume_personale":6000,"soglia_aziende_attive":10,"soglia_communal_sotto":3,
+   "bonus_pv_ingresso":1500,"sconto_servizi_pct":10,"bonus_pv_mensile_se_attivo":150,
+   "accesso":["tutto communal","coordinamento dei communal della provincia","strumenti white label"],
+   "apre_opportunita":["club 81+ provinciale"]
+  },
+  {
+   "id":"regional","ordine":3,"nome":"REGIONAL","colore":"#E8501A",
+   "territorio":"una regione","posti_per_territorio":1,
+   "mantenimento_mesi":6,
+   "soglia_volume_personale":15000,"soglia_aziende_attive":30,"soglia_provincial_sotto":3,
+   "bonus_pv_ingresso":5000,"sconto_servizi_pct":15,"bonus_pv_mensile_se_attivo":400,
+   "accesso":["tutto provincial","coordinamento dei provincial della regione","priorita Web3"],
+   "apre_opportunita":["network regionale","club 81+ regionale","franchising ZONE regionale","sub progetti"]
+  },
+  {
+   "id":"national","ordine":4,"nome":"NATIONAL","colore":"#f3b016",
+   "territorio":"Italia","posti_per_territorio":1,
+   "mantenimento_mesi":6,
+   "soglia_volume_personale":40000,"soglia_aziende_attive":100,"soglia_regional_sotto":5,
+   "bonus_pv_ingresso":15000,"sconto_servizi_pct":20,"bonus_pv_mensile_se_attivo":1200,
+   "accesso":["tutto regional","supervisione rete nazionale","accesso completo HUB"],
+   "apre_opportunita":["primo accesso a tutte le opportunita","network nazionale","club nazionale","franchising nazionale","tutti i sub progetti"]
+  }
+ ],
+ "regola_accesso":"Le opportunita si aprono a scalare. Il national accede per primo alle nuove aperture di network, club, franchising e sub progetti, poi a scalare regional, provincial, communal.",
+ "regola_mantenimento":"Ogni livello si mantiene tenendo gli stessi numeri per 6 mesi. Chi non riconferma retrocede di un gradino. Un regional che non mantiene per 6 mesi scende a provincial, e cosi via.",
+ "confine":"I benefit sono PV, crediti interni non convertibili in denaro, e accesso a opportunita. Le provvigioni in euro sul fatturato della rete, se esistono, sono calcolate dal modulo di settlement validato dal legale, fuori da qui."
+}

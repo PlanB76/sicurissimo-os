@@ -1,0 +1,523 @@
+<!DOCTYPE html><html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ Command Center | Plancia Economica Mega PRO</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@300;400;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#E8501A;--a2:#FB6B00;--v:#3FBF6B;--r:#ff5a4d;--gi:#ffce4d;--bl:#5a9bff;--vi:#c45aff;--cy:#4dd0e1;--bg:#08080B;--s:#111115;--c:#15151a;--c2:#1c1c22;--bd:#252530;--tx:#c8c8d0;--mu:#6e6e7a;--wh:#f0f0f5}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;font-size:13px;display:flex;min-height:100vh}
+/* SIDEBAR */
+.sb{width:220px;min-height:100vh;background:var(--s);border-right:1px solid var(--bd);padding:16px 0;position:fixed;top:0;left:0;overflow-y:auto;z-index:10}
+.sb .logo{padding:12px 18px;font-family:'Anton',sans-serif;font-size:22px;color:var(--wh);margin-bottom:8px}
+.sb .logo b{color:var(--a)}
+.sb .ebitda-box{margin:0 14px 14px;background:linear-gradient(135deg,#1a1210,#201510);border:1px solid var(--a);border-radius:12px;padding:14px;text-align:center}
+.sb .ebitda-box .lb{font-size:9px;text-transform:uppercase;letter-spacing:1.2px;color:var(--a)}
+.sb .ebitda-box .vl{font-family:'JetBrains Mono';font-size:24px;font-weight:700;color:var(--wh);margin:4px 0}
+.sb .ebitda-box .sub{font-size:10px;color:var(--mu)}
+.sb .grp{padding:6px 18px;font-size:9px;text-transform:uppercase;letter-spacing:1px;color:var(--mu);margin-top:10px}
+.sb .it{display:flex;align-items:center;gap:8px;padding:9px 18px;cursor:pointer;font-size:12px;color:var(--tx);transition:.12s;border-left:3px solid transparent}
+.sb .it:hover{background:var(--c);color:var(--wh)}
+.sb .it.on{background:var(--c);color:var(--a);border-left-color:var(--a);font-weight:600}
+.sb .it .ic{width:16px;text-align:center;font-size:14px}
+/* MAIN */
+.mn{margin-left:220px;flex:1;padding:20px 24px 80px;min-width:0}
+.head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:10px}
+.head h2{font-family:'Anton';font-size:22px;color:var(--wh)}
+.badge-priv{font-size:9px;color:var(--mu);border:1px solid var(--bd);border-radius:16px;padding:3px 10px;letter-spacing:.5px}
+/* TIME SELECTOR */
+.tsel{display:flex;gap:4px;margin-bottom:14px}
+.tsel button{background:var(--c);border:1px solid var(--bd);color:var(--tx);border-radius:7px;padding:6px 12px;cursor:pointer;font-size:11px;font-weight:600}
+.tsel button.on{background:var(--a);color:#fff;border-color:var(--a)}
+/* CARDS */
+.kg{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:10px;margin-bottom:14px}
+.kc{background:var(--c);border:1px solid var(--bd);border-radius:11px;padding:13px}
+.kc .lb{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.6px}
+.kc .vl{font-family:'JetBrains Mono';font-size:19px;font-weight:700;margin:4px 0}
+.kc .s2{font-size:9.5px;color:var(--mu)}
+.kc.big{border-color:var(--a);background:linear-gradient(135deg,var(--c),#1a1210)}
+.kc.big .vl{font-size:26px;color:var(--wh)}
+.e{color:var(--v)}.u{color:var(--r)}.o{color:var(--a)}.w{color:var(--wh)}.bl{color:var(--bl)}.vi{color:var(--vi)}.cy{color:var(--cy)}
+/* PANELS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:14px}
+@media(max-width:1100px){.g3{grid-template-columns:1fr 1fr}}
+@media(max-width:800px){.g2,.g3{grid-template-columns:1fr}.sb{width:180px}.mn{margin-left:180px}}
+.pn{background:var(--c);border:1px solid var(--bd);border-radius:11px;padding:16px;margin-bottom:12px}
+.pn h3{color:var(--wh);font-size:12.5px;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.pn h3 small{color:var(--mu);font-weight:400;font-size:9.5px}
+/* TABLE */
+table{width:100%;border-collapse:collapse;font-size:11.5px}
+th,td{text-align:left;padding:7px 5px;border-bottom:1px solid var(--bd)}
+th{color:var(--mu);font-weight:600;text-transform:uppercase;font-size:9.5px;letter-spacing:.3px}
+td.n{text-align:right;font-family:'JetBrains Mono'}
+.at{color:var(--v)}.ps{color:var(--r)}
+.bg-tag{display:inline-block;background:var(--c2);border:1px solid var(--bd);border-radius:4px;padding:1px 5px;font-size:9.5px}
+/* BARS */
+.bar{height:6px;border-radius:3px;background:var(--c2);overflow:hidden;margin-top:3px}
+.bar span{display:block;height:100%}
+.row-item{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid var(--bd);font-size:11.5px}
+.row-item:last-child{border:none}
+/* SECTIONS */
+.sec{display:none}.sec.on{display:block;animation:fi .2s}
+@keyframes fi{from{opacity:0;transform:translateY(3px)}to{opacity:1}}
+/* SCENARIO SLIDER */
+.slider-row{display:flex;align-items:center;gap:10px;margin:8px 0}
+.slider-row label{font-size:11px;min-width:120px;color:var(--mu)}
+.slider-row input[type=range]{flex:1;accent-color:var(--a)}
+.slider-row .sv{font-family:'JetBrains Mono';font-size:12px;min-width:80px;text-align:right}
+/* IMPORT */
+.imp{background:var(--c);border:2px dashed var(--a);border-radius:12px;padding:24px;text-align:center;margin-bottom:14px}
+.imp label{display:inline-block;background:var(--a);color:#fff;font-weight:700;padding:10px 20px;border-radius:9px;cursor:pointer}
+.imp input[type=file]{display:none}
+/* RANK */
+.rank-box{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin:12px 0}
+.rank-lv{background:var(--c2);border:1px solid var(--bd);border-radius:10px;padding:12px 16px;text-align:center;min-width:100px}
+.rank-lv.active{border-color:var(--a);background:linear-gradient(135deg,var(--c),#1a1210)}
+.rank-lv .stars{font-size:16px;margin-bottom:4px}
+.rank-lv .nm{font-size:11px;font-weight:700;color:var(--wh)}
+.note{font-size:10.5px;color:var(--mu);margin-top:6px;line-height:1.5}
+.alert{background:rgba(255,206,77,.07);border:1px solid var(--gi);border-radius:8px;padding:10px;font-size:11px;color:#e8d9a8;margin:8px 0}
+/* MASLOW PYRAMID */
+.pyr{text-align:center;margin:6px 0}
+.pyr div{display:inline-block;border-radius:6px;padding:8px;color:#0A0A0B;font-weight:700;font-size:11px;margin:3px 0}
+/* SPEED */
+.speed-box{background:var(--c2);border:1px solid var(--bd);border-radius:10px;padding:14px;text-align:center;margin:10px 0}
+.speed-box .big{font-family:'JetBrains Mono';font-size:28px;font-weight:700;color:var(--a)}
+.speed-box .lbl{font-size:10px;color:var(--mu);margin-top:2px}
+.fl{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center}
+.fl select,.fl input[type=text],.fl input[type=date]{background:var(--c2);border:1px solid var(--bd);color:#fff;border-radius:7px;padding:6px 8px;font-size:11px}
+.fl button{background:var(--a2);color:#fff;border:none;font-weight:700;padding:7px 12px;border-radius:7px;cursor:pointer;font-size:11px}
+@media print{.sb{display:none!important}.mn{margin-left:0!important}.sec{display:block!important}canvas{max-height:200px}}
+</style></head><body>
+<!-- SIDEBAR -->
+<div class="sb">
+  <div class="logo">81<b>+</b> Command</div>
+  <div class="ebitda-box"><div class="lb">EBITDA Globale</div><div class="vl" id="sb-ebitda">€0</div><div class="sub" id="sb-periodo"></div></div>
+  <div class="grp">Controllo</div>
+  <div class="it on" onclick="go('cmd',this)"><span class="ic">⚡</span>Command Center</div>
+  <div class="it" onclick="go('pnl',this)"><span class="ic">📊</span>Conto Economico</div>
+  <div class="it" onclick="go('cash',this)"><span class="ic">💰</span>Cashflow</div>
+  <div class="it" onclick="go('life',this)"><span class="ic">🏠</span>Lifestyle</div>
+  <div class="grp">Fiscale</div>
+  <div class="it" onclick="go('iva',this)"><span class="ic">🏛</span>IVA e imposte</div>
+  <div class="it" onclick="go('cli',this)"><span class="ic">👥</span>Clienti e fornitori</div>
+  <div class="it" onclick="go('fatt',this)"><span class="ic">📄</span>Registro fatture</div>
+  <div class="grp">Proiezioni</div>
+  <div class="it" onclick="go('scen',this)"><span class="ic">🎯</span>Scenari</div>
+  <div class="it" onclick="go('proj',this)"><span class="ic">📈</span>Proiezioni</div>
+  <div class="it" onclick="go('goal',this)"><span class="ic">🏆</span>KPI e obiettivi</div>
+  <div class="grp">Vita</div>
+  <div class="it" onclick="go('maslow',this)"><span class="ic">🧠</span>Maslow e ruota</div>
+  <div class="it" onclick="go('rank',this)"><span class="ic">⭐</span>Rank</div>
+  <div class="it" onclick="go('speed',this)"><span class="ic">⏱</span>Velocita €/h</div>
+  <div class="grp">Strumenti</div>
+  <div class="it" onclick="go('import',this)"><span class="ic">📥</span>Importa file</div>
+  <div class="it" onclick="window.print()"><span class="ic">🖨</span>Stampa PDF</div>
+</div>
+
+<div class="mn">
+
+<!-- 1. COMMAND CENTER -->
+<div class="sec on" id="s-cmd">
+  <div class="head"><h2>Command Center</h2><span class="badge-priv">DATI REALI, riservato alla direzione</span></div>
+  <div class="kg">
+    <div class="kc big"><div class="lb">EBITDA Globale</div><div class="vl w" id="k-ebitda">€0</div><div class="s2">ricavi meno costi imponibili</div></div>
+    <div class="kc"><div class="lb">Ricavi</div><div class="vl e" id="k-ric">€0</div><div class="s2" id="k-ricn"></div></div>
+    <div class="kc"><div class="lb">Costi</div><div class="vl u" id="k-cos">€0</div><div class="s2" id="k-cosn"></div></div>
+    <div class="kc"><div class="lb">Margine %</div><div class="vl o" id="k-marg">0%</div><div class="s2">sul fatturato</div></div>
+    <div class="kc"><div class="lb">IVA netta</div><div class="vl" id="k-iva">€0</div><div class="s2" id="k-ivas"></div></div>
+    <div class="kc"><div class="lb">Ricavo medio mese</div><div class="vl bl" id="k-rmm">€0</div><div class="s2" id="k-rmms"></div></div>
+    <div class="kc"><div class="lb">Velocita €/h</div><div class="vl o" id="k-speed">€0</div><div class="s2">8h/gg, 22gg/mese</div></div>
+    <div class="kc"><div class="lb">Burn rate mese</div><div class="vl u" id="k-burn">€0</div><div class="s2">costi mensili medi</div></div>
+  </div>
+  <div class="g2">
+    <div class="pn"><h3>Ricavi vs costi mensili<small>30 mesi, imponibile</small></h3><canvas id="g-mens" height="130"></canvas></div>
+    <div class="pn"><h3>Flusso netto mensile<small>margine operativo per mese</small></h3><canvas id="g-flusso" height="130"></canvas></div>
+  </div>
+  <div class="g3">
+    <div class="pn"><h3>Ricavi per anno</h3><canvas id="g-ryear" height="120"></canvas></div>
+    <div class="pn"><h3>Margine per anno</h3><canvas id="g-myear" height="120"></canvas></div>
+    <div class="pn"><h3>Crescita YoY %</h3><canvas id="g-yoy" height="120"></canvas></div>
+  </div>
+</div>
+
+<!-- 2. CONTO ECONOMICO -->
+<div class="sec" id="s-pnl">
+  <div class="head"><h2>Conto Economico</h2></div>
+  <div class="pn"><h3>P&L per anno<small>imponibile, fatture attive e passive</small></h3>
+    <table><thead><tr><th>Anno</th><th class="n">Ricavi</th><th class="n">Costi</th><th class="n">EBITDA</th><th class="n">Margine %</th><th class="n">IVA dovuta</th><th class="n">N. fatture</th></tr></thead><tbody id="t-pnl"></tbody></table>
+  </div>
+  <div class="g2">
+    <div class="pn"><h3>Composizione ricavi vs costi</h3><canvas id="g-comp" height="140"></canvas></div>
+    <div class="pn"><h3>Andamento EBITDA cumulativo</h3><canvas id="g-ebitda-cum" height="140"></canvas></div>
+  </div>
+</div>
+
+<!-- 3. CASHFLOW -->
+<div class="sec" id="s-cash">
+  <div class="head"><h2>Cashflow</h2></div>
+  <div class="kg">
+    <div class="kc"><div class="lb">Incassato totale</div><div class="vl e" id="k-cin">€0</div></div>
+    <div class="kc"><div class="lb">Pagato totale</div><div class="vl u" id="k-cout">€0</div></div>
+    <div class="kc"><div class="lb">Cash netto</div><div class="vl w" id="k-cnet">€0</div></div>
+    <div class="kc"><div class="lb">Fuel cumulativo</div><div class="vl o" id="k-fuel">€0</div></div>
+  </div>
+  <div class="pn"><h3>Cashflow cumulativo (Fuel)<small>incassato meno pagato, nel tempo</small></h3><canvas id="g-fuel" height="130"></canvas></div>
+  <div class="pn"><h3>Entrate e uscite mensili<small>totali fattura</small></h3><canvas id="g-cashbar" height="120"></canvas></div>
+</div>
+
+<!-- 4. LIFESTYLE -->
+<div class="sec" id="s-life">
+  <div class="head"><h2>Lifestyle Balance</h2></div>
+  <div class="kg">
+    <div class="kc big"><div class="lb">Costo vita mese</div><div class="vl u" id="k-lifem">€0</div></div>
+    <div class="kc"><div class="lb">Giorno</div><div class="vl u" id="k-lifed">€0</div></div>
+    <div class="kc"><div class="lb">Settimana</div><div class="vl u" id="k-lifew">€0</div></div>
+    <div class="kc"><div class="lb">Semestre</div><div class="vl u" id="k-lifes">€0</div></div>
+    <div class="kc"><div class="lb">Anno</div><div class="vl u" id="k-lifey">€0</div></div>
+  </div>
+  <div class="g2">
+    <div class="pn"><h3>Spese per categoria fornitore<small>dai dati reali delle fatture passive</small></h3><div id="life-cat"></div></div>
+    <div class="pn"><h3>Distribuzione costi</h3><canvas id="g-lifepie" height="160"></canvas></div>
+  </div>
+  <div class="note">Queste cifre vengono dalle tue fatture passive reali. Per un quadro completo, carica anche gli estratti conto Revolut nella sezione import.</div>
+</div>
+
+<!-- 5. IVA -->
+<div class="sec" id="s-iva">
+  <div class="head"><h2>IVA e Imposte</h2></div>
+  <div class="pn"><h3>Posizione IVA per anno</h3><table><thead><tr><th>Anno</th><th class="n">Debito</th><th class="n">Credito</th><th class="n">Dovuta</th><th>Posizione</th></tr></thead><tbody id="t-iva"></tbody></table></div>
+  <div class="pn"><h3>IVA per anno</h3><canvas id="g-iva" height="120"></canvas></div>
+</div>
+
+<!-- 6. CLIENTI E FORNITORI -->
+<div class="sec" id="s-cli">
+  <div class="head"><h2>Clienti e Fornitori</h2></div>
+  <div class="kg">
+    <div class="kc"><div class="lb">Concentrazione top cliente</div><div class="vl o" id="k-conc">0%</div><div class="s2" id="k-concn"></div></div>
+    <div class="kc"><div class="lb">N. clienti attivi</div><div class="vl bl" id="k-ncli">0</div></div>
+    <div class="kc"><div class="lb">N. fornitori</div><div class="vl vi" id="k-nfor">0</div></div>
+    <div class="kc"><div class="lb">Fattura media attiva</div><div class="vl e" id="k-fma">€0</div></div>
+  </div>
+  <div class="g2">
+    <div class="pn"><h3>Top clienti</h3><div id="lst-cli"></div></div>
+    <div class="pn"><h3>Top fornitori</h3><div id="lst-for"></div></div>
+  </div>
+  <div class="g2">
+    <div class="pn"><h3>Torta clienti</h3><canvas id="g-clipie" height="160"></canvas></div>
+    <div class="pn"><h3>Torta fornitori</h3><canvas id="g-forpie" height="160"></canvas></div>
+  </div>
+</div>
+
+<!-- 7. REGISTRO FATTURE -->
+<div class="sec" id="s-fatt">
+  <div class="head"><h2>Registro Fatture</h2></div>
+  <div class="fl">
+    <select id="ff-tipo" onchange="filtraFatt()"><option value="">Tutte</option><option value="attiva">Attive</option><option value="passiva">Passive</option></select>
+    <select id="ff-anno" onchange="filtraFatt()"><option value="">Tutti</option><option>2024</option><option>2025</option><option>2026</option></select>
+    <input type="text" id="ff-cerca" placeholder="Cerca..." style="min-width:180px" onkeydown="if(event.key==='Enter')filtraFatt()">
+    <button onclick="filtraFatt()">Cerca</button>
+  </div>
+  <div class="pn"><h3>Fatture<small id="ff-cnt"></small></h3><div style="overflow-x:auto;max-height:500px;overflow-y:auto">
+    <table><thead><tr><th>Tipo</th><th>Doc</th><th>N.</th><th>Data</th><th>Controparte</th><th class="n">Impon.</th><th class="n">IVA</th><th class="n">Totale</th></tr></thead><tbody id="ff-rows"></tbody></table>
+  </div></div>
+</div>
+
+<!-- 8. SCENARI -->
+<div class="sec" id="s-scen">
+  <div class="head"><h2>Simulatore Scenari</h2></div>
+  <div class="pn"><h3>Costruisci il tuo scenario 2026<small>muovi i cursori, i numeri si aggiornano</small></h3>
+    <div class="slider-row"><label>Nuovi clienti / mese</label><input type="range" id="sc-cli" min="0" max="10" value="2" oninput="calcScen()"><span class="sv" id="sv-cli">2</span></div>
+    <div class="slider-row"><label>Fattura media €</label><input type="range" id="sc-fatt" min="200" max="5000" step="100" value="1500" oninput="calcScen()"><span class="sv" id="sv-fatt">€1.500</span></div>
+    <div class="slider-row"><label>Costi aggiuntivi mese €</label><input type="range" id="sc-cost" min="0" max="3000" step="50" value="500" oninput="calcScen()"><span class="sv" id="sv-cost">€500</span></div>
+    <div class="slider-row"><label>Mesi proiezione</label><input type="range" id="sc-mesi" min="3" max="24" value="12" oninput="calcScen()"><span class="sv" id="sv-mesi">12</span></div>
+    <div class="kg" id="scen-kpi" style="margin-top:14px"></div>
+    <canvas id="g-scen" height="120"></canvas>
+  </div>
+</div>
+
+<!-- 9. PROIEZIONI -->
+<div class="sec" id="s-proj">
+  <div class="head"><h2>Proiezioni</h2></div>
+  <div class="g2">
+    <div class="pn"><h3>Proiezione lineare 2026<small>basata sulla media mensile attuale</small></h3><canvas id="g-proj26" height="130"></canvas></div>
+    <div class="pn"><h3>3 scenari a 12 mesi<small>pessimistico, base, ottimistico</small></h3><canvas id="g-3scen" height="130"></canvas></div>
+  </div>
+  <div class="pn"><h3>Numeri proiezione</h3><div id="proj-tab"></div></div>
+</div>
+
+<!-- 10. KPI E OBIETTIVI -->
+<div class="sec" id="s-goal">
+  <div class="head"><h2>KPI e Obiettivi</h2></div>
+  <div class="pn"><h3>Business Key Performance Indicators</h3>
+    <table><thead><tr><th>KPI</th><th class="n">Attuale</th><th class="n">Target</th><th>Stato</th><th>Gap</th></tr></thead><tbody id="t-kpi"></tbody></table>
+  </div>
+</div>
+
+<!-- 11. MASLOW E RUOTA -->
+<div class="sec" id="s-maslow">
+  <div class="head"><h2>Maslow e Ruota della vita</h2></div>
+  <div class="g2">
+    <div class="pn"><h3>Ruota della vita economica</h3><canvas id="g-ruota" height="170"></canvas></div>
+    <div class="pn"><h3>Piramide di Maslow</h3><div id="maslow-pyr"></div><div class="note">Dal basso, sopravvivenza. In cima, autorealizzazione. Lo specchio di dove va il tuo denaro.</div></div>
+  </div>
+</div>
+
+<!-- 12. RANK -->
+<div class="sec" id="s-rank">
+  <div class="head"><h2>Rank Gamification</h2></div>
+  <div class="pn"><h3>Il tuo livello attuale</h3>
+    <div class="rank-box" id="rank-box"></div>
+    <div class="note" id="rank-note"></div>
+  </div>
+</div>
+
+<!-- 13. SPEED -->
+<div class="sec" id="s-speed">
+  <div class="head"><h2>Velocita €/h</h2></div>
+  <div class="speed-box"><div class="big" id="sp-main">€0/h</div><div class="lbl">guadagno netto per ora lavorativa (8h/gg, 22gg/mese)</div></div>
+  <div class="g3">
+    <div class="kc"><div class="lb">Per giorno</div><div class="vl o" id="sp-day">€0</div></div>
+    <div class="kc"><div class="lb">Per settimana</div><div class="vl o" id="sp-week">€0</div></div>
+    <div class="kc"><div class="lb">Per mese</div><div class="vl o" id="sp-month">€0</div></div>
+  </div>
+  <div class="pn"><h3>Andamento velocita nel tempo</h3><canvas id="g-speed" height="120"></canvas></div>
+</div>
+
+<!-- 14. IMPORT -->
+<div class="sec" id="s-import">
+  <div class="head"><h2>Importa File</h2></div>
+  <div class="imp"><p style="margin-bottom:10px;color:var(--mu)">Carica estratti conto PDF, fatture XML, CSV di movimenti</p>
+    <input type="file" id="imp-file" accept=".pdf,.csv,.xml,.xlsx" multiple>
+    <label for="imp-file">Seleziona file</label>
+    <p style="margin-top:10px;font-size:11px;color:var(--mu)">Nella versione online, i file vengono elaborati dal server. Nella versione offline, i dati delle fatture sono gia embeddati.</p>
+  </div>
+</div>
+
+</div>
+<script>
+const FATTURE_DATA={"generato":"2026-06-12","piva":"01504180298","ragione":"LABO TECNIC STUDIO","totali":{"attive":{"n":92,"imponibile":87979.15,"imposta":4084.76,"totale":92063.91},"passive":{"n":223,"imponibile":22244.83,"imposta":3522.51,"totale":25767.34}},"per_anno":{"2024":{"ricavi":{"n":13,"imponibile":15524.0,"imposta":1423.4,"totale":16947.4},"costi":{"n":46,"imponibile":5394.62,"imposta":471.15,"totale":5865.77},"iva_a_debito":1423.4,"iva_a_credito":471.15,"iva_dovuta":952.25,"margine_lordo":10129.38},"2025":{"ricavi":{"n":43,"imponibile":51668.85,"imposta":2068.0,"totale":53736.85},"costi":{"n":129,"imponibile":17667.96,"imposta":2551.05,"totale":20219.01},"iva_a_debito":2068.0,"iva_a_credito":2551.05,"iva_dovuta":-483.05,"margine_lordo":34000.89},"2026":{"ricavi":{"n":36,"imponibile":20786.3,"imposta":593.36,"totale":21379.66},"costi":{"n":48,"imponibile":-817.75,"imposta":500.31,"totale":-317.44},"iva_a_debito":593.36,"iva_a_credito":500.31,"iva_dovuta":93.05,"margine_lordo":21604.05}},"per_mese":[{"mese":"2024-01","ricavi":0,"costi":489.46},{"mese":"2024-02","ricavi":0,"costi":299.43},{"mese":"2024-03","ricavi":0,"costi":202.92},{"mese":"2024-04","ricavi":0,"costi":155.91},{"mese":"2024-05","ricavi":0,"costi":2609.16},{"mese":"2024-06","ricavi":0,"costi":123.84},{"mese":"2024-07","ricavi":1586.0,"costi":159.36},{"mese":"2024-08","ricavi":1052.0,"costi":173.02},{"mese":"2024-09","ricavi":2846.0,"costi":103.88},{"mese":"2024-10","ricavi":2656.4,"costi":189.81},{"mese":"2024-11","ricavi":4560.6,"costi":254.26},{"mese":"2024-12","ricavi":2823.0,"costi":633.57},{"mese":"2025-01","ricavi":3234.4,"costi":964.93},{"mese":"2025-02","ricavi":3950.0,"costi":473.35},{"mese":"2025-03","ricavi":3202.5,"costi":886.6},{"mese":"2025-04","ricavi":4808.5,"costi":615.18},{"mese":"2025-05","ricavi":4158.22,"costi":1087.29},{"mese":"2025-06","ricavi":3383.5,"costi":4803.08},{"mese":"2025-07","ricavi":3721.95,"costi":625.54},{"mese":"2025-08","ricavi":4315.96,"costi":471.7},{"mese":"2025-09","ricavi":3581.8,"costi":982.98},{"mese":"2025-10","ricavi":5869.1,"costi":1904.47},{"mese":"2025-11","ricavi":4339.92,"costi":3513.25},{"mese":"2025-12","ricavi":7103.0,"costi":1339.59},{"mese":"2026-01","ricavi":6460.07,"costi":1097.52},{"mese":"2026-02","ricavi":917.0,"costi":-3111.64},{"mese":"2026-03","ricavi":9213.28,"costi":761.39},{"mese":"2026-04","ricavi":1838.96,"costi":394.1},{"mese":"2026-05","ricavi":1482.5,"costi":40.88},{"mese":"2026-06","ricavi":874.49,"costi":0}],"top_clienti":[{"nome":"SUNRISE RENT SCAVI S.R.L.","imponibile":42400.59,"n":19},{"nome":"FORMASICUREZZA SRL","imponibile":10186.6,"n":25},{"nome":"DELTA LAVORI S.R.L.","imponibile":8049.7,"n":7},{"nome":"STUDIO TECNICO EDIL/B di Bagno Geom. Pierluigi &amp; Bezzi Geom. Gianni Carlo","imponibile":5000.0,"n":2},{"nome":"TEC S.r.l.","imponibile":4041.58,"n":6},{"nome":"LAZZARIN COSTRUZIONI S.R.L.","imponibile":2445.6,"n":3},{"nome":"GARDEN'S HOUSE DI MOSCHINI LUCA","imponibile":2097.78,"n":1},{"nome":"BRESCIANI S.r.l.","imponibile":2072.1,"n":3},{"nome":"C.A.M. - Cooperativa Artisti Musicali Soc. Coop. A r.l.","imponibile":1912.82,"n":2},{"nome":"BONAFIN FRANCESCO","imponibile":1903.8,"n":3},{"nome":"RA.YAN MULTISERVICE SOCIETA' A RESPONSABILITA' LIMITATA SEMPLIFIC ATA","imponibile":1374.94,"n":4},{"nome":"2T SCAVI S.R.L.","imponibile":1295.44,"n":4},{"nome":"Wassim Meftah","imponibile":1074.0,"n":2},{"nome":"LAZZARIN PAOLO","imponibile":1053.96,"n":2},{"nome":"C.A.M. - Cooperativa Artisti Musicali Soc. Coop.","imponibile":957.41,"n":1}],"top_fornitori":[{"nome":"FORMASICUREZZA SRL","imponibile":4425.0,"n":31},{"nome":"BALLARIN LEONARDO E C. S.A.S.","imponibile":3296.29,"n":14},{"nome":"Illumia S.p.A","imponibile":2689.74,"n":28},{"nome":"myWorld Italia s.r.l.","imponibile":2454.76,"n":1},{"nome":"RISTORANTE ZUSHIMI","imponibile":2325.02,"n":44},{"nome":"FASTWEB SpA","imponibile":1022.67,"n":25},{"nome":"LA GENTILE S.R.L.","imponibile":983.61,"n":1},{"nome":"Agenzia formativa vitruviana srl","imponibile":769.23,"n":2},{"nome":"A.N.FO.S. SERVIZI SRL","imponibile":653.0,"n":21},{"nome":"EuroImport Srl","imponibile":238.82,"n":1},{"nome":"TT &amp; C S.R.L.","imponibile":236.37,"n":3},{"nome":"GAZZETTA SAS HOSTARIA IL PAIOLO","imponibile":235.9,"n":4},{"nome":"LUCIANO MOREGOLA","imponibile":225.0,"n":1},{"nome":"LA DONADA SNC","imponibile":212.73,"n":3},{"nome":"OTTICA FINOTTI SANDRA","imponibile":211.54,"n":1}],"elenco":[{"tipo":"passiva","tipodoc":"TD01","numero":"M002188554","data":"2024-01-01","controparte":"FASTWEB SpA","imponibile":38.95,"imposta":8.57,"totale":47.52},{"tipo":"passiva","tipodoc":"TD01","numero":"422400007186","data":"2024-01-08","controparte":"Illumia S.p.A","imponibile":218.7,"imposta":10.94,"totale":229.64},{"tipo":"passiva","tipodoc":"TD01","numero":"8/FATT","data":"2024-01-11","controparte":"RISTORANTE ZUSHIMI","imponibile":80.0,"imposta":8.0,"totale":88.0},{"tipo":"passiva","tipodoc":"TD01","numero":"13/FATT","data":"2024-01-12","controparte":"RISTORANTE ZUSHIMI","imponibile":73.18,"imposta":7.32,"totale":80.5},{"tipo":"passiva","tipodoc":"TD01","numero":"23/FATT","data":"2024-01-20","controparte":"RISTORANTE ZUSHIMI","imponibile":61.36,"imposta":6.14,"totale":67.5},{"tipo":"passiva","tipodoc":"TD01","numero":"24/FATT","data":"2024-01-21","controparte":"RISTORANTE ZUSHIMI","imponibile":17.27,"imposta":1.73,"totale":19.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M005625413","data":"2024-02-01","controparte":"FASTWEB SpA","imponibile":38.95,"imposta":8.57,"totale":47.52},{"tipo":"passiva","tipodoc":"TD01","numero":"620001368419","data":"2024-02-05","controparte":"V.E.R.I.T.A.S. SPA","imponibile":50.84,"imposta":4.59,"totale":55.43},{"tipo":"passiva","tipodoc":"TD01","numero":"422400077600","data":"2024-02-07","controparte":"Illumia S.p.A","imponibile":209.64,"imposta":46.12,"totale":255.76},{"tipo":"passiva","tipodoc":"TD01","numero":"M008787112","data":"2024-03-01","controparte":"FASTWEB SpA","imponibile":38.95,"imposta":8.57,"totale":47.52},{"tipo":"passiva","tipodoc":"TD01","numero":"422400188098","data":"2024-03-07","controparte":"Illumia S.p.A","imponibile":163.97,"imposta":36.07,"totale":200.04},{"tipo":"passiva","tipodoc":"TD01","numero":"M012072061","data":"2024-04-01","controparte":"FASTWEB SpA","imponibile":38.95,"imposta":8.57,"totale":47.52},{"tipo":"passiva","tipodoc":"TD01","numero":"422400239222","data":"2024-04-08","controparte":"Illumia S.p.A","imponibile":116.96,"imposta":25.73,"totale":142.69},{"tipo":"passiva","tipodoc":"TD01","numero":"M012967297","data":"2024-05-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"passiva","tipodoc":"TD01","numero":"422400304632","data":"2024-05-08","controparte":"Illumia S.p.A","imponibile":70.09,"imposta":15.42,"totale":85.51},{"tipo":"passiva","tipodoc":"TD01","numero":"620001385346","data":"2024-05-09","controparte":"V.E.R.I.T.A.S. SPA","imponibile":44.61,"imposta":4.0,"totale":48.61},{"tipo":"passiva","tipodoc":"TD01","numero":"MWITT24007084","data":"2024-05-29","controparte":"myWorld Italia s.r.l.","imponibile":2454.76,"imposta":0.0,"totale":2454.76},{"tipo":"passiva","tipodoc":"TD01","numero":"119/FATT","data":"2024-06-01","controparte":"RISTORANTE ZUSHIMI","imponibile":48.91,"imposta":4.89,"totale":53.8},{"tipo":"passiva","tipodoc":"TD01","numero":"M018878832","data":"2024-06-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"passiva","tipodoc":"TD01","numero":"422400386663","data":"2024-06-07","controparte":"Illumia S.p.A","imponibile":35.23,"imposta":6.05,"totale":41.28},{"tipo":"passiva","tipodoc":"TD01","numero":"M020649502","data":"2024-07-01","controparte":"FASTWEB SpA","imponibile":139.7,"imposta":8.74,"totale":148.44},{"tipo":"passiva","tipodoc":"TD01","numero":"422400426314","data":"2024-07-08","controparte":"Illumia S.p.A","imponibile":19.66,"imposta":4.33,"totale":23.99},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 1/24","data":"2024-07-23","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":100.0,"imposta":22.0,"totale":122.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 2/24","data":"2024-07-29","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":1486.0,"imposta":154.0,"totale":1640.0},{"tipo":"passiva","tipodoc":"TD01","numero":"153/FATT","data":"2024-08-01","controparte":"RISTORANTE ZUSHIMI","imponibile":23.55,"imposta":2.35,"totale":25.9},{"tipo":"passiva","tipodoc":"TD01","numero":"M023888429","data":"2024-08-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"passiva","tipodoc":"TD01","numero":"620001406339","data":"2024-08-01","controparte":"V.E.R.I.T.A.S. SPA","imponibile":56.74,"imposta":5.44,"totale":62.18},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 3/24","data":"2024-08-05","controparte":"FORMASICUREZZA SRL","imponibile":60.0,"imposta":13.2,"totale":73.2},{"tipo":"passiva","tipodoc":"TD01","numero":"422400512497","data":"2024-08-08","controparte":"Illumia S.p.A","imponibile":18.67,"imposta":4.11,"totale":22.78},{"tipo":"passiva","tipodoc":"TD01","numero":"165/FATT","data":"2024-08-11","controparte":"RISTORANTE ZUSHIMI","imponibile":34.36,"imposta":3.44,"totale":37.8},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 4/24","data":"2024-08-12","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":992.0,"imposta":88.0,"totale":1080.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M029121145","data":"2024-09-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 5/24","data":"2024-09-06","controparte":"FORMASICUREZZA SRL","imponibile":240.0,"imposta":52.8,"totale":292.8},{"tipo":"passiva","tipodoc":"TD01","numero":"422400598669","data":"2024-09-09","controparte":"Illumia S.p.A","imponibile":19.18,"imposta":4.22,"totale":23.4},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 6/24","data":"2024-09-16","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":2606.0,"imposta":220.0,"totale":2826.0},{"tipo":"passiva","tipodoc":"TD01","numero":"193/FATT","data":"2024-09-21","controparte":"RISTORANTE ZUSHIMI","imponibile":45.0,"imposta":4.5,"totale":49.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 7/24","data":"2024-10-01","controparte":"FORMASICUREZZA SRL","imponibile":70.0,"imposta":15.4,"totale":85.4},{"tipo":"passiva","tipodoc":"TD01","numero":"M031669780","data":"2024-10-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"passiva","tipodoc":"TD01","numero":"206/FATT","data":"2024-10-06","controparte":"RISTORANTE ZUSHIMI","imponibile":22.73,"imposta":2.27,"totale":25.0},{"tipo":"passiva","tipodoc":"TD04","numero":"620001416915","data":"2024-10-07","controparte":"V.E.R.I.T.A.S. SPA","imponibile":-30.31,"imposta":1.25,"totale":-29.06},{"tipo":"passiva","tipodoc":"TD01","numero":"422400690849","data":"2024-10-09","controparte":"Illumia S.p.A","imponibile":23.83,"imposta":5.24,"totale":29.07},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 8/24","data":"2024-10-11","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":2586.4,"imposta":149.6,"totale":2736.0},{"tipo":"passiva","tipodoc":"TD01","numero":"220/FATT","data":"2024-10-16","controparte":"RISTORANTE ZUSHIMI","imponibile":31.36,"imposta":3.14,"totale":34.5},{"tipo":"passiva","tipodoc":"TD01","numero":"212/47-27623","data":"2024-10-20","controparte":"FOOD GARAGE S.R.L.S.","imponibile":29.55,"imposta":2.95,"totale":32.5},{"tipo":"passiva","tipodoc":"TD24","numero":"517 /CD 2024","data":"2024-10-31","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":72.95,"imposta":16.05,"totale":89.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M033877954","data":"2024-11-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 10/24","data":"2024-11-01","controparte":"FORMASICUREZZA SRL","imponibile":1630.0,"imposta":358.6,"totale":1988.6},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 9/24","data":"2024-11-01","controparte":"FORMASICUREZZA SRL","imponibile":440.0,"imposta":96.8,"totale":536.8},{"tipo":"passiva","tipodoc":"TD01","numero":"422400772795","data":"2024-11-08","controparte":"Illumia S.p.A","imponibile":50.63,"imposta":11.14,"totale":61.77},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 11/24","data":"2024-11-12","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":2490.6,"imposta":103.4,"totale":2594.0},{"tipo":"passiva","tipodoc":"TD24","numero":"569 /CD 2024","data":"2024-11-30","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":163.93,"imposta":36.07,"totale":200.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 12/24","data":"2024-12-01","controparte":"FORMASICUREZZA SRL","imponibile":330.0,"imposta":72.6,"totale":402.6},{"tipo":"passiva","tipodoc":"TD01","numero":"M036243101","data":"2024-12-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"passiva","tipodoc":"TD01","numero":"257/FATT","data":"2024-12-05","controparte":"RISTORANTE ZUSHIMI","imponibile":35.91,"imposta":3.59,"totale":39.5},{"tipo":"passiva","tipodoc":"TD01","numero":"422400820263","data":"2024-12-09","controparte":"Illumia S.p.A","imponibile":144.54,"imposta":31.8,"totale":176.34},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 13/24","data":"2024-12-10","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":2493.0,"imposta":77.0,"totale":2570.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1000243008354558","data":"2024-12-12","controparte":"ARUBA SPA","imponibile":29.9,"imposta":6.58,"totale":36.48},{"tipo":"passiva","tipodoc":"TD24","numero":"2392/00","data":"2024-12-20","controparte":"SAMBIN S.r.l.","imponibile":195.0,"imposta":0.0,"totale":195.0},{"tipo":"passiva","tipodoc":"TD24","numero":"636 /CD 2024","data":"2024-12-31","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":188.52,"imposta":41.48,"totale":230.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M000077207","data":"2025-01-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 1/25","data":"2025-01-01","controparte":"FORMASICUREZZA SRL","imponibile":220.0,"imposta":48.4,"totale":268.4},{"tipo":"passiva","tipodoc":"TD01","numero":"83-2025","data":"2025-01-06","controparte":"EuroImport Srl","imponibile":238.82,"imposta":52.54,"totale":291.36},{"tipo":"passiva","tipodoc":"TD01","numero":"422500031471","data":"2025-01-09","controparte":"Illumia S.p.A","imponibile":198.1,"imposta":43.58,"totale":241.68},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 2/25","data":"2025-01-10","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":3014.4,"imposta":61.6,"totale":3076.0},{"tipo":"passiva","tipodoc":"TD01","numero":"15/FATT","data":"2025-01-17","controparte":"RISTORANTE ZUSHIMI","imponibile":33.64,"imposta":3.36,"totale":37.0},{"tipo":"passiva","tipodoc":"TD01","numero":"G9  000001161","data":"2025-01-18","controparte":"Unicomm S.r.l.","imponibile":39.43,"imposta":7.54,"totale":46.97},{"tipo":"passiva","tipodoc":"TD01","numero":"2","data":"2025-01-31","controparte":"SARTORI DOMINGA","imponibile":30.0,"imposta":6.6,"totale":36.6},{"tipo":"passiva","tipodoc":"TD24","numero":"21 /CD 2025","data":"2025-01-31","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":319.67,"imposta":70.33,"totale":390.0},{"tipo":"passiva","tipodoc":"TD24","numero":"25/51/00063","data":"2025-01-31","controparte":"IL GOMMISTA DI SARTO ANDREA E TANIA &amp; C SNC","imponibile":65.57,"imposta":14.43,"totale":80.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 4/25","data":"2025-02-01","controparte":"FORMASICUREZZA SRL","imponibile":865.0,"imposta":190.3,"totale":1055.3},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 3/25","data":"2025-02-01","controparte":"FORMASICUREZZA SRL","imponibile":140.0,"imposta":30.8,"totale":170.8},{"tipo":"passiva","tipodoc":"TD01","numero":"M005824648","data":"2025-02-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"passiva","tipodoc":"TD01","numero":"422500080922","data":"2025-02-07","controparte":"Illumia S.p.A","imponibile":154.96,"imposta":34.09,"totale":189.05},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 5/25","data":"2025-02-11","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":2945.0,"imposta":55.0,"totale":3000.0},{"tipo":"passiva","tipodoc":"TD24","numero":"81 /CD 2025","data":"2025-02-28","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":278.69,"imposta":61.31,"totale":340.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M008028634","data":"2025-03-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 6/25","data":"2025-03-01","controparte":"FORMASICUREZZA SRL","imponibile":150.0,"imposta":33.0,"totale":183.0},{"tipo":"passiva","tipodoc":"TD01","numero":"G9  000004371","data":"2025-03-05","controparte":"Unicomm S.r.l.","imponibile":13.44,"imposta":2.96,"totale":16.4},{"tipo":"passiva","tipodoc":"TD01","numero":"422500194237","data":"2025-03-07","controparte":"Illumia S.p.A","imponibile":167.14,"imposta":36.77,"totale":203.91},{"tipo":"passiva","tipodoc":"TD01","numero":"11","data":"2025-03-09","controparte":"SARTORI DOMINGA","imponibile":22.13,"imposta":4.87,"totale":27.0},{"tipo":"passiva","tipodoc":"TD01","numero":"10","data":"2025-03-09","controparte":"SARTORI DOMINGA","imponibile":45.45,"imposta":4.55,"totale":50.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 7/25","data":"2025-03-14","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":3052.5,"imposta":33.0,"totale":3085.5},{"tipo":"passiva","tipodoc":"TD01","numero":"77/FATT","data":"2025-03-27","controparte":"RISTORANTE ZUSHIMI","imponibile":7.27,"imposta":0.73,"totale":8.0},{"tipo":"passiva","tipodoc":"TD01","numero":"890-2025/M","data":"2025-03-27","controparte":"FORMASICUREZZA SRL","imponibile":75.0,"imposta":16.5,"totale":91.5},{"tipo":"passiva","tipodoc":"TD01","numero":"891-2025/M","data":"2025-03-27","controparte":"FORMASICUREZZA SRL","imponibile":105.0,"imposta":23.1,"totale":128.1},{"tipo":"passiva","tipodoc":"TD01","numero":"894-2025/M","data":"2025-03-27","controparte":"FORMASICUREZZA SRL","imponibile":100.0,"imposta":22.0,"totale":122.0},{"tipo":"passiva","tipodoc":"TD24","numero":"137 /CD 2025","data":"2025-03-31","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":311.47,"imposta":68.53,"totale":380.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M011891947","data":"2025-04-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 8/25","data":"2025-04-01","controparte":"FORMASICUREZZA SRL","imponibile":205.0,"imposta":45.1,"totale":250.1},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 9/25","data":"2025-04-01","controparte":"FORMASICUREZZA SRL","imponibile":1525.0,"imposta":335.5,"totale":1860.5},{"tipo":"passiva","tipodoc":"TD01","numero":"422500262121","data":"2025-04-08","controparte":"Illumia S.p.A","imponibile":100.81,"imposta":22.18,"totale":122.99},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 10/25","data":"2025-04-10","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":3078.5,"imposta":11.0,"totale":3089.5},{"tipo":"passiva","tipodoc":"TD01","numero":"1078-2025/M","data":"2025-04-15","controparte":"FORMASICUREZZA SRL","imponibile":155.0,"imposta":34.1,"totale":189.1},{"tipo":"passiva","tipodoc":"TD24","numero":"203 /CD 2025","data":"2025-04-30","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":319.67,"imposta":70.33,"totale":390.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M016409858","data":"2025-05-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 11/25","data":"2025-05-01","controparte":"FORMASICUREZZA SRL","imponibile":400.0,"imposta":0.0,"totale":400.0},{"tipo":"passiva","tipodoc":"TD01","numero":"422500320442","data":"2025-05-08","controparte":"Illumia S.p.A","imponibile":33.83,"imposta":7.44,"totale":41.27},{"tipo":"passiva","tipodoc":"TD01","numero":"132/FATT","data":"2025-05-10","controparte":"RISTORANTE ZUSHIMI","imponibile":7.27,"imposta":0.73,"totale":8.0},{"tipo":"passiva","tipodoc":"TD01","numero":"134/FATT","data":"2025-05-10","controparte":"RISTORANTE ZUSHIMI","imponibile":12.73,"imposta":1.27,"totale":14.0},{"tipo":"passiva","tipodoc":"TD01","numero":"137/FATT","data":"2025-05-11","controparte":"RISTORANTE ZUSHIMI","imponibile":22.27,"imposta":2.23,"totale":24.5},{"tipo":"passiva","tipodoc":"TD01","numero":"136/FATT","data":"2025-05-11","controparte":"RISTORANTE ZUSHIMI","imponibile":17.27,"imposta":1.73,"totale":19.0},{"tipo":"passiva","tipodoc":"TD01","numero":"135/FATT","data":"2025-05-11","controparte":"RISTORANTE ZUSHIMI","imponibile":11.82,"imposta":1.18,"totale":13.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 12/25","data":"2025-05-15","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":3078.5,"imposta":11.0,"totale":3089.5},{"tipo":"passiva","tipodoc":"TD01","numero":"504","data":"2025-05-16","controparte":"AL DA S.R.L.S.","imponibile":74.27,"imposta":7.43,"totale":81.7},{"tipo":"passiva","tipodoc":"TD01","numero":"141/FATT","data":"2025-05-17","controparte":"RISTORANTE ZUSHIMI","imponibile":14.55,"imposta":1.45,"totale":16.0},{"tipo":"passiva","tipodoc":"TD01","numero":"142/FATT","data":"2025-05-17","controparte":"RISTORANTE ZUSHIMI","imponibile":14.55,"imposta":1.45,"totale":16.0},{"tipo":"passiva","tipodoc":"TD01","numero":"145/FATT","data":"2025-05-18","controparte":"RISTORANTE ZUSHIMI","imponibile":14.55,"imposta":1.45,"totale":16.0},{"tipo":"passiva","tipodoc":"TD01","numero":"143/FATT","data":"2025-05-18","controparte":"RISTORANTE ZUSHIMI","imponibile":14.55,"imposta":1.45,"totale":16.0},{"tipo":"passiva","tipodoc":"TD01","numero":"146/FATT","data":"2025-05-20","controparte":"RISTORANTE ZUSHIMI","imponibile":13.64,"imposta":1.36,"totale":15.0},{"tipo":"passiva","tipodoc":"TD01","numero":"148/FATT","data":"2025-05-21","controparte":"RISTORANTE ZUSHIMI","imponibile":15.45,"imposta":1.55,"totale":17.0},{"tipo":"passiva","tipodoc":"TD01","numero":"152/FATT","data":"2025-05-23","controparte":"RISTORANTE ZUSHIMI","imponibile":13.64,"imposta":1.36,"totale":15.0},{"tipo":"passiva","tipodoc":"TD01","numero":"154/FATT","data":"2025-05-24","controparte":"RISTORANTE ZUSHIMI","imponibile":13.64,"imposta":1.36,"totale":15.0},{"tipo":"passiva","tipodoc":"TD01","numero":"155/FATT","data":"2025-05-25","controparte":"RISTORANTE ZUSHIMI","imponibile":11.82,"imposta":1.18,"totale":13.0},{"tipo":"passiva","tipodoc":"TD01","numero":"156/FATT","data":"2025-05-25","controparte":"RISTORANTE ZUSHIMI","imponibile":18.64,"imposta":1.86,"totale":20.5},{"tipo":"passiva","tipodoc":"TD01","numero":"157/FATT","data":"2025-05-27","controparte":"RISTORANTE ZUSHIMI","imponibile":10.91,"imposta":1.09,"totale":12.0},{"tipo":"passiva","tipodoc":"TD01","numero":"158/FATT","data":"2025-05-27","controparte":"RISTORANTE ZUSHIMI","imponibile":20.91,"imposta":2.09,"totale":23.0},{"tipo":"passiva","tipodoc":"TD01","numero":"159/FATT","data":"2025-05-28","controparte":"RISTORANTE ZUSHIMI","imponibile":6.36,"imposta":0.64,"totale":7.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1488-2025/M","data":"2025-05-30","controparte":"FORMASICUREZZA SRL","imponibile":115.0,"imposta":25.3,"totale":140.3},{"tipo":"passiva","tipodoc":"TD01","numero":"1489-2025/M","data":"2025-05-30","controparte":"FORMASICUREZZA SRL","imponibile":115.0,"imposta":25.3,"totale":140.3},{"tipo":"passiva","tipodoc":"TD01","numero":"1491-2025/M","data":"2025-05-31","controparte":"FORMASICUREZZA SRL","imponibile":125.0,"imposta":27.5,"totale":152.5},{"tipo":"passiva","tipodoc":"TD24","numero":"258 /CD 2025","data":"2025-05-31","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":204.92,"imposta":45.08,"totale":250.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 13/25","data":"2025-05-31","controparte":"2T SCAVI S.R.L.","imponibile":679.72,"imposta":11.0,"totale":690.72},{"tipo":"passiva","tipodoc":"TD01","numero":"1492-2025/M","data":"2025-05-31","controparte":"FORMASICUREZZA SRL","imponibile":125.0,"imposta":27.5,"totale":152.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 14/25","data":"2025-06-01","controparte":"FORMASICUREZZA SRL","imponibile":335.0,"imposta":0.0,"totale":335.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M017641996","data":"2025-06-01","controparte":"FASTWEB SpA","imponibile":39.7,"imposta":8.74,"totale":48.44},{"tipo":"passiva","tipodoc":"TD01","numero":"422500453869","data":"2025-06-10","controparte":"Illumia S.p.A","imponibile":25.05,"imposta":5.51,"totale":30.56},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 15/25","data":"2025-06-12","controparte":"DELTA LAVORI S.R.L.","imponibile":3048.5,"imposta":11.0,"totale":3059.5},{"tipo":"passiva","tipodoc":"TD01","numero":"497-FE","data":"2025-06-24","controparte":"Agenzia formativa vitruviana srl","imponibile":4615.38,"imposta":184.62,"totale":4800.0},{"tipo":"passiva","tipodoc":"TD24","numero":"319 /CD 2025","data":"2025-06-30","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":122.95,"imposta":27.05,"totale":150.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 16/25","data":"2025-07-01","controparte":"FORMASICUREZZA SRL","imponibile":120.0,"imposta":0.0,"totale":120.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M022754924","data":"2025-07-01","controparte":"FASTWEB SpA","imponibile":43.2,"imposta":9.51,"totale":52.71},{"tipo":"passiva","tipodoc":"TD01","numero":"422500460421","data":"2025-07-10","controparte":"Illumia S.p.A","imponibile":21.32,"imposta":4.69,"totale":26.01},{"tipo":"passiva","tipodoc":"TD01","numero":"194/FATT","data":"2025-07-10","controparte":"RISTORANTE ZUSHIMI","imponibile":324.09,"imposta":32.41,"totale":356.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 17/25","data":"2025-07-15","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":1753.45,"imposta":6.16,"totale":1759.61},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 18/25","data":"2025-07-15","controparte":"DELTA LAVORI S.R.L.","imponibile":1848.5,"imposta":11.0,"totale":1859.5},{"tipo":"passiva","tipodoc":"TD01","numero":"FPR 1189/25","data":"2025-07-17","controparte":"Officina Rosestolato di Rosestolato Andrea","imponibile":66.21,"imposta":12.09,"totale":78.3},{"tipo":"passiva","tipodoc":"TD01","numero":"210/FATT","data":"2025-07-26","controparte":"RISTORANTE ZUSHIMI","imponibile":20.0,"imposta":2.0,"totale":22.0},{"tipo":"passiva","tipodoc":"TD01","numero":"214/FATT","data":"2025-07-30","controparte":"RISTORANTE ZUSHIMI","imponibile":12.73,"imposta":1.27,"totale":14.0},{"tipo":"passiva","tipodoc":"TD01","numero":"00125002278","data":"2025-07-31","controparte":"Bar - Ristorante Adriatica","imponibile":44.55,"imposta":4.45,"totale":49.0},{"tipo":"passiva","tipodoc":"TD24","numero":"384 /CD 2025","data":"2025-07-31","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":93.44,"imposta":20.56,"totale":114.0},{"tipo":"passiva","tipodoc":"TD01","numero":"125106","data":"2025-08-01","controparte":"GEOWEB S.p.A.","imponibile":19.19,"imposta":1.56,"totale":20.75},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 19/25","data":"2025-08-01","controparte":"FORMASICUREZZA SRL","imponibile":430.0,"imposta":0.0,"totale":430.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M026034276","data":"2025-08-01","controparte":"FASTWEB SpA","imponibile":42.2,"imposta":9.29,"totale":51.49},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 21/25","data":"2025-08-07","controparte":"DELTA LAVORI S.R.L.","imponibile":1908.5,"imposta":11.0,"totale":1919.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 20/25","data":"2025-08-07","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":1813.34,"imposta":6.16,"totale":1819.5},{"tipo":"passiva","tipodoc":"TD01","numero":"422500568013","data":"2025-08-08","controparte":"Illumia S.p.A","imponibile":18.26,"imposta":4.02,"totale":22.28},{"tipo":"passiva","tipodoc":"TD01","numero":"2100-2025/M","data":"2025-08-25","controparte":"FORMASICUREZZA SRL","imponibile":180.0,"imposta":39.6,"totale":219.6},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 22/25","data":"2025-08-26","controparte":"2T SCAVI S.R.L.","imponibile":164.12,"imposta":2.2,"totale":166.32},{"tipo":"passiva","tipodoc":"TD01","numero":"2109-2025/M","data":"2025-08-26","controparte":"FORMASICUREZZA SRL","imponibile":85.0,"imposta":18.7,"totale":103.7},{"tipo":"passiva","tipodoc":"TD24","numero":"447 /CD 2025","data":"2025-08-30","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":127.05,"imposta":27.95,"totale":155.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M028212522","data":"2025-09-01","controparte":"FASTWEB SpA","imponibile":42.7,"imposta":9.4,"totale":52.1},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 23/25","data":"2025-09-01","controparte":"FORMASICUREZZA SRL","imponibile":341.6,"imposta":0.0,"totale":341.6},{"tipo":"passiva","tipodoc":"TD01","numero":"2177-2025/M","data":"2025-09-04","controparte":"FORMASICUREZZA SRL","imponibile":125.0,"imposta":27.5,"totale":152.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 24/25","data":"2025-09-04","controparte":"2T SCAVI S.R.L.","imponibile":213.8,"imposta":2.2,"totale":216.0},{"tipo":"passiva","tipodoc":"TD01","numero":"249/FATT","data":"2025-09-05","controparte":"RISTORANTE ZUSHIMI","imponibile":408.64,"imposta":40.86,"totale":449.5},{"tipo":"passiva","tipodoc":"TD01","numero":"422500650377","data":"2025-09-09","controparte":"Illumia S.p.A","imponibile":22.04,"imposta":4.85,"totale":26.89},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 25/25","data":"2025-09-09","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":1702.2,"imposta":8.8,"totale":1711.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 26/25","data":"2025-09-11","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":1324.2,"imposta":8.8,"totale":1333.0},{"tipo":"passiva","tipodoc":"TD01","numero":"256/FATT","data":"2025-09-11","controparte":"RISTORANTE ZUSHIMI","imponibile":70.64,"imposta":7.06,"totale":77.7},{"tipo":"passiva","tipodoc":"TD01","numero":"259/FATT","data":"2025-09-13","controparte":"RISTORANTE ZUSHIMI","imponibile":44.55,"imposta":4.45,"totale":49.0},{"tipo":"passiva","tipodoc":"TD01","numero":"264/FATT","data":"2025-09-17","controparte":"RISTORANTE ZUSHIMI","imponibile":18.18,"imposta":1.82,"totale":20.0},{"tipo":"passiva","tipodoc":"TD24","numero":"505 /CD 2025","data":"2025-09-30","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":251.23,"imposta":55.27,"totale":306.5},{"tipo":"passiva","tipodoc":"TD01","numero":"M033999293","data":"2025-10-01","controparte":"FASTWEB SpA","imponibile":42.7,"imposta":9.4,"totale":52.1},{"tipo":"passiva","tipodoc":"TD01","numero":"281/FATT","data":"2025-10-01","controparte":"RISTORANTE ZUSHIMI","imponibile":250.91,"imposta":25.09,"totale":276.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 27/25","data":"2025-10-01","controparte":"FORMASICUREZZA SRL","imponibile":450.0,"imposta":0.0,"totale":450.0},{"tipo":"passiva","tipodoc":"TD01","numero":"664","data":"2025-10-04","controparte":"RISTORANTE DAI VALLIGIANI ALLE VALLI SRL","imponibile":30.0,"imposta":3.0,"totale":33.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1333","data":"2025-10-05","controparte":"GRUPPO TESSARIN S.R.L.","imponibile":16.36,"imposta":1.64,"totale":18.0},{"tipo":"passiva","tipodoc":"TD01","numero":"422500732347","data":"2025-10-10","controparte":"Illumia S.p.A","imponibile":24.85,"imposta":5.47,"totale":30.32},{"tipo":"passiva","tipodoc":"TD01","numero":"667","data":"2025-10-10","controparte":"RISTORANTE DAI VALLIGIANI ALLE VALLI SRL","imponibile":36.36,"imposta":3.64,"totale":40.0},{"tipo":"passiva","tipodoc":"TD01","numero":"0499332691","data":"2025-10-12","controparte":"LaFeltrinelli Internet Bookshop S.r.l.","imponibile":40.86,"imposta":0.0,"totale":40.86},{"tipo":"passiva","tipodoc":"TD01","numero":"190","data":"2025-10-12","controparte":"LA DONADA SNC","imponibile":12.73,"imposta":1.27,"totale":14.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 28/25","data":"2025-10-13","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":3225.2,"imposta":8.8,"totale":3234.0},{"tipo":"passiva","tipodoc":"TD01","numero":"0499334658","data":"2025-10-13","controparte":"LaFeltrinelli Internet Bookshop S.r.l.","imponibile":143.82,"imposta":0.0,"totale":143.82},{"tipo":"passiva","tipodoc":"TD01","numero":"195","data":"2025-10-16","controparte":"LA DONADA SNC","imponibile":69.09,"imposta":6.91,"totale":76.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1378","data":"2025-10-17","controparte":"GAZZETTA SAS HOSTARIA IL PAIOLO","imponibile":40.45,"imposta":4.05,"totale":44.5},{"tipo":"passiva","tipodoc":"TD01","numero":"16/001","data":"2025-10-18","controparte":"ILEANA AGNANI","imponibile":136.36,"imposta":13.64,"totale":150.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1073","data":"2025-10-19","controparte":"AL DA S.R.L.S.","imponibile":27.73,"imposta":2.77,"totale":30.5},{"tipo":"passiva","tipodoc":"TD01","numero":"2550-2025/M","data":"2025-10-22","controparte":"FORMASICUREZZA SRL","imponibile":125.0,"imposta":27.5,"totale":152.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 29/25","data":"2025-10-22","controparte":"2T SCAVI S.R.L.","imponibile":237.8,"imposta":2.2,"totale":240.0},{"tipo":"passiva","tipodoc":"TD01","numero":"55Oasi Val Pisani","data":"2025-10-25","controparte":"TT &amp; C S.R.L.","imponibile":29.09,"imposta":2.91,"totale":32.0},{"tipo":"passiva","tipodoc":"TD01","numero":"58Oasi Val Pisani","data":"2025-10-26","controparte":"TT &amp; C S.R.L.","imponibile":83.64,"imposta":8.36,"totale":92.0},{"tipo":"passiva","tipodoc":"TD01","numero":"698","data":"2025-10-26","controparte":"RISTORANTE DAI VALLIGIANI ALLE VALLI SRL","imponibile":66.36,"imposta":6.64,"totale":73.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 30/25","data":"2025-10-28","controparte":"DELTA LAVORI S.R.L.","imponibile":526.4,"imposta":2.2,"totale":528.6},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 31/25","data":"2025-10-28","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":1429.7,"imposta":6.6,"totale":1436.3},{"tipo":"passiva","tipodoc":"TD01","numero":"315/FATT","data":"2025-10-29","controparte":"RISTORANTE ZUSHIMI","imponibile":17.27,"imposta":1.73,"totale":19.0},{"tipo":"passiva","tipodoc":"TD24","numero":"564 /CD 2025","data":"2025-10-31","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":491.8,"imposta":108.2,"totale":600.0},{"tipo":"passiva","tipodoc":"TD01","numero":"59Oasi Val Pisani","data":"2025-10-31","controparte":"TT &amp; C S.R.L.","imponibile":123.64,"imposta":12.36,"totale":136.0},{"tipo":"passiva","tipodoc":"TD24","numero":"1467","data":"2025-10-31","controparte":"GAZZETTA SAS HOSTARIA IL PAIOLO","imponibile":95.45,"imposta":9.55,"totale":105.0},{"tipo":"passiva","tipodoc":"TD01","numero":"M036044648","data":"2025-11-01","controparte":"FASTWEB SpA","imponibile":42.7,"imposta":9.4,"totale":52.1},{"tipo":"passiva","tipodoc":"TD01","numero":"17/001","data":"2025-11-01","controparte":"ILEANA AGNANI","imponibile":46.82,"imposta":4.68,"totale":51.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 32/25","data":"2025-11-02","controparte":"FORMASICUREZZA SRL","imponibile":60.0,"imposta":0.0,"totale":60.0},{"tipo":"passiva","tipodoc":"TD01","numero":"2645-2025/M","data":"2025-11-02","controparte":"FORMASICUREZZA SRL","imponibile":115.0,"imposta":25.3,"totale":140.3},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 33/25","data":"2025-11-02","controparte":"SAURO E THOMAS S.N.C. DI VIVIAN SAURO E C.","imponibile":273.36,"imposta":2.64,"totale":276.0},{"tipo":"passiva","tipodoc":"TD01","numero":"2667-2025/M","data":"2025-11-04","controparte":"FORMASICUREZZA SRL","imponibile":125.0,"imposta":27.5,"totale":152.5},{"tipo":"passiva","tipodoc":"TD01","numero":"323/FATT","data":"2025-11-06","controparte":"RISTORANTE ZUSHIMI","imponibile":283.45,"imposta":28.35,"totale":311.8},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 34/25","data":"2025-11-06","controparte":"ALLAM ABDELLATIF","imponibile":142.36,"imposta":2.64,"totale":145.0},{"tipo":"passiva","tipodoc":"TD01","numero":"422500747641","data":"2025-11-07","controparte":"Illumia S.p.A","imponibile":53.93,"imposta":11.86,"totale":65.79},{"tipo":"passiva","tipodoc":"TD01","numero":"1549","data":"2025-11-10","controparte":"GAZZETTA SAS HOSTARIA IL PAIOLO","imponibile":14.09,"imposta":1.41,"totale":15.5},{"tipo":"passiva","tipodoc":"TD01","numero":"20","data":"2025-11-14","controparte":"CAPOLINEA 309 di ALBERTIN STEFANO","imponibile":6.36,"imposta":0.64,"totale":7.0},{"tipo":"passiva","tipodoc":"TD01","numero":"758","data":"2025-11-17","controparte":"RISTORANTE DAI VALLIGIANI ALLE VALLI SRL","imponibile":15.0,"imposta":1.5,"totale":16.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 35/25","data":"2025-11-17","controparte":"SUNRISE RENT SCAVI S.R.L.","imponibile":3229.6,"imposta":4.4,"totale":3234.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 36/25","data":"2025-11-17","controparte":"BONAFIN FRANCESCO","imponibile":634.6,"imposta":1.1,"totale":635.7},{"tipo":"passiva","tipodoc":"TD01","numero":"2758-2025/M","data":"2025-11-18","controparte":"FORMASICUREZZA SRL","imponibile":180.0,"imposta":39.6,"totale":219.6},{"tipo":"passiva","tipodoc":"TD01","numero":"1444/A","data":"2025-11-19","controparte":"LA GENTILE S.R.L.","imponibile":983.61,"imposta":216.39,"totale":1200.0},{"tipo":"passiva","tipodoc":"TD01","numero":"178690","data":"2025-11-22","controparte":"GEOWEB S.p.A.","imponibile":89.56,"imposta":5.27,"totale":94.83},{"tipo":"passiva","tipodoc":"TD01","numero":"88/E","data":"2025-11-28","controparte":"LUCIANO MOREGOLA","imponibile":225.0,"imposta":49.5,"totale":274.5},{"tipo":"passiva","tipodoc":"TD24","numero":"1643","data":"2025-11-28","controparte":"GAZZETTA SAS HOSTARIA IL PAIOLO","imponibile":85.91,"imposta":8.59,"totale":94.5},{"tipo":"passiva","tipodoc":"TD24","numero":"627 /CD 2025","data":"2025-11-29","controparte":"BALLARIN LEONARDO E C. S.A.S.","imponibile":350.0,"imposta":77.0,"totale":427.0},{"tipo":"passiva","tipodoc":"TD01","numero":"2860-2025/M","data":"2025-11-29","controparte":"FORMASICUREZZA SRL","imponibile":250.0,"imposta":55.0,"totale":305.0},{"tipo":"passiva","tipodoc":"TD01","numero":"2865-2025/M","data":"2025-11-30","controparte":"FORMASICUREZZA SRL","imponibile":100.0,"imposta":22.0,"totale":122.0},{"tipo":"passiva","tipodoc":"TD01","numero":"2867-2025/M","data":"2025-11-30","controparte":"FORMASICUREZZA SRL","imponibile":155.0,"imposta":34.1,"totale":189.1},{"tipo":"passiva","tipodoc":"TD01","numero":"347/FATT","data":"2025-11-30","controparte":"RISTORANTE ZUSHIMI","imponibile":86.82,"imposta":8.68,"totale":95.5},{"tipo":"passiva","tipodoc":"TD01","numero":"2868-2025/M","data":"2025-11-30","controparte":"FORMASICUREZZA SRL","imponibile":180.0,"imposta":39.6,"totale":219.6},{"tipo":"passiva","tipodoc":"TD01","numero":"2864-2025/M","data":"2025-11-30","controparte":"FORMASICUREZZA SRL","imponibile":125.0,"imposta":27.5,"totale":152.5},{"tipo":"passiva","tipodoc":"TD01","numero":"M039602839","data":"2025-12-01","controparte":"FASTWEB SpA","imponibile":42.7,"imposta":9.4,"totale":52.1},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 37/25","data":"2025-12-01","controparte":"FORMASICUREZZA SRL","imponibile":570.0,"imposta":0.0,"totale":570.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 38/25","data":"2025-12-04","controparte":"DELTA LAVORI S.R.L.","imponibile":717.8,"imposta":2.2,"totale":720.0},{"tipo":"passiva","tipodoc":"TD01","numero":"422500825226","data":"2025-12-09","controparte":"Illumia S.p.A","imponibile":123.48,"imposta":27.17,"totale":150.65},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 39/25","data":"2025-12-11","controparte":"STUDIO TECNICO EDIL/B di Bagno Geom. Pierluigi &amp; Bezzi Geom. Gianni Carlo","imponibile":2500.0,"imposta":550.0,"totale":3050.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 39/25","data":"2025-12-11","controparte":"STUDIO TECNICO EDIL/B di Bagno Geom. Pierluigi &amp; Bezzi Geom. Gianni Carlo","imponibile":2500.0,"imposta":550.0,"totale":3050.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1000253009919842","data":"2025-12-12","controparte":"ARUBA SPA","imponibile":29.9,"imposta":6.58,"totale":36.48},{"tipo":"passiva","tipodoc":"TD01","numero":"2946-2025/M","data":"2025-12-12","controparte":"FORMASICUREZZA SRL","imponibile":155.0,"imposta":34.1,"totale":189.1},{"tipo":"passiva","tipodoc":"TD01","numero":"2945-2025/M","data":"2025-12-12","controparte":"FORMASICUREZZA SRL","imponibile":180.0,"imposta":39.6,"totale":219.6},{"tipo":"passiva","tipodoc":"TD06","numero":"501/2025","data":"2025-12-13","controparte":"Youssef Ben Aida","imponibile":197.0,"imposta":0.0,"totale":197.0},{"tipo":"passiva","tipodoc":"TD01","numero":"15","data":"2025-12-15","controparte":"OTTICA FINOTTI SANDRA","imponibile":211.54,"imposta":8.46,"totale":220.0},{"tipo":"passiva","tipodoc":"TD01","numero":"30/C","data":"2025-12-16","controparte":"BARBARA GREGHI","imponibile":49.97,"imposta":0.43,"totale":50.4},{"tipo":"attiva","tipodoc":"TD04","numero":"FPR 41/25","data":"2025-12-19","controparte":"DELTA LAVORI S.R.L.","imponibile":-526.4,"imposta":-2.2,"totale":-528.6},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 40/25","data":"2025-12-19","controparte":"LAZZARIN COSTRUZIONI S.R.L.","imponibile":815.2,"imposta":2.2,"totale":817.4},{"tipo":"passiva","tipodoc":"TD01","numero":"3000-2025/M","data":"2025-12-22","controparte":"FORMASICUREZZA SRL","imponibile":250.0,"imposta":55.0,"totale":305.0},{"tipo":"passiva","tipodoc":"TD01","numero":"2999-2025/M","data":"2025-12-22","controparte":"FORMASICUREZZA SRL","imponibile":100.0,"imposta":22.0,"totale":122.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 42/25","data":"2025-12-23","controparte":"DELTA LAVORI S.R.L.","imponibile":526.4,"imposta":2.2,"totale":528.6},{"tipo":"passiva","tipodoc":"TD01","numero":"M000079262","data":"2026-01-01","controparte":"FASTWEB SpA","imponibile":-45.13,"imposta":12.08,"totale":-33.05},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 1/26","data":"2026-01-01","controparte":"FORMASICUREZZA SRL","imponibile":500.0,"imposta":0.0,"totale":500.0},{"tipo":"passiva","tipodoc":"TD01","numero":"9-2026/M","data":"2026-01-02","controparte":"FORMASICUREZZA SRL","imponibile":250.0,"imposta":55.0,"totale":305.0},{"tipo":"passiva","tipodoc":"TD01","numero":"10-2026/M","data":"2026-01-02","controparte":"FORMASICUREZZA SRL","imponibile":100.0,"imposta":22.0,"totale":122.0},{"tipo":"passiva","tipodoc":"TD17","numero":"AF01 1/26","data":"2026-01-06","controparte":"UNDECIM LTD","imponibile":46.5,"imposta":10.23,"totale":56.73},{"tipo":"attiva","tipodoc":"TD04","numero":"FPR 2/26","data":"2026-01-09","controparte":"SAURO E THOMAS S.N.C. DI VIVIAN SAURO E C.","imponibile":273.36,"imposta":2.64,"totale":276.0},{"tipo":"passiva","tipodoc":"TD01","numero":"422600006009","data":"2026-01-09","controparte":"Illumia S.p.A","imponibile":170.25,"imposta":37.46,"totale":207.71},{"tipo":"attiva","tipodoc":"TD04","numero":"FPR 3/26","data":"2026-01-09","controparte":"BONAFIN FRANCESCO","imponibile":634.6,"imposta":1.1,"totale":635.7},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 6/26","data":"2026-01-09","controparte":"BONAFIN FRANCESCO","imponibile":634.6,"imposta":1.1,"totale":635.7},{"tipo":"attiva","tipodoc":"TD04","numero":"FPR 4/26","data":"2026-01-09","controparte":"LAZZARIN COSTRUZIONI S.R.L.","imponibile":815.2,"imposta":2.2,"totale":817.4},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 5/26","data":"2026-01-09","controparte":"LAZZARIN COSTRUZIONI S.R.L.","imponibile":815.2,"imposta":2.2,"totale":817.4},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 7/26","data":"2026-01-09","controparte":"SAURO E THOMAS S.N.C. DI VIVIAN SAURO E C.","imponibile":273.36,"imposta":2.64,"totale":276.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1","data":"2026-01-13","controparte":"MASTER B S.N.C. DI BONAFE' ANDREA E BONAFE' FABIO","imponibile":120.0,"imposta":26.4,"totale":146.4},{"tipo":"passiva","tipodoc":"TD01","numero":"75-2026/G","data":"2026-01-13","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":25.0,"imposta":5.5,"totale":30.5},{"tipo":"passiva","tipodoc":"TD01","numero":"10","data":"2026-01-14","controparte":"Hexagon snc di Carli Samuele &amp; C","imponibile":150.0,"imposta":33.0,"totale":183.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 8/26","data":"2026-01-16","controparte":"MUSSATI CHRISTIAN","imponibile":274.26,"imposta":27.9,"totale":302.16},{"tipo":"passiva","tipodoc":"TD01","numero":"175-2026/G","data":"2026-01-20","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":18.0,"imposta":3.96,"totale":21.96},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 9/26","data":"2026-01-21","controparte":"TEC S.r.l.","imponibile":746.54,"imposta":104.02,"totale":850.56},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 11/26","data":"2026-01-23","controparte":"BRESCIANI S.r.l.","imponibile":1210.78,"imposta":33.62,"totale":1244.4},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 10/26","data":"2026-01-23","controparte":"TEC S.r.l.","imponibile":282.17,"imposta":10.52,"totale":292.69},{"tipo":"passiva","tipodoc":"TD01","numero":"260-2026/G","data":"2026-01-24","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":76.0,"imposta":16.72,"totale":92.72},{"tipo":"passiva","tipodoc":"TD01","numero":"255-2026/G","data":"2026-01-24","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":52.0,"imposta":11.44,"totale":63.44},{"tipo":"passiva","tipodoc":"TD01","numero":"280-2026/G","data":"2026-01-27","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":13.0,"imposta":2.86,"totale":15.86},{"tipo":"passiva","tipodoc":"TD01","numero":"321-2026/G","data":"2026-01-29","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":36.0,"imposta":7.92,"totale":43.92},{"tipo":"passiva","tipodoc":"TD01","numero":"26/FATT","data":"2026-01-30","controparte":"RISTORANTE ZUSHIMI","imponibile":15.45,"imposta":1.55,"totale":17.0},{"tipo":"passiva","tipodoc":"TD01","numero":"8","data":"2026-01-31","controparte":"MAMI SRLS","imponibile":70.45,"imposta":7.05,"totale":77.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 12/26","data":"2026-02-01","controparte":"FORMASICUREZZA SRL","imponibile":340.0,"imposta":74.8,"totale":414.8},{"tipo":"passiva","tipodoc":"TD01","numero":"FVL96","data":"2026-02-04","controparte":"GABRY SOLUTION SRL","imponibile":478.69,"imposta":105.31,"totale":584.0},{"tipo":"passiva","tipodoc":"TD01","numero":"HS4VBLQT6-1","data":"2026-02-05","controparte":"Amazon Online Italy S.R.L.","imponibile":1.04,"imposta":0.23,"totale":1.27},{"tipo":"passiva","tipodoc":"TD01","numero":"422600097890","data":"2026-02-09","controparte":"Illumia S.p.A","imponibile":197.98,"imposta":43.56,"totale":241.54},{"tipo":"passiva","tipodoc":"TD01","numero":"HS4VBLQT6-2","data":"2026-02-14","controparte":"Amazon Online Italy S.R.L.","imponibile":10.3,"imposta":2.27,"totale":12.57},{"tipo":"passiva","tipodoc":"TD04","numero":"461-FE","data":"2026-02-16","controparte":"Agenzia formativa vitruviana srl","imponibile":-3846.15,"imposta":-153.85,"totale":-4000.0},{"tipo":"passiva","tipodoc":"TD17","numero":"AF01 2/26","data":"2026-02-22","controparte":"UNDECIM LTD","imponibile":46.5,"imposta":10.23,"totale":56.73},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 13/26","data":"2026-02-28","controparte":"Wassim Meftah","imponibile":577.0,"imposta":0.0,"totale":577.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 14/26","data":"2026-03-01","controparte":"FORMASICUREZZA SRL","imponibile":70.0,"imposta":0.0,"totale":70.0},{"tipo":"passiva","tipodoc":"TD01","numero":"925-2026/G","data":"2026-03-03","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":18.0,"imposta":3.96,"totale":21.96},{"tipo":"passiva","tipodoc":"TD01","numero":"598-2026/M","data":"2026-03-06","controparte":"FORMASICUREZZA SRL","imponibile":155.0,"imposta":34.1,"totale":189.1},{"tipo":"passiva","tipodoc":"TD01","numero":"599-2026/M","data":"2026-03-06","controparte":"FORMASICUREZZA SRL","imponibile":155.0,"imposta":34.1,"totale":189.1},{"tipo":"passiva","tipodoc":"TD01","numero":"1044-2026/G","data":"2026-03-07","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":54.0,"imposta":11.88,"totale":65.88},{"tipo":"passiva","tipodoc":"TD01","numero":"422600154509","data":"2026-03-09","controparte":"Illumia S.p.A","imponibile":146.63,"imposta":32.26,"totale":178.89},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 16/26","data":"2026-03-10","controparte":"BRESCIANI S.r.l.","imponibile":538.32,"imposta":13.68,"totale":552.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1074-2026/G","data":"2026-03-10","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":36.0,"imposta":7.92,"totale":43.92},{"tipo":"passiva","tipodoc":"TD01","numero":"626-2026/M","data":"2026-03-10","controparte":"FORMASICUREZZA SRL","imponibile":155.0,"imposta":34.1,"totale":189.1},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 15/26","data":"2026-03-10","controparte":"TEC S.r.l.","imponibile":1539.27,"imposta":17.13,"totale":1556.4},{"tipo":"passiva","tipodoc":"TD01","numero":"1069-2026/G","data":"2026-03-10","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":18.0,"imposta":3.96,"totale":21.96},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 17/26","data":"2026-03-12","controparte":"TEC S.r.l.","imponibile":546.72,"imposta":13.68,"totale":560.4},{"tipo":"passiva","tipodoc":"TD01","numero":"1129-2026/G","data":"2026-03-12","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":18.0,"imposta":3.96,"totale":21.96},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 19/26","data":"2026-03-13","controparte":"LAZZARIN PAOLO","imponibile":526.98,"imposta":13.02,"totale":540.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 18/26","data":"2026-03-13","controparte":"LAZZARIN PAOLO","imponibile":526.98,"imposta":13.02,"totale":540.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 20/26","data":"2026-03-16","controparte":"Wassim Meftah","imponibile":497.0,"imposta":0.0,"totale":497.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1220-2026/G","data":"2026-03-17","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":36.0,"imposta":7.92,"totale":43.92},{"tipo":"passiva","tipodoc":"TD04","numero":"NCV18","data":"2026-03-19","controparte":"GABRY SOLUTION SRL","imponibile":-478.69,"imposta":-105.31,"totale":-584.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 21/26","data":"2026-03-23","controparte":"GARDEN'S HOUSE DI MOSCHINI LUCA","imponibile":2097.78,"imposta":34.62,"totale":2132.4},{"tipo":"passiva","tipodoc":"TD01","numero":"1348-2026/G","data":"2026-03-24","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":25.0,"imposta":5.5,"totale":30.5},{"tipo":"passiva","tipodoc":"TD01","numero":"1349-2026/G","data":"2026-03-24","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":108.0,"imposta":23.76,"totale":131.76},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 22/26","data":"2026-03-27","controparte":"C.A.M. - Cooperativa Artisti Musicali Soc. Coop. A r.l.","imponibile":957.41,"imposta":12.62,"totale":970.03},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 24/26","data":"2026-03-27","controparte":"C.A.M. - Cooperativa Artisti Musicali Soc. Coop.","imponibile":957.41,"imposta":12.62,"totale":970.03},{"tipo":"attiva","tipodoc":"TD04","numero":"FPR 23/26","data":"2026-03-27","controparte":"C.A.M. - Cooperativa Artisti Musicali Soc. Coop. A r.l.","imponibile":955.41,"imposta":12.62,"totale":968.03},{"tipo":"passiva","tipodoc":"TD01","numero":"840-2026/M","data":"2026-03-28","controparte":"FORMASICUREZZA SRL","imponibile":115.0,"imposta":25.3,"totale":140.3},{"tipo":"passiva","tipodoc":"TD01","numero":"854-2026/M","data":"2026-03-30","controparte":"FORMASICUREZZA SRL","imponibile":150.0,"imposta":33.0,"totale":183.0},{"tipo":"passiva","tipodoc":"TD01","numero":"1/24","data":"2026-03-31","controparte":"MAMI SRLS","imponibile":50.45,"imposta":5.05,"totale":55.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 25/26","data":"2026-04-01","controparte":"FORMASICUREZZA SRL","imponibile":575.0,"imposta":126.5,"totale":701.5},{"tipo":"passiva","tipodoc":"TD01","numero":"1612-2026/G","data":"2026-04-05","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":13.0,"imposta":2.86,"totale":15.86},{"tipo":"passiva","tipodoc":"TD01","numero":"1613-2026/G","data":"2026-04-05","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":13.0,"imposta":2.86,"totale":15.86},{"tipo":"passiva","tipodoc":"TD01","numero":"1611-2026/G","data":"2026-04-05","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":13.0,"imposta":2.86,"totale":15.86},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 26/26","data":"2026-04-09","controparte":"TEC S.r.l.","imponibile":587.34,"imposta":9.06,"totale":596.4},{"tipo":"passiva","tipodoc":"TD01","numero":"422600210547","data":"2026-04-09","controparte":"Illumia S.p.A","imponibile":140.01,"imposta":30.8,"totale":170.81},{"tipo":"passiva","tipodoc":"TD01","numero":"1655-2026/G","data":"2026-04-09","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":18.0,"imposta":3.96,"totale":21.96},{"tipo":"passiva","tipodoc":"TD01","numero":"1745-2026/G","data":"2026-04-15","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":25.0,"imposta":5.5,"totale":30.5},{"tipo":"passiva","tipodoc":"TD01","numero":"1744-2026/G","data":"2026-04-15","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":25.0,"imposta":5.5,"totale":30.5},{"tipo":"passiva","tipodoc":"TD01","numero":"49","data":"2026-04-19","controparte":"LA DONADA SNC","imponibile":130.91,"imposta":13.09,"totale":144.0},{"tipo":"passiva","tipodoc":"TD01","numero":"105/FATT","data":"2026-04-22","controparte":"RISTORANTE ZUSHIMI","imponibile":3.18,"imposta":0.32,"totale":3.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 27/26","data":"2026-04-24","controparte":"BRESCIANI S.r.l.","imponibile":323.0,"imposta":7.0,"totale":330.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 28/26","data":"2026-04-24","controparte":"MUSSATI CHRISTIAN","imponibile":353.62,"imposta":5.54,"totale":359.16},{"tipo":"passiva","tipodoc":"TD01","numero":"1986-2026/G","data":"2026-04-28","controparte":"A.N.FO.S. SERVIZI SRL","imponibile":13.0,"imposta":2.86,"totale":15.86},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 29/26","data":"2026-05-06","controparte":"TEC S.r.l.","imponibile":339.54,"imposta":2.46,"totale":342.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 30/26","data":"2026-05-12","controparte":"AF2 COSTRUZIONI SRL","imponibile":215.51,"imposta":1.99,"totale":217.5},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 31/26","data":"2026-05-21","controparte":"Roma Patrick","imponibile":307.0,"imposta":0.0,"totale":307.0},{"tipo":"passiva","tipodoc":"TD01","numero":"79485","data":"2026-05-28","controparte":"GEOWEB S.p.A.","imponibile":40.88,"imposta":7.32,"totale":48.2},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 32/26","data":"2026-05-28","controparte":"RA.YAN MULTISERVICE SOCIETA' A RESPONSABILITA' LIMITATA SEMPLIFIC ATA","imponibile":466.01,"imposta":1.99,"totale":468.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 33/26","data":"2026-05-29","controparte":"RA.YAN MULTISERVICE SOCIETA' A RESPONSABILITA' LIMITATA SEMPLIFIC ATA","imponibile":154.44,"imposta":1.56,"totale":156.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 34/26","data":"2026-06-01","controparte":"FORMASICUREZZA SRL","imponibile":120.0,"imposta":26.4,"totale":146.4},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 35/26","data":"2026-06-08","controparte":"RA.YAN MULTISERVICE SOCIETA' A RESPONSABILITA' LIMITATA SEMPLIFIC ATA","imponibile":154.44,"imposta":1.56,"totale":156.0},{"tipo":"attiva","tipodoc":"TD01","numero":"FPR 36/26","data":"2026-06-11","controparte":"RA.YAN MULTISERVICE SOCIETA' A RESPONSABILITA' LIMITATA SEMPLIFIC ATA","imponibile":600.05,"imposta":3.55,"totale":603.6}]};
+const P=['#E8501A','#FB6B00','#3FBF6B','#5a9bff','#c45aff','#ffce4d','#ff5a4d','#4dd0e1','#a0a0a8','#7ed957','#ff8c2e','#b388ff','#66bb6a','#ef5350'];
+const eur=n=>'€'+Number(n||0).toLocaleString('it-IT',{minimumFractionDigits:2,maximumFractionDigits:2});
+const eur0=n=>'€'+Number(n||0).toLocaleString('it-IT',{maximumFractionDigits:0});
+let CH={};function dc(k){if(CH[k]){CH[k].destroy();delete CH[k];}}
+function op(){return{responsive:true,plugins:{legend:{labels:{color:'#6e6e7a',font:{size:10}}}},scales:{x:{ticks:{color:'#6e6e7a',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#6e6e7a',font:{size:9}},grid:{color:'#252530'}}}};}
+function opN(){return{responsive:true,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#6e6e7a',font:{size:9}},grid:{display:false}},y:{ticks:{color:'#6e6e7a',font:{size:9}},grid:{color:'#252530'}}}};}
+function opPie(){return{plugins:{legend:{position:'right',labels:{color:'#6e6e7a',font:{size:9}}}}};}
+
+function go(id,el){document.querySelectorAll('.sb .it').forEach(i=>i.classList.remove('on'));el.classList.add('on');document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));document.getElementById('s-'+id).classList.add('on');}
+
+// DATA
+const D=FATTURE_DATA;
+const ta=D.totali.attive,tp=D.totali.passive;
+const anni=D.per_anno||{},ak=Object.keys(anni).sort();
+const mesi=D.per_mese||[];
+const ebitda=ta.imponibile-tp.imponibile;
+const ivaN=ta.imposta-tp.imposta;
+const nMesi=Math.max(mesi.length,1);
+const ricM=ta.imponibile/nMesi, cosM=tp.imponibile/nMesi;
+const flM=ricM-cosM;
+const hMese=8*22; // ore lavorative mese
+const speedH=flM/hMese;
+
+// SIDEBAR EBITDA
+document.getElementById('sb-ebitda').textContent=eur0(ebitda);
+document.getElementById('sb-periodo').textContent=mesi.length+' mesi | '+ta.n+' att + '+tp.n+' pas';
+
+// CMD CENTER
+document.getElementById('k-ebitda').textContent=eur(ebitda);
+document.getElementById('k-ric').textContent=eur(ta.imponibile);
+document.getElementById('k-ricn').textContent=ta.n+' fatture attive';
+document.getElementById('k-cos').textContent=eur(tp.imponibile);
+document.getElementById('k-cosn').textContent=tp.n+' fatture passive';
+document.getElementById('k-marg').textContent=Math.round(ebitda/Math.max(ta.imponibile,1)*100)+'%';
+document.getElementById('k-iva').textContent=eur(ivaN);
+document.getElementById('k-iva').className='vl '+(ivaN>=0?'u':'e');
+document.getElementById('k-ivas').textContent=ivaN>=0?'da versare':'a credito';
+document.getElementById('k-rmm').textContent=eur(ricM);
+document.getElementById('k-rmms').textContent='su '+nMesi+' mesi';
+document.getElementById('k-speed').textContent=eur(speedH);
+document.getElementById('k-burn').textContent=eur(cosM);
+
+function mc(id,t,l,ds,o){const c=document.getElementById(id);if(!c)return;dc(id);CH[id]=new Chart(c,{type:t,data:{labels:l,datasets:ds},options:o||op()});}
+
+// Charts CMD
+mc('g-mens','bar',mesi.map(m=>m.mese),[{label:'Ricavi',data:mesi.map(m=>m.ricavi),backgroundColor:'#3FBF6B'},{label:'Costi',data:mesi.map(m=>m.costi),backgroundColor:'#ff5a4d'}]);
+const fl=mesi.map(m=>m.ricavi-m.costi);
+mc('g-flusso','bar',mesi.map(m=>m.mese),[{label:'Flusso',data:fl,backgroundColor:fl.map(v=>v>=0?'#3FBF6B':'#ff5a4d')}],opN());
+mc('g-ryear','bar',ak,[{label:'Ricavi',data:ak.map(a=>anni[a].ricavi.imponibile),backgroundColor:'#E8501A'}],opN());
+mc('g-myear','bar',ak,[{label:'EBITDA',data:ak.map(a=>anni[a].margine_lordo),backgroundColor:ak.map(a=>anni[a].margine_lordo>=0?'#3FBF6B':'#ff5a4d')}],opN());
+const yoy=ak.map((a,i)=>{if(!i)return 0;const p=anni[ak[i-1]].ricavi.imponibile;return p>0?Math.round((anni[a].ricavi.imponibile-p)/p*100):0;});
+mc('g-yoy','bar',ak,[{label:'Crescita %',data:yoy,backgroundColor:yoy.map(v=>v>=0?'#3FBF6B':'#ff5a4d')}],opN());
+
+// P&L
+let pnlH='';
+ak.forEach(a=>{const v=anni[a];const pct=Math.round(v.margine_lordo/Math.max(v.ricavi.imponibile,1)*100);
+pnlH+='<tr><td><b>'+a+'</b></td><td class="n at">'+eur(v.ricavi.imponibile)+'</td><td class="n ps">'+eur(v.costi.imponibile)+'</td><td class="n">'+eur(v.margine_lordo)+'</td><td class="n">'+pct+'%</td><td class="n o">'+eur(v.iva_dovuta)+'</td><td class="n">'+(v.ricavi.n+v.costi.n)+'</td></tr>';
+});
+document.getElementById('t-pnl').innerHTML=pnlH;
+mc('g-comp','bar',ak,[{label:'Ricavi',data:ak.map(a=>anni[a].ricavi.imponibile),backgroundColor:'#3FBF6B'},{label:'Costi',data:ak.map(a=>Math.abs(anni[a].costi.imponibile)),backgroundColor:'#ff5a4d'}]);
+// EBITDA cumulative
+let cum=0;const cumD=mesi.map(m=>{cum+=m.ricavi-m.costi;return cum;});
+mc('g-ebitda-cum','line',mesi.map(m=>m.mese),[{label:'EBITDA cumulativo',data:cumD,borderColor:'#E8501A',backgroundColor:'rgba(232,80,26,.1)',fill:true,tension:.2,pointRadius:0}]);
+
+// CASHFLOW
+document.getElementById('k-cin').textContent=eur(ta.totale);
+document.getElementById('k-cout').textContent=eur(tp.totale);
+document.getElementById('k-cnet').textContent=eur(ta.totale-tp.totale);
+let fuel=0;const fuelD=mesi.map(m=>{const tot_in=m.ricavi;const tot_out=m.costi;fuel+=tot_in-tot_out;return fuel;});
+document.getElementById('k-fuel').textContent=eur0(fuel);
+mc('g-fuel','line',mesi.map(m=>m.mese),[{label:'Fuel cumulativo',data:fuelD,borderColor:'#E8501A',backgroundColor:'rgba(232,80,26,.08)',fill:true,tension:.2,pointRadius:1}]);
+mc('g-cashbar','bar',mesi.map(m=>m.mese),[{label:'Incassato',data:mesi.map(m=>m.ricavi),backgroundColor:'#3FBF6B'},{label:'Pagato',data:mesi.map(m=>Math.abs(m.costi)),backgroundColor:'#ff5a4d'}]);
+
+// LIFESTYLE
+const cosAnno=tp.imponibile;
+const cosM2=cosAnno/nMesi;
+document.getElementById('k-lifem').textContent=eur(cosM2);
+document.getElementById('k-lifed').textContent=eur(cosM2/30);
+document.getElementById('k-lifew').textContent=eur(cosM2/4.33);
+document.getElementById('k-lifes').textContent=eur(cosM2*6);
+document.getElementById('k-lifey').textContent=eur(cosM2*12);
+const forn=D.top_fornitori||[];
+const maxF=forn.length?Math.max(...forn.map(f=>Math.abs(f.imponibile)),1):1;
+document.getElementById('life-cat').innerHTML=forn.map(f=>{
+  const v=Math.abs(f.imponibile),p=Math.round(v/maxF*100),mese=v/nMesi;
+  return '<div style="margin-bottom:7px"><div class="row-item" style="border:none;padding:2px 0"><span style="font-size:11px">'+f.nome.substring(0,32)+' <span class="bg-tag">'+f.n+'</span></span><span style="font-family:JetBrains Mono;font-size:11px">'+eur(v)+' <span style="color:#6e6e7a">'+eur0(mese)+'/m</span></span></div><div class="bar"><span style="width:'+p+'%;background:#ff5a4d"></span></div></div>';
+}).join('');
+mc('g-lifepie','doughnut',forn.slice(0,10).map(f=>f.nome.substring(0,18)),[{data:forn.slice(0,10).map(f=>Math.abs(f.imponibile)),backgroundColor:P}],opPie());
+
+// IVA
+let ivaH='';
+ak.forEach(a=>{const v=anni[a];ivaH+='<tr><td><b>'+a+'</b></td><td class="n">'+eur(v.iva_a_debito)+'</td><td class="n">'+eur(v.iva_a_credito)+'</td><td class="n o">'+eur(v.iva_dovuta)+'</td><td>'+(v.iva_dovuta>=0?'<span class="ps">da versare</span>':'<span class="at">a credito</span>')+'</td></tr>';});
+document.getElementById('t-iva').innerHTML=ivaH;
+mc('g-iva','bar',ak,[{label:'Debito',data:ak.map(a=>anni[a].iva_a_debito),backgroundColor:'#ff5a4d'},{label:'Credito',data:ak.map(a=>anni[a].iva_a_credito),backgroundColor:'#3FBF6B'},{label:'Netta',data:ak.map(a=>anni[a].iva_dovuta),backgroundColor:'#E8501A'}]);
+
+// CLIENTI
+const cli=D.top_clienti||[];
+const topCli=cli[0];
+const conc=topCli?Math.round(topCli.imponibile/Math.max(ta.imponibile,1)*100):0;
+document.getElementById('k-conc').textContent=conc+'%';
+document.getElementById('k-concn').textContent=topCli?topCli.nome.substring(0,25):'';
+document.getElementById('k-ncli').textContent=cli.length;
+document.getElementById('k-nfor').textContent=forn.length;
+document.getElementById('k-fma').textContent=eur(ta.imponibile/Math.max(ta.n,1));
+function bars(arr,col){const mx=arr.length?Math.max(...arr.map(x=>Math.abs(x.imponibile)),1):1;return arr.map(x=>{const v=Math.abs(x.imponibile),p=Math.round(v/mx*100);return '<div style="margin-bottom:7px"><div class="row-item" style="border:none;padding:2px 0"><span style="font-size:11px">'+x.nome.substring(0,30)+' <span class="bg-tag">'+x.n+'</span></span><span style="font-family:JetBrains Mono;font-size:11px">'+eur(v)+'</span></div><div class="bar"><span style="width:'+p+'%;background:'+col+'"></span></div></div>';}).join('');}
+document.getElementById('lst-cli').innerHTML=bars(cli,'#3FBF6B');
+document.getElementById('lst-for').innerHTML=bars(forn,'#ff5a4d');
+mc('g-clipie','doughnut',cli.slice(0,8).map(c=>c.nome.substring(0,18)),[{data:cli.slice(0,8).map(c=>Math.abs(c.imponibile)),backgroundColor:P}],opPie());
+mc('g-forpie','doughnut',forn.slice(0,8).map(f=>f.nome.substring(0,18)),[{data:forn.slice(0,8).map(f=>Math.abs(f.imponibile)),backgroundColor:P}],opPie());
+
+// FATTURE
+function filtraFatt(){
+  const tipo=document.getElementById('ff-tipo').value,anno=document.getElementById('ff-anno').value,cerca=document.getElementById('ff-cerca').value.toLowerCase();
+  let r=D.elenco||[];
+  if(tipo)r=r.filter(f=>f.tipo===tipo);if(anno)r=r.filter(f=>f.data?.startsWith(anno));
+  if(cerca)r=r.filter(f=>(f.controparte+' '+f.numero).toLowerCase().includes(cerca));
+  r=[...r].reverse();
+  document.getElementById('ff-cnt').textContent=r.length+' fatture';
+  document.getElementById('ff-rows').innerHTML=r.slice(0,500).map(f=>'<tr><td class="'+(f.tipo==='attiva'?'at':'ps')+'">'+(f.tipo==='attiva'?'ATT':'PAS')+'</td><td><span class="bg-tag">'+(f.tipodoc||'')+'</span></td><td>'+f.numero+'</td><td>'+f.data+'</td><td>'+f.controparte+'</td><td class="n">'+eur(f.imponibile)+'</td><td class="n">'+eur(f.imposta)+'</td><td class="n">'+eur(f.totale)+'</td></tr>').join('');
+}
+filtraFatt();
+
+// SCENARI
+function calcScen(){
+  const nc=+document.getElementById('sc-cli').value;
+  const fm=+document.getElementById('sc-fatt').value;
+  const cm=+document.getElementById('sc-cost').value;
+  const nm=+document.getElementById('sc-mesi').value;
+  document.getElementById('sv-cli').textContent=nc;
+  document.getElementById('sv-fatt').textContent=eur0(fm);
+  document.getElementById('sv-cost').textContent=eur0(cm);
+  document.getElementById('sv-mesi').textContent=nm;
+  const ricBase=ricM;const cosBase=cosM;
+  const labels=[],ricS=[],cosS=[],ebiS=[];
+  let cumulR=0,cumulC=0;
+  for(let i=1;i<=nm;i++){
+    const r=ricBase+nc*fm*i/nm;const c=cosBase+cm;
+    cumulR+=r;cumulC+=c;
+    labels.push('M+'+i);ricS.push(Math.round(r));cosS.push(Math.round(c));ebiS.push(Math.round(cumulR-cumulC));
+  }
+  document.getElementById('scen-kpi').innerHTML=
+    '<div class="kc"><div class="lb">Ricavi stimati tot</div><div class="vl e">'+eur0(cumulR)+'</div></div>'+
+    '<div class="kc"><div class="lb">Costi stimati tot</div><div class="vl u">'+eur0(cumulC)+'</div></div>'+
+    '<div class="kc"><div class="lb">EBITDA scenario</div><div class="vl o">'+eur0(cumulR-cumulC)+'</div></div>'+
+    '<div class="kc"><div class="lb">ROI scenario</div><div class="vl bl">'+Math.round((cumulR-cumulC)/Math.max(cumulC,1)*100)+'%</div></div>';
+  dc('scen');CH['scen']=new Chart(document.getElementById('g-scen'),{type:'line',data:{labels,datasets:[{label:'EBITDA cumulativo',data:ebiS,borderColor:'#E8501A',backgroundColor:'rgba(232,80,26,.1)',fill:true,tension:.2}]},options:op()});
+}
+calcScen();
+
+// PROIEZIONI
+const ric26=anni['2026']?anni['2026'].ricavi.imponibile:0;
+const m26=6;const avg26=ric26/m26;
+const mesi26=mesi.filter(m=>m.mese.startsWith('2026'));
+const futL=[...mesi26.map(m=>m.mese),'2026-07','2026-08','2026-09','2026-10','2026-11','2026-12'];
+const futV=futL.map(m=>{const r=mesi.find(x=>x.mese===m);return r?r.ricavi:Math.round(avg26);});
+mc('g-proj26','bar',futL,[{label:'Ricavi (reali+stima)',data:futV,backgroundColor:futL.map(m=>{const r=mesi.find(x=>x.mese===m);return r?'#3FBF6B':'#E8501A66';})}]);
+// 3 scenari
+const base=flM,pess=flM*0.6,otti=flM*1.5;
+const sc3L=Array.from({length:12},(_, i)=>'M+'+(i+1));
+mc('g-3scen','line',sc3L,[
+  {label:'Pessimistico',data:sc3L.map((_,i)=>Math.round(ebitda+pess*(i+1))),borderColor:'#ff5a4d',tension:.2},
+  {label:'Base',data:sc3L.map((_,i)=>Math.round(ebitda+base*(i+1))),borderColor:'#ffce4d',tension:.2},
+  {label:'Ottimistico',data:sc3L.map((_,i)=>Math.round(ebitda+otti*(i+1))),borderColor:'#3FBF6B',tension:.2}
+]);
+document.getElementById('proj-tab').innerHTML='<table><thead><tr><th></th><th class="n">Pessimistico</th><th class="n">Base</th><th class="n">Ottimistico</th></tr></thead><tbody>'+
+  ['3 mesi','6 mesi','12 mesi'].map((lb,i)=>{const m=[3,6,12][i];return '<tr><td>'+lb+'</td><td class="n ps">'+eur0(ebitda+pess*m)+'</td><td class="n">'+eur0(ebitda+base*m)+'</td><td class="n at">'+eur0(ebitda+otti*m)+'</td></tr>';}).join('')+'</tbody></table>';
+
+// KPI
+const kpis=[
+  ['EBITDA globale',ebitda,100000,'€'],
+  ['Margine %',Math.round(ebitda/Math.max(ta.imponibile,1)*100),50,'%'],
+  ['Ricavi mensili',Math.round(ricM),8000,'€'],
+  ['Velocita €/h',Math.round(speedH),50,'€'],
+  ['N. clienti',cli.length,20,''],
+  ['Concentrazione top',conc,30,'%'],
+  ['IVA netta',Math.round(ivaN),0,'€'],
+  ['Burn rate mese',Math.round(cosM),1500,'€']
+];
+document.getElementById('t-kpi').innerHTML=kpis.map(k=>{
+  const[nm,val,tgt,u]=k;const ok=nm.includes('Concentr')||nm.includes('Burn')?val<=tgt:val>=tgt;
+  const gap=tgt-val;
+  return '<tr><td><b>'+nm+'</b></td><td class="n">'+(u==='€'?eur0(val):val+u)+'</td><td class="n">'+(u==='€'?eur0(tgt):tgt+u)+'</td><td>'+(ok?'<span class="at">✓</span>':'<span class="ps">✗</span>')+'</td><td class="n" style="color:'+(ok?'#3FBF6B':'#ff5a4d')+'">'+(u==='€'?eur0(gap):gap+u)+'</td></tr>';
+}).join('');
+
+// MASLOW & RUOTA
+const ruota={'Business':0,'Utenze':0,'Alimentazione':0,'Formazione':0,'Salute':0,'Servizi':0,'Svago':0,'Altro':0};
+forn.forEach(f=>{const n=f.nome.toLowerCase(),v=Math.abs(f.imponibile);
+  if(n.includes('formasicurezza')||n.includes('anfos')||n.includes('vitruviana'))ruota['Formazione']+=v;
+  else if(n.includes('illumia')||n.includes('fastweb'))ruota['Utenze']+=v;
+  else if(n.includes('zushimi')||n.includes('ballarin')||n.includes('gazzetta')||n.includes('donada'))ruota['Alimentazione']+=v;
+  else if(n.includes('geoweb')||n.includes('aruba'))ruota['Servizi']+=v;
+  else if(n.includes('ottica')||n.includes('gentile'))ruota['Salute']+=v;
+  else ruota['Altro']+=v;
+});
+const rk=Object.keys(ruota).filter(k=>ruota[k]>0),rv=rk.map(k=>ruota[k]);
+mc('g-ruota','polarArea',rk,[{data:rv,backgroundColor:P.map(c=>c+'bb')}],{plugins:{legend:{position:'right',labels:{color:'#6e6e7a',font:{size:9}}}},scales:{r:{ticks:{display:false},grid:{color:'#252530'}}}});
+const maslow={'Fisiologia':0,'Sicurezza':0,'Sociale':0,'Stima':0,'Autorealizzazione':0};
+forn.forEach(f=>{const n=f.nome.toLowerCase(),v=Math.abs(f.imponibile);
+  if(n.includes('zushimi')||n.includes('ballarin')||n.includes('gazzetta'))maslow['Fisiologia']+=v;
+  else if(n.includes('illumia')||n.includes('fastweb')||n.includes('aruba'))maslow['Sicurezza']+=v;
+  else if(n.includes('ottica')||n.includes('gentile'))maslow['Sociale']+=v;
+  else if(n.includes('formasicurezza')||n.includes('anfos'))maslow['Stima']+=v;
+  else if(n.includes('vitruviana')||n.includes('geoweb'))maslow['Autorealizzazione']+=v;
+  else maslow['Sicurezza']+=v;
+});
+const mord=['Autorealizzazione','Stima','Sociale','Sicurezza','Fisiologia'],mmax=Math.max(...Object.values(maslow),1);
+document.getElementById('maslow-pyr').innerHTML=mord.map((l,i)=>{const v=maslow[l]||0,w=25+(v/mmax)*75;
+  return '<div class="pyr"><div style="width:'+w+'%;background:'+P[i]+'">'+l+' '+eur0(v)+'</div></div>';}).join('');
+
+// RANK
+const ranks=[{nm:'Novice',stars:'⭐',min:0},{nm:'Expert',stars:'⭐⭐',min:30000},{nm:'Elite',stars:'⭐⭐⭐',min:60000},{nm:'Master',stars:'⭐⭐⭐⭐',min:100000},{nm:'Epic',stars:'⭐⭐⭐⭐⭐',min:200000}];
+let curRank=ranks[0];ranks.forEach(r=>{if(ebitda>=r.min)curRank=r;});
+document.getElementById('rank-box').innerHTML=ranks.map(r=>'<div class="rank-lv'+(r.nm===curRank.nm?' active':'')+'"><div class="stars">'+r.stars+'</div><div class="nm">'+r.nm+'</div><div style="font-size:10px;color:#6e6e7a">'+eur0(r.min)+'</div></div>').join('');
+const nextR=ranks.find(r=>r.min>ebitda);
+document.getElementById('rank-note').textContent=nextR?'Prossimo livello: '+nextR.nm+' a '+eur0(nextR.min)+'. Ti mancano '+eur0(nextR.min-ebitda)+'.':'Hai raggiunto il livello massimo.';
+
+// SPEED
+document.getElementById('sp-main').textContent=eur(speedH)+'/h';
+document.getElementById('sp-day').textContent=eur(speedH*8);
+document.getElementById('sp-week').textContent=eur(speedH*8*5);
+document.getElementById('sp-month').textContent=eur(flM);
+const speedByMonth=mesi.map(m=>(m.ricavi-m.costi)/hMese);
+mc('g-speed','line',mesi.map(m=>m.mese),[{label:'€/h',data:speedByMonth,borderColor:'#E8501A',backgroundColor:'rgba(232,80,26,.1)',fill:true,tension:.2,pointRadius:1}]);
+
+</script></body></html>

@@ -1,0 +1,5 @@
+# Redirect 301 sicurissimo.online -> 81plus.net
+# Decisione 7 giugno 2026. Carica questo file come .htaccess nella radice di sicurissimo.online su Hostinger.
+RewriteEngine On
+RewriteCond %{HTTP_HOST} ^(www\.)?sicurissimo\.online$ [NC]
+RewriteRule ^(.*)$ https://81plus.net/$1 [R=301,L]

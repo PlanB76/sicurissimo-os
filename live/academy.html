@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>81+ Academy, formazione a strati che premia chi partecipa</title>
+<meta name="description" content="Tre livelli di formazione 81+. BASE accreditata Regione Lazio per tutti. VIP accreditata MIM. ELITE business e crescita. Sali di livello accumulando PV nell ecosistema.">
+<link rel="icon" href="favicon.svg">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Sora:wght@400;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--a:#E8501A;--a2:#FB6B00;--v:#3FBF6B;--bg:#0A0A0B;--c:#141417;--bd:#26262b;--tx:#c4c4cc;--mu:#8a8a92}
+*{margin:0;padding:0;box-sizing:border-box}body{background:var(--bg);color:var(--tx);font-family:'Sora',sans-serif;line-height:1.6}
+.w{max-width:1040px;margin:0 auto;padding:0 20px}a{color:inherit;text-decoration:none}
+.hero{padding:50px 0 20px;text-align:center}
+.tag{display:inline-block;background:rgba(232,80,26,.12);border:1px solid var(--a);color:var(--a);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;text-transform:uppercase}
+h1{font-family:'Anton';font-size:clamp(34px,6vw,58px);color:#fff;line-height:1.02;margin:14px 0 10px}
+.hero p{font-size:17px;max-width:620px;margin:0 auto 20px}
+.pv-status{background:var(--c);border:1px solid var(--bd);border-radius:14px;padding:18px 24px;margin:20px auto;max-width:520px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.pv-status .pv-num{font-family:'JetBrains Mono';font-size:32px;font-weight:700;color:var(--a)}
+.pv-status .pv-lbl{font-size:12px;color:var(--mu)}
+.pv-status .pv-link{font-size:12px;color:var(--a);font-weight:600}
+.sez{padding:30px 0}
+.sez h2{font-family:'Anton';color:#fff;font-size:clamp(24px,4vw,34px);text-align:center;margin-bottom:8px}
+.sub{text-align:center;color:var(--mu);margin-bottom:28px;max-width:600px;margin-left:auto;margin-right:auto}
+.strati{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:18px}
+.strato{background:var(--c);border:1px solid var(--bd);border-radius:18px;padding:28px;position:relative;overflow:hidden;transition:.2s}
+.strato:hover{transform:translateY(-3px)}
+.strato.locked{opacity:.72}
+.strato .lvl{position:absolute;top:16px;right:18px;font-family:'JetBrains Mono';font-size:11px;color:var(--mu);font-weight:700}
+.strato .ic{width:52px;height:52px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:26px;margin-bottom:14px}
+.strato h3{font-family:'Anton';color:#fff;font-size:22px;margin-bottom:4px}
+.strato .partner{font-size:12px;color:var(--mu);margin-bottom:6px}
+.strato .accredito{font-size:11px;color:var(--v);margin-bottom:12px;font-weight:600}
+.strato .desc{font-size:13px;margin-bottom:14px}
+.strato .cats{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px}
+.strato .cat{font-size:10px;background:var(--bg);border:1px solid var(--bd);border-radius:6px;padding:3px 8px;color:var(--mu)}
+.strato .pvreq{display:flex;align-items:center;gap:8px;margin-bottom:14px;font-size:13px}
+.strato .pvreq .lock{font-size:16px}
+.strato .barra{height:6px;background:var(--bd);border-radius:3px;overflow:hidden;margin-bottom:14px}
+.strato .barra span{display:block;height:100%;border-radius:3px;transition:width .4s}
+.strato .btn{display:block;text-align:center;padding:13px;border-radius:11px;font-weight:700;font-family:'Anton';letter-spacing:.5px;font-size:15px;cursor:pointer;border:none;width:100%}
+.strato .btn.open{background:var(--v);color:#fff}
+.strato .btn.lock{background:var(--bd);color:var(--mu);cursor:not-allowed}
+.strato .btn.elite{background:var(--a);color:#fff}
+.pv-guide{background:var(--c);border:1px solid var(--bd);border-radius:18px;padding:28px;margin-top:20px}
+.pv-guide h3{font-family:'Anton';color:#fff;font-size:22px;margin-bottom:6px;text-align:center}
+.pv-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin-top:18px}
+.pv-item{display:flex;align-items:center;justify-content:space-between;background:var(--bg);border:1px solid var(--bd);border-radius:10px;padding:12px 16px}
+.pv-item .az{font-size:13px}
+.pv-item .pt{font-family:'JetBrains Mono';font-weight:700;color:var(--v);font-size:14px}
+.strip{background:var(--c);border:1px solid var(--a);border-radius:18px;padding:34px;text-align:center;margin:30px 0}
+.strip h2{margin-bottom:8px}
+.btn-cta{display:inline-block;background:var(--a);color:#fff;font-weight:700;padding:15px 32px;border-radius:12px;font-family:'Anton';letter-spacing:.5px;font-size:16px}
+.nota{font-size:12px;color:var(--mu);text-align:center;max-width:760px;margin:20px auto 0}
+.foot{border-top:1px solid var(--bd);padding:30px 0;text-align:center;font-size:12px;color:var(--mu)}.foot a{color:var(--a)}
+</style>
+</head>
+<body>
+<div class="w">
+
+<section class="hero">
+  <span class="tag">81+ Academy</span>
+  <h1>La formazione che<br>premia chi partecipa</h1>
+  <p>Tre livelli. Il primo aperto a tutti. Gli altri due si sbloccano accumulando PV nell ecosistema. Piu partecipi, piu impari.</p>
+  <div class="pv-status">
+    <div>
+      <div class="pv-num" id="pv-attuali">0</div>
+      <div class="pv-lbl">I tuoi PV accumulati</div>
+    </div>
+    <div style="text-align:right">
+      <a class="pv-link" href="ricarica_pv.html">Come guadagnare PV</a><br>
+      <a class="pv-link" href="login.html" id="login-link">Accedi per vedere i tuoi PV</a>
+    </div>
+  </div>
+</section>
+
+<section class="sez">
+  <h2>I tre livelli</h2>
+  <p class="sub">Ogni livello apre corsi nuovi. Sali accumulando punti vivendo l ecosistema.</p>
+  <div class="strati" id="strati"></div>
+</section>
+
+<div class="pv-guide">
+  <h3>Come accumuli PV</h3>
+  <p style="text-align:center;color:var(--mu);font-size:13px">Ogni azione nell ecosistema ti fa salire. Ecco quanto vale ciascuna.</p>
+  <div class="pv-grid" id="pv-grid"></div>
+</div>
+
+<section class="sez">
+  <div class="strip">
+    <h2>Inizia adesso, gratis</h2>
+    <p style="max-width:520px;margin:0 auto 18px">Registrati e ricevi subito 100 PV di benvenuto. Sei gia a un quinto del livello VIP. Il primo corso della Academy te ne dà altri 120.</p>
+    <a class="btn-cta" href="signup.html">Registrati e prendi 100 PV</a>
+  </div>
+</section>
+
+<p class="nota">La Academy BASE usa una piattaforma e-learning accreditata Regione Lazio. La Academy VIP usa una piattaforma accreditata MIM, Ministero dell Istruzione e del Merito. La Academy ELITE e formazione business e crescita. Gli enti erogatori sono indicati sugli attestati. Gli attestati di formazione obbligatoria sono validi a norma di legge. I PV sono crediti fedelta interni non convertibili in denaro, servono a sbloccare livelli e ottenere sconti. I link partner portano la commissione all ecosistema in trasparenza.</p>
+
+<div class="foot">81+ Academy &nbsp;·&nbsp; <a href="index.html">Home</a> &nbsp;·&nbsp; <a href="ricarica_pv.html">Guadagna PV</a> &nbsp;·&nbsp; <a href="audit.html">Audit gratuito</a> &nbsp;·&nbsp; <a href="privacy.html">Privacy</a></div>
+</div>
+
+<script>
+let PV_UTENTE = 0;
+
+const STRATI = [
+  {id:'base',nome:'81+ Academy BASE',partner:'accreditata Regione Lazio',lvl:1,pv:0,accredito:'Accreditato Regione Lazio',col:'#3FBF6B',ic:'🛡️',
+   desc:'Formazione obbligatoria sicurezza, HACCP, privacy. Attestati validi a norma di legge. Aperto a tutti da subito.',
+   cats:['Sicurezza lavoratori','Antincendio','Primo soccorso','HACCP','Privacy GDPR','RSPP','RLS e preposti'],
+   url:'api/track.php?to=ac1&src=academy',cta:'Accedi ora'},
+  {id:'vip',nome:'81+ Academy VIP',partner:'accreditata MIM',lvl:2,pv:500,accredito:'Accreditato MIM',col:'#FB6B00',ic:'⭐',
+   desc:'Formazione professionale su qualsiasi materia. Informatica, lingue, marketing, business. Si sblocca a 500 PV.',
+   cats:['Informatica','Lingue','Grafica','Marketing','Business','Soft skills','Foto e video'],
+   url:'api/track.php?to=ac2&src=academy',cta:'Sblocca con 500 PV'},
+  {id:'elite',nome:'81+ Academy ELITE',partner:'business school',lvl:3,pv:1500,accredito:'Business e mindset',col:'#E8501A',ic:'👑',
+   desc:'Il livello piu alto. Business avanzato, crescita personale, mindset imprenditoriale. Riservato a chi accumula 1500 PV.',
+   cats:['Business avanzato','Crescita personale','Mindset','Vendita','Leadership','Finanza'],
+   url:'https://differentacademy.it/?ref=labomobile',cta:'Sblocca con 1500 PV'}
+];
+
+const PV_AZIONI = [
+  {az:'Registrazione',pt:100},{az:'Completa il profilo',pt:50},{az:'Fai un audit',pt:80},
+  {az:'Completa un corso BASE',pt:120},{az:'Invita un collega',pt:150},{az:'Acquisto shop',pt:60},
+  {az:'Attiva una membership',pt:200},{az:'Partecipa a un evento',pt:100},{az:'Missione settimanale',pt:90}
+];
+
+function renderStrati(){
+  const el = document.getElementById('strati');
+  el.innerHTML = STRATI.map(s=>{
+    const sbloccato = PV_UTENTE >= s.pv;
+    const prog = s.pv===0 ? 100 : Math.min(Math.round(PV_UTENTE/s.pv*100),100);
+    let btn;
+    if(sbloccato){
+      const cls = s.id==='elite'?'elite':'open';
+      btn = `<a class="btn ${cls}" href="${s.url}">${s.id==='base'?'Accedi ora':'Entra, sbloccato'}</a>`;
+    } else {
+      const manca = s.pv - PV_UTENTE;
+      btn = `<button class="btn lock" disabled>Mancano ${manca} PV</button>`;
+    }
+    return `<div class="strato ${sbloccato?'':'locked'}">
+      <div class="lvl">LIVELLO ${s.lvl}</div>
+      <div class="ic" style="background:${s.col}22;color:${s.col}">${s.ic}</div>
+      <h3>${s.nome}</h3>
+      <div class="partner">${s.partner}</div>
+      <div class="accredito">${s.accredito}</div>
+      <div class="desc">${s.desc}</div>
+      <div class="cats">${s.cats.map(c=>`<span class="cat">${c}</span>`).join('')}</div>
+      <div class="pvreq"><span class="lock">${sbloccato?'🔓':'🔒'}</span><span>${s.pv===0?'Aperto a tutti':`Serve ${s.pv} PV`}</span></div>
+      ${s.pv>0?`<div class="barra"><span style="width:${prog}%;background:${s.col}"></span></div>`:''}
+      ${btn}
+    </div>`;
+  }).join('');
+}
+
+function renderPvGrid(){
+  document.getElementById('pv-grid').innerHTML = PV_AZIONI.map(a=>
+    `<div class="pv-item"><span class="az">${a.az}</span><span class="pt">+${a.pt} PV</span></div>`
+  ).join('');
+}
+
+// Carica PV reali se loggato
+async function caricaPV(){
+  try{
+    const r = await fetch('api/pv.php?action=saldo');
+    const d = await r.json();
+    if(d.ok && typeof d.pv === 'number'){
+      PV_UTENTE = d.pv;
+      document.getElementById('pv-attuali').textContent = PV_UTENTE;
+      document.getElementById('login-link').style.display = 'none';
+      renderStrati();
+    }
+  }catch(e){}
+}
+
+renderStrati();
+renderPvGrid();
+caricaPV();
+</script>
+<script src="sito81.js" defer></script>
+<script src="lang81.js" defer></script>
+</body>
+</html>
