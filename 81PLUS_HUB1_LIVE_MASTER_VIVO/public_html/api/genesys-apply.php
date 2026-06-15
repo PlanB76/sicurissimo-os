@@ -1,53 +1,63 @@
 <?php
-// api/genesys-apply.php — candidatura GENESYS81+
-// POST: {nome, cognome, email, settore, community_size, piattaforma, motivazione, vuole_pix, come_ha_conosciuto}
-
+// api/genesys-apply.php — Candidatura GENESYS81+
 declare(strict_types=1);
-require_once __DIR__ . '/../core81/db.php';
+require_once dirname(__DIR__) . '/includes/config.php';
+require_once dirname(__DIR__) . '/core81/wallet_service.php';
 
-header('Content-Type: application/json; charset=utf-8');
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') json_err('Metodo non consentito', 405);
+csrf_check();
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['ok' => false, 'error' => 'Method not allowed']);
-    exit;
+$nome    = trim($_POST['nome']    ?? '');
+$email   = strtolower(trim($_POST['email'] ?? ''));
+$settore = trim($_POST['settore'] ?? '');
+$nota    = trim($_POST['nota']    ?? '');
+$ruolo_richiesto = trim($_POST['ruolo_richiesto'] ?? 'GENESYS_MEMBER');
+
+if (!$nome || !filter_var($email, FILTER_VALIDATE_EMAIL)) json_err('Nome e email obbligatori');
+
+$allowed_ruoli = ['GENESYS_MEMBER','GENESYS_NETWORKER','GENESYS_LEADER','GENESYS_FOUNDER'];
+if (!in_array($ruolo_richiesto, $allowed_ruoli, true)) $ruolo_richiesto = 'GENESYS_MEMBER';
+
+$db = DB::get();
+
+// Cerca utente esistente
+$stmt = $db->prepare('SELECT id, genesys_status FROM users WHERE email = ? LIMIT 1');
+$stmt->execute([$email]);
+$existing = $stmt->fetch();
+
+if ($existing && $existing['genesys_status'] !== 'NONE') {
+    json_err('Candidatura gia presente per questa email. Accedi alla tua area personale.');
 }
 
-$body = json_decode(file_get_contents('php://input'), true) ?? [];
+// Verifica candidatura duplicata
+$check = $db->prepare('SELECT id FROM genesys_applications WHERE email = ? AND status NOT IN ("REJECTED") LIMIT 1');
+$check->execute([$email]);
+if ($check->fetch()) json_err('Candidatura gia ricevuta. Ti contatteremo presto.');
 
-$nome    = trim($body['nome'] ?? '');
-$cognome = trim($body['cognome'] ?? '');
-$email   = trim($body['email'] ?? '');
+$stmt = $db->prepare(
+    'INSERT INTO genesys_applications (nome, email, settore, ruolo_richiesto, nota_candidato, status)
+     VALUES (?, ?, ?, ?, ?, "PENDING")'
+);
+$stmt->execute([$nome, $email, $settore, $ruolo_richiesto, $nota]);
 
-if (!$nome || !$cognome || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-    http_response_code(400);
-    echo json_encode(['ok' => false, 'error' => 'nome, cognome e email valida obbligatori']);
-    exit;
+// Se utente loggato, aggiorna status GENESYS e accredita promo PV+
+$user_id = (int)($_SESSION['user_id'] ?? 0);
+if ($user_id && GENESYS_PROMO_ACTIVE) {
+    $promo_expires = date('Y-m-d', strtotime('+' . GENESYS_PROMO_DAYS . ' days'));
+    // Controlla se promo gia inviata
+    $sent = $db->prepare('SELECT promo_pvplus_sent FROM genesys_applications WHERE email = ? ORDER BY created_at DESC LIMIT 1');
+    $sent->execute([$email]);
+    $row = $sent->fetch();
+    if ($row && !$row['promo_pvplus_sent']) {
+        $db->prepare('UPDATE users SET genesys_status = ?, genesys_promo_active = 1, genesys_promo_expires = ? WHERE id = ?')
+           ->execute([$ruolo_richiesto, $promo_expires, $user_id]);
+        WalletService::credit_pvplus($user_id, GENESYS_PROMO_PVPLUS, 'GENESYS_APPLICATION_PROMO', 'genesys_apply_' . $user_id);
+        $db->prepare('UPDATE genesys_applications SET promo_pvplus_sent = 1 WHERE email = ?')->execute([$email]);
+        $_SESSION['genesys_status'] = $ruolo_richiesto;
+    }
 }
 
-// User loggato opzionale
-session_start();
-$user_id = $_SESSION['user_id'] ?? null;
-$sic_id  = $_SESSION['sic_id'] ?? null;
-
-try {
-    $db = DB::get();
-    $stmt = $db->prepare("INSERT INTO genesys_applications 
-        (user_id, sic_id, nome, cognome, email, settore, community_size, 
-         piattaforma, motivazione, vuole_pix, come_ha_conosciuto)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-    $stmt->execute([
-        $user_id, $sic_id, $nome, $cognome, $email,
-        $body['settore'] ?? null,
-        (int)($body['community_size'] ?? 0) ?: null,
-        $body['piattaforma'] ?? null,
-        $body['motivazione'] ?? null,
-        (int)($body['vuole_pix'] ?? 0),
-        $body['come_ha_conosciuto'] ?? null,
-    ]);
-    // TODO: inviare notifica admin + autoresponder email
-    echo json_encode(['ok' => true, 'message' => 'Candidatura ricevuta. Ti contatteremo presto.']);
-} catch (Throwable $e) {
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Errore salvataggio candidatura']);
-}
+json_ok([
+    'msg'   => 'Candidatura ricevuta. Ti contatteremo via email entro 48 ore lavorative.',
+    'promo' => GENESYS_PROMO_ACTIVE ? '+ ' . GENESYS_PROMO_PVPLUS . ' PV+ accreditati sulla tua area personale.' : null,
+]);

@@ -1,37 +1,27 @@
 <?php
-// api/connect-wallet.php — collega wallet BSC/BEP20 opzionale
-// POST: {wallet_address, signature, message}
-
+// api/connect-wallet.php — Collega wallet BSC/BEP20
 declare(strict_types=1);
-require_once __DIR__ . '/../core81/auth_guard.php';
-require_once __DIR__ . '/../core81/wallet_service.php';
+require_once dirname(__DIR__) . '/includes/config.php';
+require_once dirname(__DIR__) . '/core81/auth_guard.php';
 
-header('Content-Type: application/json; charset=utf-8');
-
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') json_err('Metodo non consentito', 405);
 $user = auth_guard();
+csrf_check();
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    echo json_encode(['ok' => false, 'error' => 'Method not allowed']);
-    exit;
+$wallet_address = trim($_POST['wallet_address'] ?? '');
+$signature      = trim($_POST['signature']      ?? '');
+
+// Validazione formato indirizzo ETH/BSC
+if (!preg_match('/^0x[0-9a-fA-F]{40}$/', $wallet_address)) {
+    json_err('Indirizzo wallet non valido. Usa un indirizzo BSC/BEP-20 valido.');
 }
 
-$body = json_decode(file_get_contents('php://input'), true) ?? [];
-$address   = trim($body['wallet_address'] ?? '');
-$signature = trim($body['signature'] ?? '');
-$message   = trim($body['message'] ?? '');
+if (!$signature) json_err('Firma richiesta per verificare la proprieta del wallet');
 
-if (!$address || !$signature || !$message) {
-    http_response_code(400);
-    echo json_encode(['ok' => false, 'error' => 'wallet_address, signature e message obbligatori']);
-    exit;
-}
+// In produzione: verificare la firma crittografica del messaggio
+// Per ora salva l'indirizzo come predisposizione per BLOCCO 3
+$db = DB::get();
+$db->prepare('UPDATE users SET wallet_address = ? WHERE id = ?')
+   ->execute([$wallet_address, $user['id']]);
 
-// Verifica firma lato server (non via JS client-side)
-try {
-    $ok = WalletService::verifyAndConnect($user['id'], $address, $signature, $message);
-    echo json_encode(['ok' => $ok]);
-} catch (Throwable $e) {
-    http_response_code(500);
-    echo json_encode(['ok' => false, 'error' => 'Errore connessione wallet']);
-}
+json_ok(['msg' => 'Wallet collegato. La verifica crittografica sara abilitata nella prossima release.', 'wallet' => $wallet_address]);
