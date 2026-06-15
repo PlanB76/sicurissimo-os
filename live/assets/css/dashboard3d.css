@@ -1,0 +1,42 @@
+/* dashboard3d.css — Moduli 3D Dashboard */
+
+/* Pipeline3D */
+#pipeline3d-container {
+  width: 100%; height: 500px;
+  background: var(--black); border-radius: 12px;
+  border: 1px solid rgba(232,80,26,0.2);
+  position: relative; overflow: hidden;
+}
+
+/* Territory Map */
+#territory-map-container {
+  width: 100%; height: 500px;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(255,210,74,0.2);
+}
+
+/* Scout Map */
+#scout-map-container {
+  width: 100%; height: 450px;
+  border-radius: 12px; overflow: hidden;
+  border: 1px solid rgba(63,191,107,0.2);
+}
+
+/* Equilibrio3D radar */
+.equilibrio3d-radar {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem; padding: 1rem;
+}
+.dim-item { display: flex; flex-direction: column; align-items: center; gap: 0.4rem; }
+.dim-item span { font-size: 0.7rem; color: var(--silver); text-align: center; }
+.dim-bar {
+  width: 60px; height: 60px; border-radius: 50%;
+  background: conic-gradient(var(--orange) 70%, rgba(255,255,255,0.05) 0);
+}
+
+/* Compensi3D */
+.compensi3d-disclaimer {
+  background: rgba(232,80,26,0.08); border: 1px solid rgba(232,80,26,0.2);
+  border-radius: 8px; padding: 1rem; margin-bottom: 1rem;
+}
+.compensi3d-disclaimer p { font-size: 0.85rem; color: var(--silver); margin-bottom: 0.4rem; }
