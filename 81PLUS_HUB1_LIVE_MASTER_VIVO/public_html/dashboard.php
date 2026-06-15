@@ -71,8 +71,15 @@ require_once __DIR__ . '/includes/nav.php';
   </div>
   <?php endif; ?>
 
-  <?php if (!empty($_GET['err'])): ?>
-  <div class="alert-error" role="alert"><?= e($_GET['err']) ?></div>
+  <?php
+  $err_msgs = [
+      'accesso_negato' => 'Non hai i permessi per accedere a questa sezione.',
+      'sessione_scaduta' => 'Sessione scaduta. Accedi di nuovo.',
+  ];
+  if (!empty($_GET['err'])):
+      $err_text = $err_msgs[$_GET['err']] ?? 'Accesso non consentito.';
+  ?>
+  <div class="alert-error" role="alert"><?= e($err_text) ?></div>
   <?php endif; ?>
 
   <!-- WALLET CARD -->

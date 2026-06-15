@@ -12,7 +12,7 @@ require_once __DIR__ . '/includes/nav.php';
 <main class="page-signup container-narrow">
   <div class="auth-card card81">
     <h1>Crea il tuo account</h1>
-    <p class="auth-sub">Il tuo <strong>SIC-ID</strong> viene generato automaticamente alla conferma dell'email.</p>
+    <p class="auth-sub">Il tuo <strong>SIC-ID</strong> viene generato automaticamente alla registrazione.</p>
     <form id="signupForm" method="POST" action="<?= BASE_URL ?>/api/signup.php" novalidate>
       <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
       <div class="form-group">

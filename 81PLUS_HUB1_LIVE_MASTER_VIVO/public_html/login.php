@@ -18,8 +18,8 @@ require_once __DIR__ . '/includes/nav.php';
       <input type="hidden" name="redir" value="<?= e($_GET['redir']) ?>">
       <?php endif; ?>
       <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required autocomplete="email">
+        <label for="login">Email o Username</label>
+        <input type="text" id="login" name="login" required autocomplete="username" placeholder="email@azienda.it oppure username">
       </div>
       <div class="form-group">
         <label for="password">Password</label>
