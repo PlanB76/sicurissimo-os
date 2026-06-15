@@ -9,6 +9,20 @@ require_once dirname(__DIR__) . '/core81/referral_service.php';
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') json_err('Metodo non consentito', 405);
 csrf_check();
 
+// Rate limiting: max 5 tentativi di registrazione per IP nell'ultima ora
+$ip_hash = hash('sha256', $_SERVER['REMOTE_ADDR'] ?? '');
+try {
+    $rl_db   = DB::get();
+    $rl_stmt = $rl_db->prepare(
+        'SELECT COUNT(*) FROM signup_attempts WHERE ip_hash = ? AND created_at > NOW() - INTERVAL 1 HOUR'
+    );
+    $rl_stmt->execute([$ip_hash]);
+    if ((int)$rl_stmt->fetchColumn() >= 5) {
+        header('Retry-After: 3600');
+        json_err('Troppe registrazioni dallo stesso indirizzo. Riprova tra un\'ora.', 429);
+    }
+} catch (Throwable) { /* tabella assente in staging: non bloccare */ }
+
 $nome    = trim($_POST['nome']    ?? '');
 $email   = strtolower(trim($_POST['email'] ?? ''));
 $pass    = $_POST['password']     ?? '';
@@ -57,6 +71,11 @@ try {
     error_log('[SIGNUP ERROR] ' . $e->getMessage());
     json_err('Errore durante la registrazione. Riprova tra qualche momento.', 500);
 }
+
+// Traccia tentativo per rate limiting
+try {
+    $db->prepare('INSERT INTO signup_attempts (ip_hash, created_at) VALUES (?, NOW())')->execute([$ip_hash]);
+} catch (Throwable) {}
 
 // Welcome PV+ 100 standard (idempotente)
 WalletService::credit_pvplus($user_id, WELCOME_PVPLUS_STANDARD, 'WELCOME_BONUS', 'welcome_' . $user_id);

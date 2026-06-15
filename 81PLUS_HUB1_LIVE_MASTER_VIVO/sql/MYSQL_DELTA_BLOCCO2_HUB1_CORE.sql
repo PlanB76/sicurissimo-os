@@ -126,9 +126,51 @@ CREATE OR REPLACE VIEW wallet_transactions AS
 
 -- ─── AGGIORNAMENTO genesys_applications ─────────────────────────────────────
 ALTER TABLE genesys_applications
+  ADD COLUMN IF NOT EXISTS ruolo_richiesto VARCHAR(30) NULL
+    AFTER settore,
+  ADD COLUMN IF NOT EXISTS telefono VARCHAR(30) NULL
+    AFTER email,
+  ADD COLUMN IF NOT EXISTS telegram_username VARCHAR(80) NULL
+    AFTER telefono,
+  ADD COLUMN IF NOT EXISTS social_url VARCHAR(255) NULL
+    AFTER telegram_username,
+  ADD COLUMN IF NOT EXISTS followers_range VARCHAR(30) NULL
+    COMMENT 'es. 100-500, 500-2000, 2000+' AFTER social_url,
+  ADD COLUMN IF NOT EXISTS community_type VARCHAR(50) NULL
+    AFTER followers_range,
+  ADD COLUMN IF NOT EXISTS interest VARCHAR(80) NULL
+    AFTER community_type,
   ADD COLUMN IF NOT EXISTS promo_pvplus_sent TINYINT(1) NOT NULL DEFAULT 0
-    COMMENT '1 se 1000 PV+ promo inviati',
+    COMMENT '1 se 1000 PV+ promo candidatura inviati',
   ADD COLUMN IF NOT EXISTS profile_pvplus_sent TINYINT(1) NOT NULL DEFAULT 0
     COMMENT '1 se 1000 PV+ profilo completo inviati';
+
+-- ─── WALLET BIND LOG ─────────────────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS wallet_bind_log (
+  id             BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  user_id        BIGINT UNSIGNED NOT NULL,
+  wallet_address VARCHAR(100) NOT NULL,
+  ip_hash        VARCHAR(64) NOT NULL,
+  user_agent     VARCHAR(200) NULL,
+  status         ENUM('SUCCESS','FAILED','DUPLICATE') NOT NULL DEFAULT 'SUCCESS',
+  created_at     DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+  INDEX idx_user (user_id),
+  INDEX idx_wallet (wallet_address),
+  INDEX idx_created (created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ─── UNICITA WALLET ADDRESS ──────────────────────────────────────────────────
+-- Previene che lo stesso indirizzo sia collegato a piu account
+ALTER TABLE users
+  ADD UNIQUE INDEX IF NOT EXISTS uidx_wallet_address (wallet_address);
+
+-- ─── RATE LIMITING REGISTRAZIONI ─────────────────────────────────────────────
+CREATE TABLE IF NOT EXISTS signup_attempts (
+  id         BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+  ip_hash    VARCHAR(64) NOT NULL,
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_ip_time (ip_hash, created_at)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET foreign_key_checks = 1;

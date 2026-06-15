@@ -104,6 +104,18 @@ require_once __DIR__ . '/includes/nav.php';
         <input type="email" id="g_email" name="email" required value="<?= $logged ? e($user_g['email']) : '' ?>" <?= $logged ? 'readonly' : '' ?>>
       </div>
       <div class="form-group">
+        <label for="g_telefono">Telefono</label>
+        <input type="tel" id="g_telefono" name="telefono" placeholder="+39 333 1234567" value="<?= $logged && !empty($user_g['telefono']) ? e($user_g['telefono']) : '' ?>">
+      </div>
+      <div class="form-group">
+        <label for="g_telegram">Username Telegram</label>
+        <input type="text" id="g_telegram" name="telegram_username" placeholder="@username" value="<?= $logged && !empty($user_g['telegram_user']) ? e($user_g['telegram_user']) : '' ?>">
+      </div>
+      <div class="form-group">
+        <label for="g_social">Profilo Social o Sito Web</label>
+        <input type="url" id="g_social" name="social_url" placeholder="https://linkedin.com/in/...">
+      </div>
+      <div class="form-group">
         <label for="g_settore">Settore / Ruolo attuale</label>
         <select id="g_settore" name="settore">
           <option value="">Seleziona</option>
@@ -112,6 +124,40 @@ require_once __DIR__ . '/includes/nav.php';
           <option value="commerciale">Commerciale / Agente</option>
           <option value="formatore">Formatore</option>
           <option value="altro">Altro</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="g_community_type">Tipo di community / rete</label>
+        <select id="g_community_type" name="community_type">
+          <option value="">Seleziona</option>
+          <option value="linkedin">LinkedIn</option>
+          <option value="instagram">Instagram / Facebook</option>
+          <option value="telegram">Gruppo Telegram</option>
+          <option value="whatsapp">Gruppo WhatsApp</option>
+          <option value="youtube">YouTube</option>
+          <option value="altro">Altra piattaforma</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="g_followers">Dimensione della tua rete</label>
+        <select id="g_followers" name="followers_range">
+          <option value="">Seleziona</option>
+          <option value="0-100">Meno di 100 contatti</option>
+          <option value="100-500">100 - 500</option>
+          <option value="500-2000">500 - 2.000</option>
+          <option value="2000-10000">2.000 - 10.000</option>
+          <option value="10000+">Oltre 10.000</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="g_interest">Cosa ti interessa di piu in GENESYS81+?</label>
+        <select id="g_interest" name="interest">
+          <option value="">Seleziona</option>
+          <option value="accesso_anticipato">Accesso anticipato ai prodotti</option>
+          <option value="pvplus">Bonus PV+ e gamification</option>
+          <option value="rete_commerciale">Costruire una rete commerciale</option>
+          <option value="pix81">PIX81+ e utility digitali</option>
+          <option value="missione">La missione del sistema</option>
         </select>
       </div>
       <div class="form-group">
@@ -124,8 +170,8 @@ require_once __DIR__ . '/includes/nav.php';
         </select>
       </div>
       <div class="form-group">
-        <label for="g_nota">Raccontaci brevemente la tua esperienza nel settore</label>
-        <textarea id="g_nota" name="nota" rows="3" placeholder="Perche vuoi entrare in GENESYS81+?"></textarea>
+        <label for="g_motivazione">Raccontaci brevemente la tua esperienza nel settore</label>
+        <textarea id="g_motivazione" name="motivazione" rows="3" placeholder="Perche vuoi entrare in GENESYS81+?"></textarea>
       </div>
       <div id="genesysError" class="alert-error" style="display:none"></div>
       <div id="genesysSuccess" class="alert-success" style="display:none"></div>
