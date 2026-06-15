@@ -115,18 +115,18 @@ Backup .bak creati: dove necessario
 
 ## REGOLE SENZA MATCH (stringhe non presenti nei file)
 
-- Garantiamo al 100%, Zero multe, Zero pensieri, PV da guadagnare gratis
-- recensioni demo/simulate/generate/da verificare/non verificate
-- Scout81+, Dao81+, Community81+ (capitalizzazione)
-- proprietario dell'ecosistema, proprietario legale dell'ecosistema
-- PIX81+ dominio/domain
+- Ti guidiamo verso una gestione più ordinata e consapevole, Riduci il rischio di errori, scadenze dimenticate e sanzioni, Più ordine, più controllo, più serenità, PV+ bonus di benvenuto
+- recensioni reali documentate SICURISSIMO81+ dal 2003/simulate/generate/da verificare/non verificate
+- SCOUT81+, DAO81+, COMMUNITY81+ (capitalizzazione)
+- partecipe, votante e proprietario digitale di diritti di governance secondo regolamento DAO81+, partecipe della governance dell'ecosistema secondo regolamento DAO81+ e struttura legale validata
+- 81plus.place/domain
 - ufficio virtuale, virtual office
-- Mint in 81X o USDT (varianti)
-- NFT come investimento, NFT investimento, rendimento NFT, profitto NFT
-- RWA investimento, RWA garantito
-- BAYC, Bored Ape
-- Scopri come funzionano PV e PV+
-- LNAD, SAFE5.0, GreenGrove81 (già corretti in sessione precedente)
+- Mint solo in USDT su rete BSC/BEP20 (varianti)
+- NFT81+ come asset digitale utility, NFT81+ utility, utility NFT81+, benefit NFT81+ secondo regolamento
+- RWA dove legalmente abilitati, RWA soggetto a validazione legale
+- benchmark NFT club utility, benchmark NFT club utility
+- Scopri come funzionano i PV
+- LAND, 81plus.digital, GreenGrove81 (già corretti in sessione precedente)
 
 ## STRUTTURA CARTELLE CREATA
 

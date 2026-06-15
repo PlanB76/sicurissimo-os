@@ -1,0 +1,34 @@
+# CLAUDE DELTA MASTER WAVE1
+
+Integra tutto il delta nel MASTER VIVO.
+
+## CTA ufficiali
+
+- Registrati gratuitamente
+- Fai l'audit gratuito
+- Scopri come funzionano i PV
+
+## Obiettivo HUB1
+
+Convertire visitatore anonimo in utente registrato, generare SIC-ID automatico, dare 100 PV+, portare ad audit, PayGate81+ e BASIC+.
+
+## File da aggiornare
+
+- HUB1_MASTER_LANDING_81PLUS.md
+- HUB1_COPY_HOME_DEFINITIVA.md
+- MEMBERSHIP_BASE_81PLUS.md
+- PAYGATE81_PV_PACKS_FREE_AMOUNT.md
+- GAMIFICATION_PVPLUS_GLOBAL.md
+- WALLET81_MULTISTRATO.md
+- SCOUT81_MASTER.md
+- PLP81_PRODUCTS.md
+- NETWORK81_HOME_SECTION.md
+- CLUB81_HOME_SECTION.md
+- POINT81_FRANCHISING_SECTION.md
+- RECENSIONI_SICURISSIMO81_MASTER.md
+- 81PLUS_PLACE_PIX81_MASTER.md
+- GREEN81_FORESTA_DAO_MASTER.md
+- DAO81_COMMUNITY81_MASTER.md
+- NFT81_GENESIS_UTILITY_COLLECTION.md
+- 81PLUS_SPACE_VIRTUAL_OFFICE.md
+- WEB3_MARKETPLACE_NFT_RWA.md
