@@ -1,0 +1,11 @@
+# Webhooks — accessibili solo da IPs certificati + POST
+# PayPal IPs: 64.4.240.0/21, 212.55.152.0/21, ecc.
+# Per ora blocchiamo GET per sicurezza
+<LimitExcept POST>
+    Require all denied
+</LimitExcept>
+
+# crypto-confirm richiede anche accesso admin — non bloccare da Hostinger panel
+<Files "crypto-confirm.php">
+    Require all granted
+</Files>
