@@ -1,21 +1,83 @@
-# FLOTTA 150 AGENTI AI 81+ — Guida Operativa
-# Sistema Operativo 81+ | Versione 1.0.0 | Data 2026-06-17
+# FLOTTA 193 AGENTI AI 81+ — Guida Operativa
+# Sistema Operativo 81+ | Versione 2.0.0 | Data 2026-06-17
 
 ---
 
 ## LA FLOTTA IN 30 SECONDI
 
-Hai 150 agenti AI specializzati, divisi in 5 livelli:
+Hai 193 agenti AI specializzati, divisi in 10 gruppi:
 
-| # | Hub | Dominio | Agenti |
-|---|-----|---------|--------|
+| # | Gruppo | Dominio | Agenti |
+|---|--------|---------|--------|
 | 1 | **HUB1** — 81plus.net | Identità, governance, Nicolas, lead | 18 |
 | 2 | **HUB2** — SICURISSIMO | Compliance D.Lgs 81/08, HACCP, ISO | 50 |
 | 3 | **HUB3** — 81plus.online | Web3, utility, tokenomics, marketing | 50 |
 | 4 | **PC Operator Layer** | Operatori per azioni esterne confermate | 13 |
 | 5 | **Finance & Daily Ops** | Finanza, fatturazione, operativo quotidiano | 19 |
+| 6 | **PAYMENTS_WEB3** | Gateway Revolut/PayPal/Stripe/Crypto/Bonifico | 10 |
+| 7 | **LEAD_ENGINE** | Riscaldamento 4179 lead, sequenze, conversion | 10 |
+| 8 | **NETWORK_ENGINE** | MLM tree, commissioni, carriera, pass | 8 |
+| 9 | **SCOUT_COMPLIANCE** | Prospect, ASR2025, scadenziario, documenti | 8 |
+| 10 | **WEB3_ENGINE** | Wallet, NFT, X81 token, PIX81, GENESYS, LOCK81 | 7 |
 
-**Totale: 150 agenti. 0 deploy. 0 azioni critiche senza conferma.**
+**Totale: 193 agenti. 0 deploy. 0 azioni critiche senza conferma.**
+
+---
+
+## NUOVI AGENTI v2.0.0 — SINTESI
+
+### PAYMENTS_WEB3 (PAY-01→10)
+- **RevolutWebhook81** — processa webhook Revolut, eroga PV
+- **PayPalWebhook81** — gestisce IPN/REST PayPal
+- **StripeWebhook81** — eventi Stripe + abbonamenti ricorrenti
+- **CryptoVerifier81** — verifica tx BSC/ETH/TRX con conferme minime
+- **BonificoVerifier81** — assistenza verifica manuale bonifici
+- **PayGateCoordinator81** — crea ordini e smista ai gateway
+- **PVCreditEngine81** — unico punto di accredito PV/PV+ (server-only)
+- **RefundProcessor81** — rimborsi multi-gateway con CONFERMO CRITICO
+- **SubscriptionRenewal81** — rinnovi BASIC+/PRO+/ELITE+ con grace period
+- **X81TokenBurn81** — burn 0.5% su trasferimenti 81X
+
+### LEAD_ENGINE (LED-01→10)
+- **LeadWarmingOrchestrator81** — coordina riscaldamento 4179 lead freddi
+- **LeadScorer81** — scoring comportamentale 0-100 con NLP
+- **WhatsAppSequence81** — sequenze WA personalizzate per settore
+- **EmailSequence81** — sequenze email via Brevo/SendGrid
+- **AuditFollowUp81** — follow-up automatico post-audit (30min)
+- **LeadConversion81** — lead → utente registrato con SIC-ID
+- **SICIDGenerator81** — genera SIC-ID univoci e sequenziali
+- **LeadImporter81** — import batch CSV con deduplicazione
+- **GDPRComplianceAgent81** — diritti GDPR, cancellazione, export
+- **LeadPipelineReporter81** — report pipeline giornaliero 09:00
+
+### NETWORK_ENGINE (NET-01→08)
+- **MLMTreeManager81** — gestione albero MLM max 8 livelli
+- **CommissionCalculator81** — L1=20%, L2=10%, L3=5%
+- **Giorno20Validator81** — validazione mensile regola compensi
+- **CompensoPagamento81** — pagamento commissioni con CONFERMO CRITICO
+- **CareerLevelUpdater81** — avanzamento L0-L8 automatico
+- **NetworkPassManager81** — SDK+/SDP+/ROYAL pass lifecycle
+- **ReferralLinkTracker81** — tracciamento click/signup/conversioni
+- **ClubFranchiseManager81** — Club81+ e Franchising81+
+
+### SCOUT_COMPLIANCE (SCO-01→08)
+- **ProspectDataFetcher81** — recupera dati aziende da Outscraper/CCIAA
+- **ProspectAssigner81** — assegnazione prospect per PLP pack
+- **ASR2025Analyzer81** — calcolo requisiti formativi ASR 2025
+- **ScadenziarioGuardian81** — alert scadenze a 90/30/7/0 giorni
+- **DocGeneratorCore81** — genera DVR, Nominazioni, POS, PSS in PDF
+- **AttestatoManager81** — ciclo vita attestati + NFT opzionale
+- **CourseRecommender81** — raccomandazione corsi per gap compliance
+- **HACCPMonitor81** — checklist e alert HACCP per settore food
+
+### WEB3_ENGINE (W3E-01→07)
+- **WalletBinder81** — binding wallet BSC con firma off-chain
+- **AirdropManager81** — campagne airdrop X81 con dry-run obbligatorio
+- **NFTMinter81** — minting PIX81+/GENESYS/Attestati su BSC
+- **BlockchainTxMonitor81** — riconciliazione tx on-chain ogni 5min
+- **PIX81SlotManager81** — marketplace 1000 slot PIX81+
+- **GENESYS_Evaluator81** — valutazione domande GENESYS (max 81)
+- **LOCK81_Monitor81** — 180gg fedeltà interna NON staking
 
 ---
 
