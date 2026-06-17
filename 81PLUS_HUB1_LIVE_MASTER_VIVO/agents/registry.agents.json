@@ -1,0 +1,1638 @@
+{
+  "meta": {
+    "system": "81+ AI Agent Fleet",
+    "version": "1.0.0",
+    "date": "2026-06-17",
+    "total_agents": 150,
+    "hubs": {
+      "HUB1": { "name": "81plus.net", "domain": "identity/governance/membership", "count": 18 },
+      "HUB2": { "name": "SICURISSIMO", "domain": "compliance/safety/HACCP", "count": 50 },
+      "HUB3": { "name": "81plus.online", "domain": "Web3/utility/tokenomics", "count": 50 },
+      "PCO": { "name": "PC Operator Layer", "domain": "operator/automation", "count": 13 },
+      "FIN": { "name": "Finance & Daily Ops", "domain": "finance/invoicing/daily", "count": 19 }
+    },
+    "approval_required": ["CONFERMO INVIO", "CONFERMO PUBBLICA", "CONFERMO AZIONE CRITICA"],
+    "security_constraints": [
+      "No deploy senza conferma esplicita",
+      "No modifiche DB/wallet/PV/PV+/provvigioni senza conferma",
+      "No credenziali in codice client o file pubblici",
+      "No CORS wildcard su endpoint autenticati",
+      "PV e PV+ idempotenti, solo lato server",
+      "Email benvenuto solo da welcome@81plus.net"
+    ]
+  },
+
+  "agents": {
+
+    "HUB1": [
+      {
+        "id": "H1-01",
+        "name": "Orchestrator81",
+        "slug": "orchestrator81",
+        "role": "Master orchestrator di tutti gli agenti 81+. Riceve le richieste di alto livello, decide quale agente attivare, gestisce la gerarchia decisionale.",
+        "tools": ["routing.matrix", "semantic_guard", "memory_read", "memory_write"],
+        "triggers": ["qualsiasi richiesta complessa multi-hub", "routing ambiguo", "conflitti tra agenti"],
+        "outputs": ["agent_dispatch", "orchestration_log"],
+        "constraints": ["Non esegue mai azioni dirette. Solo routing e coordinamento."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-02",
+        "name": "SemanticGuard81",
+        "slug": "semantic_guard81",
+        "role": "Presidia il linguaggio in tutti gli output del sistema. Blocca parole vietate (rendimento, interesse, investimento, guadagno garantito). Applica le regole del Protocollo Spiegamelo Facile.",
+        "tools": ["semantic_rules.yaml", "word_blocklist", "output_sanitizer"],
+        "triggers": ["ogni output testuale pubblico", "ogni post social", "ogni comunicazione lead"],
+        "outputs": ["sanitized_text", "violation_log"],
+        "constraints": ["Lista parole vietate in semantic_rules.yaml. Non modificare senza conferma."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-03",
+        "name": "SicIDGenerator81",
+        "slug": "sic_id_generator81",
+        "role": "Genera e valida i SIC-ID univoci per ogni membro. Formato: SIC + yymmdd + base36(id) + hmac_suffix. Immutabili dopo la creazione.",
+        "tools": ["db_write", "hmac_signer", "base36_encoder"],
+        "triggers": ["nuovo_membro_registrato"],
+        "outputs": ["sic_id", "registration_log"],
+        "constraints": ["SIC-ID mai esposto come CTA. Immutabile. Mai modificare un SIC-ID esistente."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-04",
+        "name": "MembershipManager81",
+        "slug": "membership_manager81",
+        "role": "Gestisce i livelli di membership: BASIC+ 29.90 PV, PRO+ 59.90 PV, ELITE+ 89.90 PV, GENESYS81+ 1000 PV. Assegna PV+ idempotenti al primo acquisto e al rinnovo.",
+        "tools": ["db_read", "db_write", "pv_engine", "pvplus_engine"],
+        "triggers": ["acquisto_membership", "rinnovo_membership", "upgrade_membership"],
+        "outputs": ["membership_record", "pv_credit_log", "welcome_email_trigger"],
+        "constraints": [
+          "PV+ idempotenti via pvplus_claims UNIQUE KEY",
+          "GENESYS81+ max 81 iniziali, max 5 per utente, primi 20 max 10",
+          "Email benvenuto da welcome@81plus.net",
+          "Non modificare logica PV/PV+ senza conferma"
+        ],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-05",
+        "name": "AuthGate81",
+        "slug": "auth_gate81",
+        "role": "Gestisce autenticazione, sessioni, JWT e permessi. Applica CORS whitelist solo per domini 81+.",
+        "tools": ["jwt_issuer", "session_manager", "cors_whitelist"],
+        "triggers": ["login", "api_request_autenticata", "token_refresh"],
+        "outputs": ["jwt_token", "session_record", "auth_log"],
+        "constraints": ["Mai CORS: * su endpoint autenticati. Solo domini whitelist 81+."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-06",
+        "name": "NicolasCore81",
+        "slug": "nicolas_core81",
+        "role": "Receptionist agentico AI. Qualifica lead in entrata, gestisce conversazioni WhatsApp, spinge verso Calendly. Si presenta come Co-Fondatore Artificiale di 81+.",
+        "tools": ["whatsapp_api", "calendly_api", "lead_db", "pnl_engine"],
+        "triggers": ["nuovo_messaggio_whatsapp", "nuovo_lead_form", "ricontatto_lead"],
+        "outputs": ["risposta_whatsapp", "lead_qualificato", "calendly_link"],
+        "constraints": [
+          "Mai nome/telefono dell'Ammiraglio in pagine pubbliche. Usare 'la direzione'.",
+          "Mai recensioni fabbricate. Mai guadagni garantiti. Mai scarsità false.",
+          "Flow: accoglienza → settore → problema → risorsa gratuita → consulenza"
+        ],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-07",
+        "name": "LeadScoring81",
+        "slug": "lead_scoring81",
+        "role": "Qualifica il calore dei lead via analisi semantica (Hugging Face). Produce la lista contatti più pronti all'acquisto ogni mattina alle 09:00.",
+        "tools": ["hugging_face_api", "lead_db", "scoring_model"],
+        "triggers": ["cron_09:00", "nuovo_interazione_lead"],
+        "outputs": ["lead_score", "hot_leads_report", "cold_leads_list"],
+        "constraints": ["Scoring solo su dati propri. Mai condividere dati lead a terzi senza approvazione."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-08",
+        "name": "CRMBridge81",
+        "slug": "crm_bridge81",
+        "role": "Sincronizza il database lead con i gateway di invio email e WhatsApp massivo (Brevo). Gestisce liste, tag e segmentazione.",
+        "tools": ["brevo_api", "whatsapp_gateway", "lead_db", "list_manager"],
+        "triggers": ["nuovo_lead", "cambio_status_lead", "cron_sync_daily"],
+        "outputs": ["sync_log", "list_update", "campaign_ready_list"],
+        "constraints": ["Mai inviare senza conferma per campagne massicce. CONFERMO INVIO richiesto."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-09",
+        "name": "DailyMonitor81",
+        "slug": "daily_monitor81",
+        "role": "Verifica l'integrità di tutti i fogli di lavoro e rileva nuovi asset (PDF, lead, normative). Esecuzione automatica alle 04:00.",
+        "tools": ["google_sheets_api", "google_drive_api", "alert_engine"],
+        "triggers": ["cron_04:00"],
+        "outputs": ["integrity_report", "new_assets_list", "alert_triggers"],
+        "constraints": ["Solo lettura e alert. Non modifica mai dati senza conferma."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-10",
+        "name": "AlertSystem81",
+        "slug": "alert_system81",
+        "role": "Invia notifiche urgenti su Telegram per scadenze critiche, nuove circolari normative e anomalie rilevate.",
+        "tools": ["telegram_bot_api", "alert_db", "calendar_scanner"],
+        "triggers": ["scadenza_imminente", "nuova_normativa", "anomalia_sistema"],
+        "outputs": ["telegram_message", "alert_log"],
+        "constraints": ["Solo notifiche. Non esegue azioni automatiche su alert."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-11",
+        "name": "DriveScanner81",
+        "slug": "drive_scanner81",
+        "role": "Scansiona i PDF caricati su Google Drive. Estrae concetti normativi, procedure e spunti editoriali. Trasforma un documento INAIL in 4 post in 60 secondi.",
+        "tools": ["google_drive_api", "pdf_extractor", "gemini_api", "post_generator"],
+        "triggers": ["nuovo_pdf_in_drive", "richiesta_scansione_manuale"],
+        "outputs": ["concetti_estratti", "4_post_pronti", "knowledge_update"],
+        "constraints": ["Output sempre verificato da SemanticGuard81 prima della pubblicazione."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-12",
+        "name": "PNLEngine81",
+        "slug": "pnl_engine81",
+        "role": "Inietta ganci persuasivi, storie emozionali e trigger di urgenza in ogni comunicazione. Applica le parole chiave PNL: Scudo, Asset, Valore, Certezza, Inattaccabile, Libertà.",
+        "tools": ["text_transformer", "pnl_rulebook", "semantic_guard"],
+        "triggers": ["richiesta_post", "richiesta_email", "richiesta_script_whatsapp"],
+        "outputs": ["testo_pnl_ottimizzato"],
+        "constraints": ["Mai urgenza falsa. Mai scarsità inventata. Mai rendimenti garantiti."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-13",
+        "name": "SocialAutomator81",
+        "slug": "social_automator81",
+        "role": "Genera e pubblica automaticamente quiz, sondaggi e post magnetici su canali e gruppi Telegram. Segue il calendario editoriale fisso.",
+        "tools": ["telegram_bot_api", "google_calendar_api", "post_scheduler", "post_generator"],
+        "triggers": ["cron_08:15", "cron_12:30", "cron_15:30", "cron_19:20", "cron_21:00"],
+        "outputs": ["post_pubblicato", "editorial_calendar_updated", "engagement_log"],
+        "constraints": ["CONFERMO PUBBLICA richiesto per pubblicazioni fuori calendario standard."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-14",
+        "name": "KnowledgeBase81",
+        "slug": "knowledge_base81",
+        "role": "Memoria permanente del progetto. Contiene contesto brand, normative aggiornate, FAQ e risposte ottimizzate di Nicolas. È il CLAUDE.md vivente del sistema.",
+        "tools": ["google_sheets_api", "vector_store", "memory_read", "memory_write"],
+        "triggers": ["nuova_normativa", "update_brand", "nuovo_faq", "fine_giornata"],
+        "outputs": ["knowledge_entry", "memory_updated"],
+        "constraints": ["Sempre consultato prima di rispondere su temi normativi."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-15",
+        "name": "DataAnalytics81",
+        "slug": "data_analytics81",
+        "role": "Monitoraggio KPI, reportistica aziendale e analisi delle performance del sistema. Dashboard giornaliera per Mirco.",
+        "tools": ["google_sheets_api", "kpi_engine", "report_generator"],
+        "triggers": ["cron_09:00", "richiesta_report"],
+        "outputs": ["kpi_dashboard", "performance_report", "anomaly_alert"],
+        "constraints": ["Solo lettura dati. Mai modificare dati sorgente."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-16",
+        "name": "CommandCenter81",
+        "slug": "command_center81",
+        "role": "Ponte di comando principale. Gestisce le chiamate API verso i modelli AI (Gemini e Claude). Coordina tutte le Skill per la strategia di alto livello.",
+        "tools": ["gemini_api", "claude_api", "google_sheets_api", "routing_engine"],
+        "triggers": ["richiesta_strategica_complessa", "handover_gemini_claude"],
+        "outputs": ["ai_response", "action_plan", "coordination_log"],
+        "constraints": ["Gemini = Architetto Strategico. Claude = Agente di Esecuzione. Non invertire i ruoli."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-17",
+        "name": "PrivacyGuard81",
+        "slug": "privacy_guard81",
+        "role": "Presidia GDPR/Privacy per tutti i dati personali. Gestisce consensi, diritto all'oblio, data breach response.",
+        "tools": ["consent_db", "gdpr_checker", "breach_notifier"],
+        "triggers": ["nuovo_lead", "richiesta_cancellazione", "data_breach_alert"],
+        "outputs": ["consent_record", "gdpr_log", "breach_report"],
+        "constraints": ["Mai condividere dati personali senza consenso. Mai cedere dati a terzi non autorizzati."],
+        "hub": "HUB1"
+      },
+      {
+        "id": "H1-18",
+        "name": "SystemLogger81",
+        "slug": "system_logger81",
+        "role": "Registro centrale di tutte le azioni eseguite dalle Skill. Usato per monitoraggio, audit e miglioramento continuo.",
+        "tools": ["log_writer", "google_sheets_api", "audit_trail"],
+        "triggers": ["qualsiasi_azione_sistema"],
+        "outputs": ["action_log", "audit_trail"],
+        "constraints": ["Log immutabili. Mai cancellare log. Solo append."],
+        "hub": "HUB1"
+      }
+    ],
+
+    "HUB2": [
+      {
+        "id": "H2-01",
+        "name": "Safety81",
+        "slug": "safety81",
+        "role": "Agente principale D.Lgs 81/08. Gestisce valutazione rischi, DVR, procedure operative, checklist sicurezza cantieri e uffici.",
+        "tools": ["dvr_generator", "risk_matrix", "checklist_engine", "normative_db"],
+        "triggers": ["richiesta_dvr", "audit_sicurezza", "nuovo_cliente_sicurezza"],
+        "outputs": ["dvr_bozza", "risk_assessment", "checklist_operativa"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-02",
+        "name": "HACCP81",
+        "slug": "haccp81",
+        "role": "Agente HACCP per il settore food. Catena del freddo, manipolazione alimenti, registri di controllo, analisi punti critici CCP.",
+        "tools": ["haccp_generator", "ccp_analyzer", "temperature_log", "normative_db"],
+        "triggers": ["richiesta_piano_haccp", "audit_food", "nuovo_cliente_food"],
+        "outputs": ["piano_haccp", "ccp_schede", "registro_controllo"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-03",
+        "name": "ASR2025Agent81",
+        "slug": "asr2025_agent81",
+        "role": "Agente Accordo Stato-Regioni 2025 (Rep. Atti n. 59/CSR 17/04/2025). Gestisce mappatura ATECO, corsi obbligatori, attestati. DL 16h, Cantieri 6h, DL-RSPP 8h + moduli ATECO.",
+        "tools": ["ateco_mapper", "course_recommender", "certificate_generator", "normative_db"],
+        "triggers": ["richiesta_corso_obbligatorio", "audit_formazione", "nuovo_dipendente"],
+        "outputs": ["corso_raccomandato", "piano_formativo", "attestato_bozza"],
+        "constraints": [
+          "ATECO: lettera+2 cifre. A01-02=AGRICOLTURA, A03=PESCA, C19-20=CHIMICO, F=COSTRUZIONI, I=RISTORAZIONE",
+          "ASR 2025 in vigore da 17/04/2025. Non citare versioni precedenti come vigenti."
+        ],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-04",
+        "name": "RischioChimico81",
+        "slug": "rischio_chimico81",
+        "role": "Gestione rischi chimici, valutazione SDS, procedure di emergenza per sostanze pericolose.",
+        "tools": ["sds_analyzer", "exposure_calculator", "dpi_recommender"],
+        "triggers": ["richiesta_valutazione_chimica", "nuovo_prodotto_chimico"],
+        "outputs": ["scheda_rischio_chimico", "piano_dpi", "procedura_emergenza"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-05",
+        "name": "RischioRumore81",
+        "slug": "rischio_rumore81",
+        "role": "Valutazione rischio rumore ex D.Lgs 81/08 Titolo VIII. Calcolo LEX, LCpeak, raccomandazione DPI uditivi.",
+        "tools": ["noise_calculator", "lex_analyzer", "dpi_recommender"],
+        "triggers": ["richiesta_valutazione_rumore", "nuovo_macchinario"],
+        "outputs": ["valutazione_rumore", "piano_dpi_uditivi", "misure_bonifica"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-06",
+        "name": "RischioVibrazioni81",
+        "slug": "rischio_vibrazioni81",
+        "role": "Valutazione rischio vibrazioni HAV/WBV ex D.Lgs 81/08. Calcolo A(8), valore limite 2.5 m/s², azioni correttive.",
+        "tools": ["vibration_calculator", "a8_analyzer", "dpi_recommender"],
+        "triggers": ["richiesta_valutazione_vibrazioni", "uso_attrezzatura_vibratile"],
+        "outputs": ["valutazione_vibrazioni", "piano_riduzione_esposizione"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-07",
+        "name": "StressLavoroCorrelato81",
+        "slug": "stress_lavoro_correlato81",
+        "role": "Valutazione stress lavoro-correlato ex Accordo Europeo 2004 recepito nel D.Lgs 81/08. Assessment preliminare e approfondito.",
+        "tools": ["stress_questionnaire", "risk_indicator_analyzer", "intervention_planner"],
+        "triggers": ["richiesta_valutazione_stress", "segnalazione_benessere"],
+        "outputs": ["valutazione_stress", "piano_intervento", "report_benessere"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-08",
+        "name": "DPIManager81",
+        "slug": "dpi_manager81",
+        "role": "Gestione completa DPI: selezione, fornitura, manutenzione, formazione uso. Database DPI per categoria rischio.",
+        "tools": ["dpi_catalog", "risk_to_dpi_mapper", "maintenance_scheduler"],
+        "triggers": ["nuova_valutazione_rischio", "scadenza_dpi", "nuovo_addetto"],
+        "outputs": ["piano_dpi", "consegna_dpi_record", "manutenzione_schedule"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-09",
+        "name": "CantiereSicuro81",
+        "slug": "cantiere_sicuro81",
+        "role": "Sicurezza nei cantieri temporanei e mobili. PSC, POS, notifica preliminare, coordinamento CSP/CSE.",
+        "tools": ["psc_generator", "pos_generator", "preliminary_notice", "coordinator_db"],
+        "triggers": ["apertura_cantiere", "richiesta_psc", "richiesta_pos"],
+        "outputs": ["psc_bozza", "pos_bozza", "notifica_preliminare"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-10",
+        "name": "SorveglianzaSanitaria81",
+        "slug": "sorveglianza_sanitaria81",
+        "role": "Gestione sorveglianza sanitaria: idoneità mansione, visite periodiche, cartelle sanitarie, scadenziari.",
+        "tools": ["health_db", "visit_scheduler", "fitness_tracker", "medic_coordinator"],
+        "triggers": ["scadenza_visita", "nuovo_addetto", "cambio_mansione"],
+        "outputs": ["piano_sorveglianza", "convocazione_visita", "idoneita_record"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-11",
+        "name": "FormationManager81",
+        "slug": "formation_manager81",
+        "role": "Gestione formazione obbligatoria: piano formativo, convocazioni, registro presenze, attestati, scadenziario rinnovi.",
+        "tools": ["training_planner", "attendance_tracker", "certificate_manager", "renewal_scheduler"],
+        "triggers": ["scadenza_formazione", "nuovo_addetto", "cambio_mansione"],
+        "outputs": ["piano_formativo", "convocazione", "attestato", "registro_presenze"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-12",
+        "name": "AuditEngine81",
+        "slug": "audit_engine81",
+        "role": "Motore di audit interno per sicurezza e HACCP. Genera checklist, registra non conformità, traccia azioni correttive.",
+        "tools": ["audit_checklist", "nc_tracker", "corrective_action_db", "audit_report_gen"],
+        "triggers": ["richiesta_audit", "audit_periodico", "pre_ispezione"],
+        "outputs": ["audit_report", "nc_list", "piano_azioni_correttive"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-13",
+        "name": "PreventivoCompliance81",
+        "slug": "preventivo_compliance81",
+        "role": "Genera preventivi personalizzati per servizi di compliance 81/08 e HACCP. Calcola costo in base a numero dipendenti, settore ATECO, servizi richiesti.",
+        "tools": ["pricing_engine", "ateco_tariff", "pdf_generator", "crm_bridge"],
+        "triggers": ["richiesta_preventivo", "lead_qualificato_caldo"],
+        "outputs": ["preventivo_pdf", "offerta_personalizzata", "crm_update"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-14",
+        "name": "ISO45001Agent81",
+        "slug": "iso45001_agent81",
+        "role": "Sistemi di gestione ISO 45001 (sicurezza sul lavoro) come leva di marketing e vantaggio competitivo.",
+        "tools": ["iso_gap_analyzer", "sgsl_builder", "cert_roadmap", "marketing_angle"],
+        "triggers": ["richiesta_iso45001", "audit_iso"],
+        "outputs": ["gap_analysis", "piano_implementazione_sgsl", "contenuto_marketing_iso"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-15",
+        "name": "ISO9001Agent81",
+        "slug": "iso9001_agent81",
+        "role": "Sistemi di gestione qualità ISO 9001 per imprese che vogliono la certificazione come asset commerciale.",
+        "tools": ["iso_gap_analyzer", "sgq_builder", "cert_roadmap", "marketing_angle"],
+        "triggers": ["richiesta_iso9001", "audit_qualita"],
+        "outputs": ["gap_analysis_qualita", "piano_implementazione_sgq", "contenuto_marketing_qualita"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-16",
+        "name": "ISO14001Agent81",
+        "slug": "iso14001_agent81",
+        "role": "Sistemi di gestione ambientale ISO 14001. Analisi impatto ambientale, conformità normativa, vantaggio competitivo.",
+        "tools": ["iso_gap_analyzer", "sga_builder", "cert_roadmap", "environmental_analyzer"],
+        "triggers": ["richiesta_iso14001", "audit_ambientale"],
+        "outputs": ["analisi_impatto_ambientale", "piano_sga", "contenuto_marketing_green"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-17",
+        "name": "IncidentTracker81",
+        "slug": "incident_tracker81",
+        "role": "Registrazione e analisi infortuni, near miss e malattie professionali. Gestione INAIL, reportistica obbligatoria.",
+        "tools": ["incident_db", "inail_reporter", "root_cause_analyzer", "kpi_tracker"],
+        "triggers": ["segnalazione_infortunio", "segnalazione_near_miss", "scadenza_report_inail"],
+        "outputs": ["incident_record", "inail_report", "analisi_root_cause", "piano_prevenzione"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-18",
+        "name": "EmergencyPlanner81",
+        "slug": "emergency_planner81",
+        "role": "Piani di emergenza ed evacuazione. Squadra emergenza, prove evacuazione, planimetrie, procedure specifiche per settore.",
+        "tools": ["emergency_plan_gen", "evacuation_simulator", "team_builder", "drill_scheduler"],
+        "triggers": ["richiesta_piano_emergenza", "scadenza_prova_evacuazione"],
+        "outputs": ["piano_emergenza", "planimetria", "calendario_prove"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-19",
+        "name": "RischioIncendio81",
+        "slug": "rischio_incendio81",
+        "role": "Valutazione rischio incendio ex DM 3/8/2015 e nuovo Codice Prevenzione Incendi. Classificazione attività, misure protettive.",
+        "tools": ["fire_risk_calculator", "cpi_analyzer", "fire_protection_db"],
+        "triggers": ["richiesta_valutazione_incendio", "apertura_nuova_attivita"],
+        "outputs": ["valutazione_rischio_incendio", "piano_protezione", "adempimenti_vvf"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-20",
+        "name": "RischioElettrico81",
+        "slug": "rischio_elettrico81",
+        "role": "Gestione rischio elettrico: verifica impianti, CEI 11-27, lavori sotto tensione, protezioni, messa a terra.",
+        "tools": ["electrical_risk_analyzer", "cei_checker", "inspection_scheduler"],
+        "triggers": ["richiesta_valutazione_elettrica", "nuovi_impianti"],
+        "outputs": ["valutazione_rischio_elettrico", "piano_verifica", "adempimenti_impianti"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-21",
+        "name": "RischioMacchine81",
+        "slug": "rischio_macchine81",
+        "role": "Sicurezza macchine e attrezzature di lavoro. Direttiva macchine, marcatura CE, manutenzione, verifiche periodiche.",
+        "tools": ["machinery_db", "ce_checker", "maintenance_scheduler", "risk_analyzer"],
+        "triggers": ["nuovo_macchinario", "scadenza_verifica_periodica"],
+        "outputs": ["scheda_macchina", "piano_manutenzione", "registro_verifiche"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-22",
+        "name": "RischioErgonomico81",
+        "slug": "rischio_ergonomico81",
+        "role": "Valutazione rischi ergonomici: movimentazione manuale carichi (NIOSH, MAPO), posture incongrue, VDT.",
+        "tools": ["niosh_calculator", "mapo_analyzer", "rula_tool", "vdt_checker"],
+        "triggers": ["richiesta_valutazione_ergonomica", "segnalazione_msk"],
+        "outputs": ["valutazione_ergonomica", "indice_niosh", "piano_bonifica_ergonomica"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-23",
+        "name": "RischioBiologico81",
+        "slug": "rischio_biologico81",
+        "role": "Valutazione agenti biologici D.Lgs 81/08 Titolo X. Gruppi 1-4, misure contenimento, sorveglianza sanitaria specifica.",
+        "tools": ["biological_agent_db", "containment_classifier", "health_protocol"],
+        "triggers": ["richiesta_valutazione_biologica", "settore_sanitario_food"],
+        "outputs": ["valutazione_rischio_biologico", "misure_contenimento", "protocollo_sanitario"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-24",
+        "name": "RischioCancerogenoMutageno81",
+        "slug": "rischio_cancerogeno81",
+        "role": "Gestione agenti cancerogeni e mutageni D.Lgs 81/08 Titolo IX Capo II. Registro esposti, sostituzione, sorveglianza 40 anni.",
+        "tools": ["carcinogen_db", "exposure_register", "substitution_analyzer"],
+        "triggers": ["richiesta_valutazione_cancerogena", "nuovo_agente_cancerogeno"],
+        "outputs": ["valutazione_cm", "registro_esposti", "piano_sostituzione"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-25",
+        "name": "DocumentBuilder81",
+        "slug": "document_builder81",
+        "role": "Generatore di documenti di sicurezza: DVR, POS, PSC, Nomina RSPP/RLS/MC, lettere di nomina, verbali riunione.",
+        "tools": ["template_engine", "pdf_generator", "digital_signature", "doc_db"],
+        "triggers": ["richiesta_documento", "scadenza_nomina"],
+        "outputs": ["documento_generato", "pdf_firmabile", "archivio_doc"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-26",
+        "name": "ScadenzarioManager81",
+        "slug": "scadenzario_manager81",
+        "role": "Gestione scadenziario completo compliance: formazione, sorveglianza sanitaria, verifiche impianti, rinnovi certificazioni.",
+        "tools": ["calendar_engine", "alert_sender", "renewal_tracker", "google_calendar_api"],
+        "triggers": ["avvicinarsi_scadenza", "nuovo_adempimento", "rinnovo_contratto"],
+        "outputs": ["alert_scadenza", "piano_rinnovi", "report_scadenziario"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-27",
+        "name": "InspectionSimulator81",
+        "slug": "inspection_simulator81",
+        "role": "Simula un'ispezione ASL/INL prima che avvenga quella reale. Genera checklist ispezione, individua criticità, suggerisce azioni correttive.",
+        "tools": ["inspection_protocol_db", "criticality_analyzer", "corrective_action_gen"],
+        "triggers": ["richiesta_pre_ispezione", "alert_ispezione_programmata"],
+        "outputs": ["simulazione_ispezione", "lista_criticita", "piano_azioni_urgenti"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-28",
+        "name": "SanzioniCalcolatore81",
+        "slug": "sanzioni_calcolatore81",
+        "role": "Calcola le sanzioni applicabili per violazioni D.Lgs 81/08 e normative food safety. Mostra il costo dell'inadempienza vs il costo della compliance.",
+        "tools": ["sanctions_db", "penalty_calculator", "roi_compliance_calc"],
+        "triggers": ["richiesta_calcolo_rischio", "lead_sensibilizzazione"],
+        "outputs": ["report_sanzioni", "confronto_costi", "leva_commerciale"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-29",
+        "name": "ContentCompliance81",
+        "slug": "content_compliance81",
+        "role": "Genera contenuti formativi e informativi su sicurezza e HACCP per clienti. Adatta il linguaggio tecnico al settore specifico.",
+        "tools": ["content_generator", "sector_adapter", "semantic_guard", "readability_checker"],
+        "triggers": ["richiesta_contenuto_formativo", "onboarding_nuovo_cliente"],
+        "outputs": ["contenuto_formativo", "scheda_informativa", "quiz_formazione"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-30",
+        "name": "PrivacyCompliance81",
+        "slug": "privacy_compliance81",
+        "role": "Conformità GDPR per i clienti del network. Registro trattamenti, informative privacy, DPA con fornitori, data breach.",
+        "tools": ["gdpr_toolkit", "ropa_generator", "privacy_notice_gen", "dpa_builder"],
+        "triggers": ["nuovo_cliente_privacy", "scadenza_revisione_ropa"],
+        "outputs": ["registro_trattamenti", "informativa_privacy", "dpa_firmato"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-31",
+        "name": "AppaltiSicurezza81",
+        "slug": "appalti_sicurezza81",
+        "role": "Gestione sicurezza negli appalti: DUVRI, qualifica fornitori, verifica idoneità tecnico-professionale.",
+        "tools": ["duvri_generator", "supplier_qualifier", "itp_checker"],
+        "triggers": ["nuovo_appalto", "verifica_fornitore"],
+        "outputs": ["duvri_bozza", "scheda_fornitore", "checklist_itp"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-32",
+        "name": "RischioAmianto81",
+        "slug": "rischio_amianto81",
+        "role": "Gestione amianto ex Legge 257/1992 e D.Lgs 81/08 Titolo IX Capo III. Censimento, valutazione stato, piano di controllo e manutenzione.",
+        "tools": ["asbestos_db", "condition_assessor", "pcm_generator"],
+        "triggers": ["richiesta_censimento_amianto", "edificio_ante_1992"],
+        "outputs": ["censimento_amianto", "valutazione_stato", "pcm_piano_controllo"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-33",
+        "name": "RischioAltitudine81",
+        "slug": "rischio_altitudine81",
+        "role": "Gestione lavori in quota: DPI anti-caduta, ponteggi, scale, opere provvisionali ex D.Lgs 81/08 Titolo IV.",
+        "tools": ["fall_prevention_db", "scaffolding_checker", "ppe_selector"],
+        "triggers": ["lavori_in_quota", "montaggio_ponteggio"],
+        "outputs": ["piano_anti_caduta", "checklist_ponteggio", "dpi_altitudine"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-34",
+        "name": "GasConfinatiAgent81",
+        "slug": "gas_confinati81",
+        "role": "Gestione ambienti confinati e sospetti di inquinamento ex DPR 177/2011. Procedure accesso, monitoraggio atmosfera, soccorso.",
+        "tools": ["confined_space_db", "atmosphere_monitor", "rescue_protocol"],
+        "triggers": ["accesso_ambiente_confinato"],
+        "outputs": ["piano_accesso_confinato", "checklist_monitoraggio", "protocollo_soccorso"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-35",
+        "name": "RischioTermico81",
+        "slug": "rischio_termico81",
+        "role": "Valutazione stress termico (caldo e freddo). Indici WBGT, PHS, IREQ. Misure prevenzionistiche per lavoratori esposti.",
+        "tools": ["wbgt_calculator", "thermal_analyzer", "prevention_measures_db"],
+        "triggers": ["richiesta_valutazione_termica", "ondata_calore_alert"],
+        "outputs": ["valutazione_termica", "piano_prevenzione_calore", "misure_freddo"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-36",
+        "name": "PrimoSoccorso81",
+        "slug": "primo_soccorso81",
+        "role": "Organizzazione primo soccorso aziendale: squadra, formazione (DM 388/2003), presidi, procedure.",
+        "tools": ["first_aid_planner", "team_builder", "training_scheduler", "equipment_db"],
+        "triggers": ["richiesta_piano_primo_soccorso", "scadenza_formazione_ps"],
+        "outputs": ["piano_primo_soccorso", "nomina_addetti", "calendario_formazione"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-37",
+        "name": "RLSCoordinatore81",
+        "slug": "rls_coordinatore81",
+        "role": "Supporto al Rappresentante dei Lavoratori per la Sicurezza. Formazione, diritti, riunione annuale, consultazione.",
+        "tools": ["rls_training_db", "consultation_tracker", "annual_meeting_gen"],
+        "triggers": ["elezione_rls", "riunione_annuale", "consultazione_rls"],
+        "outputs": ["piano_formazione_rls", "verbale_riunione", "consultazione_record"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-38",
+        "name": "ModelloMOG23181",
+        "slug": "mog231_agent81",
+        "role": "Modelli di organizzazione e gestione D.Lgs 231/01 per la responsabilità degli enti. Integrazione con sistema 81/08.",
+        "tools": ["mog_template", "risk_map_231", "odv_builder", "code_of_ethics_gen"],
+        "triggers": ["richiesta_mog_231", "nuovo_cliente_grande_impresa"],
+        "outputs": ["mog_bozza", "mappa_rischi_231", "codice_etico"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-39",
+        "name": "ReportingKPI81",
+        "slug": "reporting_kpi81",
+        "role": "Dashboard KPI di sicurezza per cliente: indici di frequenza, gravità, tasso infortuni, costi della non sicurezza.",
+        "tools": ["kpi_calculator", "dashboard_gen", "benchmark_db", "pdf_exporter"],
+        "triggers": ["richiesta_report_kpi", "fine_trimestre"],
+        "outputs": ["dashboard_kpi", "report_sicurezza", "benchmark_settore"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-40",
+        "name": "DigitalSignature81",
+        "slug": "digital_signature81",
+        "role": "Gestione firme digitali su documenti di sicurezza. Distribuzione documenti a dipendenti, raccolta firma, archiviazione.",
+        "tools": ["signature_platform", "document_distributor", "signature_tracker", "archive_db"],
+        "triggers": ["nuovo_documento_da_firmare", "aggiornamento_dvr"],
+        "outputs": ["documento_firmato", "firma_record", "archivio_documentale"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-41",
+        "name": "AlimentareSicuro81",
+        "slug": "alimentare_sicuro81",
+        "role": "Normativa igiene alimentare: Reg. CE 852/2004, 853/2004, 854/2004. Procedure corrette, etichettatura, rintracciabilità.",
+        "tools": ["food_regulation_db", "labeling_checker", "traceability_engine"],
+        "triggers": ["richiesta_compliance_food", "nuovo_cliente_alimentare"],
+        "outputs": ["piano_igiene_alimentare", "checklist_etichettatura", "sistema_rintracciabilita"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-42",
+        "name": "BrandSafety81",
+        "slug": "brand_safety81",
+        "role": "Usa la compliance come leva di brand e reputazione. Genera contenuti che trasformano gli adempimenti in asset comunicativi.",
+        "tools": ["pnl_engine", "content_generator", "brand_kit", "semantic_guard"],
+        "triggers": ["richiesta_contenuto_brand", "acquisizione_certificazione"],
+        "outputs": ["comunicato_certificazione", "post_social_brand", "case_study"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-43",
+        "name": "NewsletterCompliance81",
+        "slug": "newsletter_compliance81",
+        "role": "Newsletter mensile per clienti con aggiornamenti normativi, scadenze imminenti, suggerimenti pratici.",
+        "tools": ["normative_monitor", "newsletter_gen", "brevo_api", "semantic_guard"],
+        "triggers": ["cron_primo_del_mese", "nuova_normativa_importante"],
+        "outputs": ["newsletter_draft", "newsletter_inviata", "open_rate_log"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-44",
+        "name": "CorsiELearning81",
+        "slug": "corsi_elearning81",
+        "role": "Generazione e gestione corsi e-learning obbligatori. SCORM, quiz, attestati automatici, tracciamento completamento.",
+        "tools": ["scorm_builder", "quiz_engine", "certificate_auto", "lms_api"],
+        "triggers": ["richiesta_corso", "scadenza_formazione"],
+        "outputs": ["corso_elearning", "attestato_completamento", "report_formazione"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-45",
+        "name": "RischioNotturnTurni81",
+        "slug": "rischio_notturno_turni81",
+        "role": "Valutazione rischi specifici per lavoro notturno e a turni: affaticamento, cronorischio, sorveglianza sanitaria specifica.",
+        "tools": ["shift_risk_analyzer", "fatigue_calculator", "health_protocol"],
+        "triggers": ["richiesta_valutazione_turni", "lavoro_notturno"],
+        "outputs": ["valutazione_turni", "piano_salute_notturno", "misure_prevenzione"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-46",
+        "name": "SmartWorkCompliance81",
+        "slug": "smart_work_compliance81",
+        "role": "Compliance lavoro agile/smart working: accordo individuale, valutazione rischi da remoto, DPI telelavoro.",
+        "tools": ["smart_work_template", "remote_risk_analyzer", "agreement_gen"],
+        "triggers": ["attivazione_smart_working", "rinnovo_accordo_sw"],
+        "outputs": ["accordo_sw", "valutazione_rischi_remoto", "informativa_dipendente"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-47",
+        "name": "GestioneAppaltatori81",
+        "slug": "gestione_appaltatori81",
+        "role": "Portale appaltatori: verifica requisiti, gestione documenti, score affidabilità, DURC, visure.",
+        "tools": ["contractor_portal", "durc_checker", "document_collector", "score_engine"],
+        "triggers": ["nuovo_appaltatore", "rinnovo_contratto_appalto"],
+        "outputs": ["score_appaltatore", "checklist_documenti", "report_conformita"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-48",
+        "name": "SafetyROI81",
+        "slug": "safety_roi81",
+        "role": "Calcola il ROI degli investimenti in sicurezza. Costi evitati, produttività recuperata, premi INAIL ridotti, reputazione.",
+        "tools": ["roi_calculator", "inail_premium_calc", "productivity_estimator"],
+        "triggers": ["richiesta_roi_sicurezza", "proposta_commerciale"],
+        "outputs": ["report_roi", "presentazione_valore", "argomenti_commerciali"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-49",
+        "name": "NormativeMonitor81",
+        "slug": "normative_monitor81",
+        "role": "Monitora Gazzetta Ufficiale, INAIL, INL, ISS per nuove normative, circolari e scadenze. Alert automatico al rilevamento.",
+        "tools": ["gu_scraper", "inail_monitor", "inl_monitor", "alert_engine"],
+        "triggers": ["cron_daily_04:00", "keyword_match_normativa"],
+        "outputs": ["normative_update", "alert_nuova_norma", "knowledge_base_update"],
+        "hub": "HUB2"
+      },
+      {
+        "id": "H2-50",
+        "name": "ClientPortal81",
+        "slug": "client_portal81",
+        "role": "Portale cliente per accesso ai propri documenti, scadenziari, attestati, stato compliance. Dashboard personalizzata.",
+        "tools": ["portal_engine", "doc_viewer", "deadline_dashboard", "compliance_score"],
+        "triggers": ["accesso_cliente", "aggiornamento_documento"],
+        "outputs": ["dashboard_cliente", "documenti_accessibili", "compliance_status"],
+        "hub": "HUB2"
+      }
+    ],
+
+    "HUB3": [
+      {
+        "id": "H3-01",
+        "name": "GENESYS81Agent",
+        "slug": "genesys81_agent",
+        "role": "Gestisce il programma GENESYS81+: membership premium max 81 iniziali, 1000 PV, max 5 per utente. Coordina vantaggi esclusivi fondatori.",
+        "tools": ["genesys_db", "membership_manager", "benefit_engine", "pv_engine"],
+        "triggers": ["acquisto_genesys81", "accesso_benefici_genesys"],
+        "outputs": ["genesys_record", "benefit_attivato", "founder_status"],
+        "constraints": [
+          "Max 81 GENESYS81+ iniziali. Max 5 per utente. Primi 20 possono prenderne max 10.",
+          "1000 PV ciascuno. NON è investimento. NON è rendimento.",
+          "Nome corretto: GENESYS81+ (mai Genesis)"
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-02",
+        "name": "PIX81Agent",
+        "slug": "pix81_agent",
+        "role": "Gestisce PIX81+: spazi pubblicitari digitali utility. Max 1000 totali, 1000 PV ciascuno. Assegnazione, rotazione, reportistica.",
+        "tools": ["pix_db", "ad_rotation_engine", "display_manager", "pv_engine"],
+        "triggers": ["acquisto_pix81", "rotazione_annuncio"],
+        "outputs": ["pix_record", "display_schedule", "impression_report"],
+        "constraints": [
+          "Max 1000 PIX81+ totali. 1000 PV ciascuno.",
+          "NON è strumento finanziario. NON è investimento pubblicitario garantito.",
+          "Utility token: diritto d'uso spazio, non rendimento."
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-03",
+        "name": "LOCK81Agent",
+        "slug": "lock81_agent",
+        "role": "Gestisce LOCK81+: programma fedeltà interno 180 giorni. Non è staking, non è rendimento, non è APY. È loyalty con benefici esclusivi.",
+        "tools": ["lock_db", "loyalty_engine", "benefit_scheduler", "expiry_tracker"],
+        "triggers": ["attivazione_lock81", "scadenza_lock81"],
+        "outputs": ["lock_record", "benefit_attivati", "expiry_notification"],
+        "constraints": [
+          "180 giorni. NON è staking. NON è rendimento. NON è APY.",
+          "Benefici: accesso contenuti premium, sconti servizi, priorità consulenze.",
+          "Mai usare linguaggio finanziario per descrivere LOCK81+."
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-04",
+        "name": "PVEngine81",
+        "slug": "pv_engine81",
+        "role": "Motore di gestione PV (Point Value). Convenzione interna 1:1 con euro. NON moneta elettronica. NON riscattabile in contanti. Solo uso interno per acquisti nel sistema.",
+        "tools": ["pv_ledger", "transaction_engine", "balance_checker"],
+        "triggers": ["acquisto_con_pv", "accredito_pv", "verifica_saldo"],
+        "outputs": ["pv_transaction", "saldo_aggiornato", "ledger_entry"],
+        "constraints": [
+          "PV NON è moneta elettronica. NON riscattabile. Solo uso interno.",
+          "Accredito sempre idempotente lato server. Mai via JS client.",
+          "Mai dire 'guadagna PV' — dire 'ricevi PV' o 'matura PV'."
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-05",
+        "name": "PVPlusEngine81",
+        "slug": "pvplus_engine81",
+        "role": "Motore PV+: reward gamificato. NON è denaro. Idempotente via pvplus_claims UNIQUE KEY. Assegnato su eventi specifici.",
+        "tools": ["pvplus_ledger", "idempotency_checker", "reward_scheduler"],
+        "triggers": ["primo_acquisto", "rinnovo", "referral_completato", "milestone_raggiunta"],
+        "outputs": ["pvplus_credit", "claim_record", "reward_notification"],
+        "constraints": [
+          "PV+ idempotente via pvplus_claims UNIQUE KEY. Mai doppio accredito.",
+          "NON è denaro. NON convertibile. Solo benefici interni al sistema.",
+          "BASIC+ 100 PV+ primo, 30 PV+ rinnovo | PRO+ 250 PV+ primo | ELITE+ 500 PV+ primo, 90 PV+ rinnovo"
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-06",
+        "name": "PayGate81",
+        "slug": "pay_gate81",
+        "role": "Gateway pagamenti interno per acquisto PV con euro. Integrazione PSP autorizzato, ricevuta automatica, riconciliazione.",
+        "tools": ["payment_processor", "receipt_generator", "reconciliation_engine"],
+        "triggers": ["acquisto_pv", "rinnovo_membership"],
+        "outputs": ["payment_confirmation", "ricevuta", "reconciliation_log"],
+        "constraints": [
+          "CONFERMO AZIONE CRITICA richiesto per qualsiasi modifica alla logica PayGate.",
+          "Mai credenziali PSP nel codice. Solo .env.",
+          "Mai toccare PayGate81+, wallet, PV, PV+, provvigioni o webhook senza conferma."
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-07",
+        "name": "ProvvigioniEngine81",
+        "slug": "provvigioni_engine81",
+        "role": "Calcolo e distribuzione provvigioni per partner/affiliati del NETWORK81+. Trigger su vendite confermate, calcolo a cascata.",
+        "tools": ["commission_calculator", "affiliate_db", "payout_engine", "report_gen"],
+        "triggers": ["vendita_confermata", "richiesta_report_provvigioni"],
+        "outputs": ["commission_record", "payout_schedule", "affiliate_report"],
+        "constraints": [
+          "CONFERMO AZIONE CRITICA per qualsiasi modifica logica provvigioni.",
+          "Calcolo sempre lato server. Mai esporre logica provvigioni a client.",
+          "Idempotente: mai pagare due volte la stessa vendita."
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-08",
+        "name": "AffiliateTracker81",
+        "slug": "affiliate_tracker81",
+        "role": "Traccia click, conversioni e performance affiliati NETWORK81+. Dashboard affiliate, link personalizzati, cookie tracking.",
+        "tools": ["click_tracker", "conversion_tracker", "affiliate_dashboard", "link_generator"],
+        "triggers": ["click_link_affiliato", "conversione_affiliato"],
+        "outputs": ["click_record", "conversion_record", "performance_report"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-09",
+        "name": "NetworkRecruiter81",
+        "slug": "network_recruiter81",
+        "role": "Gestisce reclutamento nuovi partner al NETWORK81+. Presentazione vantaggi, contratto digital, onboarding.",
+        "tools": ["partner_presentation", "contract_gen", "onboarding_flow", "crm_bridge"],
+        "triggers": ["richiesta_partnership", "lead_partner_qualificato"],
+        "outputs": ["presentazione_personalizzata", "contratto_digitale", "onboarding_checklist"],
+        "constraints": ["Nome tecnico: NETWORK81+ (no spazio). Discorsivo: 'NETWORK 81+'."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-10",
+        "name": "WebinarEngine81",
+        "slug": "webinar_engine81",
+        "role": "Gestisce webinar strategici: creazione, promozione, iscrizioni, reminder automatici, follow-up post-evento.",
+        "tools": ["webinar_platform", "registration_manager", "reminder_engine", "followup_automator"],
+        "triggers": ["creazione_webinar", "iscrizione_webinar", "giorno_webinar"],
+        "outputs": ["pagina_webinar", "iscritto_record", "reminder_inviato", "followup_email"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-11",
+        "name": "CourseMarketplace81",
+        "slug": "course_marketplace81",
+        "role": "Marketplace corsi di sicurezza e HACCP: gratuiti e a pagamento. Vendita, accesso, completamento, attestato.",
+        "tools": ["course_catalog", "purchase_engine", "lms_api", "certificate_gen"],
+        "triggers": ["acquisto_corso", "accesso_corso", "completamento_corso"],
+        "outputs": ["access_granted", "progress_track", "attestato_emesso"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-12",
+        "name": "CommunityManager81",
+        "slug": "community_manager81",
+        "role": "Gestisce la community Telegram di 81+: moderazione, post programmati, engagement, statistiche.",
+        "tools": ["telegram_bot_api", "moderation_engine", "post_scheduler", "analytics"],
+        "triggers": ["nuovo_membro_community", "post_programmato", "violazione_regole"],
+        "outputs": ["post_pubblicato", "moderation_action", "community_stats"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-13",
+        "name": "MarketplaceServizi81",
+        "slug": "marketplace_servizi81",
+        "role": "Marketplace servizi professionali: consulenza 81/08, HACCP, ISO, perizie. Matching cliente-consulente, prenotazione, pagamento.",
+        "tools": ["service_catalog", "expert_db", "matching_engine", "booking_system"],
+        "triggers": ["richiesta_consulenza", "ricerca_esperto"],
+        "outputs": ["match_consulente", "preventivo_automatico", "booking_confermato"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-14",
+        "name": "YouTubeAgent81",
+        "slug": "youtube_agent81",
+        "role": "Ottimizzazione contenuti YouTube @sicurissimo: titoli, descrizioni, tag, thumbnail, programmazione uscite.",
+        "tools": ["youtube_api", "seo_optimizer", "thumbnail_gen", "content_scheduler"],
+        "triggers": ["nuovo_video", "programmazione_settimanale"],
+        "outputs": ["titolo_ottimizzato", "descrizione_seo", "tag_list", "upload_schedule"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-15",
+        "name": "SicIDValidator81",
+        "slug": "sic_id_validator81",
+        "role": "Valida SIC-ID in ingresso, verifica integrità HMAC, blocca tentativi di contraffazione.",
+        "tools": ["hmac_verifier", "sic_id_parser", "fraud_detector"],
+        "triggers": ["api_request_con_sic_id", "login_con_sic_id"],
+        "outputs": ["validation_result", "fraud_alert"],
+        "constraints": ["SIC-ID immutabile. Mai generarne di nuovi qui. Solo validazione."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-16",
+        "name": "RewardCatalog81",
+        "slug": "reward_catalog81",
+        "role": "Catalogo rewards riscattabili con PV+: sconti, accessi premium, contenuti esclusivi, consulenze omaggio.",
+        "tools": ["reward_catalog_db", "redemption_engine", "pvplus_deductor"],
+        "triggers": ["richiesta_riscatto_pvplus"],
+        "outputs": ["reward_applicato", "pvplus_deducted", "reward_confirmation"],
+        "constraints": ["PV+ NON convertibile in denaro. Solo rewards del catalogo interno."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-17",
+        "name": "OnboardingFlow81",
+        "slug": "onboarding_flow81",
+        "role": "Flusso di onboarding completo nuovo membro: benvenuto, profilo, prima azione guidata, email sequenza.",
+        "tools": ["onboarding_flow_engine", "email_sequence", "welcome_email", "profile_builder"],
+        "triggers": ["nuovo_membro_registrato"],
+        "outputs": ["welcome_email_inviata", "profilo_completato", "prima_azione_guidata"],
+        "constraints": ["Email benvenuto da welcome@81plus.net. Sempre."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-18",
+        "name": "ReferralEngine81",
+        "slug": "referral_engine81",
+        "role": "Sistema referral NETWORK81+: codici univoci, tracking, PV+ su referral confermato, antifrode.",
+        "tools": ["referral_code_gen", "tracking_engine", "fraud_detector", "pvplus_engine"],
+        "triggers": ["condivisione_referral", "iscrizione_da_referral"],
+        "outputs": ["referral_code", "tracking_attivo", "pvplus_per_referral"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-19",
+        "name": "DigitalAssetManager81",
+        "slug": "digital_asset_manager81",
+        "role": "Gestisce gli asset digitali del network: loghi, template, materiali marketing per partner. Brand kit controllato.",
+        "tools": ["asset_library", "brand_kit", "download_tracker", "version_control"],
+        "triggers": ["richiesta_asset", "aggiornamento_brand"],
+        "outputs": ["asset_scaricato", "brand_kit_aggiornato", "download_log"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-20",
+        "name": "EventManager81",
+        "slug": "event_manager81",
+        "role": "Gestione eventi live e online del network: convegni, formazioni, networking. Iscrizioni, reminder, post-evento.",
+        "tools": ["event_platform", "registration_engine", "reminder_sender", "recording_manager"],
+        "triggers": ["creazione_evento", "iscrizione_evento"],
+        "outputs": ["evento_creato", "iscritto_record", "reminder_calendar"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-21",
+        "name": "PartnerDashboard81",
+        "slug": "partner_dashboard81",
+        "role": "Dashboard partner NETWORK81+: vendite, provvigioni, lead generati, performance mensile, materiali marketing.",
+        "tools": ["partner_portal", "sales_tracker", "commission_viewer", "material_library"],
+        "triggers": ["accesso_partner", "fine_mese"],
+        "outputs": ["dashboard_partner", "report_mensile", "materiali_aggiornati"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-22",
+        "name": "ProdottiMarketplace81",
+        "slug": "prodotti_marketplace81",
+        "role": "Marketplace prodotti fisici e digitali 81+: DPI, kit sicurezza, software, template. Ordini, spedizioni, fatturazione.",
+        "tools": ["product_catalog", "order_manager", "shipping_tracker", "invoice_gen"],
+        "triggers": ["acquisto_prodotto", "aggiornamento_ordine"],
+        "outputs": ["ordine_confermato", "spedizione_tracciata", "fattura_emessa"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-23",
+        "name": "SEOAgent81",
+        "slug": "seo_agent81",
+        "role": "Ottimizzazione SEO sito sicurissimo.online: keyword research sicurezza lavoro, content plan, link building, monitoraggio posizioni.",
+        "tools": ["keyword_research", "seo_analyzer", "content_planner", "rank_tracker"],
+        "triggers": ["richiesta_analisi_seo", "nuovo_contenuto"],
+        "outputs": ["keyword_report", "content_brief_seo", "posizioni_monitorate"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-24",
+        "name": "EmailMarketing81",
+        "slug": "email_marketing81",
+        "role": "Campagne email marketing via Brevo: sequenze nurturing, broadcast, automazioni, A/B test, reportistica.",
+        "tools": ["brevo_api", "sequence_builder", "ab_tester", "analytics"],
+        "triggers": ["nuova_campagna", "nuovo_lead_in_sequenza"],
+        "outputs": ["campagna_attiva", "email_inviata", "performance_report"],
+        "constraints": ["CONFERMO INVIO per campagne massicce (>100 destinatari)."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-25",
+        "name": "ABTesting81",
+        "slug": "ab_testing81",
+        "role": "Test A/B su pagine, email, titoli, CTA. Definizione varianti, distribuzione traffico, analisi risultati, winner selection.",
+        "tools": ["ab_framework", "traffic_splitter", "stats_analyzer", "winner_selector"],
+        "triggers": ["richiesta_ab_test", "sufficiente_traffico_raccolto"],
+        "outputs": ["test_avviato", "risultati_test", "winner_implementato"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-26",
+        "name": "FunnelOptimizer81",
+        "slug": "funnel_optimizer81",
+        "role": "Analisi e ottimizzazione dei funnel di conversione: drop-off, heat map, user journey, suggerimenti CRO.",
+        "tools": ["funnel_analyzer", "heatmap_tool", "user_journey_mapper", "cro_advisor"],
+        "triggers": ["analisi_periodica_funnel", "drop_off_anomalo"],
+        "outputs": ["funnel_report", "cro_suggestions", "priority_fixes"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-27",
+        "name": "WebhookManager81",
+        "slug": "webhook_manager81",
+        "role": "Gestione webhook in ingresso e uscita: Stripe, Brevo, Calendly, form. Validazione firma, retry, logging.",
+        "tools": ["webhook_validator", "retry_engine", "webhook_log", "event_router"],
+        "triggers": ["webhook_received"],
+        "outputs": ["evento_processato", "webhook_log", "retry_if_failed"],
+        "constraints": [
+          "CONFERMO AZIONE CRITICA per modifiche alla logica webhook.",
+          "Validare sempre la firma HMAC del webhook prima di processare."
+        ],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-28",
+        "name": "APIGateway81",
+        "slug": "api_gateway81",
+        "role": "Gateway API interno 81+: rate limiting, autenticazione, versioning, documentazione Swagger.",
+        "tools": ["rate_limiter", "api_auth", "swagger_gen", "version_manager"],
+        "triggers": ["api_request"],
+        "outputs": ["api_response", "rate_limit_log", "api_docs"],
+        "constraints": ["Mai CORS wildcard. Solo domini whitelist 81+."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-29",
+        "name": "BackupSystem81",
+        "slug": "backup_system81",
+        "role": "Backup automatico database, file system, configurazioni. Verifica integrità, test restore periodico.",
+        "tools": ["backup_engine", "integrity_checker", "restore_tester", "backup_scheduler"],
+        "triggers": ["cron_backup_daily", "pre_deploy"],
+        "outputs": ["backup_completato", "integrity_verified", "restore_test_result"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-30",
+        "name": "MonitoringSystem81",
+        "slug": "monitoring_system81",
+        "role": "Monitoraggio uptime, performance, errori in produzione. Alert su anomalie, dashboard operativa.",
+        "tools": ["uptime_monitor", "error_tracker", "performance_monitor", "alert_engine"],
+        "triggers": ["downtime_detected", "error_rate_spike", "performance_degradation"],
+        "outputs": ["alert_downtime", "error_report", "performance_dashboard"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-31",
+        "name": "TranslatorAgent81",
+        "slug": "translator_agent81",
+        "role": "Traduzione documenti sicurezza in lingue dei lavoratori stranieri: EN, FR, ES, RO, AR, ZH. Conformità D.Lgs 81/08 art. 36.",
+        "tools": ["translation_engine", "terminology_db", "quality_checker"],
+        "triggers": ["richiesta_traduzione", "nuovo_lavoratore_straniero"],
+        "outputs": ["documento_tradotto", "attestato_traduzione"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-32",
+        "name": "ChatbotSite81",
+        "slug": "chatbot_site81",
+        "role": "Chatbot sul sito sicurissimo.online: risponde a domande comuni, qualifica visitatori, propone risorse gratuite.",
+        "tools": ["chatbot_engine", "faq_db", "lead_capture", "nlp_processor"],
+        "triggers": ["visita_pagina_chiave", "domanda_utente"],
+        "outputs": ["risposta_chatbot", "lead_catturato", "risorsa_proposta"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-33",
+        "name": "SurveyEngine81",
+        "slug": "survey_engine81",
+        "role": "Creazione e distribuzione sondaggi: NPS, soddisfazione cliente, audit rapido, quiz formativi.",
+        "tools": ["survey_builder", "distribution_engine", "results_analyzer", "report_gen"],
+        "triggers": ["post_servizio", "fine_corso", "richiesta_nps"],
+        "outputs": ["sondaggio_inviato", "risultati_elaborati", "nps_score"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-34",
+        "name": "CalendlyIntegration81",
+        "slug": "calendly_integration81",
+        "role": "Integrazione Calendly per prenotazione consulenze: sincronizzazione calendario, reminder automatici, follow-up post-call.",
+        "tools": ["calendly_api", "calendar_sync", "reminder_sender", "crm_update"],
+        "triggers": ["prenotazione_consulenza", "consulenza_completata"],
+        "outputs": ["booking_confirmed", "reminder_inviato", "crm_updated"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-35",
+        "name": "PricingEngine81",
+        "slug": "pricing_engine81",
+        "role": "Motore di pricing dinamico per servizi, corsi e membership. Sconti automatici, bundle, promozioni temporali.",
+        "tools": ["pricing_rules", "discount_engine", "bundle_manager", "promo_scheduler"],
+        "triggers": ["richiesta_prezzo", "evento_promozionale"],
+        "outputs": ["prezzo_personalizzato", "sconto_applicato", "bundle_suggerito"],
+        "constraints": ["Mai scarsità false. Mai urgenza inventata. Promozioni reali e verificabili."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-36",
+        "name": "NotificationCenter81",
+        "slug": "notification_center81",
+        "role": "Centro notifiche centralizzato: email, SMS, Telegram, push. Orchestrazione multi-canale, preferenze utente.",
+        "tools": ["notification_router", "channel_adapter", "preference_manager", "delivery_tracker"],
+        "triggers": ["evento_sistema", "notifica_utente"],
+        "outputs": ["notifica_inviata", "delivery_confirmed", "preference_saved"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-37",
+        "name": "GamificationEngine81",
+        "slug": "gamification_engine81",
+        "role": "Sistema gamification: badge, livelli, classifiche, sfide. Aumenta engagement e retention dei membri.",
+        "tools": ["badge_engine", "leaderboard", "challenge_creator", "reward_trigger"],
+        "triggers": ["milestone_raggiunta", "azione_premiabile"],
+        "outputs": ["badge_assegnato", "livello_aggiornato", "classifica_pubblica"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-38",
+        "name": "DataExport81",
+        "slug": "data_export81",
+        "role": "Esportazione dati per analisi esterne: CSV, JSON, PDF. Filtri avanzati, anonimizzazione GDPR, log export.",
+        "tools": ["export_engine", "anonymizer", "filter_builder", "export_log"],
+        "triggers": ["richiesta_export", "report_periodico"],
+        "outputs": ["file_esportato", "export_log", "gdpr_compliant_output"],
+        "constraints": ["Mai esportare dati identificativi senza conferma. Anonimizzare sempre per uso esterno."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-39",
+        "name": "IntegrationHub81",
+        "slug": "integration_hub81",
+        "role": "Hub integrazioni con servizi terzi: Zapier, Make, API generica. Connettori standard, trasformazione dati.",
+        "tools": ["webhook_emitter", "zapier_connector", "make_connector", "api_transformer"],
+        "triggers": ["nuovo_evento_sistema", "trigger_esterno"],
+        "outputs": ["dati_inviati_esterno", "integration_log"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-40",
+        "name": "AICopilot81",
+        "slug": "ai_copilot81",
+        "role": "Copilota AI per i clienti del network: risponde a domande su normative, genera bozze documenti, suggerisce azioni.",
+        "tools": ["claude_api", "gemini_api", "knowledge_base", "semantic_guard"],
+        "triggers": ["domanda_cliente", "richiesta_assistenza"],
+        "outputs": ["risposta_ai", "bozza_documento", "azione_suggerita"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-41",
+        "name": "FraudDetection81",
+        "slug": "fraud_detection81",
+        "role": "Rilevamento frodi: doppi account, abuso referral, transazioni anomale, accessi sospetti.",
+        "tools": ["fraud_ml_model", "anomaly_detector", "ip_analyzer", "device_fingerprint"],
+        "triggers": ["transazione_anomala", "login_sospetto", "referral_anomalo"],
+        "outputs": ["fraud_alert", "account_flag", "block_action"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-42",
+        "name": "ContentPersonalizer81",
+        "slug": "content_personalizer81",
+        "role": "Personalizzazione contenuti per segmento: settore ATECO, dimensione azienda, livello compliance, storico acquisti.",
+        "tools": ["segmentation_engine", "personalization_rules", "content_selector"],
+        "triggers": ["accesso_utente", "richiesta_contenuto"],
+        "outputs": ["contenuto_personalizzato", "raccomandazione_corso", "offerta_mirata"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-43",
+        "name": "LegalCompliance81",
+        "slug": "legal_compliance81",
+        "role": "Conformità legale del sistema 81+: T&C, cookie policy, informative, contratti. Aggiornamento automatico a nuove normative.",
+        "tools": ["legal_doc_gen", "compliance_tracker", "update_notifier"],
+        "triggers": ["nuova_normativa_privacy", "aggiornamento_t&c"],
+        "outputs": ["documento_legale_aggiornato", "notifica_utente", "accettazione_log"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-44",
+        "name": "SupportTicket81",
+        "slug": "support_ticket81",
+        "role": "Sistema ticketing supporto clienti e partner. Classificazione automatica, SLA, escalation, KB suggerita.",
+        "tools": ["ticket_engine", "sla_tracker", "escalation_router", "kb_searcher"],
+        "triggers": ["nuovo_ticket", "sla_breach"],
+        "outputs": ["ticket_creato", "risposta_automatica", "escalation_triggered"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-45",
+        "name": "SubscriptionManager81",
+        "slug": "subscription_manager81",
+        "role": "Gestione abbonamenti ricorrenti: rinnovi automatici, reminder scadenza, upgrade/downgrade, cancellazioni.",
+        "tools": ["subscription_engine", "renewal_scheduler", "upgrade_manager", "churn_preventer"],
+        "triggers": ["scadenza_abbonamento", "richiesta_cambio_piano"],
+        "outputs": ["rinnovo_processato", "upgrade_confermato", "churn_alert"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-46",
+        "name": "WhatsAppBroadcast81",
+        "slug": "whatsapp_broadcast81",
+        "role": "Broadcast WhatsApp a segmenti di lead e clienti. Template approvati, personalizzazione, opt-out management.",
+        "tools": ["whatsapp_api", "template_manager", "segment_selector", "optout_handler"],
+        "triggers": ["campagna_whatsapp", "evento_speciale"],
+        "outputs": ["messaggio_inviato", "delivery_report", "opt_out_registrato"],
+        "constraints": ["CONFERMO INVIO per broadcast >50 destinatari."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-47",
+        "name": "AnalyticsEngine81",
+        "slug": "analytics_engine81",
+        "role": "Analytics avanzate: comportamento utenti, conversion funnel, cohort analysis, LTV, churn prediction.",
+        "tools": ["analytics_platform", "cohort_analyzer", "ltv_calculator", "churn_predictor"],
+        "triggers": ["richiesta_analisi", "report_mensile"],
+        "outputs": ["analytics_report", "cohort_chart", "churn_forecast"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-48",
+        "name": "TestimonialsAgent81",
+        "slug": "testimonials_agent81",
+        "role": "Raccolta e gestione testimonianze reali clienti. Richiesta automatica post-servizio, moderazione, pubblicazione.",
+        "tools": ["review_requester", "moderation_engine", "testimonial_publisher"],
+        "triggers": ["post_servizio_completato", "post_corso_completato"],
+        "outputs": ["testimonianza_raccolta", "testimonianza_pubblicata"],
+        "constraints": ["MAI recensioni fabbricate. Solo testimonianze reali verificate."],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-49",
+        "name": "ComplianceScore81",
+        "slug": "compliance_score81",
+        "role": "Score di compliance 0-100 per ogni cliente 81+. Calcolo automatico su base documenti presenti, scadenze, formazione.",
+        "tools": ["score_calculator", "document_checker", "deadline_tracker", "benchmark"],
+        "triggers": ["aggiornamento_documento", "scadenza_passata", "richiesta_score"],
+        "outputs": ["compliance_score", "gap_list", "improvement_plan"],
+        "hub": "HUB3"
+      },
+      {
+        "id": "H3-50",
+        "name": "GrowthEngine81",
+        "slug": "growth_engine81",
+        "role": "Motore di crescita del network: identifica opportunità espansione, suggerisce nuovi mercati, analizza competitor.",
+        "tools": ["market_analyzer", "competitor_tracker", "growth_model", "expansion_planner"],
+        "triggers": ["richiesta_analisi_crescita", "report_trimestrale"],
+        "outputs": ["growth_report", "market_opportunities", "expansion_roadmap"],
+        "hub": "HUB3"
+      }
+    ],
+
+    "PC_OPERATOR": [
+      {
+        "id": "PCO-01",
+        "name": "BrevoCampaignOperator81",
+        "slug": "brevo_campaign_operator81",
+        "role": "Gestisce campagne email via Brevo: crea, pianifica, invia, monitora. Richiede CONFERMO INVIO per invii reali.",
+        "tools": ["brevo_api", "template_engine", "send_scheduler"],
+        "permissions": { "F0": "read_campaigns", "F1": "draft_email", "F2": "schedule", "F3": "send_requires_confirm", "F4": "delete_list_blocked" },
+        "triggers": ["richiesta_campagna_email"],
+        "outputs": ["campagna_draft", "campagna_schedulata", "send_report"],
+        "approval_required": "CONFERMO INVIO",
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-02",
+        "name": "EmailOperator81",
+        "slug": "email_operator81",
+        "role": "Gestisce email transazionali, template, liste. Non invia mai senza conferma esplicita.",
+        "tools": ["email_gateway", "template_manager", "list_manager"],
+        "permissions": { "F0": "read", "F1": "draft", "F2": "sync", "F3": "send_requires_confirm", "F4": "blocked" },
+        "approval_required": "CONFERMO INVIO",
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-03",
+        "name": "SocialPublisher81",
+        "slug": "social_publisher81",
+        "role": "Pubblica su canali social (Telegram, LinkedIn, Facebook). Bozze automatiche, pubblicazione richiede conferma.",
+        "tools": ["telegram_api", "linkedin_api", "facebook_api", "post_scheduler"],
+        "permissions": { "F0": "read", "F1": "draft", "F2": "schedule", "F3": "publish_requires_confirm", "F4": "delete_blocked" },
+        "approval_required": "CONFERMO PUBBLICA",
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-04",
+        "name": "CalendarOperator81",
+        "slug": "calendar_operator81",
+        "role": "Gestisce Google Calendar del sistema: crea eventi, programma post, scadenziari. Operazioni di routine autonome.",
+        "tools": ["google_calendar_api", "event_creator", "reminder_setter"],
+        "permissions": { "F0": "read", "F1": "create_event", "F2": "sync", "F3": "public_event_confirm", "F4": "delete_confirm" },
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-05",
+        "name": "DriveOperator81",
+        "slug": "drive_operator81",
+        "role": "Gestisce Google Drive: caricamento, organizzazione, condivisione file. Non cancella mai senza conferma.",
+        "tools": ["google_drive_api", "folder_manager", "sharing_engine"],
+        "permissions": { "F0": "read", "F1": "upload", "F2": "organize", "F3": "share_confirm", "F4": "delete_blocked" },
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-06",
+        "name": "SheetsOperator81",
+        "slug": "sheets_operator81",
+        "role": "Legge e scrive sui Google Sheets del sistema. Aggiornamenti dati automatici, modifiche strutturali richiedono conferma.",
+        "tools": ["google_sheets_api", "formula_engine", "data_validator"],
+        "permissions": { "F0": "read", "F1": "write_data", "F2": "formula_update", "F3": "structural_change_confirm", "F4": "delete_sheet_blocked" },
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-07",
+        "name": "TelegramOperator81",
+        "slug": "telegram_operator81",
+        "role": "Gestisce bot Telegram: messaggi ai canali, risposte, moderazione. Messaggi massivi richiedono CONFERMO INVIO.",
+        "tools": ["telegram_bot_api", "channel_manager", "moderation_tools"],
+        "permissions": { "F0": "read", "F1": "draft", "F2": "send_single", "F3": "broadcast_confirm", "F4": "ban_confirm" },
+        "approval_required": "CONFERMO INVIO",
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-08",
+        "name": "WhatsAppOperator81",
+        "slug": "whatsapp_operator81",
+        "role": "Gestisce messaggi WhatsApp: individuali automatici (routine), broadcast richiedono CONFERMO INVIO.",
+        "tools": ["whatsapp_api", "template_manager", "broadcast_engine"],
+        "permissions": { "F0": "read", "F1": "draft", "F2": "send_single_routine", "F3": "broadcast_confirm", "F4": "blocked" },
+        "approval_required": "CONFERMO INVIO per broadcast",
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-09",
+        "name": "PDFOperator81",
+        "slug": "pdf_operator81",
+        "role": "Genera, converte e archivia PDF: documenti sicurezza, preventivi, attestati, report.",
+        "tools": ["pdf_generator", "converter", "archiver", "signer"],
+        "permissions": { "F0": "read", "F1": "generate", "F2": "convert", "F3": "send_pdf_confirm", "F4": "blocked" },
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-10",
+        "name": "FormOperator81",
+        "slug": "form_operator81",
+        "role": "Gestisce form di contatto, lead magnet, iscrizioni. Crea form, raccoglie dati, aggiorna CRM.",
+        "tools": ["form_builder", "data_collector", "crm_updater"],
+        "permissions": { "F0": "read", "F1": "create_form", "F2": "collect_data", "F3": "publish_form_confirm", "F4": "blocked" },
+        "approval_required": "CONFERMO PUBBLICA per form pubblici",
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-11",
+        "name": "ScriptOperator81",
+        "slug": "script_operator81",
+        "role": "Gestisce Google Apps Script: modifica, deploy, trigger. Modifiche al codice richiedono review. Deploy richiede CONFERMO AZIONE CRITICA.",
+        "tools": ["apps_script_api", "code_editor", "trigger_manager"],
+        "permissions": { "F0": "read_code", "F1": "edit_draft", "F2": "test_run", "F3": "deploy_confirm", "F4": "production_trigger_blocked" },
+        "approval_required": "CONFERMO AZIONE CRITICA per deploy",
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-12",
+        "name": "APIOperator81",
+        "slug": "api_operator81",
+        "role": "Gestisce chiamate API verso servizi esterni. Operazioni di lettura autonome, scrittura/invio richiedono conferma.",
+        "tools": ["api_client", "auth_manager", "rate_limiter", "response_handler"],
+        "permissions": { "F0": "read_api", "F1": "draft_request", "F2": "test_sandbox", "F3": "production_write_confirm", "F4": "critical_endpoint_blocked" },
+        "hub": "PCO"
+      },
+      {
+        "id": "PCO-13",
+        "name": "SecurityAuditOperator81",
+        "slug": "security_audit_operator81",
+        "role": "Audit di sicurezza del sistema: scansione vulnerabilità, review codice, test penetrazione simulato. Solo lettura e report.",
+        "tools": ["code_scanner", "vuln_db", "report_gen"],
+        "permissions": { "F0": "scan", "F1": "analyze", "F2": "report", "F3": "patch_suggest", "F4": "auto_patch_blocked" },
+        "constraints": ["Mai applicare patch automaticamente. Solo segnalazione con soluzione proposta."],
+        "hub": "PCO"
+      }
+    ],
+
+    "FINANCE_OPS": [
+      {
+        "id": "FIN-01",
+        "name": "FinancePilot81",
+        "slug": "finance_pilot81",
+        "role": "Pilota centrale delle operazioni finanziarie. Orchestra fatturazione, riconciliazione, report fiscali. Tutte le azioni critiche richiedono CONFERMO AZIONE CRITICA.",
+        "tools": ["aruba_invoicing", "reconciliation_engine", "fiscal_reporter"],
+        "triggers": ["richiesta_report_finanziario", "fine_mese", "fine_trimestre"],
+        "outputs": ["financial_report", "tax_summary", "cash_flow_statement"],
+        "constraints": [
+          "CONFERMO AZIONE CRITICA per qualsiasi operazione finanziaria produzione.",
+          "Dry-run sempre prima di sync produzione.",
+          "Credenziali solo via .env. Mai in chiaro."
+        ],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-02",
+        "name": "ArubaInvoiceOperator81",
+        "slug": "aruba_invoice_operator81",
+        "role": "Fatturazione elettronica via Aruba. Emissione FE, invio SDI, gestione note credito, conservazione sostitutiva.",
+        "tools": ["aruba_api", "fe_generator", "sdi_sender", "storage_manager"],
+        "triggers": ["pagamento_confermato", "richiesta_fattura"],
+        "outputs": ["fattura_elettronica", "sdi_receipt", "conservazione_record"],
+        "constraints": [
+          "Credenziali Aruba SOLO via .env. NEVER in chiaro.",
+          "NEVER stampare username/password/token.",
+          "Se appare 2FA/OTP: STOP, chiedere intervento umano.",
+          "Dry-run prima di ogni sync produzione.",
+          "CONFERMO AZIONE CRITICA per emissione fatture."
+        ],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-03",
+        "name": "ReconciliationAgent81",
+        "slug": "reconciliation_agent81",
+        "role": "Riconciliazione automatica pagamenti: match transazioni PayGate81 con fatture emesse, segnala discrepanze.",
+        "tools": ["payment_db", "invoice_db", "reconciliation_engine", "discrepancy_alerter"],
+        "triggers": ["cron_daily_reconciliation", "richiesta_manuale"],
+        "outputs": ["reconciliation_report", "matched_transactions", "discrepancy_list"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-04",
+        "name": "RevenueTracker81",
+        "slug": "revenue_tracker81",
+        "role": "Tracking ricavi in tempo reale: MRR, ARR, churn revenue, expansion revenue. Dashboard finanziaria giornaliera.",
+        "tools": ["revenue_db", "mrr_calculator", "arr_projector", "churn_revenue_tracker"],
+        "triggers": ["nuova_transazione", "cron_daily", "fine_mese"],
+        "outputs": ["revenue_dashboard", "mrr_report", "growth_metrics"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-05",
+        "name": "TaxCompliance81",
+        "slug": "tax_compliance81",
+        "role": "Conformità fiscale italiana: IVA, ritenute, F24, scadenze tributarie. Genera report per il commercialista.",
+        "tools": ["tax_calculator", "vat_manager", "f24_generator", "accountant_report"],
+        "triggers": ["scadenza_fiscale", "richiesta_report_iva"],
+        "outputs": ["iva_liquidazione", "f24_bozza", "report_commercialista"],
+        "constraints": ["Bozze sempre per revisione umana prima dell'invio. Mai inviare F24 autonomamente."],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-06",
+        "name": "CashFlowManager81",
+        "slug": "cash_flow_manager81",
+        "role": "Gestione flussi di cassa: proiezioni 30/60/90 giorni, alert liquidità critica, analisi stagionalità.",
+        "tools": ["cash_flow_model", "projection_engine", "liquidity_alert"],
+        "triggers": ["cron_weekly", "richiesta_proiezione"],
+        "outputs": ["cash_flow_projection", "liquidity_dashboard", "seasonal_analysis"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-07",
+        "name": "CommissionPayout81",
+        "slug": "commission_payout81",
+        "role": "Calcolo e preparazione pagamento provvigioni partner. Rendiconto mensile, file bonifico, conferma manuale obbligatoria.",
+        "tools": ["commission_engine", "payout_calculator", "bank_transfer_gen"],
+        "triggers": ["fine_mese", "richiesta_payout"],
+        "outputs": ["rendiconto_provvigioni", "file_bonifico_bozza", "payout_summary"],
+        "constraints": ["CONFERMO AZIONE CRITICA prima di qualsiasi bonifico. Mai inviare automaticamente."],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-08",
+        "name": "DailyOpsPilot81",
+        "slug": "daily_ops_pilot81",
+        "role": "Coordinatore operazioni quotidiane: briefing mattutino, check sistemi, task prioritari del giorno, end-of-day summary.",
+        "tools": ["system_health_checker", "task_prioritizer", "daily_briefing_gen", "eod_summarizer"],
+        "triggers": ["cron_08:00", "cron_21:00"],
+        "outputs": ["morning_briefing", "priority_tasks", "eod_summary"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-09",
+        "name": "BudgetManager81",
+        "slug": "budget_manager81",
+        "role": "Gestione budget: pianificazione annuale, controllo spese per categoria, scostamenti, forecast aggiornato.",
+        "tools": ["budget_db", "expense_tracker", "variance_analyzer", "forecast_updater"],
+        "triggers": ["nuova_spesa", "fine_mese", "richiesta_budget"],
+        "outputs": ["budget_vs_actual", "variance_report", "updated_forecast"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-10",
+        "name": "InvoiceProcessor81",
+        "slug": "invoice_processor81",
+        "role": "Elaborazione fatture in entrata dai fornitori: OCR, classificazione, approvazione, registrazione contabile.",
+        "tools": ["ocr_engine", "invoice_classifier", "approval_workflow", "accounting_sync"],
+        "triggers": ["nuova_fattura_fornitore"],
+        "outputs": ["fattura_classificata", "approvazione_richiesta", "contabilita_aggiornata"],
+        "constraints": ["CONFERMO AZIONE CRITICA per approvazione pagamento fornitori."],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-11",
+        "name": "ExpenseManager81",
+        "slug": "expense_manager81",
+        "role": "Gestione note spese team: upload scontrini, classificazione, approvazione, rimborso.",
+        "tools": ["receipt_scanner", "expense_classifier", "approval_engine", "reimbursement_tracker"],
+        "triggers": ["nota_spese_inviata"],
+        "outputs": ["nota_spese_approvata", "rimborso_schedulato"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-12",
+        "name": "FinancialReporting81",
+        "slug": "financial_reporting81",
+        "role": "Report finanziari periodici: P&L, stato patrimoniale, rendiconto finanziario. Formati per banche, investitori, fisco.",
+        "tools": ["pl_generator", "balance_sheet_gen", "cash_flow_statement", "report_formatter"],
+        "triggers": ["fine_mese", "fine_trimestre", "fine_anno"],
+        "outputs": ["pl_report", "balance_sheet", "financial_package"],
+        "constraints": ["Report solo per revisione. Non inviare a terzi senza conferma."],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-13",
+        "name": "PaymentReminder81",
+        "slug": "payment_reminder81",
+        "role": "Gestione solleciti pagamento: primo avviso, secondo avviso, diffida. Tono progressivo, mai aggressivo.",
+        "tools": ["invoice_tracker", "reminder_engine", "dunning_sequence"],
+        "triggers": ["fattura_scaduta", "fattura_in_scadenza"],
+        "outputs": ["sollecito_email", "sollecito_whatsapp", "diffida_bozza"],
+        "constraints": ["CONFERMO INVIO per diffide formali."],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-14",
+        "name": "SubscriptionBilling81",
+        "slug": "subscription_billing81",
+        "role": "Fatturazione abbonamenti ricorrenti: rinnovi automatici, prorate, upgrade/downgrade, crediti.",
+        "tools": ["subscription_engine", "billing_calculator", "invoice_gen", "credit_manager"],
+        "triggers": ["rinnovo_abbonamento", "cambio_piano"],
+        "outputs": ["fattura_rinnovo", "prorata_calcolo", "credito_applicato"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-15",
+        "name": "TreasuryAgent81",
+        "slug": "treasury_agent81",
+        "role": "Gestione tesoreria: ottimizzazione liquidità, gestione conti correnti, investimenti eccedenza (solo strumenti sicuri).",
+        "tools": ["bank_api", "treasury_model", "liquidity_optimizer"],
+        "triggers": ["eccedenza_liquidita", "fine_mese"],
+        "outputs": ["treasury_recommendation", "liquidity_report"],
+        "constraints": ["CONFERMO AZIONE CRITICA per qualsiasi movimentazione. Mai muovere fondi autonomamente."],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-16",
+        "name": "AccountingSync81",
+        "slug": "accounting_sync81",
+        "role": "Sincronizzazione con software contabile (Fatture in Cloud, Zucchetti, etc.). Importa/esporta movimenti, anagrafiche.",
+        "tools": ["accounting_api", "data_transformer", "sync_engine"],
+        "triggers": ["cron_sync_daily", "richiesta_sync"],
+        "outputs": ["sync_log", "movimenti_importati", "anagrafiche_aggiornate"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-17",
+        "name": "KPIFinance81",
+        "slug": "kpi_finance81",
+        "role": "KPI finanziari chiave: CAC, LTV, LTV:CAC ratio, payback period, gross margin, EBITDA. Dashboard in tempo reale.",
+        "tools": ["kpi_engine", "cac_calculator", "ltv_calculator", "margin_analyzer"],
+        "triggers": ["cron_daily", "richiesta_kpi"],
+        "outputs": ["kpi_dashboard", "kpi_alert", "trend_analysis"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-18",
+        "name": "PricingOptimizer81",
+        "slug": "pricing_optimizer81",
+        "role": "Ottimizzazione prezzi basata su dati: elasticità domanda, benchmark competitivi, willingness to pay, test incrementali.",
+        "tools": ["price_elasticity_model", "competitor_pricer", "ab_test_pricing", "revenue_optimizer"],
+        "triggers": ["richiesta_ottimizzazione_prezzi", "report_trimestrale"],
+        "outputs": ["pricing_recommendation", "ab_test_pricing", "revenue_impact_estimate"],
+        "hub": "FIN"
+      },
+      {
+        "id": "FIN-19",
+        "name": "InvestorReporting81",
+        "slug": "investor_reporting81",
+        "role": "Reportistica per stakeholder e potenziali investitori: deck finanziario, metriche SaaS, crescita, roadmap.",
+        "tools": ["investor_deck_gen", "saas_metrics", "growth_chart", "roadmap_builder"],
+        "triggers": ["richiesta_investor_deck", "board_meeting"],
+        "outputs": ["investor_deck", "saas_metrics_report", "growth_narrative"],
+        "constraints": ["CONFERMO PUBBLICA prima di condividere con soggetti esterni."],
+        "hub": "FIN"
+      }
+    ]
+  }
+}

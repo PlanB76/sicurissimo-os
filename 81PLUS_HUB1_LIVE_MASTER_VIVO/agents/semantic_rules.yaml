@@ -1,0 +1,239 @@
+# SEMANTIC RULES 81+ — Regole linguistiche e guard semantico
+# Versione: 1.0.0 | Data: 2026-06-17
+# Usato da: SemanticGuard81 (H1-02), PNLEngine81 (H1-12), tutti gli agenti output
+
+meta:
+  version: "1.0.0"
+  updated: "2026-06-17"
+  enforcer_agent: "semantic_guard81"
+
+
+# ─── PAROLE ASSOLUTAMENTE VIETATE ─────────────────────────────────────────────
+# Queste parole nei contesti finanziari BLOCCANO l'output — action: BLOCK
+
+forbidden_words:
+  financial_language:
+    words:
+      - "rendimento"
+      - "interesse"
+      - "interessi"
+      - "tasso di interesse"
+      - "investimento"
+      - "investire"
+      - "guadagno garantito"
+      - "profitto garantito"
+      - "ritorno sull'investimento"
+      - "roi garantito"
+      - "dividendi"
+      - "staking"
+      - "yield"
+      - "apy"
+      - "apr"
+      - "ritorno economico garantito"
+      - "moltiplicatore"
+      - "rivalutazione"
+      - "apprezzamento capitale"
+    action: "BLOCK"
+    message: "Linguaggio finanziario non consentito. Questo sistema non è uno strumento di investimento."
+
+  false_urgency:
+    words:
+      - "ultimi posti rimasti"
+      - "offerta scade tra"
+      - "solo per oggi"
+      - "prezzo aumenterà domani"
+    note: "Solo se non corrispondente a realtà verificabile"
+    action: "WARN"
+    message: "Scarsità artificiale non consentita. Usa urgenza reale e verificabile."
+
+  fake_reviews:
+    patterns:
+      - "come dicono i nostri clienti soddisfatti [nome inventato]"
+      - "risultati garantiti come per [azienda inventata]"
+    action: "BLOCK"
+    message: "Recensioni non verificate non consentite."
+
+  fake_regulations:
+    patterns:
+      - "norma inventata"
+      - "articolo inesistente"
+    note: "Citare sempre norme reali verificabili con numero articolo e decreto"
+    action: "BLOCK"
+
+  identity_exposure:
+    note: "Mai il nome o il numero di telefono dell'Ammiraglio in pagine pubbliche"
+    replacement: "la direzione"
+    action: "REPLACE"
+
+
+# ─── NAMING RULES — NOMI CANONICI ─────────────────────────────────────────────
+
+naming_rules:
+  system_names:
+    - canonical: "NETWORK81+"
+      wrong_variants: ["NETWORK 81+", "Network81+", "network 81 plus", "Rete 81"]
+      note: "Tecnico/back-office: NETWORK81+ (no spazio). Discorsivo: 'NETWORK 81+' ammesso."
+
+    - canonical: "GENESYS81+"
+      wrong_variants: ["Genesis81+", "GENESIS81+", "Genesys 81", "genesis 81+"]
+      note: "Nome corretto: GENESYS81+ (non Genesis)"
+
+    - canonical: "PIX81+"
+      wrong_variants: ["Pix 81", "PIX 81", "pix81"]
+
+    - canonical: "LOCK81+"
+      wrong_variants: ["Lock 81", "LOCK 81", "lock81"]
+
+    - canonical: "81plus.net"
+      note: "HUB1 — identity, SIC-ID, membership. Mai chiamare sicurissimo in questo contesto."
+
+    - canonical: "SICURISSIMO"
+      note: "Solo per HUB2 compliance. Non usare per HUB1 o HUB3."
+
+    - canonical: "PV"
+      wrong_variants: ["SICURISSIMO POINT81+", "Sicurissimo Point", "token"]
+      note: "Corretto: 'PV e POINT81+'. Mai 'PV e SICURISSIMO POINT81+'"
+
+    - canonical: "SIC-ID"
+      note: "Mai usato come CTA. È un identificativo tecnico, non uno strumento commerciale."
+
+  product_descriptions:
+    pv:
+      correct: "credito interno con convenzione 1:1 euro per acquisti nel sistema"
+      forbidden: ["moneta elettronica", "criptovaluta", "token finanziario", "investimento", "riscattabile in contanti"]
+
+    pvplus:
+      correct: "reward gamificato non monetario per azioni meritorie nel network"
+      forbidden: ["denaro", "guadagno", "convertibile", "riscattabile"]
+
+    genesys81plus:
+      correct: "membership premium con accesso anticipato e vantaggi fondatori"
+      forbidden: ["investimento", "rendimento", "valore che cresce", "quota", "azione"]
+
+    pix81plus:
+      correct: "spazio pubblicitario digitale con diritto d'uso"
+      forbidden: ["strumento finanziario", "investimento pubblicitario con ritorno garantito"]
+
+    lock81plus:
+      correct: "programma fedeltà interno con blocco volontario 180 giorni e benefici esclusivi"
+      forbidden: ["staking", "rendimento", "APY", "interesse", "yield"]
+
+
+# ─── PROTOCOLLO SPIEGAMELO FACILE ─────────────────────────────────────────────
+
+writing_protocol:
+  name: "Spiegamelo Facile"
+  rules:
+    - "Voce attiva. Mai passiva."
+    - "Frasi brevi. Impatto forte al primo rigo."
+    - "Tono autorevole ma diretto. Sempre TU."
+    - "Solo virgole e punti. Mai trattini, punti e virgola o asterischi."
+    - "Elimina avverbi inutili."
+    - "Output pulito: no markdown, no hashtag."
+    - "7-8 righe massimo per post. Una riga per concetto."
+
+  forbidden_adverbs:
+    - "forse"
+    - "potrebbe"
+    - "solo"
+    - "molto"
+    - "abbastanza"
+    - "probabilmente"
+    - "eventualmente"
+
+  post_structure:
+    - "Gancio emotivo (prima riga che ferma lo scroll)"
+    - "Sviluppo del problema o storia di vita"
+    - "Aggancio alla norma (81/08, HACCP o ISO) senza tecnicismi"
+    - "Beneficio trasformativo"
+    - "Call to action con link"
+
+  pnl_anchor_words:
+    positive:
+      - "Scudo"
+      - "Asset"
+      - "Valore"
+      - "Certezza"
+      - "Inattaccabile"
+      - "Libertà"
+      - "Protezione"
+      - "Profitto"
+      - "Reputazione"
+      - "Futuro"
+      - "Fiducia"
+      - "Prevenzione"
+      - "Autonomia"
+      - "Solidità"
+      - "Serenità"
+
+  forbidden_in_posts:
+    - "hashtag"
+    - "markdown"
+    - "frasi passive"
+    - "termini tecnici senza traduzione"
+    - "blocchi >8 righe senza separazione"
+    - "'potrebbe aiutarti' — ogni frase deve affermare"
+
+
+# ─── REGOLE NORMATIVE ──────────────────────────────────────────────────────────
+
+normative_rules:
+  cite_always:
+    - "D.Lgs 81/08 con numero articolo quando possibile"
+    - "Accordo Stato-Regioni con Rep. Atti n. e data"
+    - "Regolamenti CE con numero ufficiale"
+    - "ISO con numero e anno edizione"
+
+  asr_2025:
+    canonical_name: "Accordo Stato-Regioni Rep. Atti n. 59/CSR del 17 aprile 2025"
+    short_form: "ASR 2025"
+    in_force_from: "2025-04-17"
+    note: "Non citare ASR 2011 come vigente per i corsi. ASR 2025 ha sostituito."
+
+  forbidden_normative_language:
+    - "è obbligatorio per legge" (senza citare quale legge)
+    - "la norma dice" (senza citare quale norma)
+    - "è previsto" (senza riferimento normativo)
+    - "norma inventata"
+    - "articolo inesistente"
+
+
+# ─── PC OPERATOR PERMISSIONS ───────────────────────────────────────────────────
+
+permission_levels:
+  F0:
+    name: "Read Only"
+    description: "Solo lettura. Nessuna azione."
+    auto_execute: true
+
+  F1:
+    name: "Draft"
+    description: "Crea bozze, non pubblica."
+    auto_execute: true
+
+  F2:
+    name: "Sync"
+    description: "Sincronizzazione dati interni, senza azioni esterne."
+    auto_execute: true
+
+  F3:
+    name: "Public Action"
+    description: "Azione verso l'esterno: invio email, pubblicazione post, aggiornamento API."
+    auto_execute: false
+    approval_phrases:
+      email: "CONFERMO INVIO"
+      social: "CONFERMO PUBBLICA"
+      critical: "CONFERMO AZIONE CRITICA"
+
+  F4:
+    name: "Critical Blocked"
+    description: "Azioni critiche irreversibili. SEMPRE bloccate. Richiedono conferma esplicita e motivazione."
+    auto_execute: false
+    always_confirm: true
+    examples:
+      - "Eliminazione database"
+      - "Reset sistema"
+      - "Modifica logica PayGate"
+      - "Deploy in produzione"
+      - "Invio bonifici"
+      - "Modifica struttura provvigioni"

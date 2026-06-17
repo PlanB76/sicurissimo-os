@@ -1,0 +1,356 @@
+# ROUTING MATRIX 81+ — Mappa di routing agenti per categoria di richiesta
+# Versione: 1.0.0 | Data: 2026-06-17
+# Orchestrator81 (H1-01) usa questa matrice per il dispatch
+
+meta:
+  version: "1.0.0"
+  updated: "2026-06-17"
+  primary_orchestrator: "orchestrator81"
+  fallback: "command_center81"
+
+# ─── KEYWORDS → AGENT ROUTING ───────────────────────────────────────────────
+
+routes:
+
+  # HUB1 — IDENTITY & GOVERNANCE
+  sic_id:
+    keywords: ["sic-id", "codice membro", "id univoco", "registrazione"]
+    primary_agent: "sic_id_generator81"
+    fallback_agent: "orchestrator81"
+    hub: "HUB1"
+
+  membership:
+    keywords: ["membership", "abbonamento", "basic+", "pro+", "elite+", "genesys81+", "iscrizione"]
+    primary_agent: "membership_manager81"
+    fallback_agent: "orchestrator81"
+    hub: "HUB1"
+
+  authentication:
+    keywords: ["login", "accesso", "token", "sessione", "autenticazione", "jwt"]
+    primary_agent: "auth_gate81"
+    fallback_agent: "orchestrator81"
+    hub: "HUB1"
+
+  lead_management:
+    keywords: ["lead", "contatto", "qualifica", "crm", "pipeline"]
+    primary_agent: "nicolas_core81"
+    secondary_agent: "lead_scoring81"
+    fallback_agent: "crm_bridge81"
+    hub: "HUB1"
+
+  content_social:
+    keywords: ["post", "contenuto", "social", "telegram", "pubblicazione", "calendario editoriale"]
+    primary_agent: "social_automator81"
+    secondary_agent: "pnl_engine81"
+    semantic_check: "semantic_guard81"
+    hub: "HUB1"
+
+  monitoring:
+    keywords: ["monitor", "integrità", "backup", "anomalia", "alert", "sistema"]
+    primary_agent: "daily_monitor81"
+    secondary_agent: "alert_system81"
+    hub: "HUB1"
+
+  knowledge:
+    keywords: ["knowledge base", "norma", "regola", "memoria", "contesto"]
+    primary_agent: "knowledge_base81"
+    hub: "HUB1"
+
+  analytics_general:
+    keywords: ["kpi", "analytics", "report", "performance", "metriche"]
+    primary_agent: "data_analytics81"
+    hub: "HUB1"
+
+  # HUB2 — COMPLIANCE / SAFETY / HACCP
+  dvr_rischio:
+    keywords: ["dvr", "valutazione rischi", "documento rischi", "rischio"]
+    primary_agent: "safety81"
+    hub: "HUB2"
+
+  haccp:
+    keywords: ["haccp", "food", "alimentare", "catena freddo", "ccp", "punto critico", "temperatura"]
+    primary_agent: "haccp81"
+    hub: "HUB2"
+
+  formazione_asr:
+    keywords: ["asr 2025", "accordo stato regioni", "corso obbligatorio", "formazione", "attestato", "ateco", "datore lavoro"]
+    primary_agent: "asr2025_agent81"
+    secondary_agent: "formation_manager81"
+    hub: "HUB2"
+
+  rischio_chimico:
+    keywords: ["chimico", "sds", "scheda sicurezza", "sostanza pericolosa", "esposizione chimica"]
+    primary_agent: "rischio_chimico81"
+    hub: "HUB2"
+
+  rischio_rumore:
+    keywords: ["rumore", "lex", "decibel", "dpi uditivo", "esposizione sonora"]
+    primary_agent: "rischio_rumore81"
+    hub: "HUB2"
+
+  rischio_vibrazioni:
+    keywords: ["vibrazioni", "hav", "wbv", "a(8)", "vibrazioni mano-braccio", "vibrazioni corpo intero"]
+    primary_agent: "rischio_vibrazioni81"
+    hub: "HUB2"
+
+  stress_lavoro:
+    keywords: ["stress", "stress lavoro-correlato", "benessere", "rischio psicosociale", "burnout"]
+    primary_agent: "stress_lavoro_correlato81"
+    hub: "HUB2"
+
+  dpi:
+    keywords: ["dpi", "dispositivi protezione", "elmetto", "guanti", "occhiali protezione", "imbracatura"]
+    primary_agent: "dpi_manager81"
+    hub: "HUB2"
+
+  cantiere:
+    keywords: ["cantiere", "psc", "pos", "csp", "cse", "notifica preliminare", "lavori edili"]
+    primary_agent: "cantiere_sicuro81"
+    hub: "HUB2"
+
+  sorveglianza_sanitaria:
+    keywords: ["sorveglianza sanitaria", "medico competente", "visita", "idoneità", "mc"]
+    primary_agent: "sorveglianza_sanitaria81"
+    hub: "HUB2"
+
+  audit:
+    keywords: ["audit", "ispezione", "non conformità", "check", "verifica"]
+    primary_agent: "audit_engine81"
+    secondary_agent: "inspection_simulator81"
+    hub: "HUB2"
+
+  preventivo_servizi:
+    keywords: ["preventivo", "offerta", "prezzo servizi", "consulenza", "costo"]
+    primary_agent: "preventivo_compliance81"
+    hub: "HUB2"
+
+  iso_sistemi:
+    keywords: ["iso 45001", "iso 9001", "iso 14001", "sgsl", "sgq", "sga", "certificazione"]
+    primary_agent: "iso45001_agent81"
+    secondary_agents: ["iso9001_agent81", "iso14001_agent81"]
+    hub: "HUB2"
+
+  sanzioni:
+    keywords: ["sanzione", "multa", "ispezione asl", "inl", "penale", "costo inadempienza"]
+    primary_agent: "sanzioni_calcolatore81"
+    hub: "HUB2"
+
+  scadenzario:
+    keywords: ["scadenza", "rinnovo", "scadenziario", "prossime scadenze", "calendario compliance"]
+    primary_agent: "scadenzario_manager81"
+    hub: "HUB2"
+
+  documenti_sicurezza:
+    keywords: ["documento", "nomina", "lettera nomina", "verbale", "rspp", "rls"]
+    primary_agent: "document_builder81"
+    hub: "HUB2"
+
+  privacy_gdpr:
+    keywords: ["gdpr", "privacy", "dato personale", "consenso", "registro trattamenti", "dpa"]
+    primary_agent: "privacy_compliance81"
+    hub: "HUB2"
+
+  normative_aggiornamenti:
+    keywords: ["nuova norma", "circolare", "gazzetta ufficiale", "aggiornamento normativo", "inail circolare"]
+    primary_agent: "normative_monitor81"
+    secondary_agent: "asr2025_agent81"
+    hub: "HUB2"
+
+  # HUB3 — WEB3 / UTILITY / TOKENOMICS
+  genesys:
+    keywords: ["genesys81+", "genesys", "fondatore", "membership premium", "81 posti"]
+    primary_agent: "genesys81_agent"
+    constraints: ["GENESYS81+ NON è investimento. NON è rendimento."]
+    hub: "HUB3"
+
+  pix81:
+    keywords: ["pix81+", "pix", "spazio pubblicitario", "advertising"]
+    primary_agent: "pix81_agent"
+    hub: "HUB3"
+
+  lock81:
+    keywords: ["lock81+", "lock", "fedeltà", "loyalty", "180 giorni"]
+    primary_agent: "lock81_agent"
+    constraints: ["NON è staking. NON è rendimento. NON è APY."]
+    hub: "HUB3"
+
+  pv_points:
+    keywords: ["pv", "point value", "saldo pv", "acquisto pv", "crediti"]
+    primary_agent: "pv_engine81"
+    constraints: ["PV NON è moneta elettronica. NON riscattabile in contanti."]
+    hub: "HUB3"
+
+  pvplus:
+    keywords: ["pv+", "reward", "bonus", "punto plus"]
+    primary_agent: "pvplus_engine81"
+    hub: "HUB3"
+
+  pagamento:
+    keywords: ["pagamento", "acquisto", "checkout", "stripe", "bonifico"]
+    primary_agent: "pay_gate81"
+    constraints: ["CONFERMO AZIONE CRITICA per modifiche PayGate."]
+    hub: "HUB3"
+
+  provvigioni:
+    keywords: ["provvigione", "commissione", "affiliato", "partner network", "payout"]
+    primary_agent: "provvigioni_engine81"
+    secondary_agent: "affiliate_tracker81"
+    hub: "HUB3"
+
+  webinar:
+    keywords: ["webinar", "evento online", "formazione live", "iscrizione webinar"]
+    primary_agent: "webinar_engine81"
+    hub: "HUB3"
+
+  corsi_marketplace:
+    keywords: ["corso", "e-learning", "certificato", "formazione online", "attestato digitale"]
+    primary_agent: "course_marketplace81"
+    secondary_agent: "corsi_elearning81"
+    hub: "HUB3"
+
+  community:
+    keywords: ["community", "gruppo telegram", "canale telegram", "moderazione"]
+    primary_agent: "community_manager81"
+    hub: "HUB3"
+
+  seo:
+    keywords: ["seo", "keyword", "posizionamento google", "traffico organico"]
+    primary_agent: "seo_agent81"
+    hub: "HUB3"
+
+  email_marketing_hub3:
+    keywords: ["campagna email", "newsletter", "nurturing", "brevo", "automation email"]
+    primary_agent: "email_marketing81"
+    hub: "HUB3"
+
+  onboarding_nuovo_membro:
+    keywords: ["onboarding", "benvenuto", "nuovo iscritto", "primo accesso"]
+    primary_agent: "onboarding_flow81"
+    hub: "HUB3"
+
+  referral:
+    keywords: ["referral", "invita amico", "codice invito", "porta un amico"]
+    primary_agent: "referral_engine81"
+    hub: "HUB3"
+
+  compliance_score:
+    keywords: ["score compliance", "livello compliance", "quanto siamo a posto", "gap analysis"]
+    primary_agent: "compliance_score81"
+    hub: "HUB3"
+
+  # PC OPERATOR LAYER
+  email_send:
+    keywords: ["invia email", "spedisci email", "manda email", "campagna brevo"]
+    primary_agent: "brevo_campaign_operator81"
+    approval_required: "CONFERMO INVIO"
+    hub: "PCO"
+
+  social_publish:
+    keywords: ["pubblica post", "manda post", "invia su telegram", "pubblica su linkedin"]
+    primary_agent: "social_publisher81"
+    approval_required: "CONFERMO PUBBLICA"
+    hub: "PCO"
+
+  calendar_manage:
+    keywords: ["calendario", "evento", "agenda", "programma giorno"]
+    primary_agent: "calendar_operator81"
+    hub: "PCO"
+
+  pdf_create:
+    keywords: ["genera pdf", "crea documento", "esporta pdf", "stampa documento"]
+    primary_agent: "pdf_operator81"
+    hub: "PCO"
+
+  whatsapp_send:
+    keywords: ["invia whatsapp", "messaggio whatsapp", "broadcast whatsapp"]
+    primary_agent: "whatsapp_operator81"
+    approval_required: "CONFERMO INVIO per broadcast"
+    hub: "PCO"
+
+  code_deploy:
+    keywords: ["deploy", "rilascia codice", "aggiorna script", "modifica apps script"]
+    primary_agent: "script_operator81"
+    approval_required: "CONFERMO AZIONE CRITICA"
+    hub: "PCO"
+
+  # FINANCE & OPS
+  fattura:
+    keywords: ["fattura", "fatturazione", "fe", "sdi", "nota credito", "aruba"]
+    primary_agent: "aruba_invoice_operator81"
+    secondary_agent: "finance_pilot81"
+    approval_required: "CONFERMO AZIONE CRITICA"
+    hub: "FIN"
+
+  riconciliazione:
+    keywords: ["riconciliazione", "match pagamenti", "discrepanza", "quadratura"]
+    primary_agent: "reconciliation_agent81"
+    hub: "FIN"
+
+  revenue:
+    keywords: ["ricavi", "mrr", "arr", "revenue", "entrate mensili"]
+    primary_agent: "revenue_tracker81"
+    hub: "FIN"
+
+  budget:
+    keywords: ["budget", "spese", "costi", "piano finanziario", "forecast"]
+    primary_agent: "budget_manager81"
+    hub: "FIN"
+
+  commissioni_payout:
+    keywords: ["paga provvigioni", "bonifico partner", "payout mensile"]
+    primary_agent: "commission_payout81"
+    approval_required: "CONFERMO AZIONE CRITICA"
+    hub: "FIN"
+
+  kpi_finanziari:
+    keywords: ["cac", "ltv", "margin", "ebitda", "payback", "kpi finanziari"]
+    primary_agent: "kpi_finance81"
+    hub: "FIN"
+
+  report_giornaliero:
+    keywords: ["briefing", "report giornaliero", "daily ops", "cosa fare oggi"]
+    primary_agent: "daily_ops_pilot81"
+    hub: "FIN"
+
+
+# ─── PRIORITY OVERRIDES ──────────────────────────────────────────────────────
+
+priority_overrides:
+  # Queste keyword triggherano SEMPRE SemanticGuard81 PRIMA di qualsiasi agente
+  semantic_guard_always:
+    - "rendimento"
+    - "interesse"
+    - "investimento"
+    - "guadagno garantito"
+    - "profitto garantito"
+    - "ritorno"
+    - "capitale"
+    - "dividendi"
+    - "staking"
+    - "apy"
+    - "apr"
+    - "yield"
+
+  # Queste richieste richiedono conferma esplicita prima dell'azione
+  always_require_confirm:
+    - "elimina"
+    - "cancella"
+    - "reset"
+    - "drop"
+    - "pubblica in produzione"
+    - "invia a tutti"
+    - "bonifico"
+    - "paga"
+    - "fattura"
+    - "modifica provvigioni"
+    - "modifica paygate"
+    - "deploy"
+
+
+# ─── FALLBACK CHAIN ───────────────────────────────────────────────────────────
+
+fallback_chain:
+  step_1: "orchestrator81"
+  step_2: "command_center81"
+  step_3: "ask_mirco"
+  note: "Se nessun agente può gestire la richiesta, l'Orchestrator chiede conferma a Mirco prima di procedere."

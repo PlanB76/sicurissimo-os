@@ -1,0 +1,339 @@
+# TOOL BUNDLES 81+ — Set di strumenti per categoria di agenti
+# Versione: 1.0.0 | Data: 2026-06-17
+# Ogni bundle è un insieme riutilizzabile di tool che gli agenti dichiarano
+
+meta:
+  version: "1.0.0"
+  updated: "2026-06-17"
+
+
+# ─── BUNDLES PER HUB ──────────────────────────────────────────────────────────
+
+bundles:
+
+  # ── CORE INFRASTRUCTURE ────────────────────────────────────────────────────
+  core_memory:
+    description: "Lettura e scrittura memoria persistente sistema"
+    tools:
+      - name: "memory_read"
+        type: "internal"
+        endpoint: "knowledge_base/read"
+        auth: "service_token"
+      - name: "memory_write"
+        type: "internal"
+        endpoint: "knowledge_base/write"
+        auth: "service_token"
+        rate_limit: "100/hour"
+      - name: "memory_search"
+        type: "internal"
+        endpoint: "knowledge_base/search"
+        auth: "service_token"
+
+  core_logging:
+    description: "Logging azioni sistema — append only"
+    tools:
+      - name: "log_writer"
+        type: "internal"
+        endpoint: "system_logs/append"
+        auth: "service_token"
+        constraints: ["append_only", "immutable"]
+      - name: "audit_trail"
+        type: "internal"
+        endpoint: "system_logs/audit"
+        auth: "service_token"
+
+  core_routing:
+    description: "Routing e orchestrazione agenti"
+    tools:
+      - name: "agent_dispatcher"
+        type: "internal"
+        endpoint: "orchestrator/dispatch"
+        auth: "service_token"
+      - name: "routing_matrix_reader"
+        type: "internal"
+        endpoint: "routing.matrix.yaml/read"
+        auth: "service_token"
+
+  # ── GOOGLE WORKSPACE ───────────────────────────────────────────────────────
+  google_workspace:
+    description: "Suite Google completa per operazioni sistema"
+    tools:
+      - name: "google_sheets_api"
+        type: "external"
+        service: "Google Sheets API v4"
+        scopes: ["spreadsheets.readonly", "spreadsheets"]
+        sheet_id: "env:GOOGLE_SHEET_MASTER_ID"
+        env_required: ["GOOGLE_SERVICE_ACCOUNT_JSON"]
+
+      - name: "google_drive_api"
+        type: "external"
+        service: "Google Drive API v3"
+        scopes: ["drive.readonly", "drive.file"]
+        folder_id: "env:GOOGLE_DRIVE_ECOSYSTEM_ID"
+        env_required: ["GOOGLE_SERVICE_ACCOUNT_JSON"]
+
+      - name: "google_calendar_api"
+        type: "external"
+        service: "Google Calendar API v3"
+        scopes: ["calendar.readonly", "calendar.events"]
+        env_required: ["GOOGLE_SERVICE_ACCOUNT_JSON"]
+
+      - name: "apps_script_api"
+        type: "external"
+        service: "Google Apps Script API"
+        scopes: ["script.projects", "script.deployments"]
+        env_required: ["GOOGLE_SERVICE_ACCOUNT_JSON"]
+        permissions_required: "F3_with_confirm"
+
+  # ── AI MODELS ──────────────────────────────────────────────────────────────
+  ai_models:
+    description: "Chiamate ai modelli AI — Gemini (Strategico) e Claude (Esecutivo)"
+    tools:
+      - name: "gemini_api"
+        type: "external"
+        service: "Google Gemini API"
+        role: "Architetto Strategico — post magnetici, analisi normative, pianificazione"
+        model: "env:GEMINI_MODEL_ID"
+        env_required: ["GEMINI_API_KEY"]
+        constraints: ["Non invertire i ruoli con Claude"]
+
+      - name: "claude_api"
+        type: "external"
+        service: "Anthropic Claude API"
+        role: "Agente di Esecuzione — logica agentica, codice, integrazioni, task complessi"
+        model: "claude-sonnet-4-6"
+        env_required: ["ANTHROPIC_API_KEY"]
+        constraints: ["Non invertire i ruoli con Gemini"]
+
+      - name: "hugging_face_api"
+        type: "external"
+        service: "Hugging Face Inference API"
+        role: "Analisi semantica per lead scoring"
+        env_required: ["HUGGINGFACE_API_KEY"]
+
+  # ── COMMUNICATIONS ─────────────────────────────────────────────────────────
+  communications:
+    description: "Tutti i canali di comunicazione outbound"
+    tools:
+      - name: "whatsapp_api"
+        type: "external"
+        service: "WhatsApp Business API"
+        env_required: ["WHATSAPP_API_TOKEN", "WHATSAPP_PHONE_ID"]
+        commercial_number: "env:WHATSAPP_COMMERCIAL_NUMBER"
+        approval_level: "F3"
+        broadcast_approval: "CONFERMO INVIO"
+
+      - name: "telegram_bot_api"
+        type: "external"
+        service: "Telegram Bot API"
+        env_required: ["TELEGRAM_BOT_TOKEN", "TELEGRAM_CHANNEL_IDS"]
+        approval_level: "F3 for broadcast"
+        broadcast_approval: "CONFERMO PUBBLICA"
+
+      - name: "brevo_api"
+        type: "external"
+        service: "Brevo (ex Sendinblue) API"
+        env_required: ["BREVO_API_KEY"]
+        from_email: "welcome@81plus.net"
+        approval_level: "F3 for campaigns >100"
+        bulk_approval: "CONFERMO INVIO"
+
+      - name: "calendly_api"
+        type: "external"
+        service: "Calendly API"
+        env_required: ["CALENDLY_API_TOKEN", "CALENDLY_USER_URI"]
+
+  # ── DOCUMENT GENERATION ────────────────────────────────────────────────────
+  document_generation:
+    description: "Generazione e gestione documenti"
+    tools:
+      - name: "pdf_generator"
+        type: "internal"
+        engine: "wkhtmltopdf / Puppeteer"
+        templates_path: "templates/documents/"
+
+      - name: "template_engine"
+        type: "internal"
+        engine: "Twig / Blade"
+        templates_path: "templates/"
+
+      - name: "digital_signature"
+        type: "external"
+        service: "DocuSign / Firma Digitale IT"
+        env_required: ["DOCSIGN_API_KEY"]
+        approval_level: "F3"
+
+  # ── PAYMENTS & FINANCE ─────────────────────────────────────────────────────
+  payments_finance:
+    description: "Pagamenti, fatturazione, finanza"
+    tools:
+      - name: "payment_processor"
+        type: "external"
+        service: "Stripe / PayPal"
+        env_required: ["STRIPE_SECRET_KEY", "STRIPE_WEBHOOK_SECRET"]
+        approval_level: "F4 for config changes"
+        critical_note: "CONFERMO AZIONE CRITICA per qualsiasi modifica PayGate"
+
+      - name: "aruba_api"
+        type: "external"
+        service: "Aruba Fatturazione Elettronica"
+        env_required: ["ARUBA_USERNAME", "ARUBA_PASSWORD", "ARUBA_API_KEY"]
+        critical_rules:
+          - "Credenziali SOLO via .env"
+          - "MAI stampare credenziali"
+          - "Se 2FA/OTP: STOP, intervento umano"
+          - "Dry-run prima di sync produzione"
+          - "CONFERMO AZIONE CRITICA per emissione fatture"
+
+      - name: "pv_ledger"
+        type: "internal"
+        table: "pv_transactions"
+        constraints: ["idempotent", "server_side_only", "never_client_js"]
+
+      - name: "pvplus_ledger"
+        type: "internal"
+        table: "pvplus_claims"
+        unique_key: "user_id + event_type + event_id"
+        constraints: ["idempotent_via_unique_key", "server_side_only"]
+
+  # ── NORMATIVE COMPLIANCE ───────────────────────────────────────────────────
+  normative_compliance:
+    description: "Strumenti per compliance normativa D.Lgs 81/08, HACCP, ISO"
+    tools:
+      - name: "normative_db"
+        type: "internal"
+        description: "Database normative aggiornato: D.Lgs 81/08, ASR 2025, Reg. CE, ISO"
+        update_frequency: "daily via normative_monitor81"
+
+      - name: "ateco_mapper"
+        type: "internal"
+        description: "Mappatura codici ATECO → settore → rischio → corso obbligatorio"
+        format: "lettera + 2 cifre (es. A01, F41, I56)"
+        source: "ASR 2025 tabelle ATECO"
+
+      - name: "risk_matrix"
+        type: "internal"
+        description: "Matrice rischi per settore: probabilità × gravità → livello rischio"
+
+      - name: "course_recommender"
+        type: "internal"
+        description: "Raccomanda corso corretto in base a ATECO, ruolo, storico formazione"
+
+  # ── MARKETING & CRM ────────────────────────────────────────────────────────
+  marketing_crm:
+    description: "CRM, lead management, automazioni marketing"
+    tools:
+      - name: "lead_db"
+        type: "internal"
+        table: "leads"
+        description: "Database centrale lead con scoring, settore, storico interazioni"
+
+      - name: "pnl_rulebook"
+        type: "internal"
+        description: "Regole PNL e neuromarketing: parole trigger, struttura post, ganci emotivi"
+        source: "semantic_rules.yaml#pnl_anchor_words"
+
+      - name: "scoring_model"
+        type: "internal + hugging_face"
+        description: "Modello scoring lead: freddo (0-30), tiepido (31-70), caldo (71-100)"
+
+      - name: "content_scheduler"
+        type: "internal"
+        description: "Schedulatore contenuti: calendario editoriale fisso + stagionalità"
+        schedule:
+          primavera_estate: ["08:15", "12:30", "15:30", "19:00"]
+          autunno_inverno: ["08:30", "12:30", "15:45", "19:20"]
+
+  # ── ANALYTICS & MONITORING ─────────────────────────────────────────────────
+  analytics_monitoring:
+    description: "Analytics, monitoring, alerting"
+    tools:
+      - name: "uptime_monitor"
+        type: "external"
+        service: "UptimeRobot / Pingdom"
+        env_required: ["UPTIME_MONITOR_API_KEY"]
+
+      - name: "error_tracker"
+        type: "external"
+        service: "Sentry"
+        env_required: ["SENTRY_DSN"]
+
+      - name: "kpi_engine"
+        type: "internal"
+        description: "Calcolo KPI: lead generati, conversion rate, MRR, compliance score clienti"
+
+      - name: "analytics_platform"
+        type: "external"
+        service: "Google Analytics 4 / Matomo"
+        env_required: ["GA4_MEASUREMENT_ID"]
+
+  # ── SECURITY ───────────────────────────────────────────────────────────────
+  security:
+    description: "Strumenti sicurezza sistema"
+    tools:
+      - name: "semantic_guard"
+        type: "internal"
+        description: "Guard semantico — verifica output, blocca parole vietate"
+        source: "semantic_rules.yaml"
+        always_active: true
+
+      - name: "jwt_issuer"
+        type: "internal"
+        algorithm: "HS256"
+        env_required: ["JWT_SECRET"]
+        expiry: "24h"
+
+      - name: "cors_whitelist"
+        type: "internal"
+        allowed_origins:
+          - "https://81plus.net"
+          - "https://www.81plus.net"
+          - "https://sicurissimo.online"
+          - "https://www.sicurissimo.online"
+          - "https://81plus.online"
+        blocked: ["*", "null"]
+
+      - name: "hmac_signer"
+        type: "internal"
+        algorithm: "HMAC-SHA256"
+        env_required: ["HMAC_SECRET"]
+        used_for: ["SIC-ID generation", "webhook validation"]
+
+      - name: "fraud_ml_model"
+        type: "internal + hugging_face"
+        description: "Rilevamento frodi: doppi account, abuso referral, transazioni anomale"
+
+
+# ─── BUNDLE ASSIGNMENTS PER AGENTE ────────────────────────────────────────────
+# Elenco rapido agente → bundle necessari
+
+agent_bundle_map:
+  orchestrator81: [core_memory, core_logging, core_routing, security]
+  semantic_guard81: [security, core_logging]
+  sic_id_generator81: [security, core_logging, google_workspace]
+  membership_manager81: [payments_finance, core_logging, communications]
+  auth_gate81: [security, core_logging]
+  nicolas_core81: [communications, marketing_crm, core_memory]
+  lead_scoring81: [ai_models, marketing_crm, core_logging]
+  crm_bridge81: [communications, marketing_crm, core_logging]
+  daily_monitor81: [google_workspace, analytics_monitoring, core_logging]
+  alert_system81: [communications, core_logging]
+  drive_scanner81: [google_workspace, ai_models, core_memory]
+  pnl_engine81: [marketing_crm, security]
+  social_automator81: [communications, google_workspace, marketing_crm, security]
+  knowledge_base81: [google_workspace, core_memory]
+  command_center81: [ai_models, google_workspace, core_routing]
+  safety81: [normative_compliance, document_generation, core_logging]
+  haccp81: [normative_compliance, document_generation, core_logging]
+  asr2025_agent81: [normative_compliance, document_generation, core_logging]
+  audit_engine81: [normative_compliance, core_logging, document_generation]
+  preventivo_compliance81: [document_generation, marketing_crm, payments_finance]
+  finance_pilot81: [payments_finance, analytics_monitoring, core_logging]
+  aruba_invoice_operator81: [payments_finance, core_logging]
+  brevo_campaign_operator81: [communications, marketing_crm]
+  social_publisher81: [communications, security]
+  pay_gate81: [payments_finance, security, core_logging]
+  provvigioni_engine81: [payments_finance, core_logging]
+  genesys81_agent: [payments_finance, core_logging, marketing_crm]
+  pv_engine81: [payments_finance, core_logging]
+  pvplus_engine81: [payments_finance, core_logging]
