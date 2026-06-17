@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WELLFARE PROGRAM 81+ · V5 PRO</title>
+<style>
+:root {
+  --bg:     #05050A;
+  --card:   #0F0F18;
+  --orange: #E8501A;
+  --gold:   #FFD24A;
+  --white:  #FFFFFF;
+  --gray:   #B9BCC2;
+  --dark:   #1a1a1a;
+  --mid:    #555555;
+  --light:  #f8f5f1;
+  --border: #e0d8d0;
+  --olight: #FFF0E8;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background: #d4d4d4;
+  color: var(--dark);
+}
+
+/* ─── A4 PAGE ─────────────────────────────────────── */
+.page {
+  width: 210mm;
+  height: 297mm;
+  margin: 0 auto 12px;
+  position: relative;
+  overflow: hidden;
+  background: var(--white);
+  page-break-after: always;
+}
+.page-dark { background: var(--bg); color: var(--white); }
+
+/* ─── HEADER BAR ──────────────────────────────────── */
+.ph {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 14mm;
+  background: var(--dark);
+  color: var(--white);
+  font-size: 6.5pt;
+  font-weight: 700;
+  letter-spacing: .4px;
+  line-height: 1;
+}
+.ph-orange { background: var(--orange); }
+
+/* ─── FOOTER ──────────────────────────────────────── */
+.pf {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  padding: 4px 14mm;
+  font-size: 6.5pt;
+  color: var(--mid);
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  background: var(--white);
+}
+.pf-dark {
+  background: rgba(0,0,0,.25);
+  border-top-color: rgba(255,255,255,.08);
+  color: rgba(255,255,255,.4);
+}
+
+/* ─── CONTENT ─────────────────────────────────────── */
+.pc { padding: 8mm 14mm 12mm; }
+
+/* ─── TYPOGRAPHY ──────────────────────────────────── */
+.ptitle {
+  font-size: 21pt;
+  font-weight: 900;
+  line-height: 1.1;
+  letter-spacing: -.3px;
+  margin-bottom: 2px;
+  color: var(--dark);
+}
+.ptitle-dark { color: var(--white); }
+.psub {
+  font-size: 8.5pt;
+  color: var(--mid);
+  margin-bottom: 8px;
+}
+.divider {
+  height: 2px;
+  background: linear-gradient(90deg, var(--orange) 0%, transparent 80%);
+  margin-bottom: 10px;
+}
+.stitle {
+  font-size: 9pt;
+  font-weight: 700;
+  color: var(--dark);
+  margin-bottom: 6px;
+}
+
+/* ─── TABLES ──────────────────────────────────────── */
+.dt {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 7.8pt;
+  margin-bottom: 8px;
+}
+.dt th {
+  background: var(--dark);
+  color: var(--white);
+  padding: 5px 8px;
+  text-align: left;
+  font-weight: 700;
+  font-size: 7.5pt;
+}
+.dt td {
+  padding: 4.5px 8px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.45;
+  color: var(--mid);
+}
+.dt tr:nth-child(even) td { background: #faf8f5; }
+
+/* ─── GRID LAYOUTS ────────────────────────────────── */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+.g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:7px; }
+.g6 { display:grid; grid-template-columns:repeat(6,1fr); gap:6px; }
+
+/* ─── CARDS ───────────────────────────────────────── */
+.card {
+  background: var(--olight);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--orange);
+  border-radius: 3px;
+  padding: 9px;
+  font-size: 7.8pt;
+}
+.card-dark {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,.07);
+  border-left: 3px solid var(--orange);
+  color: var(--white);
+}
+.clabel {
+  font-size: 6.8pt;
+  font-weight: 700;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: .4px;
+  margin-bottom: 1px;
+}
+.ctitle { font-size: 9pt; font-weight: 800; color: var(--dark); margin-bottom: 4px; }
+.cval  { line-height: 1.45; color: var(--mid); }
+
+/* ─── FLOW STEPS ──────────────────────────────────── */
+.flow { display:flex; align-items:stretch; gap:0; }
+.fstep {
+  flex:1;
+  background: var(--card);
+  padding: 7px 5px;
+  text-align: center;
+  position: relative;
+}
+.fstep:not(:last-child)::after {
+  content: '▶';
+  position: absolute;
+  right: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--orange);
+  font-size: 9pt;
+  z-index: 2;
+}
+.fstep-name { font-size: 7.5pt; font-weight: 900; color: var(--orange); }
+.fstep-sub  { font-size: 6.5pt; color: var(--gray); line-height: 1.3; margin-top: 1px; }
+
+/* ─── BAR CHARTS ──────────────────────────────────── */
+.chart-box {
+  background: #faf8f5;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 8px 10px 6px;
+}
+.chart-box-title { font-size: 7.8pt; font-weight: 700; color: var(--dark); margin-bottom: 6px; }
+.barchart {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0;
+  margin-bottom: 2px;
+}
+.bci { flex:1; display:flex; flex-direction:column; align-items:center; }
+.bci-val { font-size: 5.8pt; font-weight: 700; text-align: center; margin-bottom: 2px; white-space: nowrap; overflow: hidden; max-width: 100%; }
+.bci-bar { width: 100%; border-radius: 2px 2px 0 0; }
+.bci-lbl { font-size: 6pt; margin-top: 3px; text-align: center; color: var(--mid); white-space: nowrap; overflow: hidden; max-width: 100%; }
+
+/* ─── DONUT ───────────────────────────────────────── */
+.donut-wrap { display:flex; align-items:center; gap:10px; }
+.donut-svg { flex-shrink:0; }
+.legend { font-size: 7pt; line-height: 2; }
+.legend-row { display:flex; align-items:center; gap:5px; color: var(--mid); }
+.ldot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+
+/* ─── BULLET LIST ─────────────────────────────────── */
+.blist { list-style:none; }
+.blist li {
+  padding: 1.5px 0 1.5px 11px;
+  position: relative;
+  font-size: 8pt;
+  line-height: 1.5;
+  color: var(--mid);
+}
+.blist li::before { content:'•'; color:var(--orange); position:absolute; left:0; font-weight:700; }
+
+/* ─── INFO BOX ────────────────────────────────────── */
+.ibox {
+  background: var(--olight);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 9px;
+  font-size: 8pt;
+}
+.ibox-title { font-size: 9pt; font-weight: 700; color: var(--dark); margin-bottom: 5px; }
+
+/* ─── SCENARIO CARDS ──────────────────────────────── */
+.scard {
+  background: var(--olight);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 9px;
+  font-size: 7.8pt;
+}
+.sc-title { font-size: 9pt; font-weight: 800; color: var(--dark); margin-bottom: 6px; }
+.sc-lbl { font-size: 6.8pt; font-weight: 700; color: var(--orange); text-transform: uppercase; margin-top: 5px; margin-bottom: 1px; }
+.sc-val { color: var(--mid); line-height: 1.4; }
+
+/* ─── FUNNEL ──────────────────────────────────────── */
+.funnelbox {
+  background: #faf8f5;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 9px;
+}
+.fitem {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  padding: 6px 10px;
+  margin-bottom: 3px;
+  font-size: 8pt;
+  text-align: center;
+}
+.fitem strong { color: var(--dark); }
+.fitem small  { display:block; font-size: 7pt; color: var(--mid); }
+
+/* ─── DISCLAIMER ──────────────────────────────────── */
+.disc {
+  background: #FFF8F4;
+  border: 1px solid #F0C0A0;
+  border-radius: 3px;
+  padding: 7px 10px;
+  font-size: 7.2pt;
+  color: var(--mid);
+  font-style: italic;
+  line-height: 1.5;
+  margin-top: 6px;
+}
+.disc-strong {
+  background: #FFF0E8;
+  border-left: 3px solid var(--orange);
+  border-radius: 0 3px 3px 0;
+  padding: 7px 10px;
+  font-size: 7.2pt;
+  color: var(--mid);
+  margin-top: 6px;
+}
+
+/* ─── SCRIPT TABLE ────────────────────────────────── */
+.script-tbl { width:100%; border-collapse:collapse; font-size:8pt; margin-bottom:8px; }
+.script-tbl th {
+  background: var(--dark);
+  color: var(--white);
+  padding: 6px 10px;
+  text-align: left;
+  font-size: 7.5pt;
+}
+.script-tbl td {
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  line-height: 1.55;
+}
+.script-tbl tr:nth-child(even) td { background: #faf8f5; }
+.script-tbl td:first-child {
+  font-weight: 700;
+  color: var(--dark);
+  white-space: nowrap;
+  width: 28%;
+}
+.script-tbl td:last-child { color: var(--mid); }
+
+/* ─── INDEX PAGE ──────────────────────────────────── */
+.idx-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 5px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 8.5pt;
+  color: var(--mid);
+  gap: 8px;
+}
+.idx-row:first-child { font-weight: 700; color: var(--dark); }
+.idx-row span:last-child { flex-shrink: 0; font-weight: 600; color: var(--dark); }
+.idx-line { flex:1; border-bottom: 1px dotted var(--border); margin: 0 6px 4px; }
+
+/* ─── PRINT ───────────────────────────────────────── */
+@media print {
+  body { background:white; }
+  .page { margin:0; box-shadow:none; }
+  @page { size:A4; margin:0; }
+}
+@media screen {
+  .page { box-shadow:0 4px 20px rgba(0,0,0,.18); }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 1 — COVER
+════════════════════════════════════════════════════ -->
+<div class="page page-dark">
+  <div class="ph" style="background:rgba(255,255,255,.06); padding-top:8px; padding-bottom:8px;">
+    <span>81+ / SICURISSIMO</span>
+    <span>DOCUMENTO MASTER</span>
+  </div>
+
+  <div style="padding:10mm 14mm 0;">
+    <!-- Title block — single clean render, no overlap -->
+    <div style="margin-bottom:6mm;">
+      <div style="font-size:34pt; font-weight:900; letter-spacing:-1px; color:var(--white); line-height:1.05;">
+        WELLFARE PROGRAM<br><span style="color:var(--orange);">81+</span>
+      </div>
+      <div style="font-size:11pt; color:var(--gold); margin-top:6px; font-weight:600; letter-spacing:.3px;">
+        Valore reale. Crescita leggibile. Sistema 81+.
+      </div>
+    </div>
+
+    <!-- Growth chart SVG -->
+    <svg viewBox="0 0 520 260" width="100%" style="display:block; max-height:155mm;">
+      <!-- Grid lines -->
+      <line x1="40" y1="10"  x2="40"  y2="215" stroke="#333" stroke-width=".5"/>
+      <line x1="40" y1="215" x2="510" y2="215" stroke="#333" stroke-width=".5"/>
+      <line x1="40" y1="55"  x2="510" y2="55"  stroke="#333" stroke-width=".3" stroke-dasharray="3,3"/>
+      <line x1="40" y1="135" x2="510" y2="135" stroke="#333" stroke-width=".3" stroke-dasharray="3,3"/>
+      <!-- Y labels -->
+      <text x="35" y="215" text-anchor="end" fill="#666" font-size="8">0</text>
+      <text x="35" y="135" text-anchor="end" fill="#666" font-size="8">150k</text>
+      <text x="35" y="55"  text-anchor="end" fill="#666" font-size="8">300k</text>
+
+      <!-- Bars (L1–L8, alternating dark/orange) -->
+      <!-- L1: 1500 PV  → h=2   --> <rect x="50"  y="213" width="40" height="2"   fill="#444"/>
+      <!-- L2: 3000 PV  → h=4   --> <rect x="110" y="211" width="40" height="4"   fill="#2a2a2a"/>
+      <!-- L3: 10000 PV → h=13  --> <rect x="170" y="202" width="40" height="13"  fill="#444"/>
+      <!-- L4: 25000 PV → h=33  --> <rect x="230" y="182" width="40" height="33"  fill="#2a2a2a"/>
+      <!-- L5: 40000 PV → h=53  --> <rect x="290" y="162" width="40" height="53"  fill="#E8501A"/>
+      <!-- L6: 75000 PV → h=100 --> <rect x="350" y="115" width="40" height="100" fill="#2a2a2a"/>
+      <!-- L7: 150000   → h=160 --> <rect x="410" y="55"  width="40" height="160" fill="#E8501A"/>
+      <!-- L8: 300000   → h=205 --> <rect x="470" y="10"  width="40" height="205" fill="#2a2a2a"/>
+
+      <!-- Orange growth curve -->
+      <path d="M70,213 C90,212 130,210 150,209 C170,208 210,200 250,190 C290,178 310,155 330,148 C350,138 370,110 390,95 C410,72 430,46 450,36 C470,22 490,12 510,8"
+            fill="none" stroke="#E8501A" stroke-width="3" stroke-linecap="round"/>
+
+      <!-- Bar labels -->
+      <text x="70"  y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L1</text>
+      <text x="130" y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L2</text>
+      <text x="190" y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L3</text>
+      <text x="250" y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L4</text>
+      <text x="310" y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L5</text>
+      <text x="370" y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L6</text>
+      <text x="430" y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L7</text>
+      <text x="490" y="227" text-anchor="middle" fill="#aaa" font-size="9" font-weight="700">L8</text>
+
+      <!-- 81+ badge -->
+      <circle cx="465" cy="55" r="28" fill="var(--orange)" stroke="white" stroke-width="2"/>
+      <text x="465" y="62" text-anchor="middle" fill="white" font-size="18" font-weight="900">81+</text>
+    </svg>
+  </div>
+
+  <div class="pf pf-dark">
+    <span>81+ GLOBAL · WELLFARE PROGRAM 81+</span>
+    <span>V5 PRO · 2026-06-17 · Pagina 1</span>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 2 — INDICE
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Indice</div>
+    <div class="psub">Panoramica completa del documento.</div>
+    <div class="divider"></div>
+
+    <div style="background:#faf8f5; border:1px solid var(--border); border-radius:4px; padding:12px 14px;">
+      <div class="idx-row" style="font-weight:700; color:var(--dark); border-bottom:2px solid var(--orange); padding-bottom:6px; margin-bottom:4px;">
+        <span>1. Indice professionale</span>
+        <span class="idx-line"></span>
+        <span>2</span>
+      </div>
+      <div class="idx-row"><span>2. Attiva opportunità. Costruisci la vita che desideri.</span><span class="idx-line"></span><span>3</span></div>
+      <div class="idx-row"><span>3. Quadro strategico del programma</span><span class="idx-line"></span><span>4</span></div>
+      <div class="idx-row"><span>4. PV e POINT81+</span><span class="idx-line"></span><span>5</span></div>
+      <div class="idx-row"><span>5. Career Program e scala rank</span><span class="idx-line"></span><span>6</span></div>
+      <div class="idx-row"><span>6. Fonti di compenso e scenari operativi</span><span class="idx-line"></span><span>7</span></div>
+      <div class="idx-row"><span>7. Scenari applicativi per tipologia di attività</span><span class="idx-line"></span><span>8</span></div>
+      <div class="idx-row"><span>8. Equilibrium Program</span><span class="idx-line"></span><span>9</span></div>
+      <div class="idx-row"><span>9. Percorsi Ambassador, Prestige, Territory e Circle</span><span class="idx-line"></span><span>10</span></div>
+      <div class="idx-row"><span>10. Piano marketing di avvio in 30 giorni</span><span class="idx-line"></span><span>11</span></div>
+      <div class="idx-row"><span>11. Presentazione, contenuti e conversione</span><span class="idx-line"></span><span>12</span></div>
+      <div class="idx-row"><span>12. Script, obiezioni e follow-up</span><span class="idx-line"></span><span>13</span></div>
+      <div class="idx-row"><span>13. Territorio, point e presidio locale</span><span class="idx-line"></span><span>14</span></div>
+      <div class="idx-row"><span>14. Regolamento, standard e dress code</span><span class="idx-line"></span><span>15</span></div>
+      <div class="idx-row"><span>15. Piano d'azione 90 giorni e conclusione</span><span class="idx-line"></span><span>16</span></div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div class="disc-strong">
+        <strong style="color:var(--dark);">Nota operativa V5 PRO:</strong> Questo documento è una bozza operativa interna. Le simulazioni di scenario non costituiscono promesse di guadagno o rendimento. I compensi dipendono esclusivamente da vendite qualificate reali. Verificare con soggetti competenti prima di ogni utilizzo ufficiale.
+      </div>
+    </div>
+
+    <div style="margin-top:12px;" class="g3">
+      <div style="background:var(--card); color:var(--white); border-radius:4px; padding:10px; text-align:center;">
+        <div style="font-size:20pt; font-weight:900; color:var(--orange);">81+</div>
+        <div style="font-size:7pt; color:var(--gray);">Ecosistema</div>
+      </div>
+      <div style="background:var(--card); color:var(--white); border-radius:4px; padding:10px; text-align:center;">
+        <div style="font-size:20pt; font-weight:900; color:var(--gold);">15</div>
+        <div style="font-size:7pt; color:var(--gray);">Sezioni</div>
+      </div>
+      <div style="background:var(--card); color:var(--white); border-radius:4px; padding:10px; text-align:center;">
+        <div style="font-size:20pt; font-weight:900; color:var(--white);">V5</div>
+        <div style="font-size:7pt; color:var(--gray);">PRO 2026</div>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 2</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 3 — ATTIVA OPPORTUNITÀ
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Attiva opportunità. Costruisci la vita che desideri.</div>
+    <div class="psub">Un cerchio semplice e potente: entri, attivi i PV, scegli ciò che ti serve, ottieni risultati, cresci e decidi fin dove vuoi arrivare.</div>
+    <div class="divider"></div>
+
+    <!-- 6-step flow -->
+    <div class="flow" style="gap:2px; margin-bottom:10px;">
+      <div class="fstep"><div class="fstep-name">ENTRI</div><div class="fstep-sub">nell'ecosistema</div></div>
+      <div class="fstep"><div class="fstep-name">ATTIVI PV</div><div class="fstep-sub">credito operativo</div></div>
+      <div class="fstep"><div class="fstep-name">SCEGLI</div><div class="fstep-sub">prodotti e servizi</div></div>
+      <div class="fstep"><div class="fstep-name">UTILIZZI</div><div class="fstep-sub">soluzioni utili</div></div>
+      <div class="fstep"><div class="fstep-name">TRASFORMI</div><div class="fstep-sub">valore in crescita</div></div>
+      <div class="fstep" style="position:relative;"><div class="fstep-name">ESPANDI</div><div class="fstep-sub">la tua visione</div></div>
+    </div>
+
+    <div class="g2">
+      <!-- Bar chart: Cerchio 81+ in numeri -->
+      <div class="chart-box">
+        <div class="chart-box-title">Cerchio 81+ in numeri</div>
+        <div class="barchart" style="height:75px;">
+          <div class="bci"><div class="bci-val">18%</div><div class="bci-bar" style="height:13px; background:var(--orange);"></div><div class="bci-lbl">1</div></div>
+          <div class="bci"><div class="bci-val">30%</div><div class="bci-bar" style="height:21px; background:var(--dark);"></div><div class="bci-lbl">2</div></div>
+          <div class="bci"><div class="bci-val">44%</div><div class="bci-bar" style="height:31px; background:var(--orange);"></div><div class="bci-lbl">3</div></div>
+          <div class="bci"><div class="bci-val">58%</div><div class="bci-bar" style="height:41px; background:var(--dark);"></div><div class="bci-lbl">4</div></div>
+          <div class="bci"><div class="bci-val">74%</div><div class="bci-bar" style="height:52px; background:var(--orange);"></div><div class="bci-lbl">5</div></div>
+          <div class="bci"><div class="bci-val">90%</div><div class="bci-bar" style="height:63px; background:var(--dark);"></div><div class="bci-lbl">6</div></div>
+        </div>
+      </div>
+
+      <!-- Lettura immediata -->
+      <div class="ibox">
+        <div class="ibox-title">Lettura immediata</div>
+        <ul class="blist">
+          <li>Il percorso parte da un ingresso semplice e da una scelta chiara.</li>
+          <li>I PV diventano il linguaggio unico che rende leggibili i passaggi.</li>
+          <li>Prodotti, servizi e opportunità convivono nello stesso ecosistema.</li>
+          <li>La crescita nasce dal valore reale generato e dalla continuità delle azioni.</li>
+          <li>Ogni pagina del documento punta a far capire, ricordare e agire.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="disc-strong" style="margin-top:10px;">
+      <strong style="color:var(--dark);">Messaggio operativo:</strong> Il modello si basa su un movimento chiaro: l'utente entra, attiva i PV, sceglie ciò che gli serve, utilizza soluzioni utili, trasforma il valore in crescita ed espande progressivamente la propria visione. Ogni fase è misurabile e leggibile attraverso i PV.
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 3</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 4 — QUADRO STRATEGICO
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Quadro strategico del programma</div>
+    <div class="psub">Sintesi del valore emerso dai materiali di riferimento e dai piani allegati.</div>
+    <div class="divider"></div>
+
+    <table class="dt" style="margin-bottom:10px;">
+      <tr><th>Area</th><th>Funzione</th><th>Effetto percepito</th></tr>
+      <tr><td><strong>Valore reale</strong></td><td>servizi utili, corsi, documenti, supporto</td><td>credibilità e concretezza</td></tr>
+      <tr><td><strong>Lingua unica</strong></td><td>PV per leggere attivazioni, crescita e carriera</td><td>semplicità di comprensione</td></tr>
+      <tr><td><strong>Continuità</strong></td><td>membership, rinnovi e relazioni nel tempo</td><td>stabilità e ripetizione</td></tr>
+      <tr><td><strong>Percorso commerciale</strong></td><td>diagnosi, proposta, follow-up, attivazione</td><td>conversione più alta</td></tr>
+      <tr><td><strong>Community</strong></td><td>eventi, contenuti, riconoscimento, supporto</td><td>appartenenza e retention</td></tr>
+      <tr><td><strong>Immagine premium</strong></td><td>ordine visuale, lessico corretto, standard alti</td><td>maggiore fiducia</td></tr>
+    </table>
+
+    <div class="g2">
+      <!-- Pie chart: Perché 81+ resta in testa -->
+      <div class="chart-box">
+        <div class="chart-box-title">Perché 81+ resta in testa</div>
+        <div class="donut-wrap">
+          <svg class="donut-svg" width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#E8501A" stroke-width="14" stroke-dasharray="48 152" stroke-dashoffset="0"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#1a1a1a" stroke-width="14" stroke-dasharray="48 152" stroke-dashoffset="-48"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#ddd" stroke-width="14" stroke-dasharray="32 168" stroke-dashoffset="-96"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#999" stroke-width="14" stroke-dasharray="32 168" stroke-dashoffset="-128"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#FFD24A" stroke-width="14" stroke-dasharray="40 160" stroke-dashoffset="-160"/>
+            <circle cx="40" cy="40" r="16" fill="white"/>
+            <text x="40" y="44" text-anchor="middle" font-size="9" font-weight="900" fill="#1a1a1a">100%</text>
+          </svg>
+          <div class="legend">
+            <div class="legend-row"><div class="ldot" style="background:var(--orange)"></div> chiarezza 24%</div>
+            <div class="legend-row"><div class="ldot" style="background:var(--dark)"></div> utilità 24%</div>
+            <div class="legend-row"><div class="ldot" style="background:#ddd"></div> stile 16%</div>
+            <div class="legend-row"><div class="ldot" style="background:#999"></div> supporto 16%</div>
+            <div class="legend-row"><div class="ldot" style="background:var(--gold)"></div> opportunità 20%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bar chart: Leve decisive -->
+      <div class="chart-box">
+        <div class="chart-box-title">Leve decisive</div>
+        <div class="barchart" style="height:75px;">
+          <div class="bci"><div class="bci-val">94%</div><div class="bci-bar" style="height:66px; background:var(--orange);"></div><div class="bci-lbl">valore</div></div>
+          <div class="bci"><div class="bci-val">90%</div><div class="bci-bar" style="height:63px; background:var(--dark);"></div><div class="bci-lbl">fiducia</div></div>
+          <div class="bci"><div class="bci-val">88%</div><div class="bci-bar" style="height:62px; background:var(--orange);"></div><div class="bci-lbl">ordine</div></div>
+          <div class="bci"><div class="bci-val">86%</div><div class="bci-bar" style="height:60px; background:var(--dark);"></div><div class="bci-lbl">desiderio</div></div>
+          <div class="bci"><div class="bci-val">92%</div><div class="bci-bar" style="height:64px; background:var(--orange);"></div><div class="bci-lbl">azione</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disc" style="margin-top:8px;">
+      I dati, i report, le checklist e i documenti generati dall'Audit 81+ e dal DOC81+ Builder sono bozze operative basate sulle informazioni inserite dall'utente e sui requisiti normativi censiti dal sistema. Devono essere verificati e validati da soggetti competenti prima dell'uso ufficiale.
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 4</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 5 — PV E POINT81+  (V5: naming corretto)
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">PV e POINT81+</div>
+    <div class="psub">I PV sono l'unità di misura del sistema e il ponte tra attivazione, utilizzo, crescita e lettura del risultato.</div>
+    <div class="divider"></div>
+
+    <div class="g2" style="margin-bottom:10px;">
+      <!-- Bar chart: Pack PV -->
+      <div class="chart-box">
+        <div class="chart-box-title">Pack PV e valore disponibile</div>
+        <div class="barchart" style="height:75px;">
+          <div class="bci"><div class="bci-val">55 PV</div><div class="bci-bar" style="height:3px; background:var(--dark);"></div><div class="bci-lbl">50</div></div>
+          <div class="bci"><div class="bci-val">120 PV</div><div class="bci-bar" style="height:5px; background:var(--dark);"></div><div class="bci-lbl">100</div></div>
+          <div class="bci"><div class="bci-val">350 PV</div><div class="bci-bar" style="height:9px; background:var(--orange);"></div><div class="bci-lbl">300</div></div>
+          <div class="bci"><div class="bci-val">600 PV</div><div class="bci-bar" style="height:15px; background:var(--dark);"></div><div class="bci-lbl">500</div></div>
+          <div class="bci"><div class="bci-val">1250 PV</div><div class="bci-bar" style="height:28px; background:var(--orange);"></div><div class="bci-lbl">1.000</div></div>
+          <div class="bci"><div class="bci-val">3000 PV</div><div class="bci-bar" style="height:52px; background:var(--dark);"></div><div class="bci-lbl">2.500</div></div>
+          <div class="bci"><div class="bci-val">6000 PV</div><div class="bci-bar" style="height:70px; background:var(--orange);"></div><div class="bci-lbl">5.000</div></div>
+        </div>
+      </div>
+
+      <!-- Pie chart: Distribuzione media PV -->
+      <div class="chart-box">
+        <div class="chart-box-title">Distribuzione media dei PV</div>
+        <div class="donut-wrap">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#E8501A" stroke-width="14" stroke-dasharray="60 140" stroke-dashoffset="0"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#1a1a1a" stroke-width="14" stroke-dasharray="48 152" stroke-dashoffset="-60"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#ddd" stroke-width="14" stroke-dasharray="32 168" stroke-dashoffset="-108"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#999" stroke-width="14" stroke-dasharray="36 164" stroke-dashoffset="-140"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#FFD24A" stroke-width="14" stroke-dasharray="24 176" stroke-dashoffset="-176"/>
+            <circle cx="40" cy="40" r="16" fill="white"/>
+            <text x="40" y="44" text-anchor="middle" font-size="9" font-weight="900" fill="#1a1a1a">100%</text>
+          </svg>
+          <div class="legend">
+            <div class="legend-row"><div class="ldot" style="background:var(--orange)"></div> documenti 30%</div>
+            <div class="legend-row"><div class="ldot" style="background:var(--dark)"></div> formazione 24%</div>
+            <div class="legend-row"><div class="ldot" style="background:#ddd"></div> membership 16%</div>
+            <div class="legend-row"><div class="ldot" style="background:#999"></div> upgrade 18%</div>
+            <div class="legend-row"><div class="ldot" style="background:var(--gold)"></div> eventi 12%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <table class="dt">
+      <tr><th>Pack</th><th>PV ottenuti</th><th>Uso tipico</th><th>Scenario</th></tr>
+      <tr><td>50</td><td><strong>55 PV</strong></td><td>check rapida o mini corso</td><td>test e primo contatto</td></tr>
+      <tr><td>100</td><td><strong>120 PV</strong></td><td>corso entry o anticipo</td><td>primo passo concreto</td></tr>
+      <tr><td>300</td><td><strong>350 PV</strong></td><td>piano piccolo o rinnovo</td><td>micro impresa</td></tr>
+      <tr><td>500</td><td><strong>600 PV</strong></td><td>servizi light + membership</td><td>artigiano o studio</td></tr>
+      <tr><td>1.000</td><td><strong>1.250 PV</strong></td><td>piano base completo</td><td>azienda organizzata</td></tr>
+      <tr><td>2.500</td><td><strong>3.000 PV</strong></td><td>sviluppo forte o team</td><td>progetto strutturato</td></tr>
+      <tr><td>5.000</td><td><strong>6.000 PV</strong></td><td>visione premium e territorio</td><td>sviluppo avanzato</td></tr>
+    </table>
+
+    <div class="disc">I PV sono crediti interni non rimborsabili e non convertibili in denaro. I corsi e i documenti erogati da partner esterni seguono le modalità di acquisto e pagamento delle rispettive piattaforme autorizzate. I POINT81+ sono reward gamificati interni collegati ad attività, progressi e missioni operative.</div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 5</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 6 — CAREER PROGRAM E SCALA RANK
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Career Program e scala rank</div>
+    <div class="psub">La progressione di carriera è pensata per essere chiara, motivante e leggibile a colpo d'occhio.</div>
+    <div class="divider"></div>
+
+    <div class="chart-box" style="margin-bottom:10px;">
+      <div class="chart-box-title">Scala rank e progressione del volume (PV di squadra)</div>
+      <div class="barchart" style="height:80px;">
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">1.500</div><div class="bci-bar" style="height:2px; background:var(--dark);"></div><div class="bci-lbl">L1</div></div>
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">3.000</div><div class="bci-bar" style="height:4px; background:var(--dark);"></div><div class="bci-lbl">L2</div></div>
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">10.000</div><div class="bci-bar" style="height:12px; background:var(--orange);"></div><div class="bci-lbl">L3</div></div>
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">25.000</div><div class="bci-bar" style="height:22px; background:var(--dark);"></div><div class="bci-lbl">L4</div></div>
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">40.000</div><div class="bci-bar" style="height:35px; background:var(--orange);"></div><div class="bci-lbl">L5</div></div>
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">75.000</div><div class="bci-bar" style="height:52px; background:var(--dark);"></div><div class="bci-lbl">L6</div></div>
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">150.000</div><div class="bci-bar" style="height:63px; background:var(--orange);"></div><div class="bci-lbl">L7</div></div>
+        <div class="bci"><div class="bci-val" style="font-size:5.5pt">300.000</div><div class="bci-bar" style="height:76px; background:var(--dark);"></div><div class="bci-lbl">L8</div></div>
+      </div>
+    </div>
+
+    <table class="dt">
+      <tr><th>Livello</th><th>PV personali</th><th>PV di squadra</th><th>Interpretazione</th></tr>
+      <tr><td><strong>L1</strong></td><td>250</td><td>1.500</td><td>avvio e prime attivazioni</td></tr>
+      <tr><td><strong>L2</strong></td><td>500</td><td>3.000</td><td>ritmo e ripetizione</td></tr>
+      <tr><td><strong>L3</strong></td><td>750</td><td>10.000</td><td>leadership iniziale</td></tr>
+      <tr><td><strong>L4</strong></td><td>1.000</td><td>25.000</td><td>struttura e metodo</td></tr>
+      <tr><td><strong>L5</strong></td><td>1.500</td><td>40.000</td><td>qualità e posizionamento</td></tr>
+      <tr><td><strong>L6</strong></td><td>2.500</td><td>75.000</td><td>sviluppo forte</td></tr>
+      <tr><td><strong>L7</strong></td><td>5.000</td><td>150.000</td><td>ampiezza regionale</td></tr>
+      <tr><td><strong>L8</strong></td><td>10.000</td><td>300.000</td><td>orizzonte nazionale</td></tr>
+    </table>
+
+    <div class="disc">Il Career Program e la scala rank si basano su volumi di vendite qualificate reali. I livelli sono indicativi della progressione operativa e non costituiscono garanzia di carriera o di compenso futuro.</div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 6</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 7 — FONTI DI COMPENSO E SCENARI
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Fonti di compenso e scenari operativi</div>
+    <div class="psub">Le simulazioni servono a capire il funzionamento del modello, non rappresentano promesse di guadagno.</div>
+    <div class="divider"></div>
+
+    <table class="dt" style="margin-bottom:12px;">
+      <tr><th>Fonte</th><th>Logica</th><th>Valore indicativo</th></tr>
+      <tr><td><strong>Diretta</strong></td><td>compenso sulle vendite personali qualificate</td><td>10% – 25% a seconda del livello</td></tr>
+      <tr><td><strong>Avvio</strong></td><td>spinta sul primo mese o sulla prima attivazione</td><td>bonus di ingresso commerciale</td></tr>
+      <tr><td><strong>Team</strong></td><td>quota sul volume sviluppato dalla struttura</td><td>dipende dal differenziale di livello</td></tr>
+      <tr><td><strong>Leadership</strong></td><td>premio su equilibrio, continuità e sviluppo di linea</td><td>legato alla qualità del volume</td></tr>
+    </table>
+
+    <div class="g3">
+      <div class="scard">
+        <div class="sc-title">Scenario prudente</div>
+        <div class="sc-lbl">Profilo</div>
+        <div class="sc-val">Partenza part-time, lista calda, poche ore al giorno.</div>
+        <div class="sc-lbl">Numeri</div>
+        <div class="sc-val">100 contatti · 40 risposte · 12 call · 4 proposte · 2 clienti</div>
+        <div class="sc-lbl">Esito</div>
+        <div class="sc-val"><strong>1.396 PV</strong> circa nel primo ciclo operativo.</div>
+      </div>
+      <div class="scard">
+        <div class="sc-title">Scenario operativo</div>
+        <div class="sc-lbl">Profilo</div>
+        <div class="sc-val">Routine settimanale, follow-up ordinato, proposta chiara.</div>
+        <div class="sc-lbl">Numeri</div>
+        <div class="sc-val">120 contatti · 18 call · 6 proposte · 3 clienti · 1 rinnovo</div>
+        <div class="sc-lbl">Esito</div>
+        <div class="sc-val"><strong>2.394 PV</strong> circa con maggiore continuità.</div>
+      </div>
+      <div class="scard">
+        <div class="sc-title">Scenario espansivo</div>
+        <div class="sc-lbl">Profilo</div>
+        <div class="sc-val">Più eventi, più referral, più sostegno di squadra.</div>
+        <div class="sc-lbl">Numeri</div>
+        <div class="sc-val">150 contatti · 25 call · 8 proposte · 5 clienti · 2 attivazioni</div>
+        <div class="sc-lbl">Esito</div>
+        <div class="sc-val"><strong>4.000+ PV</strong> e base forte per la scala rank.</div>
+      </div>
+    </div>
+
+    <div class="disc" style="margin-top:10px;"><strong>Avvertenza obbligatoria:</strong> I dati negli scenari sono stime operative illustrative. I compensi dipendono esclusivamente da vendite qualificate reali a clienti finali reali. Non vi è alcuna garanzia di guadagno, rendimento o profitto. Il risultato varia in base all'impegno, al mercato e all'esecuzione di ciascun operatore. Non vengono promesse rendite automatiche né passive income di alcun tipo.</div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 7</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 8 — SCENARI APPLICATIVI
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Scenari applicativi per tipologia di attività</div>
+    <div class="psub">Esempi concreti per aiutare il lettore a vedere il modello dentro realtà diverse.</div>
+    <div class="divider"></div>
+
+    <table class="dt" style="margin-bottom:10px;">
+      <tr><th>Scenario</th><th>Pacchetto di partenza</th><th>Bisogno centrale</th><th>Esito atteso</th></tr>
+      <tr><td><strong>Artigiano</strong></td><td>100 – 500 PV</td><td>ordine, corsi, documenti, scadenze</td><td>risolve il minimo indispensabile e si organizza</td></tr>
+      <tr><td><strong>Edilizia</strong></td><td>500 – 1.000 PV</td><td>sicurezza, cantieri, ruoli, documenti</td><td>mette struttura a un contesto complesso</td></tr>
+      <tr><td><strong>Ristorazione</strong></td><td>300 – 1.000 PV</td><td>HACCP, formazione, procedure, controllo</td><td>riduce il caos operativo e rafforza il presidio</td></tr>
+      <tr><td><strong>Studio professionale</strong></td><td>500 – 1.000 PV</td><td>servizio unico, immagine, continuità</td><td>alza percezione e utilità</td></tr>
+      <tr><td><strong>Impresa con crescita veloce</strong></td><td>1.000 – 2.500 PV</td><td>supporto continuo e sviluppo ordinato</td><td>costruisce una base ampia e scalabile</td></tr>
+      <tr><td><strong>Presidio locale</strong></td><td>2.500 – 5.000 PV</td><td>territorio, visione, sviluppo di rete</td><td>alza il livello del progetto complessivo</td></tr>
+    </table>
+
+    <div class="g2">
+      <div class="chart-box">
+        <div class="chart-box-title">Ticket PV per scenario</div>
+        <div class="barchart" style="height:80px;">
+          <div class="bci"><div class="bci-val">350 PV</div><div class="bci-bar" style="height:7px; background:var(--orange);"></div><div class="bci-lbl">Artigiano</div></div>
+          <div class="bci"><div class="bci-val">800 PV</div><div class="bci-bar" style="height:16px; background:var(--dark);"></div><div class="bci-lbl">Edilizia</div></div>
+          <div class="bci"><div class="bci-val">600 PV</div><div class="bci-bar" style="height:12px; background:var(--orange);"></div><div class="bci-lbl">Ristorante</div></div>
+          <div class="bci"><div class="bci-val">700 PV</div><div class="bci-bar" style="height:14px; background:var(--dark);"></div><div class="bci-lbl">Studio</div></div>
+          <div class="bci"><div class="bci-val">1.500 PV</div><div class="bci-bar" style="height:30px; background:var(--orange);"></div><div class="bci-lbl">Impresa</div></div>
+          <div class="bci"><div class="bci-val">3.500 PV</div><div class="bci-bar" style="height:70px; background:var(--dark);"></div><div class="bci-lbl">Territorio</div></div>
+        </div>
+      </div>
+
+      <div class="ibox">
+        <div class="ibox-title">Chiave di lettura</div>
+        <ul class="blist">
+          <li>La stessa architettura 81+ si adatta a bisogni molto diversi tra loro.</li>
+          <li>Il focus resta sempre lo stesso: semplificare il problema e guidare la scelta.</li>
+          <li>Più chiaro è il problema, più semplice diventa la proposta commerciale.</li>
+          <li>Più elegante è la presentazione, più alto è il tasso di fiducia del cliente.</li>
+          <li>Ogni scenario ha un pacchetto di partenza calibrato sul reale bisogno operativo.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 8</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 9 — EQUILIBRIUM PROGRAM
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Equilibrium Program</div>
+    <div class="psub">Il programma di equilibrio misura non solo quanto si vende, ma anche quanto il sistema cresce in modo sano e distribuibile.</div>
+    <div class="divider"></div>
+
+    <div class="g2" style="margin-bottom:8px;">
+      <div class="chart-box">
+        <div class="chart-box-title">Le sei leve di equilibrio</div>
+        <div class="barchart" style="height:75px;">
+          <div class="bci"><div class="bci-val">90%</div><div class="bci-bar" style="height:63px; background:var(--orange);"></div><div class="bci-lbl">volume</div></div>
+          <div class="bci"><div class="bci-val">80%</div><div class="bci-bar" style="height:56px; background:var(--dark);"></div><div class="bci-lbl">distribuz.</div></div>
+          <div class="bci"><div class="bci-val">84%</div><div class="bci-bar" style="height:59px; background:var(--orange);"></div><div class="bci-lbl">rinnovi</div></div>
+          <div class="bci"><div class="bci-val">76%</div><div class="bci-bar" style="height:53px; background:var(--dark);"></div><div class="bci-lbl">team</div></div>
+          <div class="bci"><div class="bci-val">78%</div><div class="bci-bar" style="height:55px; background:var(--orange);"></div><div class="bci-lbl">formaz.</div></div>
+          <div class="bci"><div class="bci-val">92%</div><div class="bci-bar" style="height:64px; background:var(--dark);"></div><div class="bci-lbl">reputaz.</div></div>
+        </div>
+      </div>
+
+      <div class="chart-box">
+        <div class="chart-box-title">Peso didattico delle leve</div>
+        <div class="donut-wrap">
+          <svg width="80" height="80" viewBox="0 0 80 80">
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#E8501A" stroke-width="14" stroke-dasharray="60 140" stroke-dashoffset="0"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#1a1a1a" stroke-width="14" stroke-dasharray="40 160" stroke-dashoffset="-60"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#ddd" stroke-width="14" stroke-dasharray="30 170" stroke-dashoffset="-100"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#999" stroke-width="14" stroke-dasharray="24 176" stroke-dashoffset="-130"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#FFD24A" stroke-width="14" stroke-dasharray="20 180" stroke-dashoffset="-154"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="#E8501A" stroke-width="14" stroke-dasharray="26 174" stroke-dashoffset="-174"/>
+            <circle cx="40" cy="40" r="16" fill="white"/>
+            <text x="40" y="44" text-anchor="middle" font-size="9" font-weight="900" fill="#1a1a1a">100%</text>
+          </svg>
+          <div class="legend">
+            <div class="legend-row"><div class="ldot" style="background:var(--orange)"></div> clienti attivi 30%</div>
+            <div class="legend-row"><div class="ldot" style="background:var(--dark)"></div> rinnovi 20%</div>
+            <div class="legend-row"><div class="ldot" style="background:#ddd"></div> squadra attiva 15%</div>
+            <div class="legend-row"><div class="ldot" style="background:#999"></div> formazione 12%</div>
+            <div class="legend-row"><div class="ldot" style="background:var(--gold)"></div> territorio 10%</div>
+            <div class="legend-row"><div class="ldot" style="background:var(--orange)"></div> reputazione 13%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="g2">
+      <div class="chart-box">
+        <div class="chart-box-title">Rete sana — distribuzione equilibrata</div>
+        <div class="barchart" style="height:65px;">
+          <div class="bci"><div class="bci-val">3.000 PV</div><div class="bci-bar" style="height:60px; background:var(--dark);"></div><div class="bci-lbl">A</div></div>
+          <div class="bci"><div class="bci-val">2.500 PV</div><div class="bci-bar" style="height:50px; background:var(--orange);"></div><div class="bci-lbl">B</div></div>
+          <div class="bci"><div class="bci-val">1.800 PV</div><div class="bci-bar" style="height:36px; background:var(--dark);"></div><div class="bci-lbl">C</div></div>
+          <div class="bci"><div class="bci-val">1.500 PV</div><div class="bci-bar" style="height:30px; background:var(--orange);"></div><div class="bci-lbl">D</div></div>
+          <div class="bci"><div class="bci-val">1.200 PV</div><div class="bci-bar" style="height:24px; background:var(--dark);"></div><div class="bci-lbl">E</div></div>
+        </div>
+      </div>
+      <div class="chart-box">
+        <div class="chart-box-title">Rete fragile — concentrazione su un ramo</div>
+        <div class="barchart" style="height:65px;">
+          <div class="bci"><div class="bci-val">7.000 PV</div><div class="bci-bar" style="height:60px; background:var(--orange);"></div><div class="bci-lbl">A</div></div>
+          <div class="bci"><div class="bci-val">500 PV</div><div class="bci-bar" style="height:8px; background:var(--dark);"></div><div class="bci-lbl">B</div></div>
+          <div class="bci"><div class="bci-val">300 PV</div><div class="bci-bar" style="height:5px; background:var(--orange);"></div><div class="bci-lbl">C</div></div>
+          <div class="bci"><div class="bci-val">200 PV</div><div class="bci-bar" style="height:3px; background:var(--dark);"></div><div class="bci-lbl">D</div></div>
+          <div class="bci"><div class="bci-val">100 PV</div><div class="bci-bar" style="height:2px; background:var(--orange);"></div><div class="bci-lbl">E</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="disc" style="margin-top:8px;">Il programma di equilibrio premia la qualità della rete, non solo il volume. Una rete sana ha distribuzione omogenea tra i rami attivi e continuità nei rinnovi.</div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 9</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 10 — PERCORSI AMBASSADOR, PRESTIGE, TERRITORY, CIRCLE
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Percorsi Ambassador, Prestige, Territory e Circle</div>
+    <div class="psub">Quattro nomi chiari per descrivere quattro modalità di sviluppo, senza complicare la lettura.</div>
+    <div class="divider"></div>
+
+    <div class="g4" style="margin-bottom:10px;">
+      <div class="card">
+        <div class="ctitle">Ambassador Path</div>
+        <div class="clabel">Profilo</div>
+        <div class="cval">Apre conversazioni, genera movimento, attiva primi clienti.</div>
+        <div class="clabel" style="margin-top:6px;">Numeri</div>
+        <div class="cval">lead, diagnosi, proposta, ingresso</div>
+        <div class="clabel" style="margin-top:6px;">Esito</div>
+        <div class="cval">Più attivazioni iniziali e più energia commerciale.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Prestige Path</div>
+        <div class="clabel">Profilo</div>
+        <div class="cval">Gestisce casi premium, ticket alti e posizionamento superiore.</div>
+        <div class="clabel" style="margin-top:6px;">Numeri</div>
+        <div class="cval">offerte alte, qualità, immagine</div>
+        <div class="clabel" style="margin-top:6px;">Esito</div>
+        <div class="cval">Aumenta valore medio e percezione del brand.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Territory Path</div>
+        <div class="clabel">Profilo</div>
+        <div class="cval">Presidia area, costruisce punti e presenza riconoscibile.</div>
+        <div class="clabel" style="margin-top:6px;">Numeri</div>
+        <div class="cval">territorio, sviluppo locale, continuità</div>
+        <div class="clabel" style="margin-top:6px;">Esito</div>
+        <div class="cval">Radica il progetto e crea riferimento stabile.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Circle Path</div>
+        <div class="clabel">Profilo</div>
+        <div class="cval">Cura community, retention, eventi e fedeltà nel tempo.</div>
+        <div class="clabel" style="margin-top:6px;">Numeri</div>
+        <div class="cval">rinnovi, referral, community</div>
+        <div class="clabel" style="margin-top:6px;">Esito</div>
+        <div class="cval">Moltiplica il passaparola e fa restare le persone.</div>
+      </div>
+    </div>
+
+    <table class="dt">
+      <tr><th>Percorso</th><th>Punto forte</th><th>Indicatore chiave</th></tr>
+      <tr><td><strong>Ambassador Path</strong></td><td>attenzione e primo movimento</td><td>contatti, call, primi clienti</td></tr>
+      <tr><td><strong>Prestige Path</strong></td><td>ticket medio e autorevolezza</td><td>valore medio e chiusure premium</td></tr>
+      <tr><td><strong>Territory Path</strong></td><td>presidio e continuità</td><td>zone attive, point, copertura</td></tr>
+      <tr><td><strong>Circle Path</strong></td><td>retention e referral</td><td>membri attivi, rinnovi, eventi</td></tr>
+    </table>
+
+    <div class="disc" style="margin-top:8px;">I quattro percorsi non sono mutualmente esclusivi. Un operatore può evolversi da Ambassador verso Territory nel tempo, oppure combinare Prestige e Circle per massimizzare valore medio e retention. La scelta dipende dalle competenze e dall'obiettivo personale di ciascuno.</div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 10</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 11 — PIANO MARKETING 30 GIORNI
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Piano marketing di avvio in 30 giorni</div>
+    <div class="psub">Struttura semplice e ripetibile per partire bene, con disciplina e senza dispersione.</div>
+    <div class="divider"></div>
+
+    <div class="g2" style="margin-bottom:10px;">
+      <div class="chart-box">
+        <div class="chart-box-title">Roadmap del primo mese</div>
+        <div class="barchart" style="height:75px;">
+          <div class="bci"><div class="bci-val">100</div><div class="bci-bar" style="height:70px; background:var(--orange);"></div><div class="bci-lbl">lista</div></div>
+          <div class="bci"><div class="bci-val">20</div><div class="bci-bar" style="height:14px; background:var(--dark);"></div><div class="bci-lbl">chat</div></div>
+          <div class="bci"><div class="bci-val">8</div><div class="bci-bar" style="height:6px; background:var(--orange);"></div><div class="bci-lbl">call</div></div>
+          <div class="bci"><div class="bci-val">4</div><div class="bci-bar" style="height:3px; background:var(--dark);"></div><div class="bci-lbl">proposte</div></div>
+          <div class="bci"><div class="bci-val">2</div><div class="bci-bar" style="height:2px; background:var(--orange);"></div><div class="bci-lbl">clienti</div></div>
+          <div class="bci"><div class="bci-val">1</div><div class="bci-bar" style="height:1px; background:var(--dark);"></div><div class="bci-lbl">prove</div></div>
+        </div>
+      </div>
+
+      <table class="dt" style="margin-bottom:0; font-size:7.5pt;">
+        <tr><th>Fase</th><th>Giorni</th><th>Obiettivo</th></tr>
+        <tr><td><strong>Preparazione</strong></td><td>1-3</td><td>profilo, strumenti, lista iniziale</td></tr>
+        <tr><td><strong>Contatto</strong></td><td>4-7</td><td>20 conversazioni vere</td></tr>
+        <tr><td><strong>Diagnosi</strong></td><td>8-14</td><td>8 call di lettura del bisogno</td></tr>
+        <tr><td><strong>Proposta</strong></td><td>15-21</td><td>4 offerte chiare e semplici</td></tr>
+        <tr><td><strong>Chiusura</strong></td><td>22-30</td><td>2 clienti e 1 testimonianza</td></tr>
+      </table>
+    </div>
+
+    <div class="g2">
+      <div class="ibox">
+        <div class="ibox-title">Settimana ideale</div>
+        <ul class="blist">
+          <li>25 nuovi contatti identificati</li>
+          <li>10 conversazioni vere avviate</li>
+          <li>2 call di diagnosi completate</li>
+          <li>1 proposta minima inviata</li>
+          <li>1 contenuto di valore al giorno</li>
+          <li>follow-up ordinato e tracciato</li>
+        </ul>
+      </div>
+      <div class="funnelbox">
+        <div style="font-size:8.5pt; font-weight:700; color:var(--dark); margin-bottom:6px;">Dal contenuto alla decisione</div>
+        <div class="fitem"><strong>Attenzione · contenuti brevi</strong><small>aggancia il problema giusto</small></div>
+        <div class="fitem"><strong>Relazione · chat e call</strong><small>crea fiducia e ascolto reale</small></div>
+        <div class="fitem"><strong>Decisione · proposta chiara</strong><small>mostra valore e passo semplice</small></div>
+        <div class="fitem"><strong>Azione · attivazione</strong><small>trasforma interesse in movimento</small></div>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 11</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 12 — PRESENTAZIONE, CONTENUTI E CONVERSIONE
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Presentazione, contenuti e conversione</div>
+    <div class="psub">Il materiale commerciale deve guidare la mente del lettore con ordine, immagini chiare e passaggi leggibili.</div>
+    <div class="divider"></div>
+
+    <table class="dt" style="margin-bottom:10px;">
+      <tr><th>Blocco</th><th>Funzione</th><th>Messaggio corretto</th></tr>
+      <tr><td><strong>Apertura</strong></td><td>attira attenzione</td><td>mostra il problema in modo semplice e visibile</td></tr>
+      <tr><td><strong>Lettura del bisogno</strong></td><td>fa emergere il divario</td><td>aiuta la persona a riconoscersi nella situazione</td></tr>
+      <tr><td><strong>Proposta</strong></td><td>traduce il valore in una scelta</td><td>riduce la confusione e semplifica la decisione</td></tr>
+      <tr><td><strong>Prova</strong></td><td>rinforza credibilità</td><td>usa esempi reali, numeri concreti e casi verificabili</td></tr>
+      <tr><td><strong>Chiusura</strong></td><td>chiede il passo successivo</td><td>porta all'azione senza pressione e senza urgenza finta</td></tr>
+    </table>
+
+    <div class="g2">
+      <div class="chart-box">
+        <div class="chart-box-title">Formato contenuti (frequenza settimanale)</div>
+        <div class="barchart" style="height:75px;">
+          <div class="bci"><div class="bci-val">14</div><div class="bci-bar" style="height:70px; background:var(--orange);"></div><div class="bci-lbl">post</div></div>
+          <div class="bci"><div class="bci-val">10</div><div class="bci-bar" style="height:50px; background:var(--dark);"></div><div class="bci-lbl">reel</div></div>
+          <div class="bci"><div class="bci-val">7</div><div class="bci-bar" style="height:35px; background:var(--orange);"></div><div class="bci-lbl">story</div></div>
+          <div class="bci"><div class="bci-val">4</div><div class="bci-bar" style="height:20px; background:var(--dark);"></div><div class="bci-lbl">checklist</div></div>
+          <div class="bci"><div class="bci-val">8</div><div class="bci-bar" style="height:40px; background:var(--orange);"></div><div class="bci-lbl">call</div></div>
+          <div class="bci"><div class="bci-val">2</div><div class="bci-bar" style="height:10px; background:var(--dark);"></div><div class="bci-lbl">webinar</div></div>
+        </div>
+      </div>
+
+      <div class="ibox">
+        <div class="ibox-title">Criteri visuali</div>
+        <ul class="blist">
+          <li>Uso coerente dei colori del brand in ogni comunicazione.</li>
+          <li>Titoli leggibili e informazioni organizzate gerarchicamente.</li>
+          <li>Grafici grandi con numeri facili da capire a colpo d'occhio.</li>
+          <li>Tabelle compatte per riempire bene le pagine senza spazio vuoto.</li>
+          <li>Frasi corte, compiute e senza ambiguità semantica.</li>
+          <li>Nessun termine vietato: investimento, rendimento, guadagno garantito.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="disc" style="margin-top:10px;">Ogni materiale commerciale prodotto e distribuito dall'operatore deve essere coerente con il brand 81+ e rispettare il regolamento semantico. Non sono ammessi claim di garanzia, rendimento, zero rischi o conformità assoluta. Ogni comunicazione deve restare verificabile e autentica.</div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 12</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 13 — SCRIPT, OBIEZIONI E FOLLOW-UP
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Script, obiezioni e follow-up</div>
+    <div class="psub">Parole semplici, credibili e ripetibili aiutano il venditore a restare lucido e professionale.</div>
+    <div class="divider"></div>
+
+    <!-- COMPLETE scripts — no truncation -->
+    <table class="script-tbl" style="margin-bottom:10px;">
+      <tr><th>Situazione</th><th>Testo completo</th></tr>
+      <tr>
+        <td>Primo messaggio</td>
+        <td>Ciao, sto aiutando persone e aziende a capire in modo semplice che cosa manca per mettere in ordine la sicurezza aziendale. Mi bastano due risposte per dirti da dove conviene partire.</td>
+      </tr>
+      <tr>
+        <td>Dopo la risposta</td>
+        <td>Perfetto. Ti faccio tre domande e capiamo subito da dove conviene partire. Nessun impegno, solo chiarezza.</td>
+      </tr>
+      <tr>
+        <td>Invito alla call</td>
+        <td>Ci prendiamo dodici minuti: ti faccio vedere il punto di partenza, le priorità e la soluzione più adatta alla tua situazione attuale. Zero pressione, massima utilità.</td>
+      </tr>
+      <tr>
+        <td>Follow-up 24 ore</td>
+        <td>Ti mando il riepilogo con le due opzioni più adatte alla tua situazione. Quando lo guardi, se vuoi, lo chiudiamo insieme in cinque minuti.</td>
+      </tr>
+    </table>
+
+    <div class="g2">
+      <div class="ibox">
+        <div class="ibox-title">Obiezioni frequenti</div>
+        <ul class="blist">
+          <li><strong>Adesso non è il momento</strong> → riporta il focus sul problema e sul costo reale del rinvio operativo.</li>
+          <li><strong>Devo pensarci</strong> → riduci la complessità e chiedi quale dubbio concreto resta da chiarire.</li>
+          <li><strong>È troppo caro</strong> → riconduci il dialogo a rischio, ordine, tempo e valore reale del percorso.</li>
+          <li><strong>Ho già qualcuno</strong> → offri una verifica indipendente, non uno scontro con il consulente attuale.</li>
+          <li><strong>Non ne ho bisogno</strong> → usa domande aperte per far emergere il bisogno latente in modo naturale.</li>
+        </ul>
+      </div>
+
+      <div class="ibox">
+        <div class="ibox-title">Follow-up corretto</div>
+        <ul class="blist">
+          <li>Sempre con prossimo passo definito e data precisa indicata.</li>
+          <li>Mai lasciare il lead senza data o azione successiva concordata.</li>
+          <li>Meglio un messaggio breve, preciso, utile e puntuale che lungo e confuso.</li>
+          <li>Ogni contatto va registrato con stato, esigenza e priorità nel CRM.</li>
+          <li>Il follow-up non è pressione: è cura del processo e rispetto del tempo altrui.</li>
+          <li>Dopo tre contatti senza risposta, sposta a lista fredda e riprendi in 30 giorni.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 13</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 14 — TERRITORIO, POINT E PRESIDIO LOCALE
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Territorio, point e presidio locale</div>
+    <div class="psub">Lo sviluppo territoriale rende visibile il brand, moltiplica la fiducia e consolida la continuità commerciale.</div>
+    <div class="divider"></div>
+
+    <div class="g2" style="margin-bottom:10px;">
+      <div class="chart-box">
+        <div class="chart-box-title">Copertura per stadi</div>
+        <div class="barchart" style="height:75px;">
+          <div class="bci"><div class="bci-val">1 step</div><div class="bci-bar" style="height:6px; background:var(--dark);"></div><div class="bci-lbl">Comune</div></div>
+          <div class="bci"><div class="bci-val">3 step</div><div class="bci-bar" style="height:18px; background:var(--orange);"></div><div class="bci-lbl">Provincia</div></div>
+          <div class="bci"><div class="bci-val">7 step</div><div class="bci-bar" style="height:41px; background:var(--dark);"></div><div class="bci-lbl">Regione</div></div>
+          <div class="bci"><div class="bci-val">12 step</div><div class="bci-bar" style="height:70px; background:var(--orange);"></div><div class="bci-lbl">Area vasta</div></div>
+        </div>
+      </div>
+
+      <table class="dt" style="margin-bottom:0;">
+        <tr><th>Funzione</th><th>Effetto</th></tr>
+        <tr><td><strong>Visibilità locale</strong></td><td>rende il brand riconoscibile nel territorio</td></tr>
+        <tr><td><strong>Accoglienza lead</strong></td><td>aumenta la fiducia del primo contatto</td></tr>
+        <tr><td><strong>Coordinamento eventi</strong></td><td>attiva relazione e follow-up strutturato</td></tr>
+        <tr><td><strong>Presidio qualità</strong></td><td>mantiene alto lo standard operativo</td></tr>
+      </table>
+    </div>
+
+    <div class="g3">
+      <div class="card">
+        <div class="ctitle">Point locale</div>
+        <div class="clabel">Profilo</div>
+        <div class="cval">Presidio leggero e operativo in un'area specifica del territorio.</div>
+        <div class="clabel" style="margin-top:5px;">Numeri</div>
+        <div class="cval">visibilità, contatti, eventi, supporto operativo quotidiano</div>
+        <div class="clabel" style="margin-top:5px;">Esito</div>
+        <div class="cval">Crea una base stabile di fiducia e relazione nel bacino locale.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Hub di riferimento</div>
+        <div class="clabel">Profilo</div>
+        <div class="cval">Punto più forte, utile a coordinare più linee e iniziative provinciali.</div>
+        <div class="clabel" style="margin-top:5px;">Numeri</div>
+        <div class="cval">coordinamento, sviluppo, standard operativi condivisi</div>
+        <div class="clabel" style="margin-top:5px;">Esito</div>
+        <div class="cval">Aumenta ordine e velocità di esecuzione delle attività territoriali.</div>
+      </div>
+      <div class="card">
+        <div class="ctitle">Area premium</div>
+        <div class="clabel">Profilo</div>
+        <div class="cval">Presidio ad alto livello per progetti e partnership selezionate.</div>
+        <div class="clabel" style="margin-top:5px;">Numeri</div>
+        <div class="cval">premium, qualità, governance e controllo strategico</div>
+        <div class="clabel" style="margin-top:5px;">Esito</div>
+        <div class="cval">Rinforza immagine e autorevolezza del sistema in area estesa.</div>
+      </div>
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 14</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 15 — REGOLAMENTO, STANDARD E DRESS CODE
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Regolamento, standard e dress code</div>
+    <div class="psub">Più regole chiare ci sono, meno errori si fanno. L'immagine premium si difende soprattutto nei dettagli.</div>
+    <div class="divider"></div>
+
+    <div class="g2" style="margin-bottom:10px;">
+      <div class="ibox">
+        <div class="ibox-title">Regole fondamentali</div>
+        <ul class="blist">
+          <li>Prima valore, poi opportunità. Sempre e senza eccezioni.</li>
+          <li>Compensi e crescita dipendono da vendite reali, non da reclutamento fine a sé stesso.</li>
+          <li>Non promettere guadagni garantiti, risultati certi o vantaggi non verificabili.</li>
+          <li>Non inventare urgenza, scarsità o territori se non sono reali.</li>
+          <li>Non utilizzare contenuti che il sistema non può sostenere e dimostrare.</li>
+          <li>Tutto entra nel CRM: contatto, problema, stato, follow-up, esito.</li>
+          <li>Ogni comunicazione deve restare coerente con il brand e con il contesto normativo.</li>
+        </ul>
+      </div>
+      <div class="ibox">
+        <div class="ibox-title">Dress code 81+</div>
+        <ul class="blist">
+          <li>Look pulito, ordinato, sobrio e contemporaneo in ogni contesto.</li>
+          <li>Prevalenza di nero, bianco e dettagli arancioni come accenti.</li>
+          <li>Business smart per presentazioni e incontri di valore.</li>
+          <li>Scarpe pulite, accessori essenziali, postura composta e aperta.</li>
+          <li>Linguaggio corretto, tono calmo, ascolto reale e presente.</li>
+          <li>Niente eccessi visivi, niente improvvisazione, niente aspetto trasandato.</li>
+        </ul>
+      </div>
+    </div>
+
+    <table class="dt">
+      <tr><th>Da evitare</th><th>Meglio dire</th></tr>
+      <tr><td>Guadagni sicuri</td><td>Puoi costruire un percorso commerciale concreto se lavori e segui il sistema con continuità.</td></tr>
+      <tr><td>È facile per tutti</td><td>È semplice da capire, ma richiede azione costante, disciplina e continuità nel tempo.</td></tr>
+      <tr><td>Basta iscriversi</td><td>Conta il valore reale che generi e il modo concreto in cui lo consegni al cliente.</td></tr>
+      <tr><td>Diventi ricco</td><td>Puoi costruire un reddito aggiuntivo o sviluppare una vera attività commerciale nel tempo.</td></tr>
+      <tr><td>Sei a norma al 100%</td><td>Ti aiutiamo a mettere ordine, ridurre il rischio e presidiare gli adempimenti con continuità.</td></tr>
+    </table>
+
+    <div class="disc-strong" style="margin-top:8px;"><strong>Nota:</strong> Queste regole sono vincolanti per tutti gli operatori 81+. La violazione sistematica delle regole semantiche e commerciali comporta la revisione dello status operativo.</div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 15</span></div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     PAGE 16 — PIANO D'AZIONE 90 GIORNI E CONCLUSIONE
+════════════════════════════════════════════════════ -->
+<div class="page">
+  <div class="ph"><span>81+ / SICURISSIMO</span><span>WELLFARE PROGRAM 81+ · V5 PRO</span></div>
+  <div class="pc">
+    <div class="ptitle">Piano d'azione 90 giorni e conclusione</div>
+    <div class="psub">Il documento si chiude con un piano semplice: capire, attivare, usare, consolidare e crescere.</div>
+    <div class="divider"></div>
+
+    <table class="dt" style="margin-bottom:12px;">
+      <tr><th>Periodo</th><th>Focus</th><th>Target essenziale</th></tr>
+      <tr><td><strong>0 – 30 giorni</strong></td><td>comprensione del sistema, primi PV, primo servizio venduto</td><td>2 clienti e 1 testimonianza reale raccolta</td></tr>
+      <tr><td><strong>31 – 60 giorni</strong></td><td>routine commerciale, follow-up ordinato, continuità operativa</td><td>5 clienti attivi e primi rinnovi avviati</td></tr>
+      <tr><td><strong>61 – 90 giorni</strong></td><td>scelta del percorso, sviluppo linee, ordine dei dati</td><td>visione chiara del proprio posizionamento futuro</td></tr>
+    </table>
+
+    <!-- 6-step conclusion flow -->
+    <div class="flow" style="gap:2px; margin-bottom:12px;">
+      <div class="fstep"><div class="fstep-name">CAPISCI</div><div class="fstep-sub">il sistema</div></div>
+      <div class="fstep"><div class="fstep-name">ATTIVI PV</div><div class="fstep-sub">in modo corretto</div></div>
+      <div class="fstep"><div class="fstep-name">USI</div><div class="fstep-sub">almeno un servizio</div></div>
+      <div class="fstep"><div class="fstep-name">CONSOLIDI</div><div class="fstep-sub">abitudine e metodo</div></div>
+      <div class="fstep"><div class="fstep-name">CRESCI</div><div class="fstep-sub">con ordine</div></div>
+      <div class="fstep" style="position:relative;"><div class="fstep-name">DECIDI</div><div class="fstep-sub">quanto espanderti</div></div>
+    </div>
+
+    <div class="card" style="border-left-width:4px; padding:12px 14px; margin-bottom:10px;">
+      <div class="ctitle" style="font-size:10pt; margin-bottom:8px;">Chiusura operativa</div>
+      <ul class="blist">
+        <li>Scegli il punto di ingresso più adatto alla tua situazione attuale e al tuo profilo operativo.</li>
+        <li>Attiva i PV necessari al tuo scenario e usa subito almeno un servizio concreto della piattaforma.</li>
+        <li>Se il sistema ti convince, attiva il percorso di sviluppo più coerente con la tua visione a lungo termine.</li>
+        <li>Muoviti ora: un primo passo concreto vale più di molte intenzioni rimandate nel tempo.</li>
+      </ul>
+    </div>
+
+    <div class="disc">
+      <strong>Disclaimer finale obbligatorio:</strong> I dati, i report, i preventivi, le checklist e i documenti generati dall'Audit 81+ e dal DOC81+ Builder sono bozze operative basate sulle informazioni inserite dall'utente e sui requisiti normativi censiti dal sistema. Non costituiscono consulenza legale, fiscale o professionale. I compensi illustrati in questo documento dipendono esclusivamente da vendite qualificate reali. Non vi è alcuna garanzia di guadagno, rendimento o profitto. Devono essere verificati e validati da soggetti competenti prima dell'uso ufficiale. 81+ · WELLFARE PROGRAM V5 PRO · 2026-06-17
+    </div>
+  </div>
+  <div class="pf"><span>81+ GLOBAL · WELLFARE PROGRAM 81+</span><span>Pagina 16</span></div>
+</div>
+
+</body>
+</html>
