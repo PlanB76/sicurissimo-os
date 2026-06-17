@@ -1,14 +1,14 @@
 <?php
 /**
  * 81+ MASTER DATABASE INSTALLER
- * Installa lo schema completo + 4179 lead in 1 click.
+ * Installa schema completo + 4179 lead (file unico) in 1 click.
+ * SIC-ID matrice: OWNER / GEN (co-founder) / 81 (utenti) / X (lead)
  * SICUREZZA: Protetto da ADMIN_KEY. Si auto-distrugge dopo il successo.
  * POSIZIONE: public_html/install_db.php
- * SQL: ../sql/MASTER_SCHEMA_81PLUS_COMPLETE.sql
- *      ../sql/LEADS_IMPORT_4179_SIC.sql
+ * SQL: ../sql/MASTER_81PLUS_GLOBAL.sql (file unificato)
  */
 
-define('INSTALLER_VERSION', '2.0.0');
+define('INSTALLER_VERSION', '3.0.0');
 define('SQL_DIR', __DIR__ . '/../sql/');
 define('ENV_FILE', __DIR__ . '/../.env');
 
@@ -57,8 +57,7 @@ if ($authed && $action === 'install') {
 
         /* Esegui file SQL con gestione DELIMITER */
         $files = [
-            'MASTER_SCHEMA_81PLUS_COMPLETE.sql' => 'Schema 78 tabelle + trigger + view',
-            'LEADS_IMPORT_4179_SIC.sql'          => 'Import 4179 lead SIC-10001→SIC-14179',
+            'MASTER_81PLUS_GLOBAL.sql' => 'Schema 78 tabelle + 4 trigger + 3 view + 4179 lead (file unico)',
         ];
 
         foreach ($files as $filename => $label) {
@@ -242,7 +241,8 @@ function parseSql(string $sql): array {
     <li>78 tabelle — Web2 + Web3 + MLM + Pagamenti + Agenti AI</li>
     <li>4 trigger automatici (wallet, referral, PV+, eventi)</li>
     <li>3 view ottimizzate (users_full, leads_dashboard, payments_summary)</li>
-    <li>4179 lead con SIC-ID SIC-10001→SIC-14179</li>
+    <li>4179 lead — SIC-ID-X-00000001 → SIC-ID-X-00004179</li>
+    <li>Matrice SIC-ID: OWNER / GEN co-founder / 81 utenti / X lead</li>
     <li>Dati iniziali: config, missioni PV+, membership, PIX81 (1000 slot)</li>
     <li>Operazione idempotente — sicura da rieseguire</li>
   </ul>
@@ -275,9 +275,8 @@ function parseSql(string $sql): array {
 
   <div style="margin-top:28px;padding-top:20px;border-top:1px solid #1a1a2e">
     <p style="font-size:12px;color:#555;line-height:1.8">
-      File SQL richiesti:<br>
-      <code style="color:#E8501A">../sql/MASTER_SCHEMA_81PLUS_COMPLETE.sql</code><br>
-      <code style="color:#E8501A">../sql/LEADS_IMPORT_4179_SIC.sql</code>
+      File SQL richiesto (unico):<br>
+      <code style="color:#E8501A">../sql/MASTER_81PLUS_GLOBAL.sql</code>
     </p>
   </div>
 
