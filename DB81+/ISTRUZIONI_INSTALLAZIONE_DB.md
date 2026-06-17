@@ -7,7 +7,7 @@
 
 | File | Descrizione |
 |------|-------------|
-| `MASTER_81PLUS_GLOBAL.sql` | Schema completo 78 tabelle + 4179 lead (file unico) |
+| `MYSQL1_INSTALL_81PLUS_HUB1_COMPLETE.sql` | Schema completo 78 tabelle + 4179 lead (file unico) — v4.0.0 |
 | `install_db.php` | Installer web protetto — si auto-cancella dopo il successo |
 | `.env.example` | Template configurazione credenziali |
 | `ISTRUZIONI_INSTALLAZIONE_DB.md` | Questo file |
@@ -50,11 +50,11 @@ public_html/
     
 (cartella una livello sopra public_html, di solito home/u173050672/)
     sql/
-        MASTER_81PLUS_GLOBAL.sql    ← carica qui
+        MYSQL1_INSTALL_81PLUS_HUB1_COMPLETE.sql    ← carica qui
     .env                            ← crea/modifica qui
 ```
 
-> **IMPORTANTE:** Il file `MASTER_81PLUS_GLOBAL.sql` va nella cartella `sql/`
+> **IMPORTANTE:** Il file `MYSQL1_INSTALL_81PLUS_HUB1_COMPLETE.sql` va nella cartella `sql/`
 > che si trova **fuori** da `public_html/`, non dentro.
 > Questo lo protegge da accesso web diretto.
 
@@ -146,7 +146,7 @@ Vai su **hPanel → phpMyAdmin** e controlla:
 
 | Problema | Causa | Soluzione |
 |----------|-------|-----------|
-| "File non trovato: MASTER_81PLUS_GLOBAL.sql" | SQL non nella cartella giusta | Mettilo in `../sql/` rispetto a public_html |
+| "File non trovato: MYSQL1_INSTALL_81PLUS_HUB1_COMPLETE.sql" | SQL non nella cartella giusta | Mettilo in `../sql/` rispetto a public_html |
 | "Connessione al database fallita" | Credenziali .env errate | Verifica DB_NAME, DB_USER, DB_PASS in hPanel |
 | "Chiave non valida" | INSTALLER_KEY diversa | Copia esatta da .env, senza spazi |
 | Timeout dopo 30 secondi | Importa lead lenta | Normale su shared hosting — aspetta o aumenta max_execution_time |

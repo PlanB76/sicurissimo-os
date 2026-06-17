@@ -8,7 +8,7 @@
  * SQL: ../sql/MASTER_81PLUS_GLOBAL.sql (file unificato)
  */
 
-define('INSTALLER_VERSION', '3.0.0');
+define('INSTALLER_VERSION', '4.0.0');
 define('SQL_DIR', __DIR__ . '/../sql/');
 define('ENV_FILE', __DIR__ . '/../.env');
 
@@ -57,7 +57,7 @@ if ($authed && $action === 'install') {
 
         /* Esegui file SQL con gestione DELIMITER */
         $files = [
-            'MASTER_81PLUS_GLOBAL.sql' => 'Schema 78 tabelle + 4 trigger + 3 view + 4179 lead (file unico)',
+            'MYSQL1_INSTALL_81PLUS_HUB1_COMPLETE.sql' => 'Schema 78 tabelle + 4 trigger + 3 view + 4179 lead (file unico)',
         ];
 
         foreach ($files as $filename => $label) {
@@ -276,7 +276,7 @@ function parseSql(string $sql): array {
   <div style="margin-top:28px;padding-top:20px;border-top:1px solid #1a1a2e">
     <p style="font-size:12px;color:#555;line-height:1.8">
       File SQL richiesto (unico):<br>
-      <code style="color:#E8501A">../sql/MASTER_81PLUS_GLOBAL.sql</code>
+      <code style="color:#E8501A">../sql/MYSQL1_INSTALL_81PLUS_HUB1_COMPLETE.sql</code>
     </p>
   </div>
 
