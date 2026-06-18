@@ -9,6 +9,10 @@ Ricevute_*
 *.tmp
 *.log
 
+# Claude Code worktrees e file di sessione locale
+.claude/worktrees/
+.claude/settings.local.json
+
 # Live site — file da non committare mai
 live/.env
 live/.env.local
