@@ -1,1148 +1,893 @@
-#Requires -Version 5.1
-<#
-.SYNOPSIS
-    81PLUS_ORGANIZER_MASTER.ps1 — Organizzatore dell'ecosistema 81+ Global
-
-.DESCRIPTION
-    Copia e organizza i file da SourceRoot (default: C:\MEMORIA81+) nella cartella
-    81PLUS_GLOBAL_MASTER sul Desktop. Analizza anche i contenuti degli archivi ZIP.
-    Deduplica via SHA256. Smista i file per parole chiave nel nome/percorso.
-    NON cancella mai i file originali. NON scrive su Google Drive senza Drive Desktop.
-
-.PARAMETER SourceRoot
-    Cartella sorgente da analizzare. Default: C:\MEMORIA81+
-
-.PARAMETER DriveMirrorRoot
-    Percorso locale di Google Drive Desktop (es. G:\Il mio Drive).
-    Se specificato, il mirror viene creato li invece che solo sul Desktop.
-
-.PARAMETER DryRun
-    Modalita simulazione: mostra cosa farebbe senza copiare nulla.
-
-.PARAMETER OpenAtEnd
-    Apre la cartella master al termine dell'esecuzione.
-
-.EXAMPLE
-    .\81PLUS_ORGANIZER_MASTER.ps1 -SourceRoot "C:\MEMORIA81+" -OpenAtEnd
-    .\81PLUS_ORGANIZER_MASTER.ps1 -SourceRoot "C:\MEMORIA81+" -DryRun
-    .\81PLUS_ORGANIZER_MASTER.ps1 -SourceRoot "C:\MEMORIA81+" -DriveMirrorRoot "G:\Il mio Drive" -OpenAtEnd
-#>
-[CmdletBinding()]
 param(
-    [string] $SourceRoot      = "C:\MEMORIA81+",
-    [string] $DriveMirrorRoot = "",
-    [switch] $DryRun,
-    [switch] $OpenAtEnd
+    [string]$SourceRoot = "C:\MEMORIA81+",
+    [string]$TargetName = "81PLUS_GLOBAL_MASTER",
+    [string]$DriveMirrorRoot = "",
+    [switch]$OpenAtEnd,
+    [switch]$DryRun
 )
 
-Set-StrictMode -Version Latest
-$ErrorActionPreference = 'Continue'
+$ErrorActionPreference = "Continue"
 
-# ─── VERSIONE E TIMESTAMP ─────────────────────────────────────────────────────
-$ScriptVersion = "1.0.0"
-$RunTimestamp  = Get-Date -Format 'yyyyMMdd_HHmmss'
-$RunDate       = Get-Date -Format 'yyyy-MM-dd HH:mm:ss'
+# ============================================================
+# 81PLUS ORGANIZER MASTER
+# Versione pulita ASCII per Windows PowerShell
+# - Crea struttura progetto su Desktop
+# - Analizza C:\MEMORIA81+
+# - Estrae ZIP in temporaneo
+# - Deduplica con SHA256
+# - Tiene file piu recente
+# - Smista nelle cartelle corrette
+# - Crea report e manifest
+# - Crea mirror Google Drive se trova cartella locale Drive
+# NON cancella mai gli originali
+# ============================================================
 
-# ─── PERCORSI BASE ────────────────────────────────────────────────────────────
-$DesktopPath      = [Environment]::GetFolderPath("Desktop")
-$MasterFolderName = "81PLUS_GLOBAL_MASTER"
-$MasterPath       = Join-Path $DesktopPath $MasterFolderName
-
-# ─── STATISTICHE GLOBALI ─────────────────────────────────────────────────────
-$Stats = [ordered]@{
-    FilesScanned    = 0
-    FilesCopied     = 0
-    DuplicatesSkip  = 0
-    ZipsProcessed   = 0
-    ZipFilesFound   = 0
-    Errors          = 0
-    BytesCopied     = [long]0
-    DriveDetected   = $false
-    MirrorCreated   = $false
+function Write-Info {
+    param([string]$Message)
+    Write-Host "[81PLUS] $Message" -ForegroundColor Cyan
 }
 
-# Registry SHA256 → destinazione (per deduplicazione)
-$HashRegistry = [System.Collections.Generic.Dictionary[string,string]]::new()
+function Write-Ok {
+    param([string]$Message)
+    Write-Host "[OK] $Message" -ForegroundColor Green
+}
 
-# Collezioni report
-$ManifestRows  = [System.Collections.ArrayList]::new()
-$DuplicateRows = [System.Collections.ArrayList]::new()
-$ErrorLines    = [System.Collections.ArrayList]::new()
+function Write-Warn {
+    param([string]$Message)
+    Write-Host "[WARN] $Message" -ForegroundColor Yellow
+}
 
-# ─── STRUTTURA CARTELLE PRINCIPALI ───────────────────────────────────────────
-$MainFolders = @(
-    "00_MASTER_VIVO",
-    "01_HOLDING_PLANB_CASH_LTD",
-    "02_LEGALE_REGOLAMENTI_COMPLIANCE",
-    "03_HUB1_81PLUS_NET",
-    "04_HUB2_SICURISSIMO",
-    "05_HUB3_WEB3_UTILITY",
-    "06_22_NODI_ECOSISTEMA",
-    "07_32_NOTEBOOKLM",
-    "08_AI_OPERATING_SYSTEM_150_AGENTI",
-    "09_MARKETING_LEAD_GENERATION",
-    "10_SCOUT81_LEAD_PACK",
-    "11_SALES_CRM_NETWORKERS",
-    "12_PV_PVPLUS_CAREER_EQUILIBRIUM",
-    "13_GAMIFICATION_RETENTION_OS",
-    "14_PASS_KIT_SDP_MEMBERSHIP",
-    "15_SICURISSIMO_POINT81_FRANCHISING",
-    "16_WELFARE_PLAN",
-    "17_VISUAL_MASTER_BRAND_ASSET",
-    "18_TECH_CLAUDE_CODE_GITHUB",
-    "19_DATABASE_API_ARCHITECTURE",
-    "20_ECONOMIA_CASHFLOW_TASSE",
-    "21_STARTUP_INNOVATIVA_BANDI_FONDI",
-    "22_INVESTITORI_BANCHE_EXIT",
-    "23_DAO_GOVERNANCE_WEB3",
-    "24_GLOBAL_EXPANSION",
-    "25_QUALITY_ASSURANCE_BONIFICA",
-    "26_SECURITY_PRIVACY_CYBER_RISK",
-    "27_WAVE_LANCI_OPERATIVI",
-    "28_CLIENTI_CASE_STUDY_TESTIMONIANZE",
-    "29_TEMPLATE_PROMPT_SCRIPT_COPY",
-    "30_ARCHIVIO_STORICO",
-    "99_INBOX_DA_SMISTARE"
-)
-
-# Regole di smistamento: ogni voce = @(keywords[], destinazione)
-# Verificate in ordine — la prima corrispondenza vince
-$RoutingRules = @(
-    # Holding
-    @{ Keys = @("planb","planb.cash","holding","ltd"); Target = "01_HOLDING_PLANB_CASH_LTD" }
-    # Legale
-    @{ Keys = @("legale","regolamento","privacy","cookie","gdpr","contratto","disclaimer","dpo","mica","ai act","termini","aml","antiriciclaggio"); Target = "02_LEGALE_REGOLAMENTI_COMPLIANCE" }
-    # HUB1
-    @{ Keys = @("hub1","81plus.net","sic-id","sic_id","sicid","sso","kyc","dashboard","wallet","paygate","missione del giorno","ruota della vita","piramide maslow","cockpit"); Target = "03_HUB1_81PLUS_NET" }
-    # HUB2
-    @{ Keys = @("hub2","sicurissimo","dvr","pos ","duvri","haccp","dvri","formazione","corsisicurezza","document81","doc81"); Target = "04_HUB2_SICURISSIMO" }
-    # HUB3
-    @{ Keys = @("hub3","web3","saf ","81x","nft","metaverso","token","blockchain","crypto","defi"); Target = "05_HUB3_WEB3_UTILITY" }
-    # 22 Nodi
-    @{ Keys = @("22 nodi","nodi ecosistema","nodo81","career81","equilibrium","lock81","pix81","genesys","academy81","shop81","marketplace81","exchange81","club81"); Target = "06_22_NODI_ECOSISTEMA" }
-    # AI OS
-    @{ Keys = @("agente ai","150 agenti","ai agent","orchestrator","matricola agente","registry agenti","team ai","ai os"); Target = "08_AI_OPERATING_SYSTEM_150_AGENTI" }
-    # Marketing
-    @{ Keys = @("marketing","social","ads","newsletter","brevo","webinar","lead magnet","funnel","copywriting","aida","epppa","repppa","attrai","vendi","sorprendi","content plan","piano editoriale","post magnetico"); Target = "09_MARKETING_LEAD_GENERATION" }
-    # Scout81
-    @{ Keys = @("scout81","lead pack","prospect","osint","lead score","opt-out","ateco","territorio scout","scout pack","scout_81","scout 81"); Target = "10_SCOUT81_LEAD_PACK" }
-    # Sales
-    @{ Keys = @("sales","crm","networker","pipeline","follow up","followup","closing","script vendita","provvigioni","call script","call strategica","preventivo"); Target = "11_SALES_CRM_NETWORKERS" }
-    # PV PVPLUS
-    @{ Keys = @("pvplus","pv+","pv plus","career81","equilibrium","eq1","eq2","eq3","eq4","eq5","eq6","eq7","eq8","bounty","exchange pvplus","wallet pv"); Target = "12_PV_PVPLUS_CAREER_EQUILIBRIUM" }
-    # Gamification
-    @{ Keys = @("gamification","retention","badge","leaderboard","wall of fame","buddy","diario81","arena","mystery","streak","maslow","ruota della vita","life wheel","daily mission","missione giornaliera"); Target = "13_GAMIFICATION_RETENTION_OS" }
-    # Pass Kit
-    @{ Keys = @("pass","kit member","kit network","kit elite","kit franchiser","kit club","sdp+","membership","basic+","pro+","elite+","network pass","club pass","franchise pass"); Target = "14_PASS_KIT_SDP_MEMBERSHIP" }
-    # Point81 Franchising
-    @{ Keys = @("sicurissimo point","franchising","franchiser","territory","mappa territori","manuale franchising","point81"); Target = "15_SICURISSIMO_POINT81_FRANCHISING" }
-    # Welfare
-    @{ Keys = @("welfare","hr plan","dipendenti","micro-learning","clima aziendale","benessere","welfare check","welfare pack"); Target = "16_WELFARE_PLAN" }
-    # Visual Brand
-    @{ Keys = @("visual","brand","logo","figma","canva","mockup","prompt gemini","midjourney","colori81","font81","brand guide","asset pack","badge pack"); Target = "17_VISUAL_MASTER_BRAND_ASSET" }
-    # Tech / Claude Code
-    @{ Keys = @("claude code","github","php","javascript","html","css","backend","frontend","deploy","hostinger","n8n","api rest","webpack","dockerfile"); Target = "18_TECH_CLAUDE_CODE_GITHUB" }
-    # Database / API
-    @{ Keys = @("database","mysql","schema","erd","data dictionary","event taxonomy","api docs","swagger","openapi","tabella sql","create table"); Target = "19_DATABASE_API_ARCHITECTURE" }
-    # Economia
-    @{ Keys = @("cashflow","economia","tasse","fiscale","commercialista","iva","fattur","business plan","margini","pricing","mrr","arr","unit economics"); Target = "20_ECONOMIA_CASHFLOW_TASSE" }
-    # Bandi
-    @{ Keys = @("startup innovativa","bando","finanziamenti","fondo perduto","smart&start","invitalia","voucher 3i","horizon","eic","bandi regionali","finanza agevolata"); Target = "21_STARTUP_INNOVATIVA_BANDI_FONDI" }
-    # Investitori
-    @{ Keys = @("investitori","angels","banche","fondi","pitch","term sheet","valuation","due diligence","exit","data room","fundraising","investor"); Target = "22_INVESTITORI_BANCHE_EXIT" }
-    # DAO
-    @{ Keys = @("dao","governance","votazioni","proposal","roadmap vote","charter dao","token vote"); Target = "23_DAO_GOVERNANCE_WEB3" }
-    # Global
-    @{ Keys = @("global","dubai","singapore","usa","africa","cayman","free zone","internazionale","localizzazione","country"); Target = "24_GLOBAL_EXPANSION" }
-    # QA
-    @{ Keys = @("qa","quality assurance","bonifica","test case","bug","approval","go no go","release notes","go-live checklist"); Target = "25_QUALITY_ASSURANCE_BONIFICA" }
-    # Security
-    @{ Keys = @("security","cyber","backup","incident","access control","password","privacy risk","api security","gdpr risk","data breach"); Target = "26_SECURITY_PRIVACY_CYBER_RISK" }
-    # Wave
-    @{ Keys = @("wave","lancio","launch","go-live","golive","mvp","release notes","wave1","wave 1","piano 90","roadmap 90"); Target = "27_WAVE_LANCI_OPERATIVI" }
-    # Clienti / Case Study
-    @{ Keys = @("cliente","clienti","case study","testimonianze","recensioni","ateco","settore","azienda caso"); Target = "28_CLIENTI_CASE_STUDY_TESTIMONIANZE" }
-    # Template Prompt
-    @{ Keys = @("template","prompt","script whatsapp","email template","landing template","ads template","copy","swipe file"); Target = "29_TEMPLATE_PROMPT_SCRIPT_COPY" }
-    # Master Vivo (largo — dopo le specifiche)
-    @{ Keys = @("master vivo","blueprint","master blaster","dna fondativo","decisioni","changelog","roadmap globale","naming","semantic guard","regola finale"); Target = "00_MASTER_VIVO" }
-)
-
-# ─── 32 NOTEBOOKLM ────────────────────────────────────────────────────────────
-$Notebooks = @(
-    @{ Id="01"; Name="MASTER_VIVO";                  Mission="Memoria centrale strategica: DNA, decisioni, naming, 22 nodi, agent registry, semantic guard, changelog, roadmap." }
-    @{ Id="02"; Name="LEGALE_REGOLAMENTI";           Mission="Regolamenti, contratti, policy PV/PV+, CAREER81+, EQUILIBRIUM, Scout81+, Lead Pack, DAO, SICURISSIMO POINT81+." }
-    @{ Id="03"; Name="HUB1";                         Mission="Cervello centrale: SIC-ID, SSO, database, dashboard, wallet, missione giorno, Ruota, Piramide, API, antifrode." }
-    @{ Id="04"; Name="HUB2";                         Mission="SICURISSIMO operativo: sicurezza D.Lgs 81/08, HACCP, privacy, audit, documenti, corsi, preventivi, workflow clienti." }
-    @{ Id="05"; Name="HUB3";                         Mission="Web3 utility: SAF, 81X, NFT utility, marketplace, metaverso, PIX81+, DAO consultiva, gestione rischi MiCA." }
-    @{ Id="06"; Name="MARKETING_CONTENUTI";          Mission="Attrazione e comunicazione: content plan, ads, social, newsletter, webinar, landing, AIDA, EPPPA, REPPPA." }
-    @{ Id="07"; Name="GLOBAL";                       Mission="Espansione internazionale: paesi target, localizzazione, partner, compliance globale, Dubai, Singapore, USA, Africa." }
-    @{ Id="08"; Name="BONIFICA";                     Mission="Pulizia e coerenza naming, parole vietate, rischi semantici, copy, PDF, landing, email, regolamenti." }
-    @{ Id="09"; Name="HUB1_WAVE1";                   Mission="Go-live MVP HUB1: landing, SIC-ID base, audit, PDF magnete, CRM, dashboard base, PV+, missione, Ruota/Piramide." }
-    @{ Id="10"; Name="VISUAL_MASTER";                Mission="Identita visiva: dark premium design, dashboard cockpit, badge, icone, prompt visual, social template, Figma, Canva." }
-    @{ Id="11"; Name="ECONOMIA_CASHFLOW";            Mission="Modello economico: cashflow, margini, prezzi, MRR/ARR, unit economics, PV/PV+, Pass/Kit, scenario 90 giorni." }
-    @{ Id="12"; Name="COMMERCIALISTA_TASSE_TAX";     Mission="Fiscalita legale: IVA, fatturazione, startup innovativa, holding LTD, SRL italiana, transfer pricing, residenza fiscale." }
-    @{ Id="13"; Name="COMPLIANCE";                   Mission="Controllo rischi: GDPR, AI Act, MiCA, sicurezza, marketing legale, network marketing, franchising, DAO, PV/PV+." }
-    @{ Id="14"; Name="DUE_DILIGENCE";                Mission="Data room per investitori: IP, contratti, bilanci, forecast, KPI, regolamenti, tech architecture, traction, team." }
-    @{ Id="15"; Name="STRATEGIE";                    Mission="Direzione strategica: go-to-market, oceano blu, competitor, pricing, roadmap, partnership, canali, lanci." }
-    @{ Id="16"; Name="INVESTITORI_ANGELS";           Mission="Fundraising: pitch deck, one pager, investor CRM, lista angels, follow-up, term sheet, valuation, demo script." }
-    @{ Id="17"; Name="BANCHE_FONDI";                 Mission="Credito e finanza: business plan bancabile, Smart&Start, Invitalia, bandi regionali, garanzie pubbliche, rendicontazione." }
-    @{ Id="18"; Name="GESTIONE_GLOBALE";             Mission="Controllo operativo: OKR, KPI, task, riunioni, wave, risorse, priorita, report CEO, risk board, decision board." }
-    @{ Id="19"; Name="EXIT";                         Mission="Exit readiness: asset strategici, IP, dataset, traction, valuation, buyer map, licensing, spin-off, KPI exit." }
-    @{ Id="20"; Name="WAVE_OPERATIVE";               Mission="Gestione tutte le wave: WAVE0 Fondazioni → WAVE18 Exit. Calendario, task, go/no-go, KPI, release notes." }
-    @{ Id="21"; Name="SCOUT81_LEAD_GENERATION";      Mission="Prospect B2B legali: OSINT, fonti pubbliche, enrichment, scoring, Scout Pack, assegnazione networker, CRM." }
-    @{ Id="22"; Name="SALES_CRM_NETWORKERS";         Mission="Vendite e rete: CRM, lead assignment, script, follow-up, preventivi, closing, onboarding networker, CAREER81+, regola 50%." }
-    @{ Id="23"; Name="WELFARE_PLAN";                 Mission="Welfare aziendale e community: formazione dipendenti, micro-learning, badge, dashboard HR, engagement, clima sicurezza." }
-    @{ Id="24"; Name="STARTUP_INNOVATIVA_BANDI";     Mission="Requisiti e fondi: startup innovativa, Smart&Start, Voucher 3I, bandi Veneto, CCIAA, fondi AI, Horizon/EIC." }
-    @{ Id="25"; Name="DAO_GOVERNANCE";               Mission="Governance consultiva: DAO charter, votazioni consultive, roadmap voting, survey, proposal template, governance logs." }
-    @{ Id="26"; Name="AI_AGENT_CONTROL_TOWER";       Mission="Controllo agenti AI: agent registry, matricole, task, permessi, prompt, output, errori, escalation, audit AI." }
-    @{ Id="27"; Name="DATA_ML_NEURAL_ENGINE";        Mission="Motore dati: event tracking, vector profiles, Markov, churn probability, recommendation engine, A/B test." }
-    @{ Id="28"; Name="REGOLAMENTI_PV_PVPLUS_CAREER"; Mission="Regole economiche interne: PV, PV+, PV+ Exchange, Bounty, CAREER81+, EQUILIBRIUM, reward, voucher, antifrode." }
-    @{ Id="29"; Name="SICURISSIMO_POINT81_FRANCHISE"; Mission="Territorio e franchising: modello punto, requisiti apertura, livelli franchiser, mappa territori, manuali, kit." }
-    @{ Id="30"; Name="CUSTOMER_SUCCESS_SUPPORT";     Mission="Assistenza e retention: ticket, FAQ, onboarding, rinnovi, supporto audit, feedback, recensioni, escalation." }
-    @{ Id="31"; Name="QA_HUMAN_APPROVAL";            Mission="Validazione: QA output AI, test dashboard, test API, validazione legale/fiscale, bug, approval workflow, go/no-go." }
-    @{ Id="32"; Name="SECURITY_PRIVACY_CYBER_RISK";  Mission="Protezione: access control, backup, GDPR, data minimization, security API, incident response, data breach, permessi AI." }
-)
-
-$NotebookSubfolders = @(
-    "FONTI", "PROMPT_MASTER", "OUTPUT_APPROVATI", "OUTPUT_DA_VALIDARE",
-    "TASK_CLAUDE_CODE", "TASK_AI_AGENT", "TASK_HUMAN", "REPORT_SETTIMANALI", "ARCHIVIO"
-)
-
-# ─── 22 NODI ECOSISTEMA ───────────────────────────────────────────────────────
-$Nodi22 = @(
-    "01_HUB1","02_HUB2","03_HUB3","04_PAYGATE81","05_SIC_ID_SSO_KYC",
-    "06_DOC81_AUDIT_ENGINE","07_ACADEMY81","08_SICURISSIMO_POINT81",
-    "09_NETWORK81","10_CAREER81","11_EQUILIBRIUM81","12_PVPLUS_CORE_WALLET_EXCHANGE",
-    "13_GAMIFICATION_OS","14_PIX81","15_GENESYS81","16_LOCK81",
-    "17_MARKETPLACE81","18_SHOP81","19_METAVERSO81","20_EXCHANGE81",
-    "21_CLUB81","22_DAO_GOVERNANCE_ORG81"
-)
-
-# ─── AI TEAM CARTELLE ─────────────────────────────────────────────────────────
-$AITeamFolders = @(
-    "REGISTRY_AGENTI","MATRICOLE_AGENTI","PROMPT_PER_AGENTE","TEAM_COMANDO",
-    "TEAM_HUB1","TEAM_HUB2","TEAM_HUB3","TEAM_MARKETING","TEAM_SALES",
-    "TEAM_SCOUT81","TEAM_LEGALE","TEAM_FISCALE","TEAM_COMPLIANCE",
-    "TEAM_GAMIFICATION","TEAM_PV_PVPLUS","TEAM_CAREER81","TEAM_EQUILIBRIUM",
-    "TEAM_SICURISSIMO_POINT81","TEAM_FUNDING","TEAM_INVESTITORI",
-    "TEAM_DATA_ML","TEAM_QA","TEAM_SECURITY",
-    "LOG_OUTPUT_AGENTI","ERRORI_AGENTI","HUMAN_ESCALATION","AGENT_PERFORMANCE_REPORT"
-)
-
-# ─── PROMPT AI CARTELLE ───────────────────────────────────────────────────────
-$PromptFolders = @(
-    "PROMPT_CLAUDE","PROMPT_CLAUDE_CODE","PROMPT_CLAUDE_COWORK",
-    "PROMPT_CHATGPT","PROMPT_GEMINI","PROMPT_GEMMA4","PROMPT_NOTEBOOKLM",
-    "PROMPT_AGENTI_AI","AI_SHARED_CONTEXT",
-    "OUTPUT_PER_CHATGPT","OUTPUT_PER_CLAUDE","OUTPUT_PER_GEMINI","OUTPUT_PER_GEMMA4"
-)
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# FUNZIONI UTILITY
-# ═══════════════════════════════════════════════════════════════════════════════
-
-function Write-Log {
-    param([string]$Message, [string]$Level = "INFO")
-    $line = "[$RunTimestamp][$Level] $Message"
-    switch ($Level) {
-        "ERROR"   { Write-Host $line -ForegroundColor Red    }
-        "WARN"    { Write-Host $line -ForegroundColor Yellow }
-        "SUCCESS" { Write-Host $line -ForegroundColor Green  }
-        "DRY"     { Write-Host $line -ForegroundColor Cyan   }
-        default   { Write-Host $line -ForegroundColor Gray   }
+function New-Folder {
+    param([string]$Path)
+    if ($DryRun) {
+        return
     }
-    if ($Level -eq "ERROR") {
-        [void]$ErrorLines.Add($line)
-        $Stats.Errors++
+    if (!(Test-Path -LiteralPath $Path)) {
+        New-Item -ItemType Directory -Path $Path -Force | Out-Null
     }
 }
 
-function Get-SafeFileName {
+function Safe-Name {
     param([string]$Name)
-    $invalid = [System.IO.Path]::GetInvalidFileNameChars() -join ''
-    $pattern = "[$([regex]::Escape($invalid))]"
-    $safe    = [regex]::Replace($Name, $pattern, '_')
-    # Tronca a 200 caratteri per evitare path troppo lunghi
-    if ($safe.Length -gt 200) {
-        $ext  = [System.IO.Path]::GetExtension($safe)
-        $base = [System.IO.Path]::GetFileNameWithoutExtension($safe)
-        $safe = $base.Substring(0, [Math]::Min($base.Length, 196 - $ext.Length)) + $ext
+    $invalid = [System.IO.Path]::GetInvalidFileNameChars()
+    foreach ($c in $invalid) {
+        $Name = $Name.Replace($c, "_")
     }
-    return $safe
+    return $Name
 }
 
-function Get-FileHash256 {
-    param([string]$FilePath)
+function Get-SafeDestPath {
+    param(
+        [string]$Folder,
+        [string]$FileName
+    )
+
+    $safe = Safe-Name $FileName
+    $dest = Join-Path $Folder $safe
+
+    if (!(Test-Path -LiteralPath $dest)) {
+        return $dest
+    }
+
+    $base = [System.IO.Path]::GetFileNameWithoutExtension($safe)
+    $ext = [System.IO.Path]::GetExtension($safe)
+    $i = 2
+
+    do {
+        $candidate = Join-Path $Folder ("{0}__SAME_NAME_{1}{2}" -f $base, $i, $ext)
+        $i++
+    } while (Test-Path -LiteralPath $candidate)
+
+    return $candidate
+}
+
+function Get-HashSafe {
+    param([string]$Path)
     try {
-        $hash = Get-FileHash -Path $FilePath -Algorithm SHA256 -ErrorAction Stop
-        return $hash.Hash
+        return (Get-FileHash -Algorithm SHA256 -LiteralPath $Path).Hash
     } catch {
-        Write-Log "Hash fallito per $FilePath : $_" "ERROR"
         return $null
     }
 }
 
-function Get-TargetFolder {
-    param([string]$FileName, [string]$RelativePath)
-    # Stringa di ricerca: nome file + percorso relativo, tutto minuscolo
-    $check = ($FileName + " " + $RelativePath).ToLower()
-    foreach ($rule in $RoutingRules) {
-        foreach ($kw in $rule.Keys) {
-            if ($check -like "*$kw*") {
-                return $rule.Target
-            }
+function Detect-GoogleDriveRoot {
+    $candidates = @(
+        "$env:USERPROFILE\Google Drive\My Drive",
+        "$env:USERPROFILE\Google Drive\Il mio Drive",
+        "$env:USERPROFILE\My Drive",
+        "$env:USERPROFILE\Il mio Drive",
+        "$env:USERPROFILE\Desktop\Google Drive",
+        "G:\My Drive",
+        "G:\Il mio Drive",
+        "H:\My Drive",
+        "H:\Il mio Drive",
+        "D:\Google Drive",
+        "E:\Google Drive"
+    )
+
+    foreach ($p in $candidates) {
+        if (Test-Path -LiteralPath $p) {
+            return $p
         }
     }
-    return "99_INBOX_DA_SMISTARE"
+
+    return ""
 }
 
-function New-Dir {
-    param([string]$Path)
-    if (-not (Test-Path $Path)) {
-        if ($DryRun) {
-            Write-Log "DRY: Crea cartella $Path" "DRY"
-        } else {
-            New-Item -ItemType Directory -Path $Path -Force | Out-Null
+function Get-Category {
+    param(
+        [string]$FullPath,
+        [string]$FileName
+    )
+
+    $text = ($FullPath + " " + $FileName).ToLowerInvariant()
+
+    $rules = @(
+        @{ Pattern = "master|blueprint|dna|decisioni|changelog|roadmap|naming|semantic|memoria"; Folder = "00_MASTER_VIVO" },
+        @{ Pattern = "holding|planb|cash ltd|societa|governance|verbali|marchi|ip|domini"; Folder = "01_HOLDING_PLANB_CASH_LTD" },
+        @{ Pattern = "legale|regolamento|privacy|cookie|gdpr|contratto|disclaimer|dpo|mica|ai act|termini"; Folder = "02_LEGALE_REGOLAMENTI_COMPLIANCE" },
+        @{ Pattern = "hub1|81plus.net|sic-id|sic id|sso|kyc|dashboard|wallet|paygate|missione|ruota|piramide|api hub1"; Folder = "03_HUB1_81PLUS_NET" },
+        @{ Pattern = "hub2|sicurissimo|dvr|pos|duvri|haccp|privacy gdpr|corsi|formazione|documenti|sicurezza"; Folder = "04_HUB2_SICURISSIMO" },
+        @{ Pattern = "hub3|web3|saf|81x|nft|metaverso|dao|token|smart contract|wallet web3|marketplace web3"; Folder = "05_HUB3_WEB3_UTILITY" },
+        @{ Pattern = "22 nodi|paygate81|doc81|academy81|network81|career81|equilibrium|pix81|genesys81|lock81|club81"; Folder = "06_22_NODI_ECOSISTEMA" },
+        @{ Pattern = "notebooklm|notebook lm|master vivo|hub1 wave1|visual master|due diligence|gestione globale"; Folder = "07_32_NOTEBOOKLM" },
+        @{ Pattern = "agent ai|agenti ai|orchestrator|ai operating|matricola|prompt agent|control tower"; Folder = "08_AI_OPERATING_SYSTEM_150_AGENTI" },
+        @{ Pattern = "marketing|contenuti|social|ads|newsletter|brevo|webinar|lead magnet|funnel|copy|aida|epppa|repppa|attrai|vendi|sorprendi"; Folder = "09_MARKETING_LEAD_GENERATION" },
+        @{ Pattern = "scout81|lead pack|prospect|osint|scraping|scout score|opt-out|do not contact"; Folder = "10_SCOUT81_LEAD_PACK" },
+        @{ Pattern = "sales|crm|networker|pipeline|follow up|closing|script vendita|provvigioni|regola 50"; Folder = "11_SALES_CRM_NETWORKERS" },
+        @{ Pattern = "pvplus|pv plus|pv\+|career81|equilibrium|eq1|eq2|eq3|eq4|eq5|eq6|eq7|eq8|bounty|exchange"; Folder = "12_PV_PVPLUS_CAREER_EQUILIBRIUM" },
+        @{ Pattern = "gamification|retention|badge|leaderboard|wall of fame|buddy|diario|arena|mystery|streak|maslow|ruota della vita"; Folder = "13_GAMIFICATION_RETENTION_OS" },
+        @{ Pattern = "pass|kit|sdp|membership|basic\+|pro\+|elite\+|network pass|club pass|franchise pass"; Folder = "14_PASS_KIT_SDP_MEMBERSHIP" },
+        @{ Pattern = "sicurissimo point|franchising|territorio|franchiser|point81"; Folder = "15_SICURISSIMO_POINT81_FRANCHISING" },
+        @{ Pattern = "welfare|hr|dipendenti|micro-learning|clima|benessere|welfare score"; Folder = "16_WELFARE_PLAN" },
+        @{ Pattern = "visual|brand|logo|figma|canva|mockup|prompt gemini|midjourney|colori|font|badge icone|pitch visual"; Folder = "17_VISUAL_MASTER_BRAND_ASSET" },
+        @{ Pattern = "claude code|github|php|javascript|html|css|backend|frontend|deploy|hostinger|n8n|api rest"; Folder = "18_TECH_CLAUDE_CODE_GITHUB" },
+        @{ Pattern = "database|mysql|schema|erd|table|api docs|data dictionary|event taxonomy|ml ready"; Folder = "19_DATABASE_API_ARCHITECTURE" },
+        @{ Pattern = "cashflow|economia|tasse|fisc|commercialista|iva|fatture|unit economics|business plan|margini|pricing"; Folder = "20_ECONOMIA_CASHFLOW_TASSE" },
+        @{ Pattern = "startup innovativa|bando|bandi|finanziamenti|fondo perduto|smart&start|invitalia|voucher 3i|funding"; Folder = "21_STARTUP_INNOVATIVA_BANDI_FONDI" },
+        @{ Pattern = "investitori|angels|banche|fondi|pitch|term sheet|valuation|due diligence|exit|data room"; Folder = "22_INVESTITORI_BANCHE_EXIT" },
+        @{ Pattern = "dao|governance|votazioni|proposal|roadmap vote|club survey"; Folder = "23_DAO_GOVERNANCE_WEB3" },
+        @{ Pattern = "global|dubai|singapore|usa|africa|cayman|free zone|internazionale"; Folder = "24_GLOBAL_EXPANSION" },
+        @{ Pattern = "qa|quality|bonifica|test|bug|approval|human approval|go no go|release"; Folder = "25_QUALITY_ASSURANCE_BONIFICA" },
+        @{ Pattern = "security|cyber|backup|incident|access control|password|privacy risk|api security"; Folder = "26_SECURITY_PRIVACY_CYBER_RISK" },
+        @{ Pattern = "wave|lancio|launch|go-live|golive|mvp|release|wave1|wave2|wave3"; Folder = "27_WAVE_LANCI_OPERATIVI" },
+        @{ Pattern = "cliente|clienti|case study|testimonianze|recensioni|ateco"; Folder = "28_CLIENTI_CASE_STUDY_TESTIMONIANZE" },
+        @{ Pattern = "template|prompt|script|whatsapp|call|email template|landing template|ads template"; Folder = "29_TEMPLATE_PROMPT_SCRIPT_COPY" }
+    )
+
+    foreach ($r in $rules) {
+        if ($text -match $r.Pattern) {
+            return $r.Folder
         }
     }
+
+    return "99_INBOX_DA_SMISTARE\DA_ANALIZZARE"
 }
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# RILEVAMENTO GOOGLE DRIVE DESKTOP
-# ═══════════════════════════════════════════════════════════════════════════════
+# ============================================================
+# Start
+# ============================================================
 
-function Find-GoogleDriveDesktop {
-    # Cerca Google Drive Desktop in percorsi comuni
-    $candidates = @()
-
-    # Google Drive File Stream (DriveFS) — controlla lettere comuni
-    foreach ($letter in @('G','H','I','J','K','L','M')) {
-        $p1 = "${letter}:\Il mio Drive"
-        $p2 = "${letter}:\My Drive"
-        $p3 = "${letter}:\"
-        if (Test-Path $p1) { $candidates += $p1 }
-        if (Test-Path $p2) { $candidates += $p2 }
-    }
-
-    # Google Drive Desktop (vecchio sync) — percorso utente
-    $oldPath = Join-Path $env:USERPROFILE "Google Drive"
-    if (Test-Path $oldPath) { $candidates += $oldPath }
-
-    # Controlla se Google Drive File Stream e attivo (agente in esecuzione)
-    $driveFsProcess = Get-Process -Name "GoogleDriveFS" -ErrorAction SilentlyContinue
-    $driveSyncProc  = Get-Process -Name "googledrivesync" -ErrorAction SilentlyContinue
-
-    if ($driveFsProcess -or $driveSyncProc) {
-        # Processo trovato: cerca il mount point via registry
-        try {
-            $regPath = "HKCU:\Software\Google\DriveFS\Share"
-            if (Test-Path $regPath) {
-                $regVal = Get-ItemProperty $regPath -ErrorAction SilentlyContinue
-                if ($regVal -and $regVal.MountPoint) {
-                    $mp = Join-Path $regVal.MountPoint "Il mio Drive"
-                    if (Test-Path $mp) { $candidates += $mp }
-                }
-            }
-        } catch {}
-    }
-
-    # Ritorna il primo candidato valido
-    if ($candidates.Count -gt 0) {
-        return $candidates[0]
-    }
-    return $null
+if (!(Test-Path -LiteralPath $SourceRoot)) {
+    Write-Warn "Source folder not found: $SourceRoot"
+    Write-Warn "Create it or run script with -SourceRoot"
+    exit 1
 }
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# CREAZIONE STRUTTURA CARTELLE
-# ═══════════════════════════════════════════════════════════════════════════════
+$Desktop = [Environment]::GetFolderPath("Desktop")
+$TargetRoot = Join-Path $Desktop $TargetName
+$TempRoot = Join-Path $env:TEMP ("81PLUS_EXTRACT_" + [Guid]::NewGuid().ToString("N"))
 
-function New-MasterStructure {
-    param([string]$BasePath)
+Write-Info "Source: $SourceRoot"
+Write-Info "Target: $TargetRoot"
 
-    Write-Log "Creazione struttura master in: $BasePath" "INFO"
+New-Folder $TargetRoot
+New-Folder $TempRoot
 
-    # Cartelle principali
-    foreach ($folder in $MainFolders) {
-        New-Dir (Join-Path $BasePath $folder)
+# ============================================================
+# Folder structure
+# ============================================================
+
+$MainFolders = @(
+"00_MASTER_VIVO",
+"00_MASTER_VIVO\DECISIONI_DEFINITIVE",
+"00_MASTER_VIVO\CHANGELOG_SETTIMANALE",
+"00_MASTER_VIVO\ROADMAP_GLOBALE",
+"00_MASTER_VIVO\NAMING_UFFICIALE",
+"00_MASTER_VIVO\SEMANTIC_GUARD",
+"00_MASTER_VIVO\MAPPA_22_NODI",
+"00_MASTER_VIVO\MAPPA_32_NOTEBOOKLM",
+"00_MASTER_VIVO\MAPPA_AGENTI_AI",
+
+"01_HOLDING_PLANB_CASH_LTD",
+"01_HOLDING_PLANB_CASH_LTD\STRUTTURA_HOLDING",
+"01_HOLDING_PLANB_CASH_LTD\ORGANIGRAMMA_HUMAN_10_AI_90",
+"01_HOLDING_PLANB_CASH_LTD\SOCIETA_OPERATIVE\PLANB_CASH_LTD",
+"01_HOLDING_PLANB_CASH_LTD\SOCIETA_OPERATIVE\81PLUS_GLOBAL_SRL_STARTUP",
+"01_HOLDING_PLANB_CASH_LTD\SOCIETA_OPERATIVE\SICURISSIMO_81",
+"01_HOLDING_PLANB_CASH_LTD\SOCIETA_OPERATIVE\NETWORK81",
+"01_HOLDING_PLANB_CASH_LTD\SOCIETA_OPERATIVE\SICURISSIMO_POINT81",
+"01_HOLDING_PLANB_CASH_LTD\SOCIETA_OPERATIVE\81PLUS_TECH_AI_LAB",
+"01_HOLDING_PLANB_CASH_LTD\GOVERNANCE",
+"01_HOLDING_PLANB_CASH_LTD\VERBALI_DECISIONI",
+"01_HOLDING_PLANB_CASH_LTD\MARCHI_IP_DOMINI",
+"01_HOLDING_PLANB_CASH_LTD\CONTRATTI_SOCIETARI",
+"01_HOLDING_PLANB_CASH_LTD\DOCUMENTI_AMMINISTRATIVI",
+
+"02_LEGALE_REGOLAMENTI_COMPLIANCE",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\TERMINI_GENERALI",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\PRIVACY_POLICY",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\COOKIE_POLICY",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_SIC_ID",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_PV",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_PVPLUS",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_PVPLUS_EXCHANGE",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_CAREER81",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_EQUILIBRIUM",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_SCOUT81",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_LEAD_PACK",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_NETWORKERS",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_FRANCHISER",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_SICURISSIMO_POINT81",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_DAO_CONSULTIVA",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\REGOLAMENTO_WELFARE",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\CONTRATTI_CLIENTI",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\CONTRATTI_NETWORKERS",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\CONTRATTI_FRANCHISER",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\CONTRATTI_PARTNER",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\DISCLAIMER_AUDIT_DOCUMENTI",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\GDPR_DPO",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\MICA_WEB3",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\AI_ACT",
+"02_LEGALE_REGOLAMENTI_COMPLIANCE\APPROVAZIONI_UMANE",
+
+"03_HUB1_81PLUS_NET",
+"03_HUB1_81PLUS_NET\ARCHITETTURA_HUB1",
+"03_HUB1_81PLUS_NET\SIC_ID_SSO_KYC",
+"03_HUB1_81PLUS_NET\DASHBOARD_UTENTE",
+"03_HUB1_81PLUS_NET\DASHBOARD_ADMIN",
+"03_HUB1_81PLUS_NET\WALLET_PV_PVPLUS",
+"03_HUB1_81PLUS_NET\PAYGATE81",
+"03_HUB1_81PLUS_NET\MISSIONE_DEL_GIORNO",
+"03_HUB1_81PLUS_NET\RUOTA_DELLA_VITA",
+"03_HUB1_81PLUS_NET\PIRAMIDE_MASLOW",
+"03_HUB1_81PLUS_NET\AI_AGENT_PANEL",
+"03_HUB1_81PLUS_NET\NOTIFICHE",
+"03_HUB1_81PLUS_NET\API_HUB1",
+"03_HUB1_81PLUS_NET\CRM_BASE",
+"03_HUB1_81PLUS_NET\AUDIT_BASE",
+"03_HUB1_81PLUS_NET\SCOUT81_BASE",
+"03_HUB1_81PLUS_NET\SEMANTIC_GUARD",
+"03_HUB1_81PLUS_NET\ANTIFRODE",
+"03_HUB1_81PLUS_NET\LOG_EVENTI",
+"03_HUB1_81PLUS_NET\WAVE1_MVP",
+
+"04_HUB2_SICURISSIMO",
+"04_HUB2_SICURISSIMO\SICUREZZA_LAVORO",
+"04_HUB2_SICURISSIMO\HACCP",
+"04_HUB2_SICURISSIMO\PRIVACY_GDPR",
+"04_HUB2_SICURISSIMO\AUDIT_SICURISSIMO",
+"04_HUB2_SICURISSIMO\DOCUMENTI\DVR",
+"04_HUB2_SICURISSIMO\DOCUMENTI\POS",
+"04_HUB2_SICURISSIMO\DOCUMENTI\DUVRI",
+"04_HUB2_SICURISSIMO\DOCUMENTI\MANUALE_HACCP",
+"04_HUB2_SICURISSIMO\DOCUMENTI\NOMINE",
+"04_HUB2_SICURISSIMO\DOCUMENTI\PRIVACY_DOC",
+"04_HUB2_SICURISSIMO\CORSI_FORMAZIONE",
+"04_HUB2_SICURISSIMO\PREVENTIVATORE",
+"04_HUB2_SICURISSIMO\LISTINI_SERVIZI",
+"04_HUB2_SICURISSIMO\PACCHETTI_START_PRO_FULL",
+"04_HUB2_SICURISSIMO\CLIENTI",
+"04_HUB2_SICURISSIMO\CASE_STUDY",
+"04_HUB2_SICURISSIMO\PARTNER_WHITE_LABEL",
+"04_HUB2_SICURISSIMO\SICURISSIMO_POINT81_LINK",
+
+"05_HUB3_WEB3_UTILITY",
+"05_HUB3_WEB3_UTILITY\SAF_UTILITY",
+"05_HUB3_WEB3_UTILITY\81X_UTILITY",
+"05_HUB3_WEB3_UTILITY\NFT_UTILITY",
+"05_HUB3_WEB3_UTILITY\PIX81",
+"05_HUB3_WEB3_UTILITY\MARKETPLACE_WEB3",
+"05_HUB3_WEB3_UTILITY\METAVERSO81",
+"05_HUB3_WEB3_UTILITY\DAO_CONSULTIVA",
+"05_HUB3_WEB3_UTILITY\WEB3_COMPLIANCE",
+"05_HUB3_WEB3_UTILITY\MICA_RISK",
+"05_HUB3_WEB3_UTILITY\SMART_CONTRACT_BOZZE",
+"05_HUB3_WEB3_UTILITY\WALLET_INTERNAL",
+"05_HUB3_WEB3_UTILITY\WEB3_ROADMAP_NON_MVP",
+
+"06_22_NODI_ECOSISTEMA",
+"07_32_NOTEBOOKLM",
+"08_AI_OPERATING_SYSTEM_150_AGENTI",
+"09_MARKETING_LEAD_GENERATION",
+"10_SCOUT81_LEAD_PACK",
+"11_SALES_CRM_NETWORKERS",
+"12_PV_PVPLUS_CAREER_EQUILIBRIUM",
+"13_GAMIFICATION_RETENTION_OS",
+"14_PASS_KIT_SDP_MEMBERSHIP",
+"15_SICURISSIMO_POINT81_FRANCHISING",
+"16_WELFARE_PLAN",
+"17_VISUAL_MASTER_BRAND_ASSET",
+"18_TECH_CLAUDE_CODE_GITHUB",
+"19_DATABASE_API_ARCHITECTURE",
+"20_ECONOMIA_CASHFLOW_TASSE",
+"21_STARTUP_INNOVATIVA_BANDI_FONDI",
+"22_INVESTITORI_BANCHE_EXIT",
+"23_DAO_GOVERNANCE_WEB3",
+"24_GLOBAL_EXPANSION",
+"25_QUALITY_ASSURANCE_BONIFICA",
+"26_SECURITY_PRIVACY_CYBER_RISK",
+"27_WAVE_LANCI_OPERATIVI",
+"28_CLIENTI_CASE_STUDY_TESTIMONIANZE",
+"29_TEMPLATE_PROMPT_SCRIPT_COPY",
+"30_ARCHIVIO_STORICO",
+"99_INBOX_DA_SMISTARE",
+"99_INBOX_DA_SMISTARE\DA_ANALIZZARE",
+"99_INBOX_DA_SMISTARE\DA_BONIFICARE",
+"99_INBOX_DA_SMISTARE\DA_INSERIRE_NEI_NOTEBOOK",
+"99_INBOX_DA_SMISTARE\DA_VALIDARE_LEGALE",
+"99_INBOX_DA_SMISTARE\DA_VALIDARE_TECNICO",
+"99_INBOX_DA_SMISTARE\DA_ARCHIVIARE",
+"99_INBOX_DA_SMISTARE\URGENTE"
+)
+
+foreach ($f in $MainFolders) {
+    New-Folder (Join-Path $TargetRoot $f)
+}
+
+$Nodes = @(
+"01_HUB1",
+"02_HUB2",
+"03_HUB3",
+"04_PAYGATE81",
+"05_SIC_ID_SSO_KYC",
+"06_DOC81_AUDIT_ENGINE",
+"07_ACADEMY81",
+"08_SICURISSIMO_POINT81",
+"09_NETWORK81",
+"10_CAREER81",
+"11_EQUILIBRIUM81",
+"12_PVPLUS_CORE_WALLET_EXCHANGE",
+"13_GAMIFICATION_OS",
+"14_PIX81",
+"15_GENESYS81",
+"16_LOCK81",
+"17_MARKETPLACE81",
+"18_SHOP81",
+"19_METAVERSO81",
+"20_EXCHANGE81",
+"21_CLUB81",
+"22_DAO_GOVERNANCE_ORG81"
+)
+
+foreach ($n in $Nodes) {
+    New-Folder (Join-Path $TargetRoot ("06_22_NODI_ECOSISTEMA\" + $n))
+}
+
+$Notebooks = @(
+"01_MASTER_VIVO",
+"02_LEGALE_REGOLAMENTI",
+"03_HUB1",
+"04_HUB2",
+"05_HUB3",
+"06_MARKETING_CONTENUTI",
+"07_GLOBAL",
+"08_BONIFICA",
+"09_HUB1_WAVE1",
+"10_VISUAL_MASTER",
+"11_ECONOMIA_CASHFLOW",
+"12_COMMERCIALISTA_TASSE_TAX_COMPLIANCE",
+"13_COMPLIANCE",
+"14_DUE_DILIGENCE",
+"15_STRATEGIE",
+"16_INVESTITORI_ANGELS",
+"17_BANCHE_FONDI",
+"18_GESTIONE_GLOBALE",
+"19_EXIT",
+"20_WAVE_OPERATIVE",
+"21_SCOUT81_LEAD_GENERATION",
+"22_SALES_CRM_NETWORKERS",
+"23_WELFARE_PLAN",
+"24_STARTUP_INNOVATIVA_BANDI",
+"25_DAO_GOVERNANCE",
+"26_AI_AGENT_CONTROL_TOWER",
+"27_DATA_ML_NEURAL_ENGINE",
+"28_REGOLAMENTI_PV_PVPLUS_CAREER_EQ",
+"29_SICURISSIMO_POINT81_FRANCHISING",
+"30_CUSTOMER_SUCCESS_SUPPORT",
+"31_QA_HUMAN_APPROVAL",
+"32_SECURITY_PRIVACY_CYBER_RISK"
+)
+
+$NotebookSubs = @(
+"FONTI",
+"PROMPT_MASTER",
+"OUTPUT_APPROVATI",
+"OUTPUT_DA_VALIDARE",
+"TASK_CLAUDE_CODE",
+"TASK_AI_AGENT",
+"TASK_HUMAN",
+"REPORT_SETTIMANALI",
+"ARCHIVIO"
+)
+
+foreach ($nb in $Notebooks) {
+    $nbRoot = Join-Path $TargetRoot ("07_32_NOTEBOOKLM\" + $nb)
+    New-Folder $nbRoot
+
+    foreach ($sub in $NotebookSubs) {
+        New-Folder (Join-Path $nbRoot $sub)
     }
 
-    # 99_INBOX: sotto-cartella DA_ANALIZZARE
-    New-Dir (Join-Path $BasePath "99_INBOX_DA_SMISTARE\DA_ANALIZZARE")
-
-    # ── 07_32_NOTEBOOKLM ──────────────────────────────────────────────────
-    $nbBase = Join-Path $BasePath "07_32_NOTEBOOKLM"
-    foreach ($nb in $Notebooks) {
-        $nbPath = Join-Path $nbBase "$($nb.Id)_$($nb.Name)"
-        New-Dir $nbPath
-        foreach ($sub in $NotebookSubfolders) {
-            New-Dir (Join-Path $nbPath $sub)
-        }
-        # README per ogni notebook
-        $readmePath = Join-Path $nbPath "README_NOTEBOOK.md"
-        if (-not (Test-Path $readmePath) -and -not $DryRun) {
-            $content = @"
-# NOTEBOOK $($nb.Id) — $($nb.Name)
+    $readme = @"
+# $nb
 
 ## Missione
-$($nb.Mission)
+Questo NotebookLM governa una area specializzata del progetto 81+ Global.
 
-## AI Team Assegnato
-Vedere `PROMPT_MASTER\` per i prompt degli agenti assegnati a questo notebook.
+## Regole
+- Usare solo naming ufficiale 81+.
+- Non usare SafePoint. Usare SICURISSIMO POINT81+.
+- Evitare promesse finanziarie o assolute.
+- Ogni output deve avere data, versione, stato e owner.
+- Ogni settimana produrre report con cambiamenti, blocchi, rischi, task AI, task umano, task Claude Code e prossima azione.
 
-## Struttura
-- **FONTI/** — documenti sorgente caricati su NotebookLM
-- **PROMPT_MASTER/** — prompt di sistema e istruzioni per Claude CoWork
-- **OUTPUT_APPROVATI/** — output validati da human reviewer
-- **OUTPUT_DA_VALIDARE/** — output AI in attesa di approvazione
-- **TASK_CLAUDE_CODE/** — task tecnici per Claude Code
-- **TASK_AI_AGENT/** — task per agenti AI autonomi
-- **TASK_HUMAN/** — task che richiedono revisione umana
-- **REPORT_SETTIMANALI/** — report settimanali dello stato notebook
-- **ARCHIVIO/** — versioni precedenti e storico
-
-## Checklist Settimanale
-- [ ] Cosa e cambiato questa settimana
-- [ ] Cosa e bloccato
-- [ ] Cosa serve
-- [ ] Cosa va approvato da Mirco
-- [ ] Rischi aperti
-- [ ] Task per Claude Code
-- [ ] Task per AI Agent
-- [ ] Task per umano
-- [ ] KPI aggiornati
-- [ ] Prossima azione
-
----
-*Generato da 81PLUS_ORGANIZER_MASTER.ps1 v$ScriptVersion — $RunDate*
+## Cartelle
+- FONTI: documenti sorgente.
+- PROMPT_MASTER: prompt da usare nel notebook.
+- OUTPUT_APPROVATI: materiale consolidato.
+- OUTPUT_DA_VALIDARE: bozze da verificare.
+- TASK_CLAUDE_CODE: task tecnici.
+- TASK_AI_AGENT: task per agenti AI.
+- TASK_HUMAN: task umani.
+- REPORT_SETTIMANALI: report settimanali.
+- ARCHIVIO: vecchie versioni.
 "@
-            Set-Content -Path $readmePath -Value $content -Encoding UTF8
-        }
-    }
 
-    # ── 06_22_NODI_ECOSISTEMA ─────────────────────────────────────────────
-    $nodiBase = Join-Path $BasePath "06_22_NODI_ECOSISTEMA"
-    foreach ($nodo in $Nodi22) {
-        $nPath = Join-Path $nodiBase $nodo
-        New-Dir $nPath
-        New-Dir (Join-Path $nPath "ARCHITETTURA")
-        New-Dir (Join-Path $nPath "REGOLAMENTI")
-        New-Dir (Join-Path $nPath "PROMPT")
-        New-Dir (Join-Path $nPath "OUTPUT")
-    }
-
-    # ── 08_AI_OPERATING_SYSTEM_150_AGENTI ─────────────────────────────────
-    $aiBase = Join-Path $BasePath "08_AI_OPERATING_SYSTEM_150_AGENTI"
-    foreach ($team in $AITeamFolders) {
-        New-Dir (Join-Path $aiBase $team)
-    }
-
-    # ── 29_TEMPLATE_PROMPT_SCRIPT_COPY ────────────────────────────────────
-    $promptBase = Join-Path $BasePath "29_TEMPLATE_PROMPT_SCRIPT_COPY"
-    foreach ($pf in $PromptFolders) {
-        New-Dir (Join-Path $promptBase $pf)
-    }
-
-    Write-Log "Struttura cartelle creata: $($MainFolders.Count) cartelle principali + notebook + nodi + AI teams" "SUCCESS"
-}
-
-# ═══════════════════════════════════════════════════════════════════════════════
-# COPIA FILE CON DEDUPLICAZIONE SHA256
-# ═══════════════════════════════════════════════════════════════════════════════
-
-function Copy-FileWithDedup {
-    param(
-        [string]$SourcePath,
-        [string]$TargetDir,
-        [string]$RelativeSource,
-        [string]$ZipSource = ""
-    )
-
-    $Stats.FilesScanned++
-    $origName = [System.IO.Path]::GetFileName($SourcePath)
-    $safeName = Get-SafeFileName $origName
-
-    # Calcola hash
-    $hash = Get-FileHash256 $SourcePath
-    if (-not $hash) { return }
-
-    # Controlla se hash gia registrato (duplicato esatto)
-    if ($HashRegistry.ContainsKey($hash)) {
-        $existingDest = $HashRegistry[$hash]
-        $Stats.DuplicatesSkip++
-        # Confronta date: tieni il piu recente
-        if (Test-Path $SourcePath) {
-            $srcDate  = (Get-Item $SourcePath).LastWriteTime
-            $destDate = if (Test-Path $existingDest) { (Get-Item $existingDest).LastWriteTime } else { [DateTime]::MinValue }
-            $sourceInfo = if ($ZipSource) { "(da ZIP: $ZipSource)" } else { "" }
-            if ($srcDate -gt $destDate -and -not $DryRun -and (Test-Path $existingDest)) {
-                Copy-Item -Path $SourcePath -Destination $existingDest -Force
-                Write-Log "Sostituito con versione piu recente: $safeName $sourceInfo" "INFO"
-            }
-        }
-        [void]$DuplicateRows.Add([PSCustomObject]@{
-            FileName     = $safeName
-            SourcePath   = $SourcePath
-            DuplicateDi  = $existingDest
-            Hash         = $hash
-            ZipSource    = $ZipSource
-            Motivo       = "SHA256 identico — tenuto il piu recente"
-        })
-        return
-    }
-
-    # Percorso destinazione
-    New-Dir $TargetDir
-    $destPath = Join-Path $TargetDir $safeName
-
-    # Gestisci conflitto: stesso nome, contenuto diverso
-    if (Test-Path $destPath) {
-        $existingHash = Get-FileHash256 $destPath
-        if ($existingHash -ne $hash) {
-            # Nome diverso: aggiungi suffisso _001, _002 ...
-            $base   = [System.IO.Path]::GetFileNameWithoutExtension($safeName)
-            $ext    = [System.IO.Path]::GetExtension($safeName)
-            $suffix = 1
-            do {
-                $newName  = "${base}_$('{0:D3}' -f $suffix)${ext}"
-                $destPath = Join-Path $TargetDir $newName
-                $suffix++
-            } while (Test-Path $destPath)
-            Write-Log "Conflitto nome — rinominato in: $newName" "WARN"
-        } else {
-            # Stesso contenuto, stesso nome: skip
-            $HashRegistry[$hash] = $destPath
-            $Stats.DuplicatesSkip++
-            return
-        }
-    }
-
-    if ($DryRun) {
-        Write-Log "DRY: Copia $origName → $TargetDir" "DRY"
-    } else {
-        try {
-            Copy-Item -Path $SourcePath -Destination $destPath -Force
-            $Stats.FilesCopied++
-            $fileSize = (Get-Item $SourcePath).Length
-            $Stats.BytesCopied += $fileSize
-            $HashRegistry[$hash] = $destPath
-
-            [void]$ManifestRows.Add([PSCustomObject]@{
-                FileName      = [System.IO.Path]::GetFileName($destPath)
-                SourcePath    = $SourcePath
-                DestPath      = $destPath
-                Hash          = $hash
-                SizeBytes     = $fileSize
-                LastModified  = (Get-Item $SourcePath).LastWriteTime.ToString('yyyy-MM-dd HH:mm:ss')
-                ZipSource     = $ZipSource
-                RelativeSrc   = $RelativeSource
-            })
-        } catch {
-            Write-Log "Errore copia $origName : $_" "ERROR"
-        }
+    if (!$DryRun) {
+        Set-Content -LiteralPath (Join-Path $nbRoot "README_NOTEBOOK.md") -Value $readme -Encoding UTF8
     }
 }
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# ELABORAZIONE FILE ZIP
-# ═══════════════════════════════════════════════════════════════════════════════
+$AiFolders = @(
+"REGISTRY_AGENTI",
+"MATRICOLE_AGENTI",
+"PROMPT_PER_AGENTE",
+"TEAM_COMANDO",
+"TEAM_HUB1",
+"TEAM_HUB2",
+"TEAM_HUB3",
+"TEAM_MARKETING",
+"TEAM_SALES",
+"TEAM_SCOUT81",
+"TEAM_LEGALE",
+"TEAM_FISCALE",
+"TEAM_COMPLIANCE",
+"TEAM_GAMIFICATION",
+"TEAM_PV_PVPLUS",
+"TEAM_CAREER81",
+"TEAM_EQUILIBRIUM",
+"TEAM_SICURISSIMO_POINT81",
+"TEAM_FUNDING",
+"TEAM_INVESTITORI",
+"TEAM_DATA_ML",
+"TEAM_QA",
+"TEAM_SECURITY",
+"LOG_OUTPUT_AGENTI",
+"ERRORI_AGENTI",
+"HUMAN_ESCALATION",
+"AGENT_PERFORMANCE_REPORT"
+)
 
-function Expand-AndProcessZip {
-    param(
-        [string]$ZipPath,
-        [string]$MasterBase,
-        [string]$RelativeZip,
-        [int]$Depth = 0
-    )
+foreach ($a in $AiFolders) {
+    New-Folder (Join-Path $TargetRoot ("08_AI_OPERATING_SYSTEM_150_AGENTI\" + $a))
+}
 
-    if ($Depth -gt 2) {
-        Write-Log "ZIP annidato troppo profondo (>3): $ZipPath — copiato as-is" "WARN"
-        $target = Join-Path $MasterBase (Get-TargetFolder (Split-Path $ZipPath -Leaf) $RelativeZip)
-        Copy-FileWithDedup $ZipPath $target $RelativeZip
-        return
-    }
+$PromptFolders = @(
+"PROMPT_CLAUDE",
+"PROMPT_CLAUDE_CODE",
+"PROMPT_CLAUDE_COWORK",
+"PROMPT_CHATGPT",
+"PROMPT_GEMINI",
+"PROMPT_NOTEBOOKLM",
+"PROMPT_AGENTI_AI",
+"AI_SHARED_CONTEXT",
+"OUTPUT_PER_CHATGPT",
+"OUTPUT_PER_CLAUDE",
+"OUTPUT_PER_GEMINI",
+"OUTPUT_PER_GEMMA4"
+)
 
-    $zipName  = [System.IO.Path]::GetFileNameWithoutExtension($ZipPath)
-    $tmpDir   = Join-Path $env:TEMP "81PLUS_ZIP_$($zipName)_$(Get-Date -Format 'yyyyMMddHHmmssfff')"
-    $Stats.ZipsProcessed++
+foreach ($p in $PromptFolders) {
+    New-Folder (Join-Path $TargetRoot ("29_TEMPLATE_PROMPT_SCRIPT_COPY\" + $p))
+}
 
-    Write-Log "Estrazione ZIP ($($Depth+1)/3): $zipName" "INFO"
+# ============================================================
+# Write base files
+# ============================================================
+
+$ReadmeMaster = @"
+# 81PLUS GLOBAL MASTER
+
+Questa e la cartella centrale del progetto 81+ Global.
+
+Regola operativa:
+99_INBOX raccoglie.
+BONIFICA pulisce.
+MASTER VIVO decide.
+NOTEBOOKLM specializza.
+CLAUDE COWORK organizza.
+CLAUDE CODE costruisce.
+GEMINI crea visual.
+CHATGPT ragiona e integra.
+GEMMA4 locale analizza offline.
+HUB1 registra.
+QA valida.
+LEGAL e COMPLIANCE approvano.
+WAVE lancia.
+
+Nota:
+Questo script non cancella file originali da C:\MEMORIA81+.
+I duplicati vengono esclusi dalla copia e registrati nei report.
+"@
+
+$AiSync = @"
+# AI SYNC INSTRUCTIONS
+
+NotebookLM:
+Caricare nel NotebookLM relativo i file presenti in:
+07_32_NOTEBOOKLM/[NOTEBOOK]/FONTI
+
+Claude:
+Usare:
+29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_CLAUDE
+
+Claude CoWork:
+Usare:
+29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_CLAUDE_COWORK
+
+Claude Code:
+Usare:
+29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_CLAUDE_CODE
+18_TECH_CLAUDE_CODE_GITHUB
+
+ChatGPT:
+Usare:
+29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_CHATGPT
+29_TEMPLATE_PROMPT_SCRIPT_COPY/AI_SHARED_CONTEXT
+
+Gemini:
+Usare:
+29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_GEMINI
+17_VISUAL_MASTER_BRAND_ASSET
+
+Gemma4 Docker:
+Usare:
+29_TEMPLATE_PROMPT_SCRIPT_COPY/OUTPUT_PER_GEMMA4
+29_TEMPLATE_PROMPT_SCRIPT_COPY/AI_SHARED_CONTEXT
+
+Nota:
+NotebookLM, Claude, ChatGPT e Gemini non scrivono automaticamente su Drive senza Drive Desktop, API, connector o integrazione.
+Claude Code puo lavorare su cartella locale sincronizzata da Google Drive Desktop.
+"@
+
+$NotebookIndex = "# NOTEBOOK INDEX`r`n`r`n" + (($Notebooks | ForEach-Object { "- $_" }) -join "`r`n")
+$NextSteps = @"
+# CLAUDE CODE NEXT STEPS
+
+Priorita Wave1:
+1. Creare database MVP.
+2. Creare landing HUB1.
+3. Creare form audit.
+4. Creare SIC-ID base.
+5. Creare CRM lead.
+6. Creare dashboard admin base.
+7. Creare dashboard utente base.
+8. Creare wallet PV+ base.
+9. Creare missione del giorno.
+10. Creare Ruota e Piramide base.
+11. Creare Scout81+ base.
+12. Creare export CSV.
+13. Creare semantic guard.
+14. Creare log eventi.
+15. Creare README installazione Hostinger.
+"@
+
+$GemmaTasks = @"
+# GEMMA4 LOCAL TASKS
+
+Usare Gemma4 Docker per:
+1. Riassumere documenti locali.
+2. Classificare file non chiari.
+3. Suggerire tag.
+4. Creare sintesi offline.
+5. Preparare output da mettere in AI_SHARED_CONTEXT.
+6. Non usare come fonte finale legale o fiscale.
+"@
+
+if (!$DryRun) {
+    Set-Content -LiteralPath (Join-Path $TargetRoot "README_MASTER.md") -Value $ReadmeMaster -Encoding UTF8
+    Set-Content -LiteralPath (Join-Path $TargetRoot "AI_SYNC_INSTRUCTIONS.md") -Value $AiSync -Encoding UTF8
+    Set-Content -LiteralPath (Join-Path $TargetRoot "NOTEBOOK_INDEX.md") -Value $NotebookIndex -Encoding UTF8
+    Set-Content -LiteralPath (Join-Path $TargetRoot "CLAUDE_CODE_NEXT_STEPS.md") -Value $NextSteps -Encoding UTF8
+    Set-Content -LiteralPath (Join-Path $TargetRoot "GEMMA4_LOCAL_TASKS.md") -Value $GemmaTasks -Encoding UTF8
+}
+
+# ============================================================
+# ZIP extraction
+# ============================================================
+
+Write-Info "Searching ZIP files..."
+
+$ZipFiles = Get-ChildItem -LiteralPath $SourceRoot -Recurse -File -ErrorAction SilentlyContinue |
+    Where-Object { $_.Extension.ToLowerInvariant() -eq ".zip" }
+
+foreach ($zip in $ZipFiles) {
+    $zipBase = [System.IO.Path]::GetFileNameWithoutExtension($zip.Name)
+    $extractTo = Join-Path $TempRoot (Safe-Name $zipBase)
 
     try {
-        if (-not $DryRun) {
-            Add-Type -AssemblyName System.IO.Compression.FileSystem -ErrorAction SilentlyContinue
-            [System.IO.Compression.ZipFile]::ExtractToDirectory($ZipPath, $tmpDir)
+        Write-Info "Extract ZIP: $($zip.FullName)"
+        if (!$DryRun) {
+            New-Folder $extractTo
+            Expand-Archive -LiteralPath $zip.FullName -DestinationPath $extractTo -Force
         }
-
-        $extractedFiles = if (Test-Path $tmpDir) {
-            Get-ChildItem -Path $tmpDir -Recurse -File
-        } else { @() }
-
-        $Stats.ZipFilesFound += $extractedFiles.Count
-        Write-Log "  $($extractedFiles.Count) file trovati nel ZIP: $zipName" "INFO"
-
-        foreach ($file in $extractedFiles) {
-            $relInZip  = $file.FullName.Substring($tmpDir.Length).TrimStart('\','/')
-            $fullRel   = "$RelativeZip\[ZIP:$zipName]\$relInZip"
-            $targetDir = Get-TargetFolder $file.Name $fullRel
-
-            if ($file.Extension -eq ".zip" -and $Depth -lt 2) {
-                Expand-AndProcessZip $file.FullName $MasterBase $fullRel ($Depth + 1)
-            } else {
-                $destDir = Join-Path $MasterBase $targetDir
-                Copy-FileWithDedup $file.FullName $destDir $fullRel ("[ZIP:$zipName]")
-            }
-        }
-
     } catch {
-        Write-Log "Errore elaborazione ZIP $($ZipPath): $_" "ERROR"
-    } finally {
-        # Rimuove SOLO la cartella temp, mai gli originali
-        if ((Test-Path $tmpDir) -and -not $DryRun) {
-            Remove-Item -Path $tmpDir -Recurse -Force -ErrorAction SilentlyContinue
+        if (!$DryRun) {
+            Add-Content -LiteralPath (Join-Path $TargetRoot "ERRORS.log") -Value ("ZIP ERROR: " + $zip.FullName + " :: " + $_.Exception.Message)
         }
     }
 }
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# SCANSIONE SORGENTE
-# ═══════════════════════════════════════════════════════════════════════════════
+# ============================================================
+# Collect files
+# ============================================================
 
-function Invoke-SourceScan {
-    param([string]$SourcePath, [string]$MasterBase)
+Write-Info "Collecting files..."
 
-    if (-not (Test-Path $SourcePath)) {
-        Write-Log "ATTENZIONE: SourceRoot non esiste: $SourcePath" "WARN"
-        Write-Log "Lo script creera la struttura vuota e aspettera i file." "WARN"
-        return
+$AllFiles = @()
+
+$OriginalFiles = Get-ChildItem -LiteralPath $SourceRoot -Recurse -File -ErrorAction SilentlyContinue |
+    Where-Object {
+        $_.Name -notin @("Thumbs.db", ".DS_Store", "desktop.ini") -and
+        $_.Length -gt 0
     }
 
-    $allFiles = Get-ChildItem -Path $SourcePath -Recurse -File -ErrorAction Continue
-    Write-Log "File trovati in sorgente: $($allFiles.Count)" "INFO"
+$AllFiles += $OriginalFiles
 
-    foreach ($file in $allFiles) {
-        $rel = $file.FullName.Substring($SourcePath.Length).TrimStart('\','/')
-
-        if ($file.Extension -eq ".zip") {
-            Expand-AndProcessZip $file.FullName $MasterBase $rel
-        } else {
-            $targetDir = Join-Path $MasterBase (Get-TargetFolder $file.Name $rel)
-            Copy-FileWithDedup $file.FullName $targetDir $rel
+if (!$DryRun -and (Test-Path -LiteralPath $TempRoot)) {
+    $ExtractedFiles = Get-ChildItem -LiteralPath $TempRoot -Recurse -File -ErrorAction SilentlyContinue |
+        Where-Object {
+            $_.Name -notin @("Thumbs.db", ".DS_Store", "desktop.ini") -and
+            $_.Length -gt 0
         }
 
-        # Progress ogni 50 file
-        if ($Stats.FilesScanned % 50 -eq 0) {
-            Write-Host "  ... scansionati $($Stats.FilesScanned) file, copiati $($Stats.FilesCopied)" -ForegroundColor DarkGray
+    $AllFiles += $ExtractedFiles
+}
+
+Write-Info ("Files found: " + $AllFiles.Count)
+
+# ============================================================
+# Hash and dedupe
+# ============================================================
+
+$Records = New-Object System.Collections.Generic.List[object]
+
+foreach ($file in $AllFiles) {
+    $hash = Get-HashSafe $file.FullName
+
+    if ($null -eq $hash) {
+        if (!$DryRun) {
+            Add-Content -LiteralPath (Join-Path $TargetRoot "ERRORS.log") -Value ("HASH ERROR: " + $file.FullName)
+        }
+        continue
+    }
+
+    $srcType = "ORIGINAL"
+    if ($file.FullName.StartsWith($TempRoot)) {
+        $srcType = "ZIP_EXTRACTED"
+    }
+
+    $Records.Add([PSCustomObject]@{
+        FullName = $file.FullName
+        Name = $file.Name
+        Extension = $file.Extension
+        Length = $file.Length
+        LastWriteTime = $file.LastWriteTime
+        Hash = $hash
+        SourceType = $srcType
+    }) | Out-Null
+}
+
+$Unique = New-Object System.Collections.Generic.List[object]
+$Duplicates = New-Object System.Collections.Generic.List[object]
+
+$Groups = $Records | Group-Object Hash
+
+foreach ($g in $Groups) {
+    $best = $g.Group | Sort-Object LastWriteTime -Descending | Select-Object -First 1
+    $Unique.Add($best) | Out-Null
+
+    $dups = $g.Group | Where-Object { $_.FullName -ne $best.FullName }
+
+    foreach ($d in $dups) {
+        $Duplicates.Add([PSCustomObject]@{
+            DuplicateFile = $d.FullName
+            KeptFile = $best.FullName
+            Hash = $d.Hash
+            SizeBytes = $d.Length
+            LastWriteTime = $d.LastWriteTime
+            Reason = "SHA256 identical - kept newest file"
+        }) | Out-Null
+    }
+}
+
+Write-Info ("Unique files: " + $Unique.Count)
+Write-Info ("Duplicates excluded: " + $Duplicates.Count)
+
+# ============================================================
+# Copy unique files
+# ============================================================
+
+$Manifest = New-Object System.Collections.Generic.List[object]
+
+foreach ($file in $Unique) {
+    $category = Get-Category -FullPath $file.FullName -FileName $file.Name
+    $destFolder = Join-Path $TargetRoot $category
+
+    if (!$DryRun) {
+        New-Folder $destFolder
+    }
+
+    $destPath = Get-SafeDestPath -Folder $destFolder -FileName $file.Name
+
+    try {
+        Write-Info ("Copy to " + $category + " :: " + $file.Name)
+
+        if (!$DryRun) {
+            Copy-Item -LiteralPath $file.FullName -Destination $destPath -Force
+        }
+
+        $Manifest.Add([PSCustomObject]@{
+            OriginalPath = $file.FullName
+            Destination = $destPath
+            Category = $category
+            Hash = $file.Hash
+            SizeBytes = $file.Length
+            LastWriteTime = $file.LastWriteTime
+            SourceType = $file.SourceType
+        }) | Out-Null
+    } catch {
+        if (!$DryRun) {
+            Add-Content -LiteralPath (Join-Path $TargetRoot "ERRORS.log") -Value ("COPY ERROR: " + $file.FullName + " :: " + $_.Exception.Message)
         }
     }
 }
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# GENERAZIONE FILE AUTOMATICI
-# ═══════════════════════════════════════════════════════════════════════════════
+# ============================================================
+# Reports
+# ============================================================
 
-function Write-AutoFiles {
-    param([string]$BasePath, [bool]$DriveFound, [string]$DrivePath)
+$ReportText = @"
+# REPORT ORGANIZZAZIONE 81PLUS
 
-    Write-Log "Scrittura file automatici..." "INFO"
-    if ($DryRun) { Write-Log "DRY: file automatici non scritti" "DRY"; return }
+Date: $(Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
-    # ── README_MASTER.md ─────────────────────────────────────────────────
-    $readme = @"
-# 81+ GLOBAL MASTER — Cartella Principale
+Source:
+$SourceRoot
 
-**Generato da:** 81PLUS_ORGANIZER_MASTER.ps1 v$ScriptVersion
-**Data:** $RunDate
-**Sorgente:** $SourceRoot
+Target:
+$TargetRoot
 
-## Cos'e questa cartella
+Files found:
+$($AllFiles.Count)
 
-`81PLUS_GLOBAL_MASTER` e il cervello organizzato dell'intero ecosistema 81+ Global.
-Contiene tutti i file del progetto smistati per categoria, la struttura per i 32 NotebookLM,
-i team AI, i 22 nodi dell'ecosistema e le cartelle prompt per ogni AI.
+Unique files copied:
+$($Unique.Count)
 
-## Regola fondamentale
+Duplicates excluded:
+$($Duplicates.Count)
 
-**Questa cartella e una COPIA organizzata. Non cancella mai i file originali in `$SourceRoot`.**
+Original files deleted:
+0
 
-## Struttura principale
-
-| Cartella | Contenuto |
-|----------|-----------|
-| 00_MASTER_VIVO | Blueprint, DNA, decisioni, changelog |
-| 01_HOLDING | PLANB.CASH LTD, holding |
-| 02_LEGALE | Contratti, regolamenti, GDPR, MiCA |
-| 03_HUB1 | 81plus.net, SIC-ID, wallet, dashboard |
-| 04_HUB2 | SICURISSIMO, audit, HACCP, documenti |
-| 05_HUB3 | Web3, SAF, 81X, NFT, metaverso |
-| 06_22_NODI | I 22 nodi dell'ecosistema |
-| 07_32_NOTEBOOKLM | Struttura per i 32 NotebookLM |
-| 08_AI_OS | AI Operating System, 150 agenti |
-| 09_MARKETING | Content, ads, webinar, lead magnet |
-| 10_SCOUT81 | Lead pack, prospect, scouting |
-| 11_SALES | CRM, networkers, script vendita |
-| 12_PV_PVPLUS | Wallet, CAREER81+, EQUILIBRIUM |
-| 13_GAMIFICATION | Badge, missioni, streak, Ruota |
-| 14_PASS_KIT | Pass, Kit, SDP+, membership |
-| 15_FRANCHISING | SICURISSIMO POINT81+, territori |
-| 16_WELFARE | Welfare aziendale, HR |
-| 17_VISUAL | Brand, visual, prompt immagini |
-| 18_TECH | Claude Code, PHP, GitHub, deploy |
-| 19_DATABASE | MySQL, schema, API docs |
-| 20_ECONOMIA | Cashflow, tasse, business plan |
-| 21_BANDI | Startup innovativa, Smart&Start |
-| 22_INVESTITORI | Angels, banche, pitch, exit |
-| 23_DAO | Governance, votazioni, charter |
-| 24_GLOBAL | Dubai, Singapore, USA, Africa |
-| 25_QA | Test, bonifica, approvazioni |
-| 26_SECURITY | Cyber, GDPR, backup, incident |
-| 27_WAVE | Lanci, go-live, release notes |
-| 28_CLIENTI | Case study, testimonianze |
-| 29_PROMPT | Template, prompt, script per ogni AI |
-| 30_ARCHIVIO | Storico versioni precedenti |
-| 99_INBOX | File non classificati da smistare |
-
-## AI che usano questa cartella
-
-- **Claude Code** — legge e scrive via file system locale
-- **ChatGPT** — upload manuale dei file necessari
-- **Gemini** — upload o Google Drive sync
-- **Gemma4 Docker** — montaggio cartella come volume
-- **NotebookLM** — upload manuale dei file FONTI per ogni notebook
-
----
-*Il Delta non e dove il fiume finisce. E dove impara a diventare mare.*
+Reports:
+- MANIFEST_81PLUS.csv
+- DUPLICATES_EXCLUDED_81PLUS.csv
+- ERRORS.log if present
 "@
-    Set-Content -Path (Join-Path $BasePath "README_MASTER.md") -Value $readme -Encoding UTF8
 
-    # ── AI_SYNC_INSTRUCTIONS.md ───────────────────────────────────────────
-    $aiSync = @"
-# AI SYNC INSTRUCTIONS — Istruzioni di Sincronizzazione AI
+if (!$DryRun) {
+    $Manifest | Export-Csv -LiteralPath (Join-Path $TargetRoot "MANIFEST_81PLUS.csv") -NoTypeInformation -Encoding UTF8
+    $Duplicates | Export-Csv -LiteralPath (Join-Path $TargetRoot "DUPLICATES_EXCLUDED_81PLUS.csv") -NoTypeInformation -Encoding UTF8
+    Set-Content -LiteralPath (Join-Path $TargetRoot "REPORT_ORGANIZZAZIONE_81PLUS.md") -Value $ReportText -Encoding UTF8
 
-**Data aggiornamento:** $RunDate
+    $reportDir = Join-Path $TargetRoot "00_MASTER_VIVO\CHANGELOG_SETTIMANALE"
+    New-Folder $reportDir
+    Set-Content -LiteralPath (Join-Path $reportDir ("REPORT_" + (Get-Date -Format "yyyy-MM-dd_HHmmss") + ".md")) -Value $ReportText -Encoding UTF8
+}
 
-## Come ogni AI usa questa cartella
+# ============================================================
+# Drive mirror
+# ============================================================
 
-### Claude Code (questo ambiente)
-- Lavora direttamente sui file locali
-- Legge e scrive in `18_TECH_CLAUDE_CODE_GITHUB/`
-- Usa `07_32_NOTEBOOKLM/*/TASK_CLAUDE_CODE/` per i task tecnici
-- Ha accesso completo alla struttura
+if ([string]::IsNullOrWhiteSpace($DriveMirrorRoot)) {
+    $DriveMirrorRoot = Detect-GoogleDriveRoot
+}
 
-### Claude CoWork
-- Riceve come input i file da `29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_CLAUDE_COWORK/`
-- Produce output in `07_32_NOTEBOOKLM/*/OUTPUT_DA_VALIDARE/`
-- Coordina i 32 NotebookLM producendo task settimanali
+if (![string]::IsNullOrWhiteSpace($DriveMirrorRoot) -and (Test-Path -LiteralPath $DriveMirrorRoot)) {
+    $DriveTarget = Join-Path $DriveMirrorRoot $TargetName
+    Write-Info ("Drive mirror target: " + $DriveTarget)
 
-### ChatGPT
-- Input: upload manuale di file da `29_TEMPLATE_PROMPT_SCRIPT_COPY/OUTPUT_PER_CHATGPT/`
-- Output: copiare i risultati in `07_32_NOTEBOOKLM/*/OUTPUT_DA_VALIDARE/`
+    if (!$DryRun) {
+        New-Folder $DriveTarget
 
-### Gemini Global
-- Usa `29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_GEMINI/`
-- Produce visual e contenuti per `17_VISUAL_MASTER_BRAND_ASSET/`
-- Output in `29_TEMPLATE_PROMPT_SCRIPT_COPY/OUTPUT_PER_GEMINI/`
+        try {
+            robocopy $TargetRoot $DriveTarget /E /R:1 /W:1 /NFL /NDL /NP | Out-Null
 
-### Gemma4 Docker (locale)
-- Monta `81PLUS_GLOBAL_MASTER/` come volume Docker
-- Compiti: analisi locale, estrazione pattern, text processing
-- Vedi `GEMMA4_LOCAL_TASKS.md` per i task specifici
+            $DriveInfo = @"
+# DRIVE MIRROR INFO
 
-### NotebookLM (32 notebook)
-- Ogni notebook usa `07_32_NOTEBOOKLM/NN_NOME/FONTI/` come sorgente
-- Upload manuale dei file FONTI su NotebookLM
-- Output copiati in `OUTPUT_APPROVATI/` o `OUTPUT_DA_VALIDARE/`
+Mirror created here:
+$DriveTarget
 
-## Regola AI → Human
+If Google Drive Desktop is active, files will sync online.
 
-AI propone.
-Human valida.
-HUB1 registra.
-
-## Semantic Guard — Parole Vietate
-
-NON usare nei testi pubblici:
-investimento, rendimento, rendita, profitto garantito, guadagno garantito,
-ROI, APY, yield, staking, capitale, zero multe, rischio zero,
-liquidita garantita, partecipazione utili, denaro automatico, passivo garantito.
-
-Usare invece:
-valore operativo, credito interno, PV+, utility interna, benefit,
-voucher, status, badge, accessi, governance consultiva, crescita,
-reputazione, community, controllo operativo, reward variabile, vendite reali.
-"@
-    Set-Content -Path (Join-Path $BasePath "AI_SYNC_INSTRUCTIONS.md") -Value $aiSync -Encoding UTF8
-
-    # ── NOTEBOOK_INDEX.md ──────────────────────────────────────────────────
-    $nbIndex = @"
-# NOTEBOOK INDEX — I 32 NotebookLM di 81+ Global
-
-**Totale notebook:** 32
-**Data:** $RunDate
-
-| # | Nome | Missione |
-|---|------|----------|
-"@
-    foreach ($nb in $Notebooks) {
-        $nbIndex += "| $($nb.Id) | $($nb.Name) | $($nb.Mission.Substring(0, [Math]::Min(80, $nb.Mission.Length)))... |`n"
-    }
-    $nbIndex += @"
-
-## Come caricare i file su NotebookLM
-
-1. Apri NotebookLM (notebooklm.google.com)
-2. Crea un notebook per ogni cartella in `07_32_NOTEBOOKLM/`
-3. Carica i file dalla sotto-cartella `FONTI/` di quel notebook
-4. Usa il `PROMPT_MASTER/` per configurare le istruzioni del notebook
-5. Salva gli output in `OUTPUT_APPROVATI/` o `OUTPUT_DA_VALIDARE/`
-
-## Nota importante
-NotebookLM non si integra automaticamente con Google Drive senza configurazione API.
-I file vanno caricati manualmente o via automazione Zapier/Make.
-"@
-    Set-Content -Path (Join-Path $BasePath "NOTEBOOK_INDEX.md") -Value $nbIndex -Encoding UTF8
-
-    # ── CLAUDE_CODE_NEXT_STEPS.md ─────────────────────────────────────────
-    $ccNext = @"
-# CLAUDE CODE — Next Steps Wave1
-
-**Generato:** $RunDate
-**Priorita:** Wave1 HUB1 MVP Go-Live
-
-## Giorni 1-7 (IN CORSO)
-- [x] Landing HUB1 (index.php)
-- [x] Form audit (audit.php + api/audit.php)
-- [x] CRM lead (leads table + admin)
-- [x] Admin dashboard (admin.php)
-- [x] Regolamenti base (termini.php, privacy.php)
-- [x] PayGate81+ (PayPal, Revolut, Crypto, Bonifico)
-- [x] Cockpit IMPARA (cockpit81.php — Ruota, Maslow, Missioni)
-
-## Giorni 8-14 (PROSSIMI)
-- [ ] SIC-ID creation flow completo (pagina dedicata)
-- [ ] PV+ wallet frontend (dashboard sezione wallet)
-- [ ] api/user-score.php (calcolo dinamico 4 score)
-- [ ] Networker area base (network81.php review)
-- [ ] Scout Pack manuale (plp-catalog.php review)
-- [ ] CSV export admin
-
-## Giorni 15-30
-- [ ] Pass/Kit frontend (shop81.php / membership.php)
-- [ ] Scout81+ semiautomatico
-- [ ] Social engine (Telegram/WhatsApp automation hook)
-- [ ] Newsletter (Brevo integration)
-- [ ] Dashboard KPI (admin.php sezione KPI)
-- [ ] Follow-up automatico
-
-## File da creare (Task tecnici)
-Vedere `07_32_NOTEBOOKLM/09_HUB1_WAVE1/TASK_CLAUDE_CODE/` per task dettagliati.
-
-## Stack tecnico
-PHP 8+, MySQL, HTML, CSS, JavaScript
-API REST interne, Hostinger, n8n opzionale, Brevo opzionale
-
-## Regola Claude Code
-1. Prima funzionante
-2. Poi bello
-3. Poi intelligente
-4. Poi scalabile
-"@
-    Set-Content -Path (Join-Path $BasePath "CLAUDE_CODE_NEXT_STEPS.md") -Value $ccNext -Encoding UTF8
-
-    # ── GEMMA4_LOCAL_TASKS.md ─────────────────────────────────────────────
-    $gemma4 = @"
-# GEMMA4 DOCKER — Task per elaborazione locale
-
-**Generato:** $RunDate
-
-## Setup Docker (esempio)
-\`\`\`bash
-docker run -it --rm \
-  -v "/path/to/81PLUS_GLOBAL_MASTER:/workspace" \
-  gemma4:latest
-\`\`\`
-
-## Task prioritari per Gemma4
-
-### 1. Analisi semantica file in 99_INBOX_DA_SMISTARE/
-- Leggi ogni file di testo
-- Classifica per categoria 81+
-- Suggerisci cartella di destinazione
-- Output: smistamento_suggestions.csv
-
-### 2. Estrazione keyword da documenti normativi
-- Analizza file in 04_HUB2_SICURISSIMO/
-- Estrai termini D.Lgs 81/08, HACCP, privacy
-- Genera glossario 81+
-- Output: GLOSSARIO_NORMATIVO_81PLUS.md
-
-### 3. Lead scoring semantico
-- Analizza email/note lead da 10_SCOUT81_LEAD_PACK/
-- Classifica temperatura (freddo/tiepido/caldo)
-- Output: lead_score_gemma4.csv
-
-### 4. Deduplica testi
-- Trova documenti con contenuto simile (>80% overlap)
-- Genera report similarita
-- Output: similarita_testi.csv
-
-### 5. Generazione FAQ automatiche
-- Analizza documenti in 00_MASTER_VIVO/
-- Genera 50 FAQ per settore
-- Output: FAQ_81PLUS_AUTO.md
-
-## Note
-Gemma4 lavora solo localmente. Non invia dati a server esterni.
-Ideale per: analisi testi, classificazione, estrazione info, dedup semantico.
-"@
-    Set-Content -Path (Join-Path $BasePath "GEMMA4_LOCAL_TASKS.md") -Value $gemma4 -Encoding UTF8
-
-    # ── DRIVE_MIRROR_INFO.md o DRIVE_SETUP_REQUIRED.md ───────────────────
-    if ($DriveFound) {
-        $driveInfo = @"
-# GOOGLE DRIVE MIRROR — Informazioni
-
-**Mirror creato:** $RunDate
-**Percorso Drive locale:** $DrivePath
-**Cartella mirror:** $(Join-Path $DrivePath $MasterFolderName)
-
-## Sincronizzazione
-Google Drive Desktop sincronizza automaticamente questa cartella sul cloud.
-Le modifiche vengono sincronizzate entro pochi secondi se sei connesso a internet.
-
-## Come accedere online
-Apri: https://drive.google.com/drive/folders/
-Cerca la cartella: $MasterFolderName
-
-## Nota importante
-NotebookLM non legge automaticamente da Google Drive.
-Per caricare file su NotebookLM devi farlo manualmente o via Make/Zapier.
-Claude Code puo lavorare direttamente su questa cartella locale sincronizzata.
-"@
-        Set-Content -Path (Join-Path $BasePath "DRIVE_MIRROR_INFO.md") -Value $driveInfo -Encoding UTF8
-    } else {
-        $driveSetup = @"
-# GOOGLE DRIVE SETUP REQUIRED
-
-**Generato:** $RunDate
-
-## Google Drive Desktop non rilevato
-
-Lo script ha cercato Google Drive Desktop nei percorsi standard ma non lo ha trovato.
-La struttura `81PLUS_GLOBAL_MASTER` e stata creata solo sul Desktop locale.
-
-## Come configurare Google Drive Desktop
-
-### Opzione 1 — Google Drive Desktop (consigliata)
-1. Scarica Google Drive Desktop: https://www.google.com/intl/it/drive/download/
-2. Installalo e accedi con l'account Google del progetto
-3. Scegli la cartella di sync locale (es. G:\Il mio Drive)
-4. Sposta o copia `81PLUS_GLOBAL_MASTER` nella cartella sync
-5. Riesegui lo script con: `.\81PLUS_ORGANIZER_MASTER.ps1 -OpenAtEnd`
-   Lo script trovera automaticamente Drive Desktop
-
-### Opzione 2 — Parametro manuale
-Se conosci il percorso locale di Drive, specifica:
-\`\`\`powershell
-.\81PLUS_ORGANIZER_MASTER.ps1 -DriveMirrorRoot "G:\Il mio Drive" -OpenAtEnd
-\`\`\`
-
-### Opzione 3 — rclone (avanzato)
-Per sync via API senza Drive Desktop:
-\`\`\`
-rclone copy "$DesktopPath\81PLUS_GLOBAL_MASTER" gdrive:81PLUS_GLOBAL_MASTER --progress
-\`\`\`
-
-## Cartella Drive del progetto
+Drive web folder provided by user:
 https://drive.google.com/drive/folders/1-6hUUcVoMcuOw1GWLL3WCgWeR8WziS3k
 
-## Importante
-Lo script NON ha sincronizzato nulla su Drive.
-I file sono solo locali in: $BasePath
+Note:
+PowerShell writes to local Drive mirror, not directly to browser link.
 "@
-        Set-Content -Path (Join-Path $BasePath "DRIVE_SETUP_REQUIRED.md") -Value $driveSetup -Encoding UTF8
-    }
-}
 
-function Write-Reports {
-    param([string]$BasePath)
-
-    if ($DryRun) { Write-Log "DRY: report non scritti" "DRY"; return }
-
-    $reportDir = $BasePath
-
-    # ── MANIFEST CSV ─────────────────────────────────────────────────────
-    $manifestPath = Join-Path $reportDir "MANIFEST_81PLUS.csv"
-    $ManifestRows | Export-Csv -Path $manifestPath -NoTypeInformation -Encoding UTF8
-    Write-Log "Manifest scritto: $manifestPath ($($ManifestRows.Count) righe)" "SUCCESS"
-
-    # ── DUPLICATI ESCLUSI CSV ─────────────────────────────────────────────
-    $dupPath = Join-Path $reportDir "DUPLICATES_EXCLUDED_81PLUS.csv"
-    $DuplicateRows | Export-Csv -Path $dupPath -NoTypeInformation -Encoding UTF8
-    Write-Log "Report duplicati: $dupPath ($($DuplicateRows.Count) righe)" "SUCCESS"
-
-    # ── ERRORS LOG ───────────────────────────────────────────────────────
-    if ($ErrorLines.Count -gt 0) {
-        $errPath = Join-Path $reportDir "ERRORS.log"
-        $ErrorLines | Set-Content -Path $errPath -Encoding UTF8
-        Write-Log "Log errori: $errPath ($($ErrorLines.Count) errori)" "WARN"
-    }
-
-    # ── REPORT ORGANIZZAZIONE ─────────────────────────────────────────────
-    $totalMB    = [Math]::Round($Stats.BytesCopied / 1MB, 2)
-    $reportText = @"
-# REPORT ORGANIZZAZIONE 81+ GLOBAL
-
-**Data esecuzione:** $RunDate
-**Script versione:** $ScriptVersion
-**Modalita:** $(if ($DryRun) { 'DRY RUN (simulazione)' } else { 'ESECUZIONE REALE' })
-
-## Riepilogo
-
-| Metrica | Valore |
-|---------|--------|
-| File scansionati | $($Stats.FilesScanned) |
-| File copiati | $($Stats.FilesCopied) |
-| Duplicati esclusi | $($Stats.DuplicatesSkip) |
-| Archivi ZIP elaborati | $($Stats.ZipsProcessed) |
-| File estratti da ZIP | $($Stats.ZipFilesFound) |
-| Errori | $($Stats.Errors) |
-| Dati copiati | $totalMB MB |
-| Google Drive rilevato | $(if ($Stats.DriveDetected) { 'SI' } else { 'NO' }) |
-| Mirror Drive creato | $(if ($Stats.MirrorCreated) { 'SI' } else { 'NO' }) |
-
-## Sorgente
-`$SourceRoot`
-
-## Destinazione
-`$BasePath`
-
-## Struttura creata
-- $($MainFolders.Count) cartelle principali
-- 32 NotebookLM con 9 sotto-cartelle ciascuno
-- 22 Nodi ecosistema
-- 27 team AI
-- 13 cartelle prompt AI
-
-## File generati automaticamente
-- README_MASTER.md
-- AI_SYNC_INSTRUCTIONS.md
-- NOTEBOOK_INDEX.md
-- CLAUDE_CODE_NEXT_STEPS.md
-- GEMMA4_LOCAL_TASKS.md
-- $(if ($Stats.DriveDetected) { 'DRIVE_MIRROR_INFO.md' } else { 'DRIVE_SETUP_REQUIRED.md' })
-- MANIFEST_81PLUS.csv ($($ManifestRows.Count) file)
-- DUPLICATES_EXCLUDED_81PLUS.csv ($($DuplicateRows.Count) duplicati)
-$(if ($ErrorLines.Count -gt 0) { "- ERRORS.log ($($ErrorLines.Count) errori)" })
-
-## Distribuzione file per cartella
-"@
-    # Conta file per cartella
-    if (-not $DryRun) {
-        foreach ($folder in $MainFolders) {
-            $fp    = Join-Path $BasePath $folder
-            $count = if (Test-Path $fp) { (Get-ChildItem $fp -Recurse -File -ErrorAction SilentlyContinue).Count } else { 0 }
-            $reportText += "`n| $folder | $count file |"
+            Set-Content -LiteralPath (Join-Path $TargetRoot "DRIVE_MIRROR_INFO.md") -Value $DriveInfo -Encoding UTF8
+            Set-Content -LiteralPath (Join-Path $DriveTarget "DRIVE_MIRROR_INFO.md") -Value $DriveInfo -Encoding UTF8
+            Write-Ok "Drive mirror created."
+        } catch {
+            Add-Content -LiteralPath (Join-Path $TargetRoot "ERRORS.log") -Value ("DRIVE MIRROR ERROR: " + $_.Exception.Message)
         }
     }
+} else {
+    Write-Warn "Google Drive Desktop local folder not found."
 
-    $reportText += @"
+    $DriveSetup = @"
+# DRIVE SETUP REQUIRED
 
----
-*Generato da 81PLUS_ORGANIZER_MASTER.ps1 v$ScriptVersion*
-*Il Delta non e dove il fiume finisce. E dove impara a diventare mare.*
+The script did not find a local Google Drive Desktop folder.
+
+To sync automatically with Google Drive:
+1. Install Google Drive Desktop.
+2. Sync the Drive folder of 81+ Global.
+3. Run script again with parameter:
+   -DriveMirrorRoot "G:\Il mio Drive"
+
+Drive web folder:
+https://drive.google.com/drive/folders/1-6hUUcVoMcuOw1GWLL3WCgWeR8WziS3k
+
+NotebookLM, Claude, ChatGPT and Gemini do not write automatically to Drive without connector, API, Drive Desktop or manual upload.
 "@
-    Set-Content -Path (Join-Path $reportDir "REPORT_ORGANIZZAZIONE_81PLUS.md") -Value $reportText -Encoding UTF8
-    Write-Log "Report organizzazione scritto." "SUCCESS"
-}
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# MAIN EXECUTION
-# ═══════════════════════════════════════════════════════════════════════════════
-
-Clear-Host
-Write-Host ""
-Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-Write-Host "  81PLUS_ORGANIZER_MASTER v$ScriptVersion" -ForegroundColor Cyan
-Write-Host "  Organizzatore Ecosistema 81+ Global" -ForegroundColor Cyan
-Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Cyan
-if ($DryRun) {
-    Write-Host "  MODALITA DRY RUN — Nessun file verra copiato o creato" -ForegroundColor Yellow
-}
-Write-Host ""
-Write-Log "Avvio: SourceRoot=$SourceRoot | DryRun=$DryRun | OpenAtEnd=$OpenAtEnd" "INFO"
-
-# ─── Determina destinazione principale ───────────────────────────────────────
-$activeMasterPath = $MasterPath
-
-# 1. Parametro esplicito
-if ($DriveMirrorRoot -and (Test-Path $DriveMirrorRoot)) {
-    $activeMasterPath = Join-Path $DriveMirrorRoot $MasterFolderName
-    $Stats.DriveDetected  = $true
-    $Stats.MirrorCreated  = $true
-    Write-Log "Drive Mirror specificato via parametro: $DriveMirrorRoot" "SUCCESS"
-}
-# 2. Auto-rilevamento Google Drive Desktop
-elseif (-not $DriveMirrorRoot) {
-    $detectedDrive = Find-GoogleDriveDesktop
-    if ($detectedDrive) {
-        $Stats.DriveDetected = $true
-        $Stats.MirrorCreated = $true
-        $activeMasterPath    = Join-Path $detectedDrive $MasterFolderName
-        Write-Log "Google Drive Desktop rilevato automaticamente: $detectedDrive" "SUCCESS"
-    } else {
-        Write-Log "Google Drive Desktop non rilevato — struttura solo Desktop" "WARN"
+    if (!$DryRun) {
+        Set-Content -LiteralPath (Join-Path $TargetRoot "DRIVE_SETUP_REQUIRED.md") -Value $DriveSetup -Encoding UTF8
     }
 }
 
-Write-Log "Destinazione master: $activeMasterPath" "INFO"
-Write-Host ""
+# ============================================================
+# Cleanup
+# ============================================================
 
-# ─── Crea struttura cartelle ─────────────────────────────────────────────────
-New-MasterStructure $activeMasterPath
-
-# Se mirror Drive attivo, crea anche copia sul Desktop (riferimento rapido locale)
-if ($Stats.MirrorCreated -and $activeMasterPath -ne $MasterPath) {
-    Write-Log "Creazione symlink o shortcut Desktop → Mirror Drive..." "INFO"
-    if (-not $DryRun) {
-        # Crea un file indicatore sul Desktop
-        $indicatorPath = Join-Path $DesktopPath "81PLUS_MASTER_SU_DRIVE.txt"
-        Set-Content $indicatorPath "Il master 81+ e su: $activeMasterPath`nData: $RunDate" -Encoding UTF8
-    }
+if (!$DryRun) {
+    try {
+        if (Test-Path -LiteralPath $TempRoot) {
+            Remove-Item -LiteralPath $TempRoot -Recurse -Force -ErrorAction SilentlyContinue
+        }
+    } catch {}
 }
 
-# ─── Scansiona sorgente ───────────────────────────────────────────────────────
-Write-Host ""
-Write-Log "Avvio scansione sorgente: $SourceRoot" "INFO"
-Invoke-SourceScan $SourceRoot $activeMasterPath
+Write-Ok "Done."
+Write-Host "Target folder:" -ForegroundColor Green
+Write-Host $TargetRoot -ForegroundColor White
 
-# ─── Scrivi file automatici ───────────────────────────────────────────────────
-Write-Host ""
-Write-AutoFiles $activeMasterPath $Stats.DriveDetected $activeMasterPath
-
-# ─── Scrivi report ────────────────────────────────────────────────────────────
-Write-Reports $activeMasterPath
-
-# ─── Riepilogo finale ─────────────────────────────────────────────────────────
-Write-Host ""
-Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Green
-Write-Host "  COMPLETATO$(if ($DryRun) { ' (DRY RUN)' })" -ForegroundColor Green
-Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Green
-Write-Host "  File scansionati : $($Stats.FilesScanned)" -ForegroundColor White
-Write-Host "  File copiati     : $($Stats.FilesCopied)" -ForegroundColor Green
-Write-Host "  Duplicati skip   : $($Stats.DuplicatesSkip)" -ForegroundColor Yellow
-Write-Host "  ZIP elaborati    : $($Stats.ZipsProcessed) ($($Stats.ZipFilesFound) file interni)" -ForegroundColor White
-Write-Host "  Errori           : $($Stats.Errors)" -ForegroundColor $(if ($Stats.Errors -gt 0) { 'Red' } else { 'Green' })
-Write-Host "  Dati copiati     : $([Math]::Round($Stats.BytesCopied/1MB,2)) MB" -ForegroundColor White
-Write-Host "  Drive rilevato   : $($Stats.DriveDetected)" -ForegroundColor $(if ($Stats.DriveDetected) { 'Green' } else { 'Yellow' })
-Write-Host "  Destinazione     : $activeMasterPath" -ForegroundColor Cyan
-Write-Host ""
-Write-Host "  Il Delta non e dove il fiume finisce." -ForegroundColor DarkGray
-Write-Host "  E dove impara a diventare mare." -ForegroundColor DarkGray
-Write-Host "══════════════════════════════════════════════════════════════" -ForegroundColor Green
-
-# ─── Apri cartella ────────────────────────────────────────────────────────────
-if ($OpenAtEnd -and -not $DryRun -and (Test-Path $activeMasterPath)) {
-    Start-Process "explorer.exe" $activeMasterPath
+if ($OpenAtEnd -and !$DryRun) {
+    Start-Process explorer.exe $TargetRoot
 }
