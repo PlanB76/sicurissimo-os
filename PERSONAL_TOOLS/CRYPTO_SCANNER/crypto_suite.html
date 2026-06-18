@@ -164,6 +164,21 @@ a{color:var(--cyan);text-decoration:none}
 
 <!-- 💎 GEMME (principale) -->
 <div id="pg-gemme" class="pg on">
+  <div class="card" style="margin-bottom:14px">
+    <div style="font-size:13px;font-weight:800;margin-bottom:9px">⚡ Compra o controlla un token al volo</div>
+    <input id="man-addr" class="inp" placeholder="0x... incolla qui l'indirizzo del token" style="margin-bottom:8px">
+    <div style="display:flex;gap:8px">
+      <select id="man-chain" class="sel" style="flex:1">
+        <option value="1">Ethereum</option>
+        <option value="56">BNB Chain</option>
+        <option value="137">Polygon</option>
+        <option value="42161">Arbitrum</option>
+        <option value="8453">Base</option>
+      </select>
+      <button class="btn btn-out btn-sm" onclick="checkManual()">🛡️ Controlla</button>
+      <button class="btn btn-buy btn-sm" onclick="buyManual()">💚 Compra</button>
+    </div>
+  </div>
   <div class="stats">
     <div class="stat"><div class="val" id="s-x20" style="color:var(--gold)">-</div><div class="lbl">x20+</div></div>
     <div class="stat"><div class="val" id="s-x10" style="color:var(--orange)">-</div><div class="lbl">x10+</div></div>
@@ -279,7 +294,7 @@ const CHAIN_HEX={1:'0x1',56:'0x38',137:'0x89',42161:'0xa4b1',8453:'0x2105'};
 const EXPL={1:'https://etherscan.io/tx/',56:'https://bscscan.com/tx/',137:'https://polygonscan.com/tx/',42161:'https://arbiscan.io/tx/',8453:'https://basescan.org/tx/'};
 const DEX_URL={1:'https://app.uniswap.org/swap?chain=mainnet&outputCurrency=',56:'https://pancakeswap.finance/swap?outputCurrency=',137:'https://app.uniswap.org/swap?chain=polygon&outputCurrency=',42161:'https://app.uniswap.org/swap?chain=arbitrum&outputCurrency=',8453:'https://app.uniswap.org/swap?chain=base&outputCurrency='};
 const PS='https://apiv5.paraswap.io';
-const ERC20=['function allowance(address,address) view returns(uint256)','function approve(address,uint256) returns(bool)','function balanceOf(address) view returns(uint256)'];
+const ERC20=['function allowance(address,address) view returns(uint256)','function approve(address,uint256) returns(bool)','function balanceOf(address) view returns(uint256)','function decimals() view returns(uint8)','function symbol() view returns(string)'];
 const NATIVE='0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
 const TOKS={
   1:[{s:'ETH',a:NATIVE,d:18,nat:1},{s:'USDC',a:'0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',d:6},{s:'USDT',a:'0xdAC17F958D2ee523a2206206994597C13D831ec7',d:6},{s:'WBTC',a:'0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',d:8}],
@@ -596,6 +611,25 @@ async function executeRoute(ft,tt,route,cb){
   const tx=await S.signer.sendTransaction({to:td.to,data:td.data,value:BigInt(td.value||0),gasLimit:BigInt(Math.ceil(Number(td.gas||300000)*1.25))});
   const ex=EXPL[S.chainId]||'';cb('sp',`⏳ Inviata! <a href="${ex}${tx.hash}" target="_blank">Vedi ↗</a>`);
   const rc=await tx.wait();cb('sc',`✅ Fatto! Blocco ${rc.blockNumber}. <a href="${ex}${tx.hash}" target="_blank">TX ↗</a>`);return rc;
+}
+
+/* ===== COMPRA/CONTROLLA AL VOLO (indirizzo manuale) ===== */
+function manAddr(){return document.getElementById('man-addr').value.trim();}
+function checkManual(){
+  const addr=manAddr(),cid=+document.getElementById('man-chain').value;
+  if(!addr||(typeof ethers!=='undefined'&&!ethers.isAddress(addr))){alert('Indirizzo non valido');return;}
+  openCheck(addr,cid);
+}
+async function buyManual(){
+  const addr=manAddr(),cid=+document.getElementById('man-chain').value;
+  if(!addr||(typeof ethers!=='undefined'&&!ethers.isAddress(addr))){alert('Indirizzo non valido');return;}
+  if(!S.wallet){openWallet();return;}
+  if(S.chainId!==cid){if(!await ensureChain(cid))return;}
+  try{
+    const c=new ethers.Contract(addr,ERC20,S.provider);
+    const [dec,sym]=await Promise.all([c.decimals(),c.symbol().catch(()=>'TOKEN')]);
+    openTrade(addr,cid,Number(dec),sym,'buy');
+  }catch(e){alert('Token non leggibile su questa rete. Controlla indirizzo e rete.');}
 }
 
 /* ===== TRADE MODAL (buy/sell su gemma) ===== */
