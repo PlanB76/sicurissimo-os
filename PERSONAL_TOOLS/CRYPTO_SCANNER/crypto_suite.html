@@ -328,6 +328,13 @@ const GT_NETS=[
 ];
 const CHAIN_NAMES={1:'Ethereum',56:'BNB Chain',137:'Polygon',42161:'Arbitrum',8453:'Base'};
 const CHAIN_HEX={1:'0x1',56:'0x38',137:'0x89',42161:'0xa4b1',8453:'0x2105'};
+const CHAIN_META={
+  1:    {name:'Ethereum',     rpc:'https://cloudflare-eth.com',          explorer:'https://etherscan.io',    sym:'ETH',   dec:18},
+  56:   {name:'BNB Chain',    rpc:'https://bsc-dataseed.binance.org',    explorer:'https://bscscan.com',     sym:'BNB',   dec:18},
+  137:  {name:'Polygon',      rpc:'https://polygon-rpc.com',             explorer:'https://polygonscan.com', sym:'MATIC', dec:18},
+  42161:{name:'Arbitrum One', rpc:'https://arb1.arbitrum.io/rpc',        explorer:'https://arbiscan.io',     sym:'ETH',   dec:18},
+  8453: {name:'Base',         rpc:'https://mainnet.base.org',            explorer:'https://basescan.org',    sym:'ETH',   dec:18},
+};
 const EXPL={1:'https://etherscan.io/tx/',56:'https://bscscan.com/tx/',137:'https://polygonscan.com/tx/',42161:'https://arbiscan.io/tx/',8453:'https://basescan.org/tx/'};
 const DEX_URL={1:'https://app.uniswap.org/swap?chain=mainnet&outputCurrency=',56:'https://pancakeswap.finance/swap?outputCurrency=',137:'https://app.uniswap.org/swap?chain=polygon&outputCurrency=',42161:'https://app.uniswap.org/swap?chain=arbitrum&outputCurrency=',8453:'https://app.uniswap.org/swap?chain=base&outputCurrency='};
 const PS='https://apiv5.paraswap.io';
@@ -713,8 +720,33 @@ function renderWallet(){
 async function wmSwitch(){await ensureChain(+document.getElementById('wm-chain').value);}
 async function ensureChain(target){
   if(S.chainId===target)return true;
-  try{await S.rawProvider.request({method:'wallet_switchEthereumChain',params:[{chainId:CHAIN_HEX[target]}]});await sleep(500);S.chainId=Number((await S.provider.getNetwork()).chainId);renderWallet();return true;}
-  catch(e){alert('Cambia rete a '+CHAIN_NAMES[target]+' manualmente nel wallet');return false;}
+  const hex=CHAIN_HEX[target],meta=CHAIN_META[target];
+  try{
+    await S.rawProvider.request({method:'wallet_switchEthereumChain',params:[{chainId:hex}]});
+  }catch(sw){
+    /* 4902 = rete non presente nel wallet → la aggiungiamo automaticamente */
+    if((sw.code===4902||sw.code===-32603||sw.message?.includes('4902'))&&meta){
+      try{
+        await S.rawProvider.request({method:'wallet_addEthereumChain',params:[{
+          chainId:hex,chainName:meta.name,
+          rpcUrls:[meta.rpc],
+          blockExplorerUrls:[meta.explorer],
+          nativeCurrency:{name:meta.sym,symbol:meta.sym,decimals:meta.dec}
+        }]});
+      }catch(add){
+        if(add.code!==4001)alert('Impossibile aggiungere la rete: '+(add.message||add));
+        return false;
+      }
+    }else if(sw.code===4001){
+      return false; /* utente ha rifiutato: nessun alert */
+    }else{
+      alert('Errore cambio rete: '+(sw.message||sw));return false;
+    }
+  }
+  await sleep(800);
+  try{S.chainId=Number((await S.provider.getNetwork()).chainId);}catch(e){}
+  renderWallet();
+  return S.chainId===target;
 }
 function fillChainSel(id){const s=document.getElementById(id);if(s)s.innerHTML=Object.keys(TOKS).map(c=>`<option value="${c}" ${+c===S.chainId?'selected':''}>${CHAIN_NAMES[c]}</option>`).join('');}
 
