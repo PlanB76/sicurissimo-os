@@ -16,11 +16,24 @@
 body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;min-height:100vh;overflow-x:hidden}
 a{color:var(--cyan);text-decoration:none}
 
-.nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom)}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px;font-size:9px;color:var(--txt2);cursor:pointer;gap:2px;border:none;background:none;min-height:52px}
-.nav-btn .ic{font-size:19px;line-height:1}
+.nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.nav::-webkit-scrollbar{display:none}
+.nav-btn{flex-shrink:0;width:60px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px;font-size:8px;color:var(--txt2);cursor:pointer;gap:2px;border:none;background:none;min-height:52px}
+.nav-btn .ic{font-size:18px;line-height:1}
 .nav-btn.on{color:var(--orange)}
 .nav-btn.on .ic{filter:drop-shadow(0 0 6px var(--orange))}
+/* DEX sub-tabs */
+.sub-tabs{display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:12px;overflow-x:auto}
+.sub-tab{flex-shrink:0;padding:8px 14px;font-size:12px;font-weight:600;color:var(--txt2);cursor:pointer;border-bottom:2px solid transparent}
+.sub-tab.on{color:var(--orange);border-bottom-color:var(--orange)}
+/* Tool cards */
+.tool-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:12px;cursor:pointer;text-decoration:none}
+.tool-card:active{background:var(--bg3)}
+.tool-icon{font-size:32px;flex-shrink:0}
+.tool-info .name{font-size:15px;font-weight:700}
+.tool-info .desc{font-size:11px;color:var(--txt2);margin-top:3px}
+/* TV iframe */
+.tv-wrap{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
 
 .pg{display:none;padding:12px 12px 70px;min-height:100vh}
 .pg.on{display:block}
@@ -341,6 +354,64 @@ a{color:var(--cyan);text-decoration:none}
   </div>
 </div>
 
+<!-- 📡 DEXSCREENER -->
+<div id="pg-dex" class="pg">
+  <div class="hdr"><h1>📡 <span>DEX</span>SCREENER</h1></div>
+  <div class="sub-tabs">
+    <div class="sub-tab on" onclick="dexTab('trending',this)">🔥 Trending</div>
+    <div class="sub-tab" onclick="dexTab('new',this)">✨ Nuovi</div>
+    <div class="sub-tab" onclick="dexTab('boosts',this)">🚀 Boosts</div>
+    <div class="sub-tab" onclick="dexTab('search',this)">🔍 Cerca</div>
+  </div>
+  <div id="dex-search-row" style="display:none;margin-bottom:10px">
+    <div style="display:flex;gap:8px">
+      <input id="dex-query" class="inp" placeholder="Token, simbolo o indirizzo..." style="flex:1" onkeydown="if(event.key==='Enter')dexSearch()">
+      <button class="btn btn-orange" onclick="dexSearch()">🔍</button>
+    </div>
+  </div>
+  <div class="cdown" id="dex-ts" style="margin-bottom:8px">-</div>
+  <div id="dex-list"><div class="loading"><div class="spin"></div> Caricamento DexScreener...</div></div>
+</div>
+
+<!-- 🖥️ TOOLS -->
+<div id="pg-tools" class="pg">
+  <div class="hdr"><h1>🖥️ <span>TOOLS</span></h1></div>
+
+  <a class="tool-card" href="https://dexscreener.com" target="_blank">
+    <div class="tool-icon">📡</div>
+    <div class="tool-info">
+      <div class="name">DexScreener</div>
+      <div class="desc">Analisi pair DEX in tempo reale su tutte le chain. Cerca qualsiasi token, vedi liquidità, volume e holders.</div>
+    </div>
+    <div style="color:var(--txt2);font-size:16px">↗</div>
+  </a>
+
+  <a class="tool-card" href="https://cryptoscan.ai" target="_blank">
+    <div class="tool-icon">🔬</div>
+    <div class="tool-info">
+      <div class="name">CryptoScan AI</div>
+      <div class="desc">Scanner DEX avanzato con AI. Rileva pattern di pump, whale activity, token nuovi e segnali di trading.</div>
+    </div>
+    <div style="color:var(--txt2);font-size:16px">↗</div>
+  </a>
+
+  <a class="tool-card" href="https://www.tradingview.com/crypto-screener/" target="_blank">
+    <div class="tool-icon">📺</div>
+    <div class="tool-info">
+      <div class="name">TradingView Screener</div>
+      <div class="desc">Screener completo con filtri su 200+ indicatori tecnici. Apre il sito ufficiale TradingView.</div>
+    </div>
+    <div style="color:var(--txt2);font-size:16px">↗</div>
+  </a>
+
+  <div class="card" style="padding:8px 12px">
+    <div style="font-size:13px;font-weight:700;margin-bottom:10px">📺 TradingView Crypto Screener</div>
+    <div class="tv-wrap" id="tv-frame-wrap" style="height:520px">
+      <div class="loading" id="tv-loading"><div class="spin"></div> Caricamento widget...</div>
+    </div>
+  </div>
+</div>
+
 <!-- WALLET MODAL -->
 <div id="wallet-modal" class="modal-bg" onclick="if(event.target===this)closeWalletModal()">
   <div class="modal">
@@ -355,8 +426,10 @@ a{color:var(--cyan);text-decoration:none}
 <!-- NAV -->
 <nav class="nav">
   <button class="nav-btn on" id="nav-hunter" onclick="go('hunter')"><span class="ic">🔥</span>HUNTER</button>
+  <button class="nav-btn" id="nav-dex" onclick="go('dex')"><span class="ic">📡</span>DEX</button>
   <button class="nav-btn" id="nav-analisi" onclick="go('analisi')"><span class="ic">🛡️</span>ANALISI</button>
   <button class="nav-btn" id="nav-scanner" onclick="go('scanner')"><span class="ic">📊</span>SCANNER</button>
+  <button class="nav-btn" id="nav-tools" onclick="go('tools')"><span class="ic">🖥️</span>TOOLS</button>
   <button class="nav-btn" id="nav-wallet" onclick="go('wallet')"><span class="ic">💼</span>WALLET</button>
   <button class="nav-btn" id="nav-swap" onclick="go('swap')"><span class="ic">⚡</span>SWAP</button>
   <button class="nav-btn" id="nav-chart" onclick="go('chart')"><span class="ic">📈</span>CHART</button>
@@ -364,7 +437,7 @@ a{color:var(--cyan);text-decoration:none}
 
 <script>
 /* ===== CONSTANTS ===== */
-const PAGES=['hunter','analisi','scanner','wallet','swap','chart'];
+const PAGES=['hunter','dex','analisi','scanner','tools','wallet','swap','chart'];
 const GT_NETS=[
   {id:'eth',chainId:1,name:'ETH',col:'#627EEA'},
   {id:'bsc',chainId:56,name:'BSC',col:'#F3BA2F'},
@@ -408,6 +481,8 @@ function go(id){
   if(id==='swap'){fillTokenSelects();document.getElementById('ro-banner').style.display=S.wallet?'none':'block';}
   if(id==='wallet'&&S.wallet) refreshWallet();
   if(id==='alert') renderPositions();
+  if(id==='dex') loadDex();
+  if(id==='tools') initTradingView();
 }
 
 /* ===== GEM HUNTER ===== */
@@ -1062,6 +1137,192 @@ function renderPositions(){
 function startPosWatcher(){
   if(S.posInt) clearInterval(S.posInt);
   S.posInt=setInterval(()=>{if(S.page==='alert'&&S.positions.length) renderPositions();},5000);
+}
+
+/* ===== DEXSCREENER ===== */
+const DS='https://api.dexscreener.com';
+let dexTabCur='trending';
+let dexLoaded={trending:false,new:false,boosts:false};
+
+function dexTab(tab,el){
+  dexTabCur=tab;
+  document.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('on'));
+  if(el) el.classList.add('on');
+  document.getElementById('dex-search-row').style.display=tab==='search'?'block':'none';
+  if(tab!=='search') loadDex();
+  else document.getElementById('dex-list').innerHTML='<div class="empty"><div class="ic">🔍</div>Inserisci un termine di ricerca</div>';
+}
+
+async function loadDex(){
+  if(dexTabCur==='search') return;
+  const el=document.getElementById('dex-list');
+  el.innerHTML='<div class="loading"><div class="spin"></div> Caricamento DexScreener...</div>';
+  try{
+    let pairs=[];
+    if(dexTabCur==='trending'){
+      // Top boosted = most active community tokens
+      const r=await fetch(`${DS}/token-boosts/top/v1`);
+      const d=await r.json();
+      const boostList=(d||[]).slice(0,20);
+      // Enrich with pair data
+      const enriched=await enrichDexBoosts(boostList);
+      pairs=enriched;
+    } else if(dexTabCur==='new'){
+      const r=await fetch(`${DS}/token-profiles/latest/v1`);
+      const d=await r.json();
+      // Fetch pair data for each profile
+      const profiles=(d||[]).slice(0,20);
+      const enriched=await enrichDexProfiles(profiles);
+      pairs=enriched;
+    } else if(dexTabCur==='boosts'){
+      const r=await fetch(`${DS}/token-boosts/latest/v1`);
+      const d=await r.json();
+      const boostList=(d||[]).slice(0,20);
+      const enriched=await enrichDexBoosts(boostList);
+      pairs=enriched;
+    }
+    document.getElementById('dex-ts').textContent='Aggiornato: '+new Date().toLocaleTimeString('it');
+    renderDexList(pairs);
+  }catch(e){
+    el.innerHTML=`<div class="empty"><div class="ic">❌</div>Errore DexScreener: ${esc(e.message)}</div>`;
+  }
+}
+
+async function enrichDexBoosts(boosts){
+  const results=[];
+  // Group by chain and fetch pairs in batches
+  for(const b of boosts){
+    try{
+      const r=await fetch(`${DS}/latest/dex/tokens/${b.tokenAddress}`);
+      const d=await r.json();
+      const pair=(d.pairs||[]).sort((a,x)=>(parseFloat(x.liquidity?.usd||0))-(parseFloat(a.liquidity?.usd||0)))[0];
+      if(pair) results.push({...pair,_boost:b,_icon:b.icon,_desc:b.description});
+    }catch(e){}
+  }
+  return results;
+}
+
+async function enrichDexProfiles(profiles){
+  const results=[];
+  for(const p of profiles){
+    try{
+      const r=await fetch(`${DS}/latest/dex/tokens/${p.tokenAddress}`);
+      const d=await r.json();
+      const pair=(d.pairs||[]).sort((a,x)=>(parseFloat(x.liquidity?.usd||0))-(parseFloat(a.liquidity?.usd||0)))[0];
+      if(pair) results.push({...pair,_profile:p,_icon:p.icon,_desc:p.description});
+    }catch(e){}
+  }
+  return results;
+}
+
+async function dexSearch(){
+  const q=document.getElementById('dex-query').value.trim();
+  if(!q) return;
+  const el=document.getElementById('dex-list');
+  el.innerHTML='<div class="loading"><div class="spin"></div> Ricerca...</div>';
+  try{
+    const r=await fetch(`${DS}/latest/dex/search?q=${encodeURIComponent(q)}`);
+    const d=await r.json();
+    const pairs=(d.pairs||[]).slice(0,30);
+    document.getElementById('dex-ts').textContent=`Risultati per "${q}": ${pairs.length}`;
+    renderDexList(pairs);
+  }catch(e){
+    el.innerHTML=`<div class="empty"><div class="ic">❌</div>${esc(e.message)}</div>`;
+  }
+}
+
+const DS_CHAIN_NAMES={ethereum:'ETH',bsc:'BSC',polygon:'MATIC',arbitrum:'ARB',base:'BASE',avalanche:'AVAX',solana:'SOL',optimism:'OP'};
+const DS_CHAIN_COLS={ethereum:'#627EEA',bsc:'#F3BA2F',polygon:'#8247E5',arbitrum:'#28A0F0',base:'#0052FF',avalanche:'#E84142',solana:'#9945FF',optimism:'#FF0420'};
+
+function renderDexList(pairs){
+  const el=document.getElementById('dex-list');
+  if(!pairs.length){el.innerHTML='<div class="empty"><div class="ic">📡</div>Nessun risultato</div>';return;}
+  el.innerHTML=pairs.map(p=>{
+    const base=p.baseToken||{};
+    const quote=p.quoteToken||{};
+    const chg24=parseFloat(p.priceChange?.h24||0);
+    const chg1=parseFloat(p.priceChange?.h1||0);
+    const liq=parseFloat(p.liquidity?.usd||0);
+    const vol24=parseFloat(p.volume?.h24||0);
+    const price=parseFloat(p.priceUsd||0);
+    const mcap=parseFloat(p.marketCap||p.fdv||0);
+    const buys24=p.txns?.h24?.buys||0;
+    const sells24=p.txns?.h24?.sells||0;
+    const chainId=p.chainId||'';
+    const chainName=DS_CHAIN_NAMES[chainId]||chainId.slice(0,4).toUpperCase();
+    const chainCol=DS_CHAIN_COLS[chainId]||'#888';
+    const p24c=chg24>=0?'g-pos':'g-neg';
+    const p1c=chg1>=0?'g-pos':'g-neg';
+    const desc=p._desc?`<div style="font-size:11px;color:var(--txt2);margin-top:4px;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical">${esc(p._desc)}</div>`:'';
+    const iconHtml=p._icon?`<img src="${p._icon}" style="width:32px;height:32px;border-radius:50%;flex-shrink:0" onerror="this.style.display='none'">`:`<div style="width:32px;height:32px;border-radius:50%;background:${chainCol}33;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0">💎</div>`;
+    return `<div class="gem-card">
+      <div class="flex-sb">
+        <div style="display:flex;align-items:center;gap:8px">
+          ${iconHtml}
+          <div>
+            <div class="gem-name">${esc(base.symbol||'?')} <span style="font-size:10px;color:${chainCol};background:${chainCol}22;padding:1px 6px;border-radius:8px">${chainName}</span></div>
+            <div class="gem-sym">${esc(base.name||'')} / ${esc(quote.symbol||'')}</div>
+          </div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:14px;font-weight:700">${fmtPrice(price)}</div>
+          <div class="small ${p24c}">${chg24>=0?'+':''}${chg24.toFixed(2)}%</div>
+        </div>
+      </div>
+      ${desc}
+      <div class="gem-stats" style="margin-top:8px">
+        <div class="gst"><div class="v ${p24c}">${chg24>=0?'+':''}${chg24.toFixed(1)}%</div><div class="l">24h</div></div>
+        <div class="gst"><div class="v ${p1c}">${chg1>=0?'+':''}${chg1.toFixed(1)}%</div><div class="l">1h</div></div>
+        <div class="gst"><div class="v">${fmtUSD(liq)}</div><div class="l">Liquidità</div></div>
+        <div class="gst"><div class="v">${fmtUSD(vol24)}</div><div class="l">Vol 24h</div></div>
+        <div class="gst"><div class="v">${buys24+sells24}</div><div class="l">TX 24h</div></div>
+        <div class="gst"><div class="v">${mcap?fmtUSD(mcap):'?'}</div><div class="l">Mcap</div></div>
+      </div>
+      <div class="gem-meta" style="margin-top:6px">
+        ${buys24||sells24?`<span class="badge badge-cyan">B:${buys24} S:${sells24}</span>`:''}
+        ${liq>0&&liq<500000?'<span class="badge badge-gold">Micro Cap</span>':''}
+        ${chg24>100?'<span class="badge badge-orange">🔥 +100%</span>':''}
+        <a href="${p.url||'#'}" target="_blank" class="badge badge-grey">DexScreener ↗</a>
+        ${base.address?`<span class="badge badge-grey" onclick="analyzeFrom('${base.address}',${dexChainToId(chainId)})" style="cursor:pointer">🛡️ Analizza</span>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function dexChainToId(chain){
+  const m={ethereum:1,bsc:56,polygon:137,arbitrum:42161,base:8453,avalanche:43114,optimism:10};
+  return m[chain]||1;
+}
+
+/* ===== TRADINGVIEW ===== */
+let tvLoaded=false;
+function initTradingView(){
+  if(tvLoaded) return;
+  tvLoaded=true;
+  const wrap=document.getElementById('tv-frame-wrap');
+  const loading=document.getElementById('tv-loading');
+  // Build TradingView screener widget via script tag
+  const container=document.createElement('div');
+  container.style.height='520px';
+  const script=document.createElement('script');
+  script.type='text/javascript';
+  script.src='https://s3.tradingview.com/external-embedding/embed-widget-screener.js';
+  script.async=true;
+  script.textContent=JSON.stringify({
+    "width":"100%",
+    "height":520,
+    "defaultColumn":"overview",
+    "screener_type":"crypto_mkt",
+    "displayCurrency":"USD",
+    "colorTheme":"dark",
+    "locale":"it"
+  });
+  script.onload=()=>{if(loading) loading.style.display='none';};
+  wrap.innerHTML='';
+  wrap.appendChild(container);
+  container.appendChild(script);
+  // Fallback: after 4s hide loading anyway
+  setTimeout(()=>{if(loading) loading.style.display='none';},4000);
 }
 
 /* ===== UTILS ===== */
