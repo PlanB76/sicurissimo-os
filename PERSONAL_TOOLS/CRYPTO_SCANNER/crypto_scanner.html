@@ -2,714 +2,428 @@
 <html lang="it">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Crypto Daily Scanner — Mirco</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0">
+<title>Crypto Scanner — Mirco</title>
 <style>
-  :root {
-    --black: #05050A;
-    --card: #0F0F18;
-    --card2: #16161F;
-    --orange: #E8501A;
-    --gold: #FFD24A;
-    --green: #3FBF6B;
-    --cyan: #00D9FF;
-    --red: #FF4444;
-    --yellow: #FFD24A;
-    --text: #E8E8F0;
-    --muted: #6B6B80;
-    --border: #1E1E2E;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { background: var(--black); color: var(--text); font-family: 'DM Sans', 'Segoe UI', sans-serif; font-size: 14px; }
-  header { padding: 18px 24px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
-  .logo { font-family: 'Bebas Neue', 'Impact', sans-serif; font-size: 22px; letter-spacing: 2px; color: var(--orange); }
-  .logo span { color: var(--gold); }
-  .header-right { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
-  #clock { font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
-  #status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); display: inline-block; margin-right: 4px; }
-  #status-text { font-size: 12px; color: var(--muted); }
-  button { cursor: pointer; border: none; border-radius: 6px; font-family: inherit; font-size: 13px; font-weight: 600; padding: 8px 16px; transition: opacity 0.15s; }
-  button:hover { opacity: 0.8; }
-  .btn-primary { background: var(--orange); color: #fff; }
-  .btn-ghost { background: var(--card2); color: var(--text); border: 1px solid var(--border); }
-  .btn-cyan { background: var(--cyan); color: var(--black); }
-  .btn-sm { padding: 5px 10px; font-size: 12px; }
+:root {
+  --bg: #05050A; --card: #0F0F18; --card2: #16161F;
+  --orange: #E8501A; --gold: #FFD24A; --green: #3FBF6B;
+  --cyan: #00D9FF; --red: #FF4444; --text: #E8E8F0;
+  --muted: #6B6B80; --border: #1E1E2E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,'DM Sans','Segoe UI',sans-serif;font-size:14px;min-height:100vh;padding-bottom:20px}
+a{color:var(--cyan);text-decoration:none}
+button{cursor:pointer;border:none;border-radius:8px;font-family:inherit;font-weight:700;font-size:13px;padding:10px 18px;transition:opacity .15s}
+button:hover{opacity:.8}
+button:disabled{opacity:.4;cursor:not-allowed}
+.btn-primary{background:var(--orange);color:#fff}
+.btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn-sm{padding:7px 12px;font-size:12px}
+select,input[type="text"]{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:8px;padding:9px 12px;font-size:13px;font-family:inherit}
+select:focus,input:focus{outline:none;border-color:var(--cyan)}
 
-  main { max-width: 1400px; margin: 0 auto; padding: 20px 16px; }
+/* HEADER */
+header{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;background:var(--bg)}
+.logo{font-family:'Impact',sans-serif;font-size:19px;letter-spacing:2px;color:var(--orange)}
+.logo span{color:var(--gold)}
+.hdr-right{display:flex;align-items:center;gap:10px}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.sdot.loading{background:var(--gold);animation:blink 1s infinite}
+.sdot.error{background:var(--red)}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
 
-  /* DISCLAIMER */
-  .disclaimer { background: #1A1208; border: 1px solid #4A3000; border-radius: 8px; padding: 12px 16px; margin-bottom: 20px; font-size: 12px; color: #C8A040; line-height: 1.5; }
-  .disclaimer strong { color: var(--gold); }
+/* TABS */
+.tabs{display:flex;background:var(--card);border-bottom:1px solid var(--border);position:sticky;top:45px;z-index:90}
+.tab{flex:1;padding:13px 8px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;user-select:none}
+.tab.active{color:var(--orange);border-bottom-color:var(--orange)}
 
-  /* FILTERS */
-  .filters { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; align-items: center; }
-  .filters label { color: var(--muted); font-size: 12px; margin-right: 4px; }
-  select { background: var(--card2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 7px 10px; font-size: 13px; font-family: inherit; }
-  input[type="text"] { background: var(--card2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 7px 12px; font-size: 13px; font-family: inherit; width: 180px; }
-  input[type="text"]::placeholder { color: var(--muted); }
+/* PAGES */
+.page{display:none;padding:16px}
+.page.active{display:block}
 
-  /* LAYOUT */
-  .layout { display: grid; grid-template-columns: 1fr 340px; gap: 20px; }
-  @media (max-width: 900px) { .layout { grid-template-columns: 1fr; } }
+/* DISCLAIMER */
+.disc{background:#1A1208;border:1px solid #4A3000;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:11px;color:#C8A040;line-height:1.5}
 
-  /* TABLE */
-  .table-wrap { background: var(--card); border-radius: 10px; border: 1px solid var(--border); overflow: hidden; }
-  .table-header { padding: 14px 16px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); }
-  .table-header h2 { font-size: 15px; font-weight: 600; }
-  .table-header .sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
-  table { width: 100%; border-collapse: collapse; }
-  th { padding: 10px 12px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); white-space: nowrap; cursor: pointer; user-select: none; }
-  th:hover { color: var(--text); }
-  th.sorted { color: var(--cyan); }
-  td { padding: 11px 12px; border-bottom: 1px solid #0D0D18; white-space: nowrap; }
-  tr:last-child td { border-bottom: none; }
-  tr:hover td { background: rgba(255,255,255,0.02); }
-  .coin-info { display: flex; align-items: center; gap: 8px; }
-  .coin-img { width: 24px; height: 24px; border-radius: 50%; }
-  .coin-name { font-weight: 600; font-size: 13px; }
-  .coin-symbol { color: var(--muted); font-size: 11px; }
-  .price { font-variant-numeric: tabular-nums; font-weight: 600; }
-  .pct { font-weight: 600; font-variant-numeric: tabular-nums; }
-  .up { color: var(--green); }
-  .down { color: var(--red); }
-  .neutral { color: var(--muted); }
-  .vol { color: var(--muted); font-size: 12px; }
+/* STATS BAR */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:16px}
+.stat{background:var(--card);border-radius:8px;padding:10px 12px;border:1px solid var(--border)}
+.stat-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.stat-v{font-size:19px;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
 
-  /* RISK BADGE */
-  .risk { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
-  .risk-1, .risk-2 { background: rgba(63,191,107,0.15); color: var(--green); }
-  .risk-3, .risk-4 { background: rgba(255,210,74,0.15); color: var(--gold); }
-  .risk-5, .risk-6 { background: rgba(232,80,26,0.15); color: var(--orange); }
-  .risk-7, .risk-8, .risk-9, .risk-10 { background: rgba(255,68,68,0.15); color: var(--red); }
+/* FILTERS */
+.filters{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;align-items:center}
 
-  /* MOMENTUM BAR */
-  .momentum-bar { height: 4px; border-radius: 2px; background: var(--border); width: 80px; position: relative; }
-  .momentum-fill { height: 100%; border-radius: 2px; position: absolute; top: 0; }
+/* GEM GRID */
+.gem-grid{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:600px){.gem-grid{grid-template-columns:1fr 1fr}}
+@media(min-width:1000px){.gem-grid{grid-template-columns:1fr 1fr 1fr}}
 
-  /* SELECT BUTTON */
-  .select-btn { width: 28px; height: 28px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; background: var(--card2); color: var(--muted); border: 1px solid var(--border); padding: 0; }
-  .select-btn.selected { background: var(--orange); color: #fff; border-color: var(--orange); }
-  .select-btn:hover { border-color: var(--orange); color: var(--orange); }
+.gem-card{background:var(--card);border-radius:12px;border:1px solid var(--border);padding:16px;position:relative;overflow:hidden}
+.gem-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.gem-forte::before{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.gem-buona::before{background:linear-gradient(90deg,var(--gold),var(--orange))}
+.gem-watch::before{background:var(--border)}
 
-  /* SIDEBAR */
-  .sidebar { display: flex; flex-direction: column; gap: 16px; }
-  .panel { background: var(--card); border-radius: 10px; border: 1px solid var(--border); padding: 16px; }
-  .panel h3 { font-size: 14px; font-weight: 700; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
-  .panel h3 .icon { font-size: 16px; }
+.gem-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.gem-coin{display:flex;align-items:center;gap:10px}
+.gem-img{width:32px;height:32px;border-radius:50%}
+.gem-sym{font-weight:700;font-size:16px}
+.gem-name{font-size:11px;color:var(--muted);margin-top:1px}
+.badge{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700}
+.badge-forte{background:rgba(63,191,107,.15);color:var(--green)}
+.badge-buona{background:rgba(255,210,74,.15);color:var(--gold)}
+.badge-watch{background:rgba(107,107,128,.15);color:var(--muted)}
 
-  /* SELECTED ASSETS */
-  .selected-list { display: flex; flex-direction: column; gap: 8px; }
-  .selected-item { background: var(--card2); border-radius: 8px; padding: 10px 12px; display: flex; align-items: center; justify-content: space-between; border: 1px solid var(--border); }
-  .selected-item.empty { color: var(--muted); font-size: 12px; border-style: dashed; justify-content: center; }
-  .selected-name { font-weight: 600; font-size: 13px; }
-  .selected-alloc { font-size: 12px; color: var(--muted); }
-  .remove-btn { background: none; border: none; color: var(--muted); font-size: 16px; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; }
-  .remove-btn:hover { color: var(--red); }
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.score-num{font-size:32px;font-weight:700;min-width:54px;font-variant-numeric:tabular-nums}
+.bar-wrap{flex:1}
+.bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width .5s}
+.bar-fill.forte{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.bar-fill.buona{background:linear-gradient(90deg,var(--gold),var(--orange))}
+.bar-fill.watch{background:var(--muted)}
+.bar-lbl{font-size:10px;color:var(--muted);margin-top:3px}
 
-  /* USDT INPUT */
-  .usdt-input-wrap { margin-bottom: 12px; }
-  .usdt-input-wrap label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-  .usdt-input { background: var(--card2); color: var(--text); border: 1px solid var(--border); border-radius: 6px; padding: 8px 12px; font-size: 16px; font-weight: 700; width: 100%; font-family: inherit; }
-  .usdt-input:focus { outline: none; border-color: var(--cyan); }
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:10px 0}
+.metric{background:var(--card2);border-radius:6px;padding:8px;text-align:center}
+.metric-l{font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.metric-v{font-size:14px;font-weight:700;margin-top:3px;font-variant-numeric:tabular-nums}
+.up{color:var(--green)}
+.down{color:var(--red)}
 
-  /* ALLOCATIONS */
-  .alloc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px; }
-  .alloc-item { display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
-  .alloc-bar-wrap { margin-top: 4px; height: 3px; background: var(--border); border-radius: 2px; }
-  .alloc-bar { height: 100%; border-radius: 2px; background: var(--cyan); }
+.reason{font-size:11px;color:var(--muted);line-height:1.5;border-top:1px solid var(--border);padding-top:8px;margin-top:8px}
+.reason strong{color:var(--text)}
 
-  /* SCENARIO TABLE */
-  .scenario-table { width: 100%; font-size: 12px; }
-  .scenario-table th { font-size: 10px; padding: 6px 8px; }
-  .scenario-table td { padding: 6px 8px; font-size: 12px; font-variant-numeric: tabular-nums; }
-  .scenario-total { font-weight: 700; }
-  .gain { color: var(--green); }
-  .loss { color: var(--red); }
+/* SCANNER TABLE */
+.table-wrap{background:var(--card);border-radius:10px;border:1px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;min-width:560px}
+th{padding:10px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:11px 12px;border-bottom:1px solid #0D0D18;white-space:nowrap;font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+.ci{display:flex;align-items:center;gap:8px}
+.cimg{width:22px;height:22px;border-radius:50%}
 
-  /* LOADING */
-  .loading { text-align: center; padding: 60px 20px; color: var(--muted); }
-  .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--orange); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
+/* LOADING */
+.loading{text-align:center;padding:60px 20px;color:var(--muted)}
+.spinner{width:32px;height:32px;border:3px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
 
-  /* EMPTY SELECTION */
-  .no-selection { text-align: center; padding: 20px; color: var(--muted); font-size: 12px; line-height: 1.6; }
-
-  /* ALERT */
-  .alert-panel { background: rgba(0,217,255,0.05); border: 1px solid rgba(0,217,255,0.2); }
-  .alert-input { background: var(--card2); border: 1px solid var(--border); color: var(--text); border-radius: 6px; padding: 7px 10px; font-size: 13px; font-family: inherit; width: 100%; margin-bottom: 8px; }
-  .alert-row { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
-  .alert-row label { font-size: 12px; color: var(--muted); white-space: nowrap; }
-
-  /* NOTES */
-  .note { font-size: 11px; color: var(--muted); line-height: 1.5; margin-top: 8px; }
-
-  /* MARKET OVERVIEW */
-  .overview-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px; }
-  .overview-card { background: var(--card2); border-radius: 6px; padding: 10px 12px; border: 1px solid var(--border); }
-  .overview-label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
-  .overview-value { font-size: 16px; font-weight: 700; margin-top: 2px; }
-  .overview-sub { font-size: 11px; color: var(--muted); }
-
-  /* TAGS */
-  .tag { display: inline-flex; align-items: center; padding: 2px 6px; border-radius: 3px; font-size: 10px; font-weight: 600; margin-left: 4px; }
-  .tag-vol { background: rgba(0,217,255,0.1); color: var(--cyan); }
-  .tag-hot { background: rgba(232,80,26,0.15); color: var(--orange); }
-  .tag-new { background: rgba(63,191,107,0.12); color: var(--green); }
-
-  /* TOOLTIP */
-  [data-tip] { position: relative; }
-  [data-tip]:hover::after { content: attr(data-tip); position: absolute; bottom: 120%; left: 50%; transform: translateX(-50%); background: #1E1E2E; color: var(--text); padding: 5px 10px; border-radius: 4px; font-size: 11px; white-space: nowrap; z-index: 100; pointer-events: none; }
-
-  .progress-ring { margin-top: 8px; }
-  .divider { height: 1px; background: var(--border); margin: 12px 0; }
+/* TOAST */
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 20px;font-size:13px;z-index:9999;opacity:0;transition:all .3s;max-width:320px;text-align:center;pointer-events:none}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
 <body>
 
 <header>
   <div>
-    <div class="logo">CRYPTO DAILY <span>SCANNER</span></div>
-    <div style="font-size:11px;color:var(--muted);margin-top:2px;">Valutazione rischio giornaliera — uso personale</div>
+    <div class="logo">CRYPTO <span>SCANNER</span></div>
   </div>
-  <div class="header-right">
-    <div><span id="status-dot"></span><span id="status-text">Caricamento...</span></div>
-    <span id="clock"></span>
+  <div class="hdr-right">
+    <div class="sdot" id="sdot"></div>
+    <span id="last-time" style="font-size:11px;color:var(--muted)"></span>
     <button class="btn-ghost btn-sm" onclick="loadData()">⟳ Aggiorna</button>
   </div>
 </header>
 
-<main>
-  <div class="disclaimer">
-    <strong>Strumento di analisi personale.</strong> I dati sono informativi. Nessuna indicazione costituisce consiglio finanziario. Le cripto sono asset ad alto rischio. Puoi perdere tutto il capitale investito. Ogni decisione e tua e solo tua.
+<div class="tabs">
+  <div class="tab active" id="tab-gems" onclick="switchTab('gems')">💎 GEMME DEL GIORNO</div>
+  <div class="tab" id="tab-scanner" onclick="switchTab('scanner')">📊 SCANNER COMPLETO</div>
+</div>
+
+<!-- GEMME PAGE -->
+<div class="page active" id="page-gems">
+  <div class="disc"><strong>Solo uso personale.</strong> Non è consulenza finanziaria. Le crypto sono ad alto rischio. Puoi perdere tutto il capitale.</div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-l">Gemme Forti</div><div class="stat-v" id="s-forte" style="color:var(--green)">—</div></div>
+    <div class="stat"><div class="stat-l">Gemme Buone</div><div class="stat-v" id="s-buona" style="color:var(--gold)">—</div></div>
+    <div class="stat"><div class="stat-l">Score Medio</div><div class="stat-v" id="s-avg">—</div></div>
+    <div class="stat"><div class="stat-l">Fear &amp; Greed</div><div class="stat-v" id="s-fg">—</div></div>
   </div>
 
   <div class="filters">
-    <div>
-      <label>Ordina per</label>
-      <select id="sort-by" onchange="renderTable()">
-        <option value="volume_score">Volume Spike</option>
-        <option value="price_change_percentage_24h_abs">Variazione 24h</option>
-        <option value="momentum">Momentum</option>
-        <option value="risk_score">Rischio (crescente)</option>
-        <option value="market_cap">Market Cap</option>
-      </select>
-    </div>
-    <div>
-      <label>Rischio max</label>
-      <select id="filter-risk" onchange="renderTable()">
-        <option value="10">Tutti</option>
-        <option value="4">Basso (1-4)</option>
-        <option value="6">Medio (1-6)</option>
-        <option value="8">Alto (1-8)</option>
-      </select>
-    </div>
-    <div>
-      <label>Categoria</label>
-      <select id="filter-cat" onchange="renderTable()">
-        <option value="all">Tutte</option>
-        <option value="large">Large Cap (&gt;10B)</option>
-        <option value="mid">Mid Cap (1B-10B)</option>
-        <option value="small">Small Cap (&lt;1B)</option>
-      </select>
-    </div>
-    <input type="text" id="search" placeholder="Cerca nome o simbolo..." oninput="renderTable()">
-    <div style="margin-left:auto;font-size:12px;color:var(--muted);">Top 100 per volume · <span id="last-update">—</span></div>
+    <select id="gems-filter" onchange="renderGems()">
+      <option value="top">Migliori (Forte+Buona)</option>
+      <option value="forte">Solo FORTE</option>
+      <option value="buona">Solo BUONA</option>
+      <option value="all">Tutte</option>
+    </select>
+    <select id="gems-sort" onchange="renderGems()">
+      <option value="gem_score">Score Gemma</option>
+      <option value="p24h">24h %</option>
+      <option value="volume_spike">Volume Spike</option>
+      <option value="momentum">Momentum</option>
+    </select>
   </div>
 
-  <div class="layout">
-    <!-- TABLE -->
-    <div class="table-wrap">
-      <div class="table-header">
-        <div>
-          <h2>Mercato Live</h2>
-          <div class="sub">Clicca + per selezionare fino a 3 asset · max 3 per diversificare il rischio</div>
-        </div>
-      </div>
-      <div id="table-container">
-        <div class="loading"><div class="spinner"></div>Caricamento dati da CoinGecko...</div>
-      </div>
-    </div>
-
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-
-      <!-- MARKET OVERVIEW -->
-      <div class="panel">
-        <h3><span class="icon">🌐</span> Mercato Globale</h3>
-        <div class="overview-grid" id="market-overview">
-          <div class="overview-card"><div class="overview-label">BTC Dominance</div><div class="overview-value" id="btc-dom">—</div></div>
-          <div class="overview-card"><div class="overview-label">Fear &amp; Greed</div><div class="overview-value" id="fear-greed">—</div></div>
-          <div class="overview-card"><div class="overview-label">BTC 24h</div><div class="overview-value" id="btc-24h">—</div></div>
-          <div class="overview-card"><div class="overview-label">ETH 24h</div><div class="overview-value" id="eth-24h">—</div></div>
-        </div>
-      </div>
-
-      <!-- SELECTION -->
-      <div class="panel">
-        <h3><span class="icon">🎯</span> Asset Selezionati</h3>
-        <div class="usdt-input-wrap">
-          <label>Capitale da allocare (USDT)</label>
-          <input type="number" class="usdt-input" id="usdt-amount" value="1000" min="1" oninput="renderAllocation()">
-        </div>
-        <div class="selected-list" id="selected-list">
-          <div class="selected-item empty">Clicca + nella tabella per aggiungere</div>
-        </div>
-        <div class="note">Seleziona 2-3 asset per distribuire il rischio. Con 1 solo asset il rischio e massimo.</div>
-      </div>
-
-      <!-- ALLOCATION -->
-      <div class="panel" id="allocation-panel" style="display:none">
-        <h3><span class="icon">💰</span> Allocazione &amp; Scenari</h3>
-        <div id="alloc-details"></div>
-        <div class="divider"></div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-weight:600;">Scenari P&amp;L (stima)</div>
-        <div id="scenario-container"></div>
-        <div class="note">I scenari mostrano il risultato se TUTTI gli asset si muovono nella stessa direzione. Nella realta i movimenti sono decorrelati.</div>
-      </div>
-
-      <!-- ALERT -->
-      <div class="panel alert-panel">
-        <h3><span class="icon">🔔</span> Alert Prezzo</h3>
-        <div id="alert-list" style="display:flex;flex-direction:column;gap:8px;margin-bottom:10px;"></div>
-        <div style="font-size:12px;color:var(--muted);margin-bottom:8px;">Aggiungi alert su un asset selezionato:</div>
-        <div class="alert-row">
-          <label>Asset</label>
-          <select id="alert-coin" class="alert-input" style="margin:0"></select>
-        </div>
-        <div class="alert-row">
-          <label>Target $</label>
-          <input type="number" class="alert-input" id="alert-price" placeholder="es. 45000" style="margin:0">
-          <select id="alert-dir" class="alert-input" style="margin:0;width:auto">
-            <option value="above">Sopra</option>
-            <option value="below">Sotto</option>
-          </select>
-        </div>
-        <button class="btn-cyan btn-sm" onclick="addAlert()" style="width:100%;margin-top:6px">+ Aggiungi Alert</button>
-        <div class="note">Gli alert funzionano finche questa pagina e aperta. Per alert persistenti usa app esterne (Binance, CoinGecko, TradingView).</div>
-      </div>
-
-    </div>
+  <div class="gem-grid" id="gems-grid">
+    <div style="grid-column:1/-1"><div class="loading"><div class="spinner"></div>Scansione mercato in corso...</div></div>
   </div>
-</main>
+</div>
+
+<!-- SCANNER PAGE -->
+<div class="page" id="page-scanner">
+  <div class="filters">
+    <select id="scan-sort" onchange="renderTable()">
+      <option value="gem_score">GEM Score</option>
+      <option value="volume_spike">Volume Spike</option>
+      <option value="momentum">Momentum</option>
+      <option value="p24h_abs">24h % (assoluto)</option>
+      <option value="risk_asc">Rischio ↑</option>
+    </select>
+    <select id="scan-risk" onchange="renderTable()">
+      <option value="10">Tutti i rischi</option>
+      <option value="4">Basso (≤4)</option>
+      <option value="6">Medio (≤6)</option>
+    </select>
+    <input type="text" id="scan-search" placeholder="Cerca..." oninput="renderTable()" style="width:120px">
+  </div>
+  <div id="table-wrap">
+    <div class="loading"><div class="spinner"></div>Caricamento...</div>
+  </div>
+</div>
+
+<div id="toast"></div>
 
 <script>
-// ─── STATE ───────────────────────────────────────────────────
 let allCoins = [];
-let selectedCoins = [];
-let alerts = [];
-let alertInterval = null;
-let sortDir = 'desc';
-let lastSortKey = 'volume_score';
 
-// ─── CLOCK ───────────────────────────────────────────────────
-function updateClock() {
-  const now = new Date();
-  document.getElementById('clock').textContent =
-    now.toLocaleDateString('it-IT') + '  ' +
-    now.toLocaleTimeString('it-IT', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
-}
-setInterval(updateClock, 1000);
-updateClock();
-
-// ─── LOAD DATA ───────────────────────────────────────────────
-async function loadData() {
-  setStatus('loading');
-  try {
-    const [marketRes, globalRes, fearRes] = await Promise.allSettled([
-      fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=100&page=1&sparkline=false&price_change_percentage=1h,24h,7d'),
-      fetch('https://api.coingecko.com/api/v3/global'),
-      fetch('https://api.alternative.me/fng/')
-    ]);
-
-    if (marketRes.status === 'fulfilled' && marketRes.value.ok) {
-      const data = await marketRes.value.json();
-      allCoins = data.map(c => enrichCoin(c));
-    } else {
-      throw new Error('API non disponibile');
-    }
-
-    // Global market data
-    if (globalRes.status === 'fulfilled' && globalRes.value.ok) {
-      const g = await globalRes.value.json();
-      const btcDom = g.data?.market_cap_percentage?.btc;
-      if (btcDom) document.getElementById('btc-dom').textContent = btcDom.toFixed(1) + '%';
-    }
-
-    // Fear & Greed
-    if (fearRes.status === 'fulfilled' && fearRes.value.ok) {
-      const f = await fearRes.value.json();
-      const val = f.data?.[0]?.value;
-      const cls = f.data?.[0]?.value_classification;
-      if (val) {
-        const el = document.getElementById('fear-greed');
-        el.textContent = val + ' — ' + (cls || '');
-        el.style.color = val > 60 ? 'var(--red)' : val < 40 ? 'var(--green)' : 'var(--gold)';
-      }
-    }
-
-    // BTC & ETH 24h
-    const btc = allCoins.find(c => c.symbol === 'btc');
-    const eth = allCoins.find(c => c.symbol === 'eth');
-    if (btc) {
-      const el = document.getElementById('btc-24h');
-      el.textContent = formatPct(btc.price_change_percentage_24h);
-      el.className = 'overview-value ' + pctClass(btc.price_change_percentage_24h);
-    }
-    if (eth) {
-      const el = document.getElementById('eth-24h');
-      el.textContent = formatPct(eth.price_change_percentage_24h);
-      el.className = 'overview-value ' + pctClass(eth.price_change_percentage_24h);
-    }
-
-    document.getElementById('last-update').textContent = 'Aggiornato ' + new Date().toLocaleTimeString('it-IT', {hour:'2-digit',minute:'2-digit'});
-    setStatus('ok');
-    renderTable();
-    renderAllocation();
-    checkAlerts();
-  } catch(e) {
-    setStatus('error');
-    document.getElementById('table-container').innerHTML =
-      '<div class="loading" style="color:var(--red)">Errore caricamento dati. CoinGecko API potrebbe avere limiti di rate. Riprova tra 30 secondi.</div>';
-  }
+function switchTab(id) {
+  ['gems','scanner'].forEach(t => {
+    document.getElementById('tab-'+t).classList.toggle('active', t === id);
+    document.getElementById('page-'+t).classList.toggle('active', t === id);
+  });
 }
 
 function setStatus(s) {
-  const dot = document.getElementById('status-dot');
-  const txt = document.getElementById('status-text');
-  if (s === 'loading') { dot.style.background = 'var(--gold)'; txt.textContent = 'Caricamento...'; }
-  else if (s === 'ok')  { dot.style.background = 'var(--green)'; txt.textContent = 'Dati live'; }
-  else                  { dot.style.background = 'var(--red)'; txt.textContent = 'Errore API'; }
+  const d = document.getElementById('sdot');
+  d.className = 'sdot' + (s==='loading'?' loading':s==='error'?' error':'');
 }
 
-// ─── ENRICH COIN ─────────────────────────────────────────────
-function enrichCoin(c) {
-  // Volume spike score: volume/market_cap ratio (higher = more activity relative to size)
-  const vol_mc_ratio = c.market_cap > 0 ? (c.total_volume / c.market_cap) : 0;
-  c.volume_score = vol_mc_ratio;
+async function loadData() {
+  setStatus('loading');
+  try {
+    const [mktRes, fgRes] = await Promise.allSettled([
+      fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=volume_desc&per_page=100&page=1&sparkline=false&price_change_percentage=1h,24h,7d'),
+      fetch('https://api.alternative.me/fng/')
+    ]);
 
-  // Momentum: weighted combo of 1h and 24h
-  const p1h  = c.price_change_percentage_1h_in_currency || 0;
-  const p24h = c.price_change_percentage_24h || 0;
-  const p7d  = c.price_change_percentage_7d_in_currency || 0;
-  c.momentum = (p1h * 0.5) + (p24h * 0.35) + (p7d * 0.15);
+    if (mktRes.status !== 'fulfilled' || !mktRes.value.ok) throw new Error('API limit');
+    allCoins = (await mktRes.value.json()).map(enrichCoin);
 
-  // Risk score 1-10
-  c.risk_score = calcRisk(c);
-  c.risk_label = riskLabel(c.risk_score);
-
-  // Absolute 24h for sorting
-  c.price_change_percentage_24h_abs = Math.abs(p24h);
-
-  // Category
-  if (c.market_cap > 10e9) c.category = 'large';
-  else if (c.market_cap > 1e9) c.category = 'mid';
-  else c.category = 'small';
-
-  return c;
-}
-
-function calcRisk(c) {
-  let score = 0;
-  // Market cap risk (0-4 pts)
-  if (c.market_cap > 100e9) score += 0;
-  else if (c.market_cap > 10e9) score += 1;
-  else if (c.market_cap > 1e9) score += 2;
-  else if (c.market_cap > 100e6) score += 3;
-  else score += 4;
-  // Volatility 24h (0-4 pts)
-  const v = Math.abs(c.price_change_percentage_24h || 0);
-  if (v < 2) score += 0;
-  else if (v < 5) score += 1;
-  else if (v < 10) score += 2;
-  else if (v < 20) score += 3;
-  else score += 4;
-  // Liquidity (volume/mc) bonus: high liquidity reduces risk
-  if (c.volume_score > 0.5) score -= 1;
-  return Math.max(1, Math.min(10, Math.round(score + 1)));
-}
-
-function riskLabel(s) {
-  if (s <= 2) return 'BASSO';
-  if (s <= 4) return 'MEDIO-BASSO';
-  if (s <= 6) return 'MEDIO';
-  if (s <= 8) return 'ALTO';
-  return 'MOLTO ALTO';
-}
-
-// ─── RENDER TABLE ─────────────────────────────────────────────
-function renderTable() {
-  if (!allCoins.length) return;
-  const sortKey = document.getElementById('sort-by').value;
-  const maxRisk = parseInt(document.getElementById('filter-risk').value);
-  const cat = document.getElementById('filter-cat').value;
-  const search = document.getElementById('search').value.toLowerCase();
-
-  let coins = allCoins.filter(c => {
-    if (c.risk_score > maxRisk) return false;
-    if (cat !== 'all' && c.category !== cat) return false;
-    if (search && !c.name.toLowerCase().includes(search) && !c.symbol.toLowerCase().includes(search)) return false;
-    return true;
-  });
-
-  coins.sort((a, b) => {
-    const av = a[sortKey] ?? 0;
-    const bv = b[sortKey] ?? 0;
-    return sortKey === 'risk_score' ? av - bv : bv - av;
-  });
-
-  const rows = coins.slice(0, 60).map((c, i) => {
-    const isSelected = selectedCoins.find(s => s.id === c.id);
-    const p1h  = c.price_change_percentage_1h_in_currency || 0;
-    const p24h = c.price_change_percentage_24h || 0;
-    const p7d  = c.price_change_percentage_7d_in_currency || 0;
-
-    const momNorm = Math.min(100, Math.max(0, (c.momentum + 20) / 40 * 100));
-    const momColor = c.momentum > 0 ? 'var(--green)' : 'var(--red)';
-    const momLeft = c.momentum < 0 ? Math.max(0, momNorm) : 50;
-    const momWidth = Math.abs(momNorm - 50);
-
-    const volTag = c.volume_score > 0.3 ? '<span class="tag tag-vol">VOL↑</span>' : '';
-    const hotTag = Math.abs(p24h) > 10 ? '<span class="tag tag-hot">HOT</span>' : '';
-
-    return `<tr>
-      <td style="color:var(--muted);font-size:12px">${i+1}</td>
-      <td>
-        <div class="coin-info">
-          <img class="coin-img" src="${c.image}" onerror="this.style.display='none'" loading="lazy">
-          <div>
-            <div class="coin-name">${c.name}${volTag}${hotTag}</div>
-            <div class="coin-symbol">${c.symbol.toUpperCase()}</div>
-          </div>
-        </div>
-      </td>
-      <td class="price">$${formatPrice(c.current_price)}</td>
-      <td class="pct ${pctClass(p1h)}">${formatPct(p1h)}</td>
-      <td class="pct ${pctClass(p24h)}">${formatPct(p24h)}</td>
-      <td class="pct ${pctClass(p7d)}">${formatPct(p7d)}</td>
-      <td class="vol">${formatVol(c.total_volume)}</td>
-      <td>
-        <span class="risk risk-${c.risk_score}" data-tip="${c.risk_label} — Score ${c.risk_score}/10">
-          ${c.risk_score}/10
-        </span>
-      </td>
-      <td>
-        <div class="momentum-bar">
-          <div class="momentum-fill" style="background:${momColor};left:${momLeft}%;width:${momWidth}%"></div>
-        </div>
-      </td>
-      <td>
-        <button class="select-btn ${isSelected ? 'selected' : ''}" onclick="toggleSelect('${c.id}')">
-          ${isSelected ? '✓' : '+'}
-        </button>
-      </td>
-    </tr>`;
-  }).join('');
-
-  document.getElementById('table-container').innerHTML = `
-    <table>
-      <thead>
-        <tr>
-          <th>#</th>
-          <th>Asset</th>
-          <th onclick="setSortKey('current_price')" class="${lastSortKey==='current_price'?'sorted':''}">Prezzo</th>
-          <th onclick="setSortKey('p1h')" class="${lastSortKey==='p1h'?'sorted':''}">1h</th>
-          <th onclick="setSortKey('price_change_percentage_24h_abs')" class="${lastSortKey==='price_change_percentage_24h_abs'?'sorted':''}">24h ▼</th>
-          <th onclick="setSortKey('p7d')" class="${lastSortKey==='p7d'?'sorted':''}">7d</th>
-          <th onclick="setSortKey('total_volume')" class="${lastSortKey==='total_volume'?'sorted':''}">Volume 24h</th>
-          <th onclick="setSortKey('risk_score')" class="${lastSortKey==='risk_score'?'sorted':''}">Rischio</th>
-          <th onclick="setSortKey('momentum')" class="${lastSortKey==='momentum'?'sorted':''}">Momentum</th>
-          <th>+</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>`;
-}
-
-function setSortKey(k) {
-  document.getElementById('sort-by').value = k;
-  lastSortKey = k;
-  renderTable();
-}
-
-// ─── SELECTION ────────────────────────────────────────────────
-function toggleSelect(id) {
-  const coin = allCoins.find(c => c.id === id);
-  if (!coin) return;
-  const idx = selectedCoins.findIndex(c => c.id === id);
-  if (idx >= 0) {
-    selectedCoins.splice(idx, 1);
-  } else {
-    if (selectedCoins.length >= 3) {
-      alert('Massimo 3 asset selezionabili. Rimuovi uno prima di aggiungerne un altro.');
-      return;
-    }
-    selectedCoins.push(coin);
-  }
-  renderTable();
-  renderAllocation();
-  updateAlertSelect();
-}
-
-// ─── ALLOCATION ───────────────────────────────────────────────
-function renderAllocation() {
-  const panel = document.getElementById('allocation-panel');
-  const selList = document.getElementById('selected-list');
-  const usdt = parseFloat(document.getElementById('usdt-amount').value) || 1000;
-
-  if (!selectedCoins.length) {
-    panel.style.display = 'none';
-    selList.innerHTML = '<div class="selected-item empty">Clicca + nella tabella per aggiungere</div>';
-    return;
-  }
-  panel.style.display = 'block';
-
-  // Weight by inverse risk (lower risk = slightly higher weight)
-  const weights = selectedCoins.map(c => 1 / c.risk_score);
-  const totalW = weights.reduce((a,b) => a+b, 0);
-  const allocs = weights.map(w => (w/totalW) * usdt);
-
-  // Selected list
-  selList.innerHTML = selectedCoins.map((c, i) => `
-    <div class="selected-item">
-      <div>
-        <div class="selected-name">${c.symbol.toUpperCase()} <span style="color:var(--muted);font-size:11px">${c.name}</span></div>
-        <div class="selected-alloc">${formatUSDT(allocs[i])} USDT · Rischio ${c.risk_score}/10</div>
-      </div>
-      <button class="remove-btn" onclick="toggleSelect('${c.id}')">✕</button>
-    </div>`).join('');
-
-  // Allocation details
-  const avgRisk = selectedCoins.reduce((a,c) => a+c.risk_score, 0) / selectedCoins.length;
-  document.getElementById('alloc-details').innerHTML = `
-    <div class="alloc-list">
-      ${selectedCoins.map((c, i) => `
-        <div>
-          <div class="alloc-item">
-            <span style="font-weight:600">${c.symbol.toUpperCase()}</span>
-            <span><span style="color:var(--cyan)">${formatUSDT(allocs[i])}</span> USDT <span style="color:var(--muted)">(${(allocs[i]/usdt*100).toFixed(0)}%)</span></span>
-          </div>
-          <div class="alloc-bar-wrap"><div class="alloc-bar" style="width:${(allocs[i]/usdt*100).toFixed(0)}%"></div></div>
-        </div>`).join('')}
-    </div>
-    <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:4px">
-      <span>Rischio medio portafoglio</span>
-      <span style="color:${avgRisk<=4?'var(--green)':avgRisk<=6?'var(--gold)':'var(--red)'};font-weight:700">${avgRisk.toFixed(1)}/10</span>
-    </div>`;
-
-  // Scenarios
-  const scenarios = [-30, -20, -10, -5, 5, 10, 20, 30];
-  const scenarioRows = scenarios.map(pct => {
-    const pl = allocs.map(a => a * pct / 100);
-    const total = pl.reduce((a,b)=>a+b,0);
-    const final = usdt + total;
-    const cls = total >= 0 ? 'gain' : 'loss';
-    return `<tr>
-      <td class="pct ${pct>=0?'up':'down'}">${pct>0?'+':''}${pct}%</td>
-      ${pl.map(p=>`<td class="${cls}">${p>=0?'+':''}${p.toFixed(0)}</td>`).join('')}
-      <td class="scenario-total ${cls}">${total>=0?'+':''}${total.toFixed(0)}</td>
-      <td class="scenario-total" style="color:var(--text)">${final.toFixed(0)}</td>
-    </tr>`;
-  });
-
-  document.getElementById('scenario-container').innerHTML = `
-    <table class="scenario-table">
-      <thead>
-        <tr>
-          <th>Scenario</th>
-          ${selectedCoins.map(c=>`<th>${c.symbol.toUpperCase()}</th>`).join('')}
-          <th>P&amp;L tot</th>
-          <th>Finale</th>
-        </tr>
-      </thead>
-      <tbody>${scenarioRows.join('')}</tbody>
-    </table>`;
-}
-
-// ─── ALERTS ───────────────────────────────────────────────────
-function updateAlertSelect() {
-  const sel = document.getElementById('alert-coin');
-  sel.innerHTML = selectedCoins.map(c =>
-    `<option value="${c.id}">${c.symbol.toUpperCase()} — $${formatPrice(c.current_price)}</option>`
-  ).join('') || '<option value="">Seleziona asset prima</option>';
-}
-
-function addAlert() {
-  const id = document.getElementById('alert-coin').value;
-  const price = parseFloat(document.getElementById('alert-price').value);
-  const dir = document.getElementById('alert-dir').value;
-  if (!id || !price) return;
-  const coin = allCoins.find(c => c.id === id);
-  if (!coin) return;
-  alerts.push({ id, symbol: coin.symbol.toUpperCase(), price, dir, triggered: false });
-  renderAlerts();
-  document.getElementById('alert-price').value = '';
-}
-
-function renderAlerts() {
-  document.getElementById('alert-list').innerHTML = alerts.map((a, i) => `
-    <div style="display:flex;justify-content:space-between;align-items:center;background:var(--card2);padding:7px 10px;border-radius:6px;font-size:12px;${a.triggered?'border:1px solid var(--green)':''}">
-      <span>${a.symbol} ${a.dir === 'above' ? '↑ sopra' : '↓ sotto'} <strong>$${formatPrice(a.price)}</strong></span>
-      <span style="display:flex;gap:8px;align-items:center">
-        ${a.triggered ? '<span style="color:var(--green);font-weight:700">✓ TRIGGERATO</span>' : '<span style="color:var(--muted)">In attesa</span>'}
-        <button class="btn-ghost btn-sm" onclick="removeAlert(${i})">✕</button>
-      </span>
-    </div>`).join('');
-}
-
-function removeAlert(i) { alerts.splice(i, 1); renderAlerts(); }
-
-function checkAlerts() {
-  if (!alerts.length) return;
-  let triggered = false;
-  alerts.forEach(a => {
-    const coin = allCoins.find(c => c.id === a.id);
-    if (!coin) return;
-    const hit = a.dir === 'above'
-      ? coin.current_price >= a.price
-      : coin.current_price <= a.price;
-    if (hit && !a.triggered) {
-      a.triggered = true;
-      triggered = true;
-      if (Notification.permission === 'granted') {
-        new Notification(`🔔 Alert ${a.symbol}`, {
-          body: `Prezzo ${a.dir === 'above' ? 'sopra' : 'sotto'} $${a.price} — Attuale: $${formatPrice(coin.current_price)}`
-        });
+    if (fgRes.status === 'fulfilled' && fgRes.value.ok) {
+      const fg = await fgRes.value.json();
+      const v = fg.data?.[0];
+      if (v) {
+        const el = document.getElementById('s-fg');
+        el.textContent = v.value + ' · ' + (v.value_classification||'');
+        el.style.color = v.value > 65 ? 'var(--red)' : v.value < 35 ? 'var(--green)' : 'var(--gold)';
       }
     }
-  });
-  if (triggered) renderAlerts();
+
+    document.getElementById('last-time').textContent = new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+    setStatus('ok');
+    updateStats();
+    renderGems();
+    renderTable();
+  } catch(e) {
+    setStatus('error');
+    document.getElementById('gems-grid').innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--red)">Errore API CoinGecko. Riprova tra 30 secondi.<br><br><small style="color:var(--muted)">${e.message}</small></div>`;
+    document.getElementById('table-wrap').innerHTML = `<div style="text-align:center;padding:40px;color:var(--red)">Errore API</div>`;
+  }
 }
 
-// ─── HELPERS ──────────────────────────────────────────────────
-function formatPrice(p) {
+function enrichCoin(c) {
+  const p1h  = c.price_change_percentage_1h_in_currency  || 0;
+  const p24h = c.price_change_percentage_24h             || 0;
+  const p7d  = c.price_change_percentage_7d_in_currency  || 0;
+  const volume_spike = c.market_cap > 0 ? c.total_volume / c.market_cap : 0;
+  const momentum = p1h * 0.5 + p24h * 0.35 + p7d * 0.15;
+  const cat = c.market_cap > 10e9 ? 'large' : c.market_cap > 1e9 ? 'mid' : 'small';
+
+  // Risk 1-10
+  let r = 0;
+  if      (c.market_cap > 100e9) r += 0;
+  else if (c.market_cap > 10e9)  r += 1;
+  else if (c.market_cap > 1e9)   r += 2;
+  else if (c.market_cap > 100e6) r += 3;
+  else                           r += 4;
+  const v24abs = Math.abs(p24h);
+  if      (v24abs < 2)  r += 0;
+  else if (v24abs < 5)  r += 1;
+  else if (v24abs < 10) r += 2;
+  else if (v24abs < 20) r += 3;
+  else                  r += 4;
+  if (volume_spike > 0.5) r -= 1;
+  const risk_score = Math.max(1, Math.min(10, Math.round(r + 1)));
+
+  // GEM score 0-100
+  let sc = 0;
+  // Momentum (0-35)
+  if      (momentum > 15) sc += 35;
+  else if (momentum > 10) sc += 28;
+  else if (momentum > 5)  sc += 20;
+  else if (momentum > 2)  sc += 12;
+  else if (momentum > 0)  sc += 6;
+  // Volume spike (0-25)
+  if      (volume_spike > 1.0)  sc += 25;
+  else if (volume_spike > 0.5)  sc += 20;
+  else if (volume_spike > 0.3)  sc += 14;
+  else if (volume_spike > 0.15) sc += 8;
+  else if (volume_spike > 0.08) sc += 4;
+  // Trend consistency (0-20)
+  const pos = (p1h>0?1:0)+(p24h>0?1:0)+(p7d>0?1:0);
+  if (pos === 3) sc += 20;
+  else if (pos === 2) sc += 10;
+  // Market cap tier (0-8): mid-large sweet spot
+  if (c.market_cap > 1e9 && c.market_cap < 100e9) sc += 8;
+  else sc += 3;
+  // Fresh acceleration (0-10)
+  if (p1h > 2 && p24h > 5)  sc += 10;
+  else if (p1h > 1)          sc += 5;
+  // Risk penalty
+  if (risk_score >= 8) sc -= 12;
+  else if (risk_score >= 6) sc -= 5;
+
+  const gem_score = Math.max(0, Math.min(100, Math.round(sc)));
+  const gem_level = gem_score >= 68 ? 'forte' : gem_score >= 48 ? 'buona' : 'watch';
+
+  // Reason text
+  const parts = [];
+  if (momentum > 10)     parts.push('<strong>Momentum molto forte</strong> su tutti i timeframe');
+  else if (momentum > 3) parts.push('<strong>Momentum positivo</strong>');
+  if (pos === 3)         parts.push('Trend consistente 1h/24h/7d');
+  if (volume_spike > 0.3) parts.push(`<strong>Volume spike</strong> ${(volume_spike*100).toFixed(0)}% del market cap`);
+  if (p1h > 2)           parts.push(`Accelerazione +${p1h.toFixed(1)}% ultima ora`);
+  if (risk_score <= 3)   parts.push('Rischio contenuto');
+  if (risk_score >= 7)   parts.push('<span style="color:var(--red)">Attenzione: alta volatilità</span>');
+  const gem_reason = parts.join('. ') || 'Attività nella media. Nessun segnale forte al momento.';
+
+  return { ...c, p1h, p24h, p7d, p24h_abs: v24abs, volume_spike, momentum, risk_score, cat, gem_score, gem_level, gem_reason };
+}
+
+function updateStats() {
+  document.getElementById('s-forte').textContent = allCoins.filter(c => c.gem_level === 'forte').length;
+  document.getElementById('s-buona').textContent = allCoins.filter(c => c.gem_level === 'buona').length;
+  const avg = allCoins.length ? Math.round(allCoins.reduce((a,c) => a+c.gem_score,0)/allCoins.length) : 0;
+  document.getElementById('s-avg').textContent = avg;
+}
+
+function renderGems() {
+  if (!allCoins.length) return;
+  const filter = document.getElementById('gems-filter').value;
+  const sort   = document.getElementById('gems-sort').value;
+
+  let coins = allCoins.filter(c => {
+    if (filter === 'forte') return c.gem_level === 'forte';
+    if (filter === 'buona') return c.gem_level === 'buona';
+    if (filter === 'top')   return c.gem_level !== 'watch';
+    return true;
+  });
+  coins.sort((a,b) => sort === 'risk_asc' ? a.risk_score - b.risk_score : (b[sort]||0) - (a[sort]||0));
+
+  if (!coins.length) {
+    document.getElementById('gems-grid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)">Nessuna gemma con questi filtri</div>';
+    return;
+  }
+
+  document.getElementById('gems-grid').innerHTML = coins.map(c => {
+    const lvl = c.gem_level;
+    const sc  = c.gem_score;
+    const col = lvl==='forte'?'var(--green)':lvl==='buona'?'var(--gold)':'var(--muted)';
+    const badgeTxt = lvl==='forte'?'🔥 FORTE':lvl==='buona'?'⭐ BUONA':'👁 WATCH';
+    return `<div class="gem-card gem-${lvl}">
+      <div class="gem-hdr">
+        <div class="gem-coin">
+          <img class="gem-img" src="${c.image}" onerror="this.style.display='none'" loading="lazy">
+          <div>
+            <div class="gem-sym">${c.symbol.toUpperCase()}</div>
+            <div class="gem-name">${c.name}</div>
+          </div>
+        </div>
+        <span class="badge badge-${lvl}">${badgeTxt}</span>
+      </div>
+      <div class="score-row">
+        <div class="score-num" style="color:${col}">${sc}</div>
+        <div class="bar-wrap">
+          <div class="bar"><div class="bar-fill ${lvl}" style="width:${sc}%"></div></div>
+          <div class="bar-lbl">GEM SCORE · Rischio ${c.risk_score}/10 · $${fmtPrice(c.current_price)}</div>
+        </div>
+      </div>
+      <div class="metrics">
+        <div class="metric"><div class="metric-l">1h</div><div class="metric-v ${c.p1h>=0?'up':'down'}">${fmt(c.p1h)}%</div></div>
+        <div class="metric"><div class="metric-l">24h</div><div class="metric-v ${c.p24h>=0?'up':'down'}">${fmt(c.p24h)}%</div></div>
+        <div class="metric"><div class="metric-l">7d</div><div class="metric-v ${c.p7d>=0?'up':'down'}">${fmt(c.p7d)}%</div></div>
+        <div class="metric"><div class="metric-l">Vol/Cap</div><div class="metric-v" style="color:var(--cyan)">${(c.volume_spike*100).toFixed(0)}%</div></div>
+        <div class="metric"><div class="metric-l">Momentum</div><div class="metric-v ${c.momentum>=0?'up':'down'}">${fmt(c.momentum)}</div></div>
+        <div class="metric"><div class="metric-l">Cap</div><div class="metric-v" style="font-size:11px;color:var(--muted)">${c.cat.toUpperCase()}</div></div>
+      </div>
+      <div class="reason">${c.gem_reason}</div>
+    </div>`;
+  }).join('');
+}
+
+function renderTable() {
+  if (!allCoins.length) return;
+  const sort   = document.getElementById('scan-sort').value;
+  const maxR   = parseInt(document.getElementById('scan-risk').value);
+  const search = document.getElementById('scan-search').value.toLowerCase();
+
+  let coins = allCoins.filter(c =>
+    c.risk_score <= maxR &&
+    (!search || c.name.toLowerCase().includes(search) || c.symbol.toLowerCase().includes(search))
+  );
+  coins.sort((a,b) => sort==='risk_asc' ? a.risk_score-b.risk_score : (b[sort]||0)-(a[sort]||0));
+
+  document.getElementById('table-wrap').innerHTML = `
+    <div class="table-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Asset</th><th>Score</th><th>1h</th><th>24h</th><th>7d</th><th>Rischio</th><th>Vol/Cap</th>
+        </tr></thead>
+        <tbody>${coins.slice(0,80).map((c,i) => {
+          const scoreCol = c.gem_level==='forte'?'var(--green)':c.gem_level==='buona'?'var(--gold)':'var(--muted)';
+          const riskCol  = c.risk_score<=3?'var(--green)':c.risk_score<=6?'var(--gold)':'var(--red)';
+          return `<tr>
+            <td style="color:var(--muted);font-size:11px">${i+1}</td>
+            <td><div class="ci"><img class="cimg" src="${c.image}" onerror="this.style.display='none'" loading="lazy">
+              <div><div style="font-weight:700">${c.symbol.toUpperCase()}</div><div style="font-size:10px;color:var(--muted)">${c.name}</div></div></div></td>
+            <td style="color:${scoreCol};font-weight:700">${c.gem_score}</td>
+            <td class="${c.p1h>=0?'up':'down'}">${fmt(c.p1h)}%</td>
+            <td class="${c.p24h>=0?'up':'down'}">${fmt(c.p24h)}%</td>
+            <td class="${c.p7d>=0?'up':'down'}">${fmt(c.p7d)}%</td>
+            <td style="color:${riskCol}">${c.risk_score}/10</td>
+            <td style="color:var(--cyan)">${(c.volume_spike*100).toFixed(1)}%</td>
+          </tr>`;
+        }).join('')}</tbody>
+      </table>
+    </div>`;
+}
+
+function fmt(n) {
+  if (n == null) return '—';
+  return (n >= 0 ? '+' : '') + n.toFixed(2);
+}
+function fmtPrice(p) {
   if (!p) return '—';
-  if (p >= 1000) return p.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:0});
-  if (p >= 1)    return p.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:4});
-  if (p >= 0.01) return p.toFixed(4);
+  if (p >= 1000) return p.toLocaleString('en-US',{maximumFractionDigits:0});
+  if (p >= 1)    return p.toFixed(2);
+  if (p >= 0.001) return p.toFixed(4);
   return p.toFixed(6);
 }
-function formatPct(p) {
-  if (p == null) return '—';
-  return (p >= 0 ? '+' : '') + p.toFixed(2) + '%';
-}
-function formatVol(v) {
-  if (!v) return '—';
-  if (v >= 1e9) return '$' + (v/1e9).toFixed(1) + 'B';
-  if (v >= 1e6) return '$' + (v/1e6).toFixed(0) + 'M';
-  return '$' + (v/1e3).toFixed(0) + 'K';
-}
-function formatUSDT(v) { return v.toFixed(2); }
-function pctClass(p) { return p > 0 ? 'up' : p < 0 ? 'down' : 'neutral'; }
-
-// ─── INIT ────────────────────────────────────────────────────
-// Ask notification permission
-if ('Notification' in window && Notification.permission === 'default') {
-  Notification.requestPermission();
+function toast(msg, dur=2500) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), dur);
 }
 
-// Auto-refresh every 3 minutes
+// Auto-refresh every 5 min
+setInterval(loadData, 5 * 60 * 1000);
 loadData();
-setInterval(loadData, 3 * 60 * 1000);
 </script>
 </body>
 </html>
