@@ -1,0 +1,19 @@
+ROUTING HUB 81+. COME DECIDO A QUALE HUB VA UN IDEA
+
+REGOLA.
+Leggo l idea. Cerco le parole chiave. Assegno l HUB. Aggiorno il file HUB_XX.TXT. Se non e chiaro, lo metto in 08 BONIFICA e chiedo conferma.
+
+ESEMPI DI INSTRADAMENTO.
+Idea su prezzi, margini, cashflow. Va in HUB_11 ECONOMIA E CASHFLOW.
+Idea su provvigioni, rank, regola 50. Va in HUB_28 REGOLE PV PVPLUS CAREER EQ.
+Idea su corsi, DVR, HACCP, privacy. Va in HUB_04 HUB2 SICURISSIMO.
+Idea su lead, prospect, OSINT. Va in HUB_21 SCOUT81 E LEAD GENERATION.
+Idea su post, ads, funnel, copy. Va in HUB_06 MARKETING E CONTENUTI.
+Idea su bandi, Smart and Start, Invitalia. Va in HUB_24 STARTUP INNOVATIVA E BANDI.
+Idea su territorio, franchising, point. Va in HUB_29 SICURISSIMO POINT81 E FRANCHISING.
+Idea su codice, database, API, deploy. Va in HUB_03 HUB1 oppure HUB_27 DATA ML.
+Idea su visual, logo, mockup. Va in HUB_10 VISUAL MASTER.
+Idea legale o regolamento. Va in HUB_02 LEGALE E REGOLAMENTI.
+
+USCITA.
+Ogni aggiornamento HUB aggiunge una riga datata nella sezione CONTENUTO del file scelto. Niente trattini, solo virgole e punti.

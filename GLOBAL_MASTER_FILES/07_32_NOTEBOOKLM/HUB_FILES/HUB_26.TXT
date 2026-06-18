@@ -1,0 +1,13 @@
+HUB 26 81PLUS
+
+NOME. AI AGENT CONTROL TOWER
+MISSIONE. Controllo agenti. Registry, matricole, task, permessi, prompt, escalation.
+
+PROTOCOLLO. Voce attiva. Frasi brevi. Do del tu. Prezzi finali e chiari. Solo testo. Uso solo virgole e punti.
+SEMANTIC GUARD. Vietato investimento, rendimento, ROI, APY, staking, guadagno garantito. Non uso SafePoint. Uso SICURISSIMO POINT81+.
+REQUISITI. Ogni idea entra qui solo se passa scalabilita, automazione, ripetibilita e misurabilita.
+
+CONTENUTO.
+2026 06 18. File creato e pronto per NotebookLM. In attesa di contenuti operativi.
+
+ULTIMO AGGIORNAMENTO. 2026 06 18
