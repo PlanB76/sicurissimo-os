@@ -133,6 +133,22 @@ tr:hover td{background:rgba(255,255,255,.02)}
 .row{display:flex;gap:10px}
 .row .field{flex:1}
 .chain-badge{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba(0,217,255,.1);color:var(--cyan)}
+
+/* WALLET MODAL */
+#wallet-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9000;align-items:center;justify-content:center}
+#wallet-modal.open{display:flex}
+.modal-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:24px;width:100%;max-width:420px;box-shadow:0 24px 80px rgba(0,0,0,.6)}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:6px}
+.modal-sub{font-size:12px;color:var(--muted);margin-bottom:20px}
+.wallet-option{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .15s;margin-bottom:10px;background:var(--card2)}
+.wallet-option:hover{border-color:var(--orange);background:var(--card3)}
+.wallet-option:last-child{margin-bottom:0}
+.wallet-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.wallet-info .wname{font-weight:700;font-size:14px}
+.wallet-info .wdesc{font-size:11px;color:var(--muted);margin-top:2px}
+.wallet-badge-detected{font-size:10px;font-weight:700;padding:2px 6px;border-radius:3px;background:rgba(63,191,107,.15);color:var(--green);margin-left:8px}
+.modal-close{position:absolute;top:16px;right:16px;background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;padding:4px}
+.modal-note{font-size:11px;color:var(--muted);text-align:center;margin-top:14px;line-height:1.5}
 </style>
 </head>
 <body>
@@ -150,7 +166,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <option value="56">BNB Chain</option>
       <option value="42161">Arbitrum</option>
     </select>
-    <button class="btn-orange btn-sm" id="connect-btn" onclick="connectWallet()">Connetti MetaMask</button>
+    <button class="btn-orange btn-sm" id="connect-btn" onclick="openWalletModal()">🔗 Connetti Wallet</button>
     <span id="clock" style="font-size:12px;color:var(--muted)"></span>
   </div>
 </header>
@@ -166,13 +182,14 @@ tr:hover td{background:rgba(255,255,255,.02)}
 
   <!-- TAB: PORTFOLIO -->
   <div id="tab-portfolio" class="tab-content active">
-    <div class="disclaimer"><strong>Uso personale.</strong> Connetti solo il wallet che usi per il trading. Non inserire mai seed phrase. Ogni swap richiede la tua firma su MetaMask. Nessun dato viene trasmesso a server esterni.</div>
+    <div class="disclaimer"><strong>Uso personale.</strong> Connetti solo il wallet che usi per il trading. Non inserire mai seed phrase. Ogni swap richiede la tua firma nel tuo wallet. Nessun dato viene trasmesso a server esterni.</div>
 
     <div id="portfolio-empty" class="panel" style="text-align:center;padding:40px">
-      <div style="font-size:40px;margin-bottom:12px">🦊</div>
-      <div style="font-size:16px;font-weight:700;margin-bottom:8px">Connetti MetaMask per iniziare</div>
-      <div style="color:var(--muted);margin-bottom:20px;font-size:13px">Leggi i tuoi bilanci on-chain in tempo reale su ETH, Polygon, BNB Chain o Arbitrum.</div>
-      <button class="btn-orange" onclick="connectWallet()">Connetti Wallet</button>
+      <div style="font-size:40px;margin-bottom:12px">🔗</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">Connetti il tuo wallet per iniziare</div>
+      <div style="color:var(--muted);margin-bottom:6px;font-size:13px">Supporta TokenPocket, MetaMask, Trust Wallet, OKX e qualsiasi wallet EVM.</div>
+      <div style="color:var(--muted);margin-bottom:20px;font-size:12px">ETH · Polygon · BNB Chain · Arbitrum</div>
+      <button class="btn-orange" onclick="openWalletModal()">🔗 Connetti Wallet</button>
     </div>
 
     <div id="portfolio-content" style="display:none">
@@ -197,7 +214,7 @@ tr:hover td{background:rgba(255,255,255,.02)}
       <div>
         <div class="panel" style="margin-bottom:16px">
           <div class="panel-title"><span class="icon">⚡</span>Swap Rapido</div>
-          <div class="disclaimer" style="font-size:11px">Lo swap si apre su 1inch con i parametri pre-compilati. Tu firmi su MetaMask. Controlla sempre slippage e gas prima di confermare.</div>
+          <div class="disclaimer" style="font-size:11px">Lo swap si apre su 1inch con i parametri pre-compilati. Firmi con TokenPocket o il tuo wallet. Controlla sempre slippage e gas prima di confermare.</div>
 
           <div class="swap-box">
             <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600">VENDI</div>
@@ -472,6 +489,22 @@ tr:hover td{background:rgba(255,255,255,.02)}
   </div>
 </main>
 
+<!-- WALLET MODAL -->
+<div id="wallet-modal">
+  <div class="modal-box" style="position:relative">
+    <button class="modal-close" onclick="closeWalletModal()">✕</button>
+    <div class="modal-title">Connetti il tuo Wallet</div>
+    <div class="modal-sub" id="modal-sub">Scegli il tuo wallet. Ogni operazione richiede la tua firma.</div>
+
+    <div id="wallet-options"></div>
+
+    <div class="modal-note">
+      Non condividere mai la seed phrase o la chiave privata con nessuno.<br>
+      Questa app non raccoglie dati. Tutto gira nel tuo browser.
+    </div>
+  </div>
+</div>
+
 <div id="toast"></div>
 <audio id="alert-sound" preload="auto">
   <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgmsKwjlQxLF+Vv7OJTSsnW5G6s4dGJiJVjLaqg0AhHlCGsqR/OyAbTYGvoXo2GBhHdqmbdS8SEl90jZd1LhAQXnCPk3UrDg1YaYuQbyoKCVFjiIxpJQgGS16FiGIgBQVGVH+FXBsBBD9MeH9WFgADP0ZufFERAAJCRW95Sw0AAkJHcnZFCgACREpudD8HAQNHSmtzOAYBBEtMaXAvBQEFTk9nay4EAgZQUGZmKAQDB1NSY2IkBAMIVFNiYCIEAwlVVF9dHwQDClZVXVseBQMKV1ZbWR0EAwtZV1dYGwQCCllYVVUZAwIKWllTUhYDAgpbWlFQFAMBCltbT04SAAEKY11OTBAAAQtcXk1LDgABC15fS0kMAAEMYGBJRwsAAQxhYkhFCQABDWJjR0MIAAENZGRGQQYAAg5lZkVABQACDmdnREAEAAIOaGhCPgMAAg9paUE9AgADD2pqPzsCAQMQa2s7OQEBBBB" type="audio/wav">
@@ -527,39 +560,158 @@ function showTab(id) {
   if (id === 'chart') startWebSocket();
 }
 
-// ─── WALLET ────────────────────────────────────────────────────
-async function connectWallet() {
-  if (!window.ethereum) {
-    toast('MetaMask non rilevato. Installa MetaMask su metamask.io', 'error');
+// ─── WALLET MODAL ──────────────────────────────────────────────
+function openWalletModal() {
+  const detected = detectProviders();
+  const opts = [
+    {
+      id: 'tokenpocket',
+      icon: '🟣',
+      bg: '#7B4FD4',
+      name: 'TokenPocket',
+      desc: 'Multi-chain · EVM + Tron + Solana',
+      detected: detected.tokenpocket || detected.injected,
+      action: () => connectWithInjected(),
+    },
+    {
+      id: 'metamask',
+      icon: '🦊',
+      bg: '#F6851B',
+      name: 'MetaMask',
+      desc: 'Browser extension · Mobile app',
+      detected: detected.metamask,
+      action: () => connectWithInjected(),
+    },
+    {
+      id: 'trust',
+      icon: '🛡️',
+      bg: '#3375BB',
+      name: 'Trust Wallet',
+      desc: 'Multi-chain mobile wallet',
+      detected: detected.trust,
+      action: () => connectWithInjected(),
+    },
+    {
+      id: 'okx',
+      icon: '⬛',
+      bg: '#2A2A2A',
+      name: 'OKX Wallet',
+      desc: 'Exchange wallet · DeFi',
+      detected: detected.okx,
+      action: () => connectWithInjected(),
+    },
+    {
+      id: 'injected',
+      icon: '🔌',
+      bg: '#444',
+      name: 'Wallet rilevato',
+      desc: 'Usa il wallet attivo nel browser',
+      detected: detected.injected && !detected.metamask && !detected.tokenpocket,
+      action: () => connectWithInjected(),
+    },
+    {
+      id: 'readonly',
+      icon: '👁️',
+      bg: '#1E1E2E',
+      name: 'Solo lettura (indirizzo)',
+      desc: 'Inserisci un indirizzo per monitorare',
+      detected: false,
+      action: () => connectReadOnly(),
+    },
+  ];
+
+  const visibleOpts = opts.filter(o => o.id === 'readonly' || o.detected || ['tokenpocket','metamask'].includes(o.id));
+
+  document.getElementById('wallet-options').innerHTML = visibleOpts.map(o => `
+    <div class="wallet-option" onclick="walletModalAction('${o.id}')">
+      <div class="wallet-icon" style="background:${o.bg}">${o.icon}</div>
+      <div class="wallet-info">
+        <div class="wname">${o.name}${o.detected ? '<span class="wallet-badge-detected">RILEVATO</span>' : ''}</div>
+        <div class="wdesc">${o.desc}</div>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('wallet-modal').classList.add('open');
+}
+
+function closeWalletModal() {
+  document.getElementById('wallet-modal').classList.remove('open');
+}
+
+function detectProviders() {
+  const eth = window.ethereum;
+  return {
+    injected:     !!eth,
+    metamask:     !!(eth?.isMetaMask && !eth?.isTokenPocket),
+    tokenpocket:  !!(eth?.isTokenPocket || window.tokenpocket),
+    trust:        !!(eth?.isTrust || eth?.isTrustWallet),
+    okx:          !!(eth?.isOKExWallet || window.okexchain),
+  };
+}
+
+const _walletActions = {};
+function walletModalAction(id) {
+  closeWalletModal();
+  if (id === 'readonly') { connectReadOnly(); return; }
+  connectWithInjected();
+}
+
+async function connectWithInjected() {
+  const provider = window.ethereum || window.tokenpocket?.ethereum;
+  if (!provider) {
+    toast('Nessun wallet rilevato. Apri questa pagina dentro TokenPocket (Browser integrato) oppure installa un\'estensione wallet.', 'error');
+    setTimeout(() => {
+      if (confirm('Vuoi aprire questa pagina dentro TokenPocket?\n\nCopia il link e incollalo nel browser integrato di TokenPocket.')) {
+        navigator.clipboard?.writeText(location.href).then(() => toast('Link copiato. Incollalo nel browser di TokenPocket.', 'info'));
+      }
+    }, 300);
     return;
   }
   try {
-    const accounts = await window.ethereum.request({method:'eth_requestAccounts'});
-    S.provider = new ethers.BrowserProvider(window.ethereum);
+    const accounts = await provider.request({method:'eth_requestAccounts'});
+    S.provider = new ethers.BrowserProvider(provider);
     S.signer = await S.provider.getSigner();
     S.wallet = accounts[0];
     const net = await S.provider.getNetwork();
     S.chainId = Number(net.chainId);
     updateWalletUI();
     await refreshBalances();
-    toast('Wallet connesso: ' + shortAddr(S.wallet), 'success');
-    window.ethereum.on('accountsChanged', a => { S.wallet = a[0]; updateWalletUI(); refreshBalances(); });
-    window.ethereum.on('chainChanged', () => location.reload());
+    const wname = provider.isTokenPocket ? 'TokenPocket' : provider.isMetaMask ? 'MetaMask' : provider.isTrust ? 'Trust Wallet' : 'Wallet';
+    toast(wname + ' connesso: ' + shortAddr(S.wallet), 'success');
+    provider.on('accountsChanged', a => { S.wallet = a[0]; updateWalletUI(); refreshBalances(); });
+    provider.on('chainChanged', () => location.reload());
     if (Notification.permission === 'default') Notification.requestPermission();
   } catch(e) {
-    toast('Connessione annullata o errore: ' + e.message, 'error');
+    toast('Connessione annullata: ' + (e.message || e), 'error');
   }
 }
 
-function updateWalletUI() {
-  document.getElementById('w-dot').className = 'dot dot-green';
-  document.getElementById('w-addr').textContent = shortAddr(S.wallet);
-  document.getElementById('connect-btn').textContent = '✓ Connesso';
-  document.getElementById('connect-btn').disabled = true;
+function connectReadOnly() {
+  const addr = prompt('Inserisci l\'indirizzo wallet (0x...):\n\nSolo lettura — non puoi firmare transazioni.');
+  if (!addr || !addr.startsWith('0x') || addr.length !== 42) {
+    toast('Indirizzo non valido', 'error'); return;
+  }
+  S.wallet = addr;
+  S.provider = new ethers.JsonRpcProvider('https://eth.llamarpc.com');
+  updateWalletUI(true);
+  refreshBalances();
+  toast('Wallet in sola lettura: ' + shortAddr(addr), 'info');
+}
+
+// Alias per compatibilità
+function connectWallet() { openWalletModal(); }
+
+function updateWalletUI(readOnly) {
+  document.getElementById('w-dot').className = 'dot ' + (readOnly ? 'dot-yellow' : 'dot-green');
+  document.getElementById('w-addr').textContent = shortAddr(S.wallet) + (readOnly ? ' 👁️' : '');
+  document.getElementById('connect-btn').textContent = readOnly ? '👁️ Solo lettura' : '✓ Connesso';
+  document.getElementById('connect-btn').disabled = !readOnly;
+  if (!readOnly) document.getElementById('connect-btn').onclick = null;
   document.getElementById('portfolio-empty').style.display = 'none';
   document.getElementById('portfolio-content').style.display = 'block';
-  const chain = CHAINS[S.chainId];
-  document.getElementById('chain-select').value = S.chainId;
+  if (S.chainId && document.getElementById('chain-select')) {
+    document.getElementById('chain-select').value = S.chainId;
+  }
 }
 
 async function refreshBalances() {
@@ -1131,8 +1283,12 @@ document.getElementById('default-sl').value = S.riskParams.sl;
 document.getElementById('default-tp').value = S.riskParams.tp;
 document.getElementById('slippage').value = S.riskParams.slippage;
 
-// Auto-detect MetaMask
-if (window.ethereum?.selectedAddress) connectWallet();
+// Auto-connect se già autorizzato
+if (window.ethereum?.selectedAddress) {
+  connectWithInjected();
+} else if (window.tokenpocket?.ethereum?.selectedAddress) {
+  connectWithInjected();
+}
 </script>
 </body>
 </html>
