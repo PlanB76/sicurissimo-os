@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crypto Wallet & Trade — Mirco</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.1/ethers.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+:root {
+  --black:#05050A; --card:#0F0F18; --card2:#16161F; --card3:#1C1C28;
+  --orange:#E8501A; --gold:#FFD24A; --green:#3FBF6B; --cyan:#00D9FF;
+  --red:#FF4444; --text:#E8E8F0; --muted:#6B6B80; --border:#1E1E2E;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--black);color:var(--text);font-family:'DM Sans','Segoe UI',sans-serif;font-size:14px;min-height:100vh}
+a{color:var(--cyan);text-decoration:none}
+button{cursor:pointer;border:none;border-radius:6px;font-family:inherit;font-size:13px;font-weight:600;padding:8px 16px;transition:all .15s}
+button:hover{opacity:.85}
+button:disabled{opacity:.4;cursor:not-allowed}
+.btn-orange{background:var(--orange);color:#fff}
+.btn-green{background:var(--green);color:#000}
+.btn-red{background:var(--red);color:#fff}
+.btn-cyan{background:var(--cyan);color:#000}
+.btn-ghost{background:var(--card2);color:var(--text);border:1px solid var(--border)}
+.btn-sm{padding:5px 12px;font-size:12px}
+input,select{background:var(--card2);color:var(--text);border:1px solid var(--border);border-radius:6px;padding:8px 12px;font-size:13px;font-family:inherit;width:100%}
+input:focus,select:focus{outline:none;border-color:var(--cyan)}
+label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:600;letter-spacing:.3px}
+
+/* HEADER */
+header{padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;position:sticky;top:0;z-index:100;background:var(--black)}
+.logo{font-family:'Impact',sans-serif;font-size:20px;letter-spacing:2px;color:var(--orange)}
+.logo span{color:var(--gold)}
+.header-right{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* TABS */
+.tabs{display:flex;gap:2px;padding:12px 20px 0;border-bottom:1px solid var(--border)}
+.tab{padding:9px 18px;border-radius:8px 8px 0 0;cursor:pointer;font-size:13px;font-weight:600;color:var(--muted);border:1px solid transparent;border-bottom:none;transition:all .15s}
+.tab:hover{color:var(--text)}
+.tab.active{background:var(--card);color:var(--text);border-color:var(--border)}
+.tab-content{display:none;padding:20px}
+.tab-content.active{display:block}
+
+/* GRID */
+main{max-width:1600px;margin:0 auto}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+@media(max-width:900px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* PANELS */
+.panel{background:var(--card);border-radius:10px;border:1px solid var(--border);padding:16px}
+.panel-title{font-size:14px;font-weight:700;margin-bottom:14px;display:flex;align-items:center;justify-content:space-between}
+.panel-title .icon{margin-right:6px}
+
+/* WALLET STATUS */
+.wallet-badge{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--card2);border-radius:8px;border:1px solid var(--border);font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dot-green{background:var(--green)}
+.dot-red{background:var(--red)}
+.dot-yellow{background:var(--gold);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* BALANCE CARDS */
+.balance-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:10px;margin-bottom:14px}
+.balance-card{background:var(--card2);border-radius:8px;padding:12px;border:1px solid var(--border)}
+.balance-symbol{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.5px}
+.balance-amount{font-size:20px;font-weight:700;margin:2px 0;font-variant-numeric:tabular-nums}
+.balance-usd{font-size:11px;color:var(--muted)}
+
+/* POSITIONS TABLE */
+table{width:100%;border-collapse:collapse}
+th{padding:8px 12px;text-align:left;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #0D0D18;font-size:13px}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(255,255,255,.02)}
+
+/* TRADE PANEL */
+.swap-box{background:var(--card2);border-radius:10px;padding:16px;border:1px solid var(--border)}
+.swap-row{display:flex;gap:10px;align-items:flex-end;margin-bottom:12px}
+.swap-amount-wrap{flex:1}
+.swap-amount{font-size:22px;font-weight:700;padding:12px 16px}
+.token-select{width:140px;font-weight:700;font-size:14px}
+.swap-arrow{text-align:center;font-size:20px;color:var(--muted);padding:8px 0;cursor:pointer;user-select:none}
+.swap-arrow:hover{color:var(--cyan)}
+.price-impact{font-size:12px;padding:8px 12px;border-radius:6px;margin-bottom:12px}
+.impact-ok{background:rgba(63,191,107,.1);color:var(--green)}
+.impact-warn{background:rgba(255,210,74,.1);color:var(--gold)}
+.impact-danger{background:rgba(255,68,68,.1);color:var(--red)}
+.swap-btn-row{display:flex;gap:10px}
+.swap-btn-row button{flex:1;padding:14px;font-size:15px}
+
+/* CHART */
+.chart-wrap{position:relative;height:240px}
+.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.price-display{font-size:24px;font-weight:700;font-variant-numeric:tabular-nums}
+.price-change{font-size:13px;font-weight:600;padding:3px 8px;border-radius:4px}
+.up{color:var(--green)}
+.down{color:var(--red)}
+.up-bg{background:rgba(63,191,107,.1);color:var(--green)}
+.down-bg{background:rgba(255,68,68,.1);color:var(--red)}
+.tf-btns{display:flex;gap:4px}
+.tf-btn{padding:3px 8px;font-size:11px;border-radius:4px;cursor:pointer;background:var(--card3);color:var(--muted);border:none}
+.tf-btn.active{background:var(--orange);color:#fff}
+
+/* ALERTS */
+.alert-item{background:var(--card2);border-radius:8px;padding:12px;border:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+.alert-item.triggered{border-color:var(--green);background:rgba(63,191,107,.05);animation:glow .5s ease}
+.alert-item.triggered-red{border-color:var(--red);background:rgba(255,68,68,.05)}
+@keyframes glow{0%{box-shadow:0 0 0 0 rgba(63,191,107,.4)}100%{box-shadow:0 0 0 8px rgba(63,191,107,0)}}
+.alert-type{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700}
+.type-tp{background:rgba(63,191,107,.15);color:var(--green)}
+.type-sl{background:rgba(255,68,68,.15);color:var(--red)}
+.type-pct{background:rgba(0,217,255,.15);color:var(--cyan)}
+
+/* DISCLAIMER */
+.disclaimer{background:#1A1208;border:1px solid #4A3000;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:11px;color:#C8A040;line-height:1.5}
+
+/* STATS ROW */
+.stats-row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.stat-pill{background:var(--card2);border-radius:6px;padding:8px 14px;border:1px solid var(--border)}
+.stat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.stat-value{font-size:16px;font-weight:700;margin-top:1px}
+
+/* MISC */
+.empty-state{text-align:center;padding:30px;color:var(--muted);font-size:13px}
+.tag{display:inline-flex;align-items:center;padding:2px 7px;border-radius:3px;font-size:10px;font-weight:700;margin-left:4px}
+.divider{height:1px;background:var(--border);margin:12px 0}
+.note{font-size:11px;color:var(--muted);line-height:1.5;margin-top:8px}
+#toast{position:fixed;bottom:24px;right:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;max-width:320px;z-index:9999;transform:translateY(100px);opacity:0;transition:all .3s;box-shadow:0 8px 32px rgba(0,0,0,.5)}
+#toast.show{transform:translateY(0);opacity:1}
+.field{margin-bottom:12px}
+.row{display:flex;gap:10px}
+.row .field{flex:1}
+.chain-badge{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:700;background:rgba(0,217,255,.1);color:var(--cyan)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">CRYPTO <span>WALLET</span> & TRADE</div>
+  <div class="header-right">
+    <div id="wallet-badge" class="wallet-badge">
+      <div class="dot dot-red" id="w-dot"></div>
+      <span id="w-addr">Wallet non connesso</span>
+    </div>
+    <select id="chain-select" style="width:auto" onchange="switchChain()">
+      <option value="1">Ethereum</option>
+      <option value="137">Polygon</option>
+      <option value="56">BNB Chain</option>
+      <option value="42161">Arbitrum</option>
+    </select>
+    <button class="btn-orange btn-sm" id="connect-btn" onclick="connectWallet()">Connetti MetaMask</button>
+    <span id="clock" style="font-size:12px;color:var(--muted)"></span>
+  </div>
+</header>
+
+<main>
+  <div class="tabs">
+    <div class="tab active" onclick="showTab('portfolio')">📊 Portfolio</div>
+    <div class="tab" onclick="showTab('trade')">⚡ Trade</div>
+    <div class="tab" onclick="showTab('chart')">📈 Live Chart</div>
+    <div class="tab" onclick="showTab('alerts')">🔔 Alert & Auto</div>
+    <div class="tab" onclick="showTab('history')">📋 Storico</div>
+  </div>
+
+  <!-- TAB: PORTFOLIO -->
+  <div id="tab-portfolio" class="tab-content active">
+    <div class="disclaimer"><strong>Uso personale.</strong> Connetti solo il wallet che usi per il trading. Non inserire mai seed phrase. Ogni swap richiede la tua firma su MetaMask. Nessun dato viene trasmesso a server esterni.</div>
+
+    <div id="portfolio-empty" class="panel" style="text-align:center;padding:40px">
+      <div style="font-size:40px;margin-bottom:12px">🦊</div>
+      <div style="font-size:16px;font-weight:700;margin-bottom:8px">Connetti MetaMask per iniziare</div>
+      <div style="color:var(--muted);margin-bottom:20px;font-size:13px">Leggi i tuoi bilanci on-chain in tempo reale su ETH, Polygon, BNB Chain o Arbitrum.</div>
+      <button class="btn-orange" onclick="connectWallet()">Connetti Wallet</button>
+    </div>
+
+    <div id="portfolio-content" style="display:none">
+      <div class="stats-row" id="portfolio-stats"></div>
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-title"><span><span class="icon">💼</span>Bilanci Wallet</span> <button class="btn-ghost btn-sm" onclick="refreshBalances()">⟳ Aggiorna</button></div>
+        <div class="balance-grid" id="balance-grid"></div>
+        <div class="note">I bilanci sono letti direttamente dalla blockchain. Nessun dato e memorizzato localmente.</div>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span><span class="icon">📌</span>Posizioni Aperte</span></div>
+        <div id="positions-table-wrap">
+          <div class="empty-state">Nessuna posizione aperta. Usa il tab Trade per aprirne una.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: TRADE -->
+  <div id="tab-trade" class="tab-content">
+    <div class="grid2" style="max-width:900px;margin:0 auto">
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title"><span class="icon">⚡</span>Swap Rapido</div>
+          <div class="disclaimer" style="font-size:11px">Lo swap si apre su 1inch con i parametri pre-compilati. Tu firmi su MetaMask. Controlla sempre slippage e gas prima di confermare.</div>
+
+          <div class="swap-box">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600">VENDI</div>
+            <div class="swap-row">
+              <div class="swap-amount-wrap">
+                <input type="number" class="swap-amount" id="from-amount" value="500" placeholder="0.00" oninput="updateSwapPreview()">
+              </div>
+              <select class="token-select" id="from-token" onchange="updateSwapPreview()">
+                <option value="USDT">USDT</option>
+                <option value="USDC">USDC</option>
+                <option value="ETH">ETH</option>
+                <option value="BNB">BNB</option>
+                <option value="MATIC">MATIC</option>
+              </select>
+            </div>
+            <div class="swap-arrow" onclick="flipTokens()">⇅</div>
+            <div style="font-size:12px;color:var(--muted);margin-bottom:10px;font-weight:600">RICEVI (stimato)</div>
+            <div class="swap-row">
+              <div class="swap-amount-wrap">
+                <input type="text" class="swap-amount" id="to-amount" placeholder="0.00" readonly style="opacity:.7">
+              </div>
+              <select class="token-select" id="to-token" onchange="updateSwapPreview()">
+                <option value="ETH">ETH</option>
+                <option value="BTC">BTC (WBTC)</option>
+                <option value="SOL">SOL</option>
+                <option value="MATIC">MATIC</option>
+                <option value="ARB">ARB</option>
+                <option value="OP">OP</option>
+                <option value="LINK">LINK</option>
+                <option value="UNI">UNI</option>
+                <option value="USDT">USDT</option>
+                <option value="USDC">USDC</option>
+              </select>
+            </div>
+            <div id="price-impact-row" class="price-impact impact-ok" style="display:none"></div>
+            <div class="swap-btn-row" style="margin-top:14px">
+              <button class="btn-green" onclick="executeSwap('buy')">🟢 BUY — Apri su 1inch</button>
+              <button class="btn-red" onclick="executeSwap('sell')">🔴 SELL — Apri su 1inch</button>
+            </div>
+          </div>
+          <div class="note" style="margin-top:12px">1inch trova automaticamente il percorso di swap piu conveniente. Il prezzo finale dipende dalla liquidita del pool al momento della firma.</div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="icon">💱</span>Apri anche su altri DEX</div>
+          <div style="display:flex;flex-direction:column;gap:8px" id="dex-links"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title"><span class="icon">📊</span>Preview Trade</div>
+          <div id="trade-preview">
+            <div class="empty-state" style="padding:20px">Compila il form per vedere il preview</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="icon">⚙️</span>Parametri Rischio</div>
+          <div class="field">
+            <label>Slippage tolleranza (%)</label>
+            <select id="slippage">
+              <option value="0.5">0.5% — Conservativo</option>
+              <option value="1" selected>1% — Standard</option>
+              <option value="2">2% — Permissivo</option>
+              <option value="5">5% — Alta volatilita</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Stop-Loss automatico (% perdita max)</label>
+            <input type="number" id="default-sl" value="10" min="1" max="50" placeholder="es. 10">
+          </div>
+          <div class="field">
+            <label>Take-Profit automatico (% guadagno target)</label>
+            <input type="number" id="default-tp" value="15" min="1" max="200" placeholder="es. 15">
+          </div>
+          <button class="btn-cyan btn-sm" style="width:100%" onclick="applyRiskParams()">Salva parametri</button>
+          <div class="note">I valori vengono usati come default quando apri una nuova posizione dal tab Alert.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: CHART -->
+  <div id="tab-chart" class="tab-content">
+    <div class="panel" style="margin-bottom:16px">
+      <div style="display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:14px">
+        <div>
+          <label>Asset da monitorare</label>
+          <select id="chart-symbol" onchange="changeChartSymbol()" style="width:180px">
+            <option value="BTCUSDT">Bitcoin (BTC)</option>
+            <option value="ETHUSDT">Ethereum (ETH)</option>
+            <option value="BNBUSDT">BNB</option>
+            <option value="SOLUSDT">Solana (SOL)</option>
+            <option value="MATICUSDT">Polygon (MATIC)</option>
+            <option value="ARBUSDT">Arbitrum (ARB)</option>
+            <option value="OPUSDT">Optimism (OP)</option>
+            <option value="LINKUSDT">Chainlink (LINK)</option>
+            <option value="UNIUSDT">Uniswap (UNI)</option>
+            <option value="AVAXUSDT">Avalanche (AVAX)</option>
+            <option value="DOTUSDT">Polkadot (DOT)</option>
+            <option value="ADAUSDT">Cardano (ADA)</option>
+          </select>
+        </div>
+        <div class="tf-btns" id="tf-btns">
+          <span class="tf-btn active" onclick="setTF('1m')">1m</span>
+          <span class="tf-btn" onclick="setTF('5m')">5m</span>
+          <span class="tf-btn" onclick="setTF('15m')">15m</span>
+          <span class="tf-btn" onclick="setTF('1h')">1h</span>
+          <span class="tf-btn" onclick="setTF('4h')">4h</span>
+          <span class="tf-btn" onclick="setTF('1d')">1D</span>
+        </div>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:10px">
+          <div class="dot" id="ws-dot" style="background:var(--red)"></div>
+          <span id="ws-status" style="font-size:12px;color:var(--muted)">WebSocket disconnesso</span>
+        </div>
+      </div>
+      <div class="chart-header">
+        <div>
+          <div id="chart-name" style="font-size:13px;color:var(--muted)">Bitcoin / USDT</div>
+          <div class="price-display" id="live-price">$—</div>
+        </div>
+        <div style="text-align:right">
+          <div><span class="price-change" id="price-change-24h">—</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:4px">24h High: <span id="high-24h">—</span> · Low: <span id="low-24h">—</span></div>
+          <div style="font-size:11px;color:var(--muted);margin-top:2px">Vol 24h: <span id="vol-24h">—</span></div>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <canvas id="price-chart"></canvas>
+      </div>
+    </div>
+
+    <div class="grid2">
+      <div class="panel">
+        <div class="panel-title"><span class="icon">🎯</span>Livelli Chiave</div>
+        <div id="key-levels">
+          <div class="empty-state" style="padding:20px">In attesa di dati sufficienti...</div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-title"><span class="icon">📊</span>Indicatori Live</div>
+        <div id="indicators-panel">
+          <div class="empty-state" style="padding:20px">In attesa di dati sufficienti...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ALERTS -->
+  <div id="tab-alerts" class="tab-content">
+    <div class="grid2">
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title"><span class="icon">➕</span>Nuovo Alert / Posizione</div>
+          <div class="row">
+            <div class="field">
+              <label>Asset (simbolo Binance)</label>
+              <select id="alert-asset">
+                <option value="BTCUSDT">BTC</option>
+                <option value="ETHUSDT">ETH</option>
+                <option value="BNBUSDT">BNB</option>
+                <option value="SOLUSDT">SOL</option>
+                <option value="MATICUSDT">MATIC</option>
+                <option value="ARBUSDT">ARB</option>
+                <option value="OPUSDT">OP</option>
+                <option value="LINKUSDT">LINK</option>
+                <option value="UNIUSDT">UNI</option>
+                <option value="AVAXUSDT">AVAX</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>USDT investiti</label>
+              <input type="number" id="alert-amount" value="500" placeholder="500">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label>Prezzo di entrata ($)</label>
+              <input type="number" id="entry-price" placeholder="es. 3200.00" step="any">
+            </div>
+            <div class="field">
+              <label>Prezzo attuale ($)</label>
+              <input type="number" id="current-price-field" placeholder="Auto da WebSocket" step="any">
+            </div>
+          </div>
+          <div class="row">
+            <div class="field">
+              <label>Stop-Loss a $</label>
+              <input type="number" id="sl-price" placeholder="es. 2880.00" step="any">
+            </div>
+            <div class="field">
+              <label>Take-Profit a $</label>
+              <input type="number" id="tp-price" placeholder="es. 3680.00" step="any">
+            </div>
+          </div>
+          <div class="field">
+            <label>Note (opzionale)</label>
+            <input type="text" id="alert-note" placeholder="Motivo del trade, strategia...">
+          </div>
+          <button class="btn-orange" style="width:100%;padding:12px" onclick="addPosition()">+ Aggiungi Posizione e Alert</button>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="icon">⚡</span>Alert Prezzo Semplice</div>
+          <div class="row">
+            <div class="field">
+              <label>Asset</label>
+              <select id="simple-alert-asset">
+                <option value="BTCUSDT">BTC</option><option value="ETHUSDT">ETH</option>
+                <option value="BNBUSDT">BNB</option><option value="SOLUSDT">SOL</option>
+                <option value="MATICUSDT">MATIC</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>Target $</label>
+              <input type="number" id="simple-alert-price" placeholder="es. 50000" step="any">
+            </div>
+            <div class="field" style="max-width:100px">
+              <label>Direzione</label>
+              <select id="simple-alert-dir">
+                <option value="above">↑ Sopra</option>
+                <option value="below">↓ Sotto</option>
+              </select>
+            </div>
+          </div>
+          <button class="btn-cyan btn-sm" style="width:100%" onclick="addSimpleAlert()">+ Alert</button>
+        </div>
+      </div>
+
+      <div>
+        <div class="panel" style="margin-bottom:16px">
+          <div class="panel-title">
+            <span><span class="icon">📌</span>Posizioni & Alert Attivi</span>
+            <span id="alerts-count" style="font-size:12px;color:var(--muted)">0 attivi</span>
+          </div>
+          <div id="alerts-list">
+            <div class="empty-state">Nessun alert attivo. Aggiungine uno dal pannello a sinistra.</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-title"><span class="icon">ℹ️</span>Come funziona l'automazione</div>
+          <div style="font-size:12px;color:var(--muted);line-height:1.7">
+            <p style="margin-bottom:8px"><strong style="color:var(--green)">Quando il prezzo raggiunge il tuo target:</strong></p>
+            <p>1. Suona un alert sonoro e visivo</p>
+            <p>2. Appare una notifica browser</p>
+            <p>3. Compare un bottone SELL/BUY che apre 1inch con i parametri gia compilati</p>
+            <p>4. Tu clicchi Conferma su MetaMask</p>
+            <br>
+            <p><strong style="color:var(--gold)">Perche non e al 100% automatico?</strong></p>
+            <p>L'esecuzione senza firma richiede un server con la chiave privata — rischio inaccettabile. Questa e la versione piu sicura: tu sei sempre in controllo, l'app fa tutto il resto.</p>
+            <br>
+            <p><strong style="color:var(--cyan)">Requisito:</strong> la pagina deve restare aperta nel browser.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: HISTORY -->
+  <div id="tab-history" class="tab-content">
+    <div class="panel">
+      <div class="panel-title">
+        <span><span class="icon">📋</span>Storico Operazioni</span>
+        <button class="btn-ghost btn-sm" onclick="exportHistory()">⬇ Esporta CSV</button>
+      </div>
+      <div id="history-table-wrap">
+        <div class="empty-state">Nessuna operazione registrata. Le operazioni completate appariranno qui.</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div id="toast"></div>
+<audio id="alert-sound" preload="auto">
+  <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgmsKwjlQxLF+Vv7OJTSsnW5G6s4dGJiJVjLaqg0AhHlCGsqR/OyAbTYGvoXo2GBhHdqmbdS8SEl90jZd1LhAQXnCPk3UrDg1YaYuQbyoKCVFjiIxpJQgGS16FiGIgBQVGVH+FXBsBBD9MeH9WFgADP0ZufFERAAJCRW95Sw0AAkJHcnZFCgACREpudD8HAQNHSmtzOAYBBEtMaXAvBQEFTk9nay4EAgZQUGZmKAQDB1NSY2IkBAMIVFNiYCIEAwlVVF9dHwQDClZVXVseBQMKV1ZbWR0EAwtZV1dYGwQCCllYVVUZAwIKWllTUhYDAgpbWlFQFAMBCltbT04SAAEKY11OTBAAAQtcXk1LDgABC15fS0kMAAEMYGBJRwsAAQxhYkhFCQABDWJjR0MIAAENZGRGQQYAAg5lZkVABQACDmdnREAEAAIOaGhCPgMAAg9paUE9AgADD2pqPzsCAQMQa2s7OQEBBBB" type="audio/wav">
+</audio>
+
+<script>
+// ─── STATE ─────────────────────────────────────────────────────
+const S = {
+  wallet: null,
+  provider: null,
+  signer: null,
+  chainId: 1,
+  balances: {},
+  positions: JSON.parse(localStorage.getItem('positions') || '[]'),
+  simpleAlerts: JSON.parse(localStorage.getItem('simpleAlerts') || '[]'),
+  history: JSON.parse(localStorage.getItem('tradeHistory') || '[]'),
+  livePrices: {},
+  chartData: [],
+  ws: null,
+  chartSymbol: 'BTCUSDT',
+  tf: '1m',
+  chart: null,
+  riskParams: JSON.parse(localStorage.getItem('riskParams') || '{"sl":10,"tp":15,"slippage":1}'),
+};
+
+// ─── CHAIN CONFIG ──────────────────────────────────────────────
+const CHAINS = {
+  1:     { name:'Ethereum',  explorer:'https://etherscan.io/tx/',   usdt:'0xdAC17F958D2ee523a2206206994597C13D831ec7' },
+  137:   { name:'Polygon',   explorer:'https://polygonscan.com/tx/', usdt:'0xc2132D05D31c914a87C6611C10748AEb04B58e8F' },
+  56:    { name:'BNB Chain', explorer:'https://bscscan.com/tx/',    usdt:'0x55d398326f99059fF775485246999027B3197955' },
+  42161: { name:'Arbitrum',  explorer:'https://arbiscan.io/tx/',    usdt:'0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9' },
+};
+
+const ERC20_ABI = [
+  'function balanceOf(address owner) view returns (uint256)',
+  'function decimals() view returns (uint8)',
+  'function symbol() view returns (string)'
+];
+
+// ─── CLOCK ─────────────────────────────────────────────────────
+function updateClock() {
+  document.getElementById('clock').textContent = new Date().toLocaleTimeString('it-IT');
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── TABS ──────────────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  if (id === 'chart') startWebSocket();
+}
+
+// ─── WALLET ────────────────────────────────────────────────────
+async function connectWallet() {
+  if (!window.ethereum) {
+    toast('MetaMask non rilevato. Installa MetaMask su metamask.io', 'error');
+    return;
+  }
+  try {
+    const accounts = await window.ethereum.request({method:'eth_requestAccounts'});
+    S.provider = new ethers.BrowserProvider(window.ethereum);
+    S.signer = await S.provider.getSigner();
+    S.wallet = accounts[0];
+    const net = await S.provider.getNetwork();
+    S.chainId = Number(net.chainId);
+    updateWalletUI();
+    await refreshBalances();
+    toast('Wallet connesso: ' + shortAddr(S.wallet), 'success');
+    window.ethereum.on('accountsChanged', a => { S.wallet = a[0]; updateWalletUI(); refreshBalances(); });
+    window.ethereum.on('chainChanged', () => location.reload());
+    if (Notification.permission === 'default') Notification.requestPermission();
+  } catch(e) {
+    toast('Connessione annullata o errore: ' + e.message, 'error');
+  }
+}
+
+function updateWalletUI() {
+  document.getElementById('w-dot').className = 'dot dot-green';
+  document.getElementById('w-addr').textContent = shortAddr(S.wallet);
+  document.getElementById('connect-btn').textContent = '✓ Connesso';
+  document.getElementById('connect-btn').disabled = true;
+  document.getElementById('portfolio-empty').style.display = 'none';
+  document.getElementById('portfolio-content').style.display = 'block';
+  const chain = CHAINS[S.chainId];
+  document.getElementById('chain-select').value = S.chainId;
+}
+
+async function refreshBalances() {
+  if (!S.wallet || !S.provider) return;
+  S.balances = {};
+  const chain = CHAINS[S.chainId] || CHAINS[1];
+
+  // Native balance
+  const nativeBal = await S.provider.getBalance(S.wallet);
+  const nativeSymbol = S.chainId === 56 ? 'BNB' : S.chainId === 137 ? 'MATIC' : 'ETH';
+  S.balances[nativeSymbol] = parseFloat(ethers.formatEther(nativeBal));
+
+  // USDT balance
+  try {
+    const usdt = new ethers.Contract(chain.usdt, ERC20_ABI, S.provider);
+    const dec = await usdt.decimals();
+    const bal = await usdt.balanceOf(S.wallet);
+    S.balances['USDT'] = parseFloat(ethers.formatUnits(bal, dec));
+  } catch(e) { S.balances['USDT'] = 0; }
+
+  renderBalances();
+}
+
+function renderBalances() {
+  const nativeSymbol = S.chainId === 56 ? 'BNB' : S.chainId === 137 ? 'MATIC' : 'ETH';
+  const nativeWsSymbol = nativeSymbol + 'USDT';
+  const nativePrice = S.livePrices[nativeWsSymbol] || 0;
+  const nativeVal = (S.balances[nativeSymbol] || 0) * nativePrice;
+  const usdtVal = S.balances['USDT'] || 0;
+  const totalVal = nativeVal + usdtVal;
+
+  document.getElementById('portfolio-stats').innerHTML = `
+    <div class="stat-pill"><div class="stat-label">Totale Portfolio</div><div class="stat-value">$${totalVal.toFixed(2)}</div></div>
+    <div class="stat-pill"><div class="stat-label">USDT</div><div class="stat-value" style="color:var(--green)">$${usdtVal.toFixed(2)}</div></div>
+    <div class="stat-pill"><div class="stat-label">${nativeSymbol}</div><div class="stat-value">${(S.balances[nativeSymbol]||0).toFixed(4)}</div></div>
+    <div class="stat-pill"><div class="stat-label">Rete</div><div class="stat-value chain-badge">${CHAINS[S.chainId]?.name || 'Unknown'}</div></div>`;
+
+  document.getElementById('balance-grid').innerHTML = Object.entries(S.balances).map(([sym,bal]) => {
+    const wsKey = sym === nativeSymbol ? nativeWsSymbol : sym + 'USDT';
+    const price = S.livePrices[wsKey] || 0;
+    const usd = bal * (price || (sym === 'USDT' ? 1 : 0));
+    return `<div class="balance-card">
+      <div class="balance-symbol">${sym}</div>
+      <div class="balance-amount">${bal < 0.001 ? bal.toFixed(6) : bal.toFixed(4)}</div>
+      ${usd > 0 ? `<div class="balance-usd">≈ $${usd.toFixed(2)}</div>` : ''}
+    </div>`;
+  }).join('');
+
+  renderPositions();
+}
+
+async function switchChain() {
+  const chainId = parseInt(document.getElementById('chain-select').value);
+  if (!window.ethereum) return;
+  try {
+    await window.ethereum.request({
+      method: 'wallet_switchEthereumChain',
+      params: [{ chainId: '0x' + chainId.toString(16) }]
+    });
+  } catch(e) {
+    toast('Impossibile cambiare rete: ' + e.message, 'error');
+  }
+}
+
+// ─── SWAP ──────────────────────────────────────────────────────
+function updateSwapPreview() {
+  const fromAmt = parseFloat(document.getElementById('from-amount').value) || 0;
+  const fromToken = document.getElementById('from-token').value;
+  const toToken = document.getElementById('to-token').value;
+  if (!fromAmt || fromToken === toToken) return;
+
+  const fromPrice = fromToken === 'USDT' || fromToken === 'USDC' ? 1 : (S.livePrices[fromToken + 'USDT'] || 0);
+  const toPrice = toToken === 'USDT' || toToken === 'USDC' ? 1 : (S.livePrices[toToken + 'USDT'] || 0);
+  const fromUsd = fromAmt * fromPrice;
+
+  if (toPrice > 0) {
+    const toAmt = fromUsd / toPrice;
+    document.getElementById('to-amount').value = toAmt < 0.001 ? toAmt.toFixed(6) : toAmt.toFixed(4);
+  }
+
+  const sl = S.riskParams.sl || 10;
+  const tp = S.riskParams.tp || 15;
+  const slPrice = toPrice * (1 - sl/100);
+  const tpPrice = toPrice * (1 + tp/100);
+
+  document.getElementById('trade-preview').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div style="background:var(--card2);border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">VENDI</div>
+        <div style="font-size:18px;font-weight:700">${fromAmt} ${fromToken}</div>
+        <div style="font-size:12px;color:var(--muted)">≈ $${fromUsd.toFixed(2)}</div>
+      </div>
+      <div style="text-align:center;font-size:20px;color:var(--cyan)">↓</div>
+      <div style="background:var(--card2);border-radius:8px;padding:12px;border:1px solid var(--border)">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:4px">RICEVI (stimato)</div>
+        <div style="font-size:18px;font-weight:700">${document.getElementById('to-amount').value || '—'} ${toToken}</div>
+        <div style="font-size:12px;color:var(--muted)">@ $${toPrice > 0 ? toPrice.toFixed(4) : '—'}</div>
+      </div>
+      ${toPrice > 0 ? `
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+        <div style="background:rgba(255,68,68,.08);border-radius:6px;padding:8px;text-align:center">
+          <div style="font-size:10px;color:var(--red);font-weight:700">STOP-LOSS ${sl}%</div>
+          <div style="font-size:14px;font-weight:700;color:var(--red)">$${slPrice.toFixed(4)}</div>
+          <div style="font-size:11px;color:var(--muted)">Perdi: $${(fromUsd*sl/100).toFixed(2)}</div>
+        </div>
+        <div style="background:rgba(63,191,107,.08);border-radius:6px;padding:8px;text-align:center">
+          <div style="font-size:10px;color:var(--green);font-weight:700">TAKE-PROFIT ${tp}%</div>
+          <div style="font-size:14px;font-weight:700;color:var(--green)">$${tpPrice.toFixed(4)}</div>
+          <div style="font-size:11px;color:var(--muted)">Guadagni: $${(fromUsd*tp/100).toFixed(2)}</div>
+        </div>
+      </div>` : ''}
+    </div>`;
+
+  updateDexLinks(fromAmt, fromToken, toToken);
+}
+
+function flipTokens() {
+  const f = document.getElementById('from-token').value;
+  const t = document.getElementById('to-token').value;
+  const fa = document.getElementById('from-amount').value;
+  const ta = document.getElementById('to-amount').value;
+  document.getElementById('from-token').value = t;
+  document.getElementById('to-token').value = f;
+  document.getElementById('from-amount').value = ta || fa;
+  updateSwapPreview();
+}
+
+function executeSwap(side) {
+  const fromAmt = document.getElementById('from-amount').value || '500';
+  const fromToken = document.getElementById('from-token').value;
+  const toToken = document.getElementById('to-token').value;
+  const chainId = S.chainId || 1;
+  const slippage = document.getElementById('slippage').value || '1';
+  const url = `https://app.1inch.io/#/${chainId}/simple/swap/${fromToken}/${toToken}?inputAmount=${fromAmt}&slippage=${slippage}`;
+  window.open(url, '_blank');
+  toast(`Swap aperto su 1inch: ${fromAmt} ${fromToken} → ${toToken}`, 'info');
+}
+
+function updateDexLinks(amt, from, to) {
+  const chainId = S.chainId || 1;
+  const dexes = [
+    { name:'1inch',     url:`https://app.1inch.io/#/${chainId}/simple/swap/${from}/${to}?inputAmount=${amt}` },
+    { name:'Uniswap',   url:`https://app.uniswap.org/swap?inputCurrency=${from}&outputCurrency=${to}&exactField=input&exactAmount=${amt}` },
+    { name:'ParaSwap',  url:`https://app.paraswap.io/#/${from}-${to}/${amt}/SELL?network=ethereum` },
+    { name:'Matcha',    url:`https://matcha.xyz/trade?buyToken=${to}&sellToken=${from}&sellAmount=${amt}` },
+  ];
+  document.getElementById('dex-links').innerHTML = dexes.map(d =>
+    `<a href="${d.url}" target="_blank" style="display:flex;align-items:center;justify-content:space-between;background:var(--card2);border-radius:6px;padding:10px 14px;border:1px solid var(--border);color:var(--text)">
+      <span style="font-weight:600">${d.name}</span>
+      <span style="font-size:12px;color:var(--cyan)">Apri →</span>
+    </a>`).join('');
+}
+
+function applyRiskParams() {
+  S.riskParams.sl = parseFloat(document.getElementById('default-sl').value) || 10;
+  S.riskParams.tp = parseFloat(document.getElementById('default-tp').value) || 15;
+  S.riskParams.slippage = parseFloat(document.getElementById('slippage').value) || 1;
+  localStorage.setItem('riskParams', JSON.stringify(S.riskParams));
+  toast('Parametri rischio salvati', 'success');
+  updateSwapPreview();
+}
+
+// ─── WEBSOCKET ─────────────────────────────────────────────────
+function startWebSocket() {
+  if (S.ws) { S.ws.close(); S.ws = null; }
+  const symbols = ['BTCUSDT','ETHUSDT','BNBUSDT','SOLUSDT','MATICUSDT','ARBUSDT','OPUSDT','LINKUSDT','UNIUSDT','AVAXUSDT','DOTUSDT','ADAUSDT'];
+  const streams = symbols.map(s => s.toLowerCase() + '@ticker').join('/');
+  S.ws = new WebSocket(`wss://stream.binance.com:9443/stream?streams=${streams}`);
+  S.ws.onopen = () => {
+    document.getElementById('ws-dot').style.background = 'var(--green)';
+    document.getElementById('ws-status').textContent = 'WebSocket live';
+  };
+  S.ws.onmessage = e => {
+    const d = JSON.parse(e.data).data;
+    if (!d) return;
+    const sym = d.s;
+    S.livePrices[sym] = parseFloat(d.c);
+    if (sym === S.chartSymbol) {
+      updateLivePrice(d);
+      addChartPoint(parseFloat(d.c));
+    }
+    checkAlertTriggers(sym, parseFloat(d.c));
+    if (S.wallet) renderBalances();
+    updateSwapPreview();
+  };
+  S.ws.onerror = () => {
+    document.getElementById('ws-dot').style.background = 'var(--red)';
+    document.getElementById('ws-status').textContent = 'Errore WebSocket';
+  };
+  S.ws.onclose = () => {
+    document.getElementById('ws-dot').style.background = 'var(--gold)';
+    document.getElementById('ws-status').textContent = 'Disconnesso — riconnessione...';
+    setTimeout(startWebSocket, 3000);
+  };
+}
+
+function updateLivePrice(d) {
+  const price = parseFloat(d.c);
+  const change = parseFloat(d.P);
+  document.getElementById('live-price').textContent = '$' + formatPrice(price);
+  const changeEl = document.getElementById('price-change-24h');
+  changeEl.textContent = (change >= 0 ? '+' : '') + change.toFixed(2) + '%';
+  changeEl.className = 'price-change ' + (change >= 0 ? 'up-bg' : 'down-bg');
+  document.getElementById('high-24h').textContent = '$' + formatPrice(parseFloat(d.h));
+  document.getElementById('low-24h').textContent = '$' + formatPrice(parseFloat(d.l));
+  document.getElementById('vol-24h').textContent = '$' + formatVol(parseFloat(d.q));
+}
+
+// ─── CHART ─────────────────────────────────────────────────────
+function initChart() {
+  if (S.chart) S.chart.destroy();
+  const ctx = document.getElementById('price-chart').getContext('2d');
+  S.chartData = [];
+  S.chart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [],
+      datasets: [{
+        data: [],
+        borderColor: '#00D9FF',
+        borderWidth: 1.5,
+        pointRadius: 0,
+        fill: true,
+        backgroundColor: ctx => {
+          const g = ctx.chart.ctx.createLinearGradient(0,0,0,240);
+          g.addColorStop(0,'rgba(0,217,255,.15)');
+          g.addColorStop(1,'rgba(0,217,255,.0)');
+          return g;
+        },
+        tension: 0.3,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false, animation: false,
+      plugins: { legend: { display: false }, tooltip: {
+        callbacks: { label: c => '$' + formatPrice(c.parsed.y) }
+      }},
+      scales: {
+        x: { display: false },
+        y: {
+          grid: { color: '#1E1E2E' },
+          ticks: { color: '#6B6B80', font:{size:11}, callback: v => '$' + formatPrice(v) },
+          position: 'right',
+        }
+      }
+    }
+  });
+}
+
+function addChartPoint(price) {
+  if (!S.chart) { initChart(); return; }
+  const now = new Date().toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  S.chartData.push(price);
+  const maxPts = S.tf === '1m' ? 120 : S.tf === '5m' ? 100 : 80;
+  if (S.chartData.length > maxPts) S.chartData.shift();
+  S.chart.data.datasets[0].data = [...S.chartData];
+  S.chart.data.labels = S.chartData.map((_,i) => i === S.chartData.length-1 ? now : '');
+  S.chart.update('none');
+  updateIndicators();
+}
+
+function changeChartSymbol() {
+  S.chartSymbol = document.getElementById('chart-symbol').value;
+  S.chartData = [];
+  initChart();
+}
+
+function setTF(tf) {
+  S.tf = tf;
+  document.querySelectorAll('.tf-btn').forEach(b => b.classList.remove('active'));
+  event.target.classList.add('active');
+  S.chartData = [];
+  initChart();
+}
+
+function updateIndicators() {
+  const data = S.chartData;
+  if (data.length < 14) return;
+  const last = data[data.length-1];
+  const rsi = calcRSI(data, 14);
+  const sma20 = data.length >= 20 ? data.slice(-20).reduce((a,b)=>a+b,0)/20 : null;
+  const sma50 = data.length >= 50 ? data.slice(-50).reduce((a,b)=>a+b,0)/50 : null;
+  const trend = sma20 ? (last > sma20 ? '↑ RIALZISTA' : '↓ RIBASSISTA') : '—';
+  const rsiClass = rsi > 70 ? 'style="color:var(--red)"' : rsi < 30 ? 'style="color:var(--green)"' : '';
+  document.getElementById('indicators-panel').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">RSI (14)</span><strong ${rsiClass}>${rsi.toFixed(1)} ${rsi>70?'— Ipercomprato':rsi<30?'— Ipervenduto':''}</strong></div>
+      ${sma20 ? `<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">SMA 20</span><strong>$${formatPrice(sma20)}</strong></div>` : ''}
+      ${sma50 ? `<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">SMA 50</span><strong>$${formatPrice(sma50)}</strong></div>` : ''}
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Trend</span><strong style="color:${trend.includes('↑')?'var(--green)':'var(--red)'}">${trend}</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Variazione sess.</span><strong class="${data[0]<=last?'up':'down'}">${((last-data[0])/data[0]*100).toFixed(2)}%</strong></div>
+    </div>`;
+  const levels = calcLevels(data);
+  document.getElementById('key-levels').innerHTML = `
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Resistenza</span><strong style="color:var(--red)">$${formatPrice(levels.res)}</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Prezzo attuale</span><strong>$${formatPrice(last)}</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Supporto</span><strong style="color:var(--green)">$${formatPrice(levels.sup)}</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">Range sessione</span><strong>${((levels.res-levels.sup)/last*100).toFixed(2)}%</strong></div>
+    </div>`;
+}
+
+function calcRSI(data, period) {
+  let gains=0, losses=0;
+  for (let i=data.length-period; i<data.length-1; i++) {
+    const d = data[i+1]-data[i];
+    if (d>0) gains+=d; else losses+=Math.abs(d);
+  }
+  const avgGain = gains/period, avgLoss = losses/period;
+  if (avgLoss === 0) return 100;
+  const rs = avgGain/avgLoss;
+  return 100-(100/(1+rs));
+}
+
+function calcLevels(data) {
+  const slice = data.slice(-50);
+  return { res: Math.max(...slice), sup: Math.min(...slice) };
+}
+
+// ─── POSITIONS & ALERTS ────────────────────────────────────────
+function addPosition() {
+  const asset = document.getElementById('alert-asset').value;
+  const amount = parseFloat(document.getElementById('alert-amount').value) || 500;
+  const entry = parseFloat(document.getElementById('entry-price').value) || (S.livePrices[asset] || 0);
+  const sl = parseFloat(document.getElementById('sl-price').value) || (entry * (1 - S.riskParams.sl/100));
+  const tp = parseFloat(document.getElementById('tp-price').value) || (entry * (1 + S.riskParams.tp/100));
+  const note = document.getElementById('alert-note').value;
+  if (!entry) { toast('Inserisci il prezzo di entrata', 'error'); return; }
+  S.positions.push({ id: Date.now(), asset, amount, entry, sl, tp, note, openedAt: new Date().toISOString(), status:'open', slTriggered:false, tpTriggered:false });
+  saveState();
+  renderAlertsList();
+  toast('Posizione aperta: ' + asset.replace('USDT','') + ' @ $' + entry.toFixed(2), 'success');
+  startWebSocket();
+}
+
+function addSimpleAlert() {
+  const asset = document.getElementById('simple-alert-asset').value;
+  const price = parseFloat(document.getElementById('simple-alert-price').value);
+  const dir = document.getElementById('simple-alert-dir').value;
+  if (!price) { toast('Inserisci il prezzo target', 'error'); return; }
+  S.simpleAlerts.push({ id: Date.now(), asset, price, dir, triggered: false });
+  saveState();
+  renderAlertsList();
+  toast('Alert aggiunto: ' + asset.replace('USDT','') + ' ' + (dir==='above'?'sopra':'sotto') + ' $' + price.toFixed(2), 'success');
+  startWebSocket();
+}
+
+function checkAlertTriggers(sym, price) {
+  let changed = false;
+  S.positions.forEach(p => {
+    if (p.asset !== sym || p.status !== 'open') return;
+    if (!p.slTriggered && price <= p.sl) {
+      p.slTriggered = true; changed = true;
+      triggerAlert(p, 'STOP-LOSS', price, 'sl');
+    }
+    if (!p.tpTriggered && price >= p.tp) {
+      p.tpTriggered = true; changed = true;
+      triggerAlert(p, 'TAKE-PROFIT', price, 'tp');
+    }
+  });
+  S.simpleAlerts.forEach(a => {
+    if (a.asset !== sym || a.triggered) return;
+    const hit = a.dir === 'above' ? price >= a.price : price <= a.price;
+    if (hit) { a.triggered = true; changed = true; triggerSimpleAlert(a, price); }
+  });
+  if (changed) { saveState(); renderAlertsList(); }
+}
+
+function triggerAlert(pos, type, price, side) {
+  const sym = pos.asset.replace('USDT','');
+  const pnl = (price - pos.entry) / pos.entry * pos.amount;
+  const pnlStr = pnl >= 0 ? '+$' + pnl.toFixed(2) : '-$' + Math.abs(pnl).toFixed(2);
+  playSound();
+  notify(`🚨 ${type} — ${sym}`, `Prezzo: $${formatPrice(price)} · P&L: ${pnlStr}`);
+  toast(`🚨 ${type} TRIGGERATO su ${sym} — P&L: ${pnlStr}`, side==='sl'?'error':'success');
+  const chainId = S.chainId || 1;
+  const url = `https://app.1inch.io/#/${chainId}/simple/swap/${sym}/USDT?inputAmount=100%25&slippage=2`;
+  setTimeout(() => {
+    if (confirm(`${type} triggerato su ${sym}!\nP&L stimato: ${pnlStr}\n\nVuoi aprire 1inch per chiudere la posizione?`)) {
+      window.open(url, '_blank');
+    }
+  }, 100);
+}
+
+function triggerSimpleAlert(alert, price) {
+  const sym = alert.asset.replace('USDT','');
+  playSound();
+  notify(`🔔 Alert ${sym}`, `Prezzo ${alert.dir==='above'?'sopra':'sotto'} $${alert.price} — Attuale: $${formatPrice(price)}`);
+  toast(`🔔 Alert ${sym}: $${formatPrice(price)}`, 'info');
+}
+
+function renderAlertsList() {
+  const all = [
+    ...S.positions.filter(p=>p.status==='open').map(p => {
+      const sym = p.asset.replace('USDT','');
+      const price = S.livePrices[p.asset] || p.entry;
+      const pnl = (price - p.entry) / p.entry * p.amount;
+      const pnlPct = (price - p.entry) / p.entry * 100;
+      const pnlClass = pnl >= 0 ? 'up' : 'down';
+      return `<div class="alert-item ${p.slTriggered?'triggered-red':p.tpTriggered?'triggered':''}">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px">
+            <strong>${sym}</strong>
+            <span class="alert-type type-pct">POSIZIONE</span>
+            ${p.slTriggered?'<span class="alert-type type-sl">SL TRIGGERATO</span>':''}
+            ${p.tpTriggered?'<span class="alert-type type-tp">TP TRIGGERATO</span>':''}
+          </div>
+          <div style="font-size:11px;color:var(--muted)">Entrata: $${formatPrice(p.entry)} · Importo: $${p.amount}</div>
+          <div style="font-size:11px;margin-top:3px">
+            P&L: <strong class="${pnlClass}">${pnl>=0?'+':''}$${Math.abs(pnl).toFixed(2)} (${pnlPct>=0?'+':''}${pnlPct.toFixed(2)}%)</strong>
+          </div>
+          <div style="font-size:10px;color:var(--muted);margin-top:3px">
+            SL: <span style="color:var(--red)">$${formatPrice(p.sl)}</span> · TP: <span style="color:var(--green)">$${formatPrice(p.tp)}</span>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <button class="btn-red btn-sm" onclick="closePosition(${p.id})">Chiudi</button>
+          <button class="btn-ghost btn-sm" onclick="removePosition(${p.id})">✕</button>
+        </div>
+      </div>`;
+    }),
+    ...S.simpleAlerts.map(a => {
+      const sym = a.asset.replace('USDT','');
+      return `<div class="alert-item ${a.triggered?'triggered':''}">
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px">
+            <strong>${sym}</strong>
+            <span class="alert-type type-pct">${a.dir==='above'?'↑ Sopra':'↓ Sotto'} $${formatPrice(a.price)}</span>
+            ${a.triggered?'<span class="alert-type type-tp">TRIGGERATO</span>':''}
+          </div>
+        </div>
+        <button class="btn-ghost btn-sm" onclick="removeSimpleAlert(${a.id})">✕</button>
+      </div>`;
+    })
+  ];
+  document.getElementById('alerts-list').innerHTML = all.join('') || '<div class="empty-state">Nessun alert attivo.</div>';
+  document.getElementById('alerts-count').textContent = (S.positions.filter(p=>p.status==='open').length + S.simpleAlerts.filter(a=>!a.triggered).length) + ' attivi';
+}
+
+function closePosition(id) {
+  const p = S.positions.find(x => x.id === id);
+  if (!p) return;
+  const price = S.livePrices[p.asset] || p.entry;
+  const pnl = (price - p.entry) / p.entry * p.amount;
+  S.history.push({ ...p, closedAt: new Date().toISOString(), closePrice: price, pnl });
+  p.status = 'closed';
+  saveState();
+  renderAlertsList();
+  renderHistory();
+  toast('Posizione chiusa: P&L ' + (pnl>=0?'+':'') + '$' + pnl.toFixed(2), pnl>=0?'success':'error');
+}
+
+function removePosition(id) { S.positions = S.positions.filter(p => p.id !== id); saveState(); renderAlertsList(); }
+function removeSimpleAlert(id) { S.simpleAlerts = S.simpleAlerts.filter(a => a.id !== id); saveState(); renderAlertsList(); }
+
+function renderPositions() {
+  const open = S.positions.filter(p => p.status === 'open');
+  if (!open.length) {
+    document.getElementById('positions-table-wrap').innerHTML = '<div class="empty-state">Nessuna posizione aperta.</div>';
+    return;
+  }
+  const rows = open.map(p => {
+    const sym = p.asset.replace('USDT','');
+    const price = S.livePrices[p.asset] || p.entry;
+    const pnl = (price - p.entry) / p.entry * p.amount;
+    const pnlPct = (price - p.entry) / p.entry * 100;
+    return `<tr>
+      <td><strong>${sym}</strong></td>
+      <td>$${formatPrice(p.entry)}</td>
+      <td>$${formatPrice(price)}</td>
+      <td class="${pnl>=0?'up':'down'}">${pnl>=0?'+':''}$${Math.abs(pnl).toFixed(2)} (${pnlPct>=0?'+':''}${pnlPct.toFixed(2)}%)</td>
+      <td style="color:var(--red)">$${formatPrice(p.sl)}</td>
+      <td style="color:var(--green)">$${formatPrice(p.tp)}</td>
+      <td><button class="btn-red btn-sm" onclick="closePosition(${p.id})">Chiudi</button></td>
+    </tr>`;
+  }).join('');
+  document.getElementById('positions-table-wrap').innerHTML = `
+    <table><thead><tr><th>Asset</th><th>Entrata</th><th>Attuale</th><th>P&L</th><th>Stop-Loss</th><th>Take-Profit</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function renderHistory() {
+  if (!S.history.length) return;
+  const rows = S.history.slice().reverse().map(h => {
+    const sym = h.asset.replace('USDT','');
+    const pnl = h.pnl || 0;
+    return `<tr>
+      <td>${new Date(h.openedAt).toLocaleDateString('it-IT')}</td>
+      <td><strong>${sym}</strong></td>
+      <td>$${h.amount}</td>
+      <td>$${formatPrice(h.entry)}</td>
+      <td>$${formatPrice(h.closePrice)}</td>
+      <td class="${pnl>=0?'up':'down'}">${pnl>=0?'+':''}$${Math.abs(pnl).toFixed(2)}</td>
+      <td class="${pnl>=0?'up':'down'}">${((pnl/h.amount)*100).toFixed(2)}%</td>
+    </tr>`;
+  }).join('');
+  const totalPnl = S.history.reduce((a,h)=>a+(h.pnl||0),0);
+  document.getElementById('history-table-wrap').innerHTML = `
+    <div style="margin-bottom:12px;font-size:13px">
+      P&L totale: <strong class="${totalPnl>=0?'up':'down'}">${totalPnl>=0?'+':''}$${Math.abs(totalPnl).toFixed(2)}</strong> su ${S.history.length} operazioni
+    </div>
+    <table><thead><tr><th>Data</th><th>Asset</th><th>Importo</th><th>Entrata</th><th>Uscita</th><th>P&L $</th><th>P&L %</th></tr></thead><tbody>${rows}</tbody></table>`;
+}
+
+function exportHistory() {
+  if (!S.history.length) { toast('Nessuno storico da esportare', 'error'); return; }
+  const csv = ['Data,Asset,Importo,Entrata,Uscita,PnL_USD,PnL_PCT',
+    ...S.history.map(h => [
+      new Date(h.openedAt).toLocaleDateString('it-IT'),
+      h.asset.replace('USDT',''), h.amount, h.entry, h.closePrice || 0,
+      (h.pnl||0).toFixed(2), ((h.pnl/h.amount)*100).toFixed(2)
+    ].join(','))
+  ].join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
+  a.download = 'trade_history_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+}
+
+// ─── UTILS ─────────────────────────────────────────────────────
+function saveState() {
+  localStorage.setItem('positions', JSON.stringify(S.positions));
+  localStorage.setItem('simpleAlerts', JSON.stringify(S.simpleAlerts));
+  localStorage.setItem('tradeHistory', JSON.stringify(S.history));
+}
+
+function playSound() {
+  try { document.getElementById('alert-sound').play(); } catch(e) {}
+}
+
+function notify(title, body) {
+  if (Notification.permission === 'granted') new Notification(title, { body });
+}
+
+function toast(msg, type) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.style.borderColor = type==='error'?'var(--red)':type==='success'?'var(--green)':'var(--border)';
+  el.classList.add('show');
+  clearTimeout(el._t);
+  el._t = setTimeout(() => el.classList.remove('show'), 4000);
+}
+
+function shortAddr(addr) {
+  if (!addr) return '';
+  return addr.slice(0,6) + '...' + addr.slice(-4);
+}
+
+function formatPrice(p) {
+  if (!p && p !== 0) return '—';
+  if (p >= 1000) return p.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  if (p >= 1)    return p.toFixed(4);
+  if (p >= 0.01) return p.toFixed(5);
+  return p.toFixed(8);
+}
+
+function formatVol(v) {
+  if (!v) return '—';
+  if (v >= 1e9) return '$' + (v/1e9).toFixed(1) + 'B';
+  if (v >= 1e6) return '$' + (v/1e6).toFixed(0) + 'M';
+  return '$' + (v/1e3).toFixed(0) + 'K';
+}
+
+// ─── INIT ──────────────────────────────────────────────────────
+initChart();
+startWebSocket();
+renderAlertsList();
+renderHistory();
+document.getElementById('default-sl').value = S.riskParams.sl;
+document.getElementById('default-tp').value = S.riskParams.tp;
+document.getElementById('slippage').value = S.riskParams.slippage;
+
+// Auto-detect MetaMask
+if (window.ethereum?.selectedAddress) connectWallet();
+</script>
+</body>
+</html>
