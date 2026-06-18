@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DEX GEM RADAR 81 — Analisi DEX, Controllo Rischio, Lettura On Chain</title>
+<style>
+:root{
+  --bg:#05050A;--bg2:#0D0D18;--bg3:#14142A;
+  --orange:#E8501A;--gold:#FFD24A;--green:#3FBF6B;
+  --cyan:#00D9FF;--red:#FF4466;--purple:#9B59B6;
+  --txt:#E8E8F0;--txt2:#888;--border:#1E1E3A;--card:#0F0F22;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;font-size:14px;min-height:100vh;line-height:1.4}
+a{color:var(--cyan);text-decoration:none}
+a:hover{text-decoration:underline}
+code{font-family:monospace;font-size:12px}
+
+.disclaimer{background:#FF446611;border-bottom:2px solid #FF446666;color:#FF9999;padding:8px 16px;font-size:11px;text-align:center;line-height:1.7;font-weight:600}
+
+header{background:var(--bg2);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px}
+.brand{font-size:20px;font-weight:900;letter-spacing:-0.5px;color:var(--txt)}
+.brand .hl{color:var(--orange)}
+.tagline{font-size:11px;color:var(--txt2);margin-top:2px}
+.mode-pill{font-size:10px;padding:4px 10px;border-radius:20px;border:1px solid var(--border);color:var(--txt2);font-weight:700}
+.mode-pill.php{border-color:var(--green);color:var(--green)}
+
+.wrap{max-width:1440px;margin:0 auto;padding:16px 14px 60px}
+
+/* SEARCH */
+.search-card{background:var(--bg2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:16px}
+.search-row{display:flex;gap:8px;flex-wrap:wrap}
+.sel,.inp{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:11px 13px;color:var(--txt);font-size:14px;outline:none}
+.sel:focus,.inp:focus{border-color:var(--orange)}
+.inp{flex:1;min-width:220px}
+.hint{font-size:11px;color:var(--txt2);margin-top:7px}
+
+.btn{border:none;cursor:pointer;padding:11px 18px;border-radius:9px;font-weight:700;font-size:13px;display:inline-flex;align-items:center;gap:6px}
+.btn-primary{background:var(--orange);color:#fff}
+.btn-primary:hover{opacity:.9}
+.btn-sm{padding:7px 11px;font-size:12px;border-radius:7px}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--txt)}
+.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn-gold{background:#FFD24A22;border:1px solid var(--gold);color:var(--gold)}
+.btn-cyan{background:#00D9FF22;border:1px solid var(--cyan);color:var(--cyan)}
+.btn-red{background:#FF446622;border:1px solid var(--red);color:var(--red)}
+.btn-grey{background:#33334422;border:1px solid var(--border);color:var(--txt2)}
+.btn-green{background:#3FBF6B22;border:1px solid var(--green);color:var(--green)}
+
+/* SECTION TITLES */
+.sec-hd{font-size:11px;font-weight:800;color:var(--txt2);text-transform:uppercase;letter-spacing:1px;margin:20px 0 10px}
+
+/* TOKEN HEADER */
+.tok-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.tok-name{font-size:18px;font-weight:800}
+.tok-sym{font-size:13px;color:var(--txt2);margin-left:4px}
+.tok-addr{font-size:11px;font-family:monospace;color:var(--txt2);flex:1;min-width:140px;word-break:break-all}
+.chain-chip{padding:3px 9px;border-radius:6px;font-size:10px;font-weight:800;white-space:nowrap}
+
+.state-badge{padding:5px 11px;border-radius:8px;font-size:12px;font-weight:800;white-space:nowrap}
+.st-DA_ANALIZZARE{background:#FFD24A22;border:1px solid #FFD24A66;color:var(--gold)}
+.st-INTERESSANTE{background:#00D9FF22;border:1px solid #00D9FF66;color:var(--cyan)}
+.st-RISCHIO_ALTO{background:#FF446622;border:1px solid #FF446666;color:var(--red)}
+.st-SCARTATO{background:#33334422;border:1px solid var(--border);color:var(--txt2)}
+.st-WATCHLIST{background:#FFD24A33;border:1px solid var(--gold);color:var(--gold)}
+
+/* PAIRS TABLE */
+.tbl-wrap{overflow-x:auto;margin-bottom:14px;border-radius:12px;border:1px solid var(--border)}
+.tbl{width:100%;border-collapse:collapse;white-space:nowrap}
+.tbl th{background:var(--bg2);padding:9px 11px;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--txt2);border-bottom:1px solid var(--border);text-align:left}
+.tbl td{padding:9px 11px;font-size:12px;border-bottom:1px solid #1E1E3A55}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:#1E1E3A55}
+.tbl tr.sel td{background:#E8501A11}
+.pos{color:var(--green)}.neg{color:var(--red)}.neu{color:var(--txt2)}
+.ok{color:var(--green)}.warn{color:var(--gold)}.bad{color:var(--red)}.na{color:var(--txt2)}
+
+/* RISK GRID */
+.risk-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+@media(max-width:980px){.risk-grid{grid-template-columns:1fr}}
+.rbox{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+.rbox-title{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--txt2);margin-bottom:12px}
+.ri{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:7px;background:var(--bg2);margin-bottom:5px}
+.ri .k{font-size:11px;color:var(--txt2)}
+.ri .v{font-size:12px;font-weight:700}
+
+/* SCORE RING */
+.score-ring{width:66px;height:66px;border-radius:50%;border:3px solid;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;margin:0 auto 10px}
+.ring-low{border-color:var(--cyan);color:var(--cyan)}
+.ring-med{border-color:var(--gold);color:var(--gold)}
+.ring-high{border-color:var(--red);color:var(--red)}
+
+/* FLAGS */
+.flag{display:flex;align-items:flex-start;gap:7px;padding:5px 8px;border-radius:6px;margin-bottom:4px;font-size:11px;line-height:1.4}
+.f-critical{background:#FF446622;color:var(--red);border:1px solid #FF446644}
+.f-high{background:#E8501A22;color:var(--orange);border:1px solid #E8501A44}
+.f-medium{background:#FFD24A22;color:var(--gold);border:1px solid #FFD24A44}
+.f-low{background:#00D9FF11;color:var(--cyan);border:1px solid #00D9FF33}
+.f-ok{background:#3FBF6B11;color:var(--green);border:1px solid #3FBF6B33}
+
+/* ACTIONS */
+.act-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px}
+.note-area{width:100%;background:var(--bg);border:1px solid var(--border);border-radius:8px;color:var(--txt);padding:10px;font-size:13px;resize:vertical;min-height:64px;outline:none;margin-bottom:10px}
+.note-area:focus{border-color:var(--orange)}
+.act-row{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.act-sep{flex:1}
+
+/* WATCHLIST */
+.wl-empty{text-align:center;padding:30px;color:var(--txt2);font-size:13px}
+.wl-tbl{width:100%;border-collapse:collapse}
+.wl-tbl th{background:var(--bg2);padding:7px 10px;font-size:10px;font-weight:700;text-transform:uppercase;color:var(--txt2);border-bottom:1px solid var(--border);text-align:left}
+.wl-tbl td{padding:8px 10px;font-size:11px;border-bottom:1px solid #1E1E3A44}
+.wl-tbl tr:last-child td{border-bottom:none}
+
+/* SAFETY */
+.safety{background:var(--bg2);border-top:1px solid var(--border);padding:20px 14px;margin-top:24px}
+.safety-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px;max-width:1440px;margin:10px auto 0}
+.sitem{display:flex;gap:8px;align-items:flex-start;font-size:11px;color:var(--txt2);line-height:1.5}
+.sitem .ico{font-size:14px;flex-shrink:0}
+
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--orange);border-radius:50%;animation:sp .7s linear infinite;vertical-align:middle;margin-right:5px}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading-ph{color:var(--txt2);padding:20px 0;text-align:center;font-size:12px}
+.nd-box{color:var(--txt2);text-align:center;padding:14px;font-size:12px;line-height:1.7}
+
+footer{text-align:center;padding:14px;font-size:10px;color:var(--txt2);border-top:1px solid var(--border);background:var(--bg2)}
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER FISSO -->
+<div class="disclaimer">
+  ⚠️ Questa pagina non dà consigli finanziari · Non compra e non vende · Non collegare wallet · Non inserire seed phrase o private key · Le decisioni sono tue e solo tue
+</div>
+
+<!-- HEADER -->
+<header>
+  <div>
+    <div class="brand">DEX <span class="hl">GEM</span> RADAR <span class="hl">81</span></div>
+    <div class="tagline">Radar operativo per analisi DEX, controllo rischio e lettura on chain</div>
+  </div>
+  <div id="mode-pill" class="mode-pill">◉ Locale</div>
+</header>
+
+<div class="wrap">
+
+<!-- SEARCH -->
+<div class="search-card">
+  <div class="search-row">
+    <select id="chain" class="sel">
+      <option value="ethereum">Ethereum (ETH)</option>
+      <option value="bsc" selected>BNB Chain (BSC)</option>
+      <option value="polygon">Polygon (MATIC)</option>
+      <option value="arbitrum">Arbitrum</option>
+      <option value="base">Base</option>
+      <option value="solana">Solana ⚠️</option>
+    </select>
+    <input id="query" class="inp" type="text"
+      placeholder="Indirizzo contratto 0x...  oppure  nome / simbolo token"
+      onkeydown="if(event.key==='Enter')analyze()">
+    <button class="btn btn-primary" onclick="analyze()">🔍 Analizza token</button>
+  </div>
+  <div class="hint">Indirizzo contratto (0x…) → risultati precisi per quella coppia · Nome/simbolo → ricerca su tutte le coppie DEX</div>
+</div>
+
+<!-- RESULTS (nascosto finché non si cerca) -->
+<div id="results" style="display:none">
+
+  <!-- Token header -->
+  <div id="tok-card" class="tok-card"></div>
+
+  <!-- Pairs table -->
+  <div class="sec-hd">Coppie DEX trovate</div>
+  <div class="tbl-wrap">
+    <table class="tbl">
+      <thead>
+        <tr>
+          <th>DEX</th>
+          <th>Prezzo USD</th>
+          <th>5m</th><th>1h</th><th>6h</th><th>24h</th>
+          <th>Vol 24h</th>
+          <th>Liquidità</th>
+          <th>Mcap</th>
+          <th>FDV</th>
+          <th>Buy / Sell 24h</th>
+          <th>Età coppia</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="pairs-body">
+        <tr><td colspan="13" style="text-align:center;padding:24px;color:var(--txt2)"><span class="spin"></span>Caricamento...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Risk panels -->
+  <div class="risk-grid">
+
+    <div class="rbox">
+      <div class="rbox-title">🍯 Honeypot.is</div>
+      <div id="hp-box"><div class="loading-ph"><span class="spin"></span>Verifica honeypot...</div></div>
+    </div>
+
+    <div class="rbox">
+      <div class="rbox-title">🛡️ GoPlus Security</div>
+      <div id="gp-box"><div class="loading-ph"><span class="spin"></span>Analisi sicurezza...</div></div>
+    </div>
+
+    <div class="rbox">
+      <div class="rbox-title">⚡ Score Rischio</div>
+      <div id="score-box"><div class="loading-ph">In attesa dei dati...</div></div>
+    </div>
+
+  </div>
+
+  <!-- Actions -->
+  <div class="act-card">
+    <div style="font-size:12px;font-weight:700;margin-bottom:6px;color:var(--txt2)">NOTE MANUALI</div>
+    <textarea id="notes" class="note-area" placeholder="Appunti personali: social, team, contesto, link, osservazioni..."></textarea>
+    <div class="act-row">
+      <button class="btn btn-gold btn-sm" onclick="setStatus('WATCHLIST')">⭐ Watchlist</button>
+      <button class="btn btn-cyan btn-sm" onclick="setStatus('INTERESSANTE')">👍 Interessante</button>
+      <button class="btn btn-red btn-sm" onclick="setStatus('RISCHIO_ALTO')">⚠️ Rischio alto</button>
+      <button class="btn btn-grey btn-sm" onclick="setStatus('SCARTATO')">✕ Scarta</button>
+      <div class="act-sep"></div>
+      <button class="btn btn-ghost btn-sm" onclick="saveLogCSV()">📥 Salva in CSV</button>
+      <button class="btn btn-ghost btn-sm" onclick="copyAddr()">📋 Copia contratto</button>
+      <a id="dex-link" href="#" target="_blank" class="btn btn-ghost btn-sm">📊 DEX Screener</a>
+    </div>
+  </div>
+
+</div><!-- /results -->
+
+<!-- WATCHLIST -->
+<div class="sec-hd" style="margin-top:24px">⭐ Watchlist locale</div>
+<div class="tbl-wrap" style="margin-bottom:8px">
+  <div id="wl-wrap"><div class="wl-empty">Nessun token. Aggiungi con il pulsante ⭐ dopo un'analisi.</div></div>
+</div>
+<div style="display:flex;gap:7px;flex-wrap:wrap">
+  <button class="btn btn-ghost btn-sm" onclick="exportWL()">📥 Esporta watchlist CSV</button>
+  <button class="btn btn-ghost btn-sm" onclick="clearWL()">🗑️ Svuota watchlist</button>
+</div>
+
+</div><!-- /wrap -->
+
+<!-- SAFETY RULES -->
+<div class="safety">
+  <div style="max-width:1440px;margin:0 auto">
+    <div style="font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:1px;color:var(--txt2)">Regole antitruffa — leggile sempre prima di operare</div>
+    <div class="safety-grid">
+      <div class="sitem"><span class="ico">🚫</span><span>Non collegare mai il wallet a questa pagina</span></div>
+      <div class="sitem"><span class="ico">🚫</span><span>Non firmare mai transazioni da questa pagina</span></div>
+      <div class="sitem"><span class="ico">🚫</span><span>Non inserire mai seed phrase o private key</span></div>
+      <div class="sitem"><span class="ico">🚫</span><span>Non comprare solo perché un token sta salendo</span></div>
+      <div class="sitem"><span class="ico">🚫</span><span>Non usare la pagina per trading automatico</span></div>
+      <div class="sitem"><span class="ico">✅</span><span>Controlla sempre honeypot, liquidità, tax e owner</span></div>
+      <div class="sitem"><span class="ico">✅</span><span>Verifica il contratto direttamente su Etherscan/BSCScan</span></div>
+      <div class="sitem"><span class="ico">✅</span><span>Guarda sempre l'età della coppia DEX</span></div>
+      <div class="sitem"><span class="ico">✅</span><span>Controlla i social: devono essere attivi e coerenti</span></div>
+      <div class="sitem"><span class="ico">⚠️</span><span>Volume che cresce senza liquidità = segnale di scarto</span></div>
+      <div class="sitem"><span class="ico">⚠️</span><span>Mint attivo senza motivo documentato = segnale di scarto</span></div>
+      <div class="sitem"><span class="ico">⚠️</span><span>Owner con troppo potere = segnale di scarto</span></div>
+      <div class="sitem"><span class="ico">⚠️</span><span>Pair appena creata: attendi almeno 24h di dati</span></div>
+      <div class="sitem"><span class="ico">⚠️</span><span>Nome copiato da token famosi = alto rischio scam</span></div>
+      <div class="sitem"><span class="ico">⚠️</span><span>Promozione aggressiva senza dati = segnale di scarto</span></div>
+      <div class="sitem"><span class="ico">⚠️</span><span>Blacklist o pause attiva = segnale di scarto</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  DEX GEM RADAR 81 · Solo lettura · Nessun wallet · Nessuna transazione · Non è consulenza finanziaria · Le decisioni sono tue
+</footer>
+
+<script>
+/* ========================================
+   DEX GEM RADAR 81  —  v1.0
+   Analisi DEX, controllo rischio on chain.
+   Non è consulenza finanziaria.
+   Non compra, non vende, non suggerisce.
+   ======================================== */
+
+const DS_API  = 'https://api.dexscreener.com';
+const GP_API  = 'https://api.gopluslabs.io/api/v1';
+const HP_API  = 'https://api.honeypot.is/v2';
+
+const CHAIN_TO_GP  = {ethereum:1, bsc:56, polygon:137, arbitrum:42161, base:8453};
+const CHAIN_TO_HP  = {ethereum:1, bsc:56, polygon:137, arbitrum:42161, base:8453};
+const CHAIN_COLOR  = {ethereum:'#627EEA', bsc:'#F3BA2F', polygon:'#8247E5',
+                      arbitrum:'#28A0F0', base:'#0052FF', solana:'#9945FF'};
+const EXPLORER     = {ethereum:'https://etherscan.io/token/',
+                      bsc:'https://bscscan.com/token/',
+                      polygon:'https://polygonscan.com/token/',
+                      arbitrum:'https://arbiscan.io/token/',
+                      base:'https://basescan.org/token/',
+                      solana:'https://solscan.io/token/'};
+
+/* ── State ── */
+let phpMode = false;
+let watchlist = [];
+let cur = {addr:'', chain:'', pairs:[], hp:null, gp:null, risk:null, status:'DA_ANALIZZARE'};
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+
+/* ── Init ── */
+(async () => {
+  watchlist = JSON.parse(localStorage.getItem('dgr81_wl') || '[]');
+  renderWL();
+
+  if (location.protocol !== 'file:') {
+    try {
+      const r = await fetch('api.php?action=ping', {signal: AbortSignal.timeout(1800)});
+      const d = await r.json();
+      if (d.ok) {
+        phpMode = true;
+        const p = document.getElementById('mode-pill');
+        p.textContent = '◉ Proxy PHP';
+        p.classList.add('php');
+      }
+    } catch(e) {}
+  }
+})();
+
+/* ════════════════════════════════════════
+   ANALYZE
+   ════════════════════════════════════════ */
+async function analyze() {
+  const chain = document.getElementById('chain').value;
+  const q     = document.getElementById('query').value.trim();
+  if (!q) { alert('Inserisci un indirizzo contratto o un nome token'); return; }
+
+  /* reset UI */
+  document.getElementById('results').style.display = 'block';
+  document.getElementById('tok-card').innerHTML   = '<span class="spin"></span> Ricerca in corso...';
+  document.getElementById('pairs-body').innerHTML = '<tr><td colspan="13" style="text-align:center;padding:24px;color:var(--txt2)"><span class="spin"></span> Caricamento coppie...</td></tr>';
+  document.getElementById('hp-box').innerHTML     = '<div class="loading-ph"><span class="spin"></span>Verifica honeypot...</div>';
+  document.getElementById('gp-box').innerHTML     = '<div class="loading-ph"><span class="spin"></span>Analisi sicurezza...</div>';
+  document.getElementById('score-box').innerHTML  = '<div class="loading-ph">In attesa dei dati...</div>';
+  document.getElementById('notes').value = '';
+  document.getElementById('dex-link').href = '#';
+  cur = {addr:'', chain, pairs:[], hp:null, gp:null, risk:null, status:'DA_ANALIZZARE'};
+
+  const isAddr = /^0x[0-9a-fA-F]{20,}$/.test(q) || (chain === 'solana' && q.length >= 32);
+
+  /* ── fetch DEX Screener ── */
+  let pairs = [];
+  try {
+    if (phpMode) {
+      const r = await fetch(`api.php?action=dexscreener&chain=${encodeURIComponent(chain)}&q=${encodeURIComponent(q)}&isAddr=${isAddr?1:0}`);
+      pairs = (await r.json()).pairs || [];
+    } else {
+      const url = isAddr
+        ? `${DS_API}/latest/dex/tokens/${encodeURIComponent(q)}`
+        : `${DS_API}/latest/dex/search?q=${encodeURIComponent(q)}`;
+      const d = await (await fetch(url)).json();
+      pairs = d.pairs || [];
+    }
+  } catch(e) {
+    document.getElementById('tok-card').innerHTML = `<span style="color:var(--red)">❌ Errore DEX Screener: ${esc(e.message)}</span>`;
+    return;
+  }
+
+  /* filter by selected chain */
+  if (chain !== 'all') pairs = pairs.filter(p => p.chainId === chain).slice(0, 20);
+
+  if (!pairs.length) {
+    document.getElementById('tok-card').innerHTML =
+      `<span style="color:var(--gold)">⚠️ Nessuna coppia trovata su <b>${chain}</b> per "<b>${esc(q)}</b>"</span>
+       <div style="font-size:11px;color:var(--txt2);margin-top:4px">Prova su un altro chain, oppure verifica l'indirizzo.</div>`;
+    document.getElementById('pairs-body').innerHTML = '<tr><td colspan="13" style="text-align:center;padding:24px;color:var(--txt2)">Nessuna coppia</td></tr>';
+    ['hp-box','gp-box','score-box'].forEach(id => document.getElementById(id).innerHTML = '<div class="nd-box">—</div>');
+    return;
+  }
+
+  const token = pairs[0].baseToken;
+  cur.addr  = token.address;
+  cur.chain = chain;
+  cur.pairs = pairs;
+
+  renderTokenCard(token, chain, pairs.length);
+  renderPairs(pairs);
+  document.getElementById('dex-link').href = pairs[0].url || `https://dexscreener.com/${chain}/${token.address}`;
+
+  /* ── Security checks (parallel) ── */
+  const isSolana = chain === 'solana';
+  if (isSolana) {
+    document.getElementById('hp-box').innerHTML = '<div class="nd-box" style="color:var(--gold)">⚠️ Honeypot.is non supporta Solana<br><small>Usa rugcheck.xyz o birdeye.so</small></div>';
+    document.getElementById('gp-box').innerHTML = '<div class="nd-box" style="color:var(--gold)">⚠️ GoPlus non supporta Solana<br><small>Verifica manualmente il contratto</small></div>';
+    calcRisk(null, null, pairs[0]);
+    return;
+  }
+
+  const [hpRes, gpRes] = await Promise.allSettled([
+    fetchHP(cur.addr, chain),
+    fetchGP(cur.addr, chain),
+  ]);
+
+  cur.hp = hpRes.status === 'fulfilled' ? hpRes.value : null;
+  cur.gp = gpRes.status === 'fulfilled' ? gpRes.value : null;
+
+  renderHP(cur.hp);
+  renderGP(cur.gp);
+  calcRisk(cur.hp, cur.gp, pairs[0]);
+}
+
+/* ════════════════════════════════════════
+   API CALLS
+   ════════════════════════════════════════ */
+async function fetchHP(addr, chain) {
+  const cid = CHAIN_TO_HP[chain];
+  if (!cid) return null;
+  const url = phpMode
+    ? `api.php?action=honeypot&address=${addr}&chainId=${cid}`
+    : `${HP_API}/IsHoneypot?address=${encodeURIComponent(addr)}&chainID=${cid}`;
+  try { return await (await fetch(url)).json(); } catch(e) { return null; }
+}
+
+async function fetchGP(addr, chain) {
+  const cid = CHAIN_TO_GP[chain];
+  if (!cid) return null;
+  const al = addr.toLowerCase();
+
+  if (phpMode) {
+    try {
+      const d = await (await fetch(`api.php?action=goplus&address=${al}&chainId=${cid}`)).json();
+      return d.result || null;
+    } catch(e) { return null; }
+  } else {
+    try {
+      const d = await (await fetch(`${GP_API}/token_security/${cid}?contract_addresses=${al}`)).json();
+      const res = d.result || {};
+      return res[al] || res[Object.keys(res).find(k => k.toLowerCase() === al)] || null;
+    } catch(e) { return null; }
+  }
+}
+
+/* ════════════════════════════════════════
+   RENDER — TOKEN CARD
+   ════════════════════════════════════════ */
+function renderTokenCard(tok, chain, pairCount) {
+  const col = CHAIN_COLOR[chain] || '#888';
+  const exp = (EXPLORER[chain] || '') + tok.address;
+  document.getElementById('tok-card').innerHTML = `
+    <div>
+      <span class="tok-name">${esc(tok.name)}</span>
+      <span class="tok-sym">${esc(tok.symbol)}</span>
+    </div>
+    <span class="chain-chip" style="background:${col}22;color:${col};border:1px solid ${col}44">${chain.toUpperCase()}</span>
+    <code class="tok-addr">${tok.address}</code>
+    <span id="state-badge" class="state-badge st-DA_ANALIZZARE">DA ANALIZZARE</span>
+    <span style="font-size:11px;color:var(--txt2)">${pairCount} coppia${pairCount!==1?'e':''}</span>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <a href="${exp}" target="_blank" class="btn btn-ghost btn-sm">🔍 Explorer</a>
+    </div>`;
+}
+
+/* ════════════════════════════════════════
+   RENDER — PAIRS TABLE
+   ════════════════════════════════════════ */
+function renderPairs(pairs) {
+  const tb = document.getElementById('pairs-body');
+  if (!pairs.length) {
+    tb.innerHTML = '<tr><td colspan="13" style="text-align:center;padding:24px;color:var(--txt2)">Nessuna coppia</td></tr>';
+    return;
+  }
+  tb.innerHTML = pairs.map((p, i) => {
+    const chg  = c => p.priceChange?.[c];
+    const fmtC = v => {
+      if (v === undefined || v === null) return '<span class="na">—</span>';
+      const n = parseFloat(v);
+      return `<span class="${n > 0 ? 'pos' : n < 0 ? 'neg' : 'neu'}">${n > 0 ? '+' : ''}${n.toFixed(1)}%</span>`;
+    };
+    const liq  = p.liquidity?.usd || 0;
+    const age  = pairAge(p.pairCreatedAt);
+    const b    = p.txns?.h24?.buys  || 0;
+    const s    = p.txns?.h24?.sells || 0;
+    return `<tr class="${i === 0 ? 'sel' : ''}" onclick="selectPair(${i})" style="cursor:pointer">
+      <td>
+        <div style="font-weight:700;font-size:11px">${esc(p.dexId)}</div>
+        <div style="font-size:10px;color:var(--txt2)">${esc(p.quoteToken?.symbol || '')}</div>
+      </td>
+      <td><b>${p.priceUsd ? '$' + fmtPrice(+p.priceUsd) : '—'}</b></td>
+      <td>${fmtC(chg('m5'))}</td>
+      <td>${fmtC(chg('h1'))}</td>
+      <td>${fmtC(chg('h6'))}</td>
+      <td>${fmtC(chg('h24'))}</td>
+      <td>${usd(p.volume?.h24 || 0)}</td>
+      <td class="${liq < 5000 ? 'bad' : liq < 25000 ? 'warn' : 'ok'}">${usd(liq)}</td>
+      <td>${usd(p.marketCap || 0)}</td>
+      <td>${usd(p.fdv || 0)}</td>
+      <td>${b + s > 0 ? `<span class="ok">${b}</span>/<span class="bad">${s}</span>` : '<span class="na">—</span>'}</td>
+      <td class="${age && age.days < 1 ? 'bad' : age && age.days < 7 ? 'warn' : 'na'}">${age ? age.label : '—'}</td>
+      <td><a href="${p.url || '#'}" target="_blank" class="btn btn-ghost btn-sm" onclick="event.stopPropagation()">↗</a></td>
+    </tr>`;
+  }).join('');
+}
+
+function selectPair(i) {
+  document.querySelectorAll('#pairs-body tr').forEach((r, j) => r.classList.toggle('sel', j === i));
+  const p = cur.pairs[i];
+  document.getElementById('dex-link').href = p.url || `https://dexscreener.com/${cur.chain}/${p.pairAddress}`;
+}
+
+/* ════════════════════════════════════════
+   RENDER — HONEYPOT
+   ════════════════════════════════════════ */
+function renderHP(d) {
+  const el = document.getElementById('hp-box');
+  if (!d) {
+    el.innerHTML = `<div class="nd-box">
+      ⚠️ Dati non disponibili<br>
+      <small>Honeypot.is potrebbe avere CORS su file locale.<br>
+      Con il proxy PHP funziona sempre.</small>
+    </div>`;
+    return;
+  }
+  const hp  = d.isHoneypot === true;
+  const sim = d.simulationSuccess;
+  const sr  = d.simulationResult || {};
+  const bt  = +(sr.buyTax  || d.buyTax  || 0);
+  const st  = +(sr.sellTax || d.sellTax || 0);
+  const reason = d.honeypotReason || '';
+
+  el.innerHTML = `
+    <div class="flag ${hp ? 'f-critical' : 'f-ok'}" style="margin-bottom:8px;font-size:12px;font-weight:700">
+      ${hp ? '☠️ HONEYPOT RILEVATO' : '✅ Honeypot non rilevato'}
+    </div>
+    ${hp && reason ? `<div class="flag f-critical" style="margin-bottom:8px;font-size:10px">${esc(reason)}</div>` : ''}
+    <div class="ri"><span class="k">Simulazione vendita</span>
+      <span class="v ${sim === false ? 'bad' : sim ? 'ok' : 'na'}">
+        ${sim === true ? '✅ Funzionante' : sim === false ? '❌ Fallita' : 'N/D'}
+      </span>
+    </div>
+    <div class="ri"><span class="k">Tax acquisto</span>
+      <span class="v ${bt > 10 ? 'bad' : bt > 5 ? 'warn' : 'ok'}">${bt ? bt.toFixed(1) + '%' : '0%'}</span>
+    </div>
+    <div class="ri"><span class="k">Tax vendita</span>
+      <span class="v ${st > 10 ? 'bad' : st > 5 ? 'warn' : 'ok'}">${st ? st.toFixed(1) + '%' : '0%'}</span>
+    </div>
+    <div style="font-size:10px;color:var(--txt2);margin-top:8px">Fonte: honeypot.is · test simulazione reale</div>`;
+}
+
+/* ════════════════════════════════════════
+   RENDER — GOPLUS
+   ════════════════════════════════════════ */
+function renderGP(d) {
+  const el = document.getElementById('gp-box');
+  if (!d) {
+    el.innerHTML = `<div class="nd-box">
+      ⚠️ Dati GoPlus non disponibili<br>
+      <small>Il token potrebbe non essere indicizzato,<br>
+      oppure prova con il proxy PHP.</small>
+    </div>`;
+    return;
+  }
+  const v   = x => x === '1';
+  const os  = v(d.is_open_source);
+  const mint = v(d.is_mintable);
+  const bl  = v(d.is_blacklisted);
+  const pause = v(d.transfer_pausable) || v(d.trading_cooldown);
+  const proxy = v(d.is_proxy);
+  const takeback = v(d.can_take_back_ownership);
+  const ownerPct = parseFloat(d.creator_percent || 0) * 100;
+  const holders  = parseInt(d.holder_count || 0);
+  const st = parseFloat(d.sell_tax || 0) * 100;
+  const bt = parseFloat(d.buy_tax  || 0) * 100;
+
+  el.innerHTML = `
+    <div class="ri"><span class="k">Contratto verificato</span>
+      <span class="v ${os ? 'ok' : 'bad'}">${os ? '✅ Sì' : '❌ No'}</span>
+    </div>
+    <div class="ri"><span class="k">Funzione mint</span>
+      <span class="v ${mint ? 'bad' : 'ok'}">${mint ? '⚠️ Attiva' : '✅ No'}</span>
+    </div>
+    <div class="ri"><span class="k">Blacklist</span>
+      <span class="v ${bl ? 'bad' : 'ok'}">${bl ? '⚠️ Attiva' : '✅ No'}</span>
+    </div>
+    <div class="ri"><span class="k">Trading pausabile</span>
+      <span class="v ${pause ? 'warn' : 'ok'}">${pause ? '⚠️ Sì' : '✅ No'}</span>
+    </div>
+    <div class="ri"><span class="k">Contratto proxy</span>
+      <span class="v ${proxy ? 'warn' : 'ok'}">${proxy ? '⚠️ Sì' : '✅ No'}</span>
+    </div>
+    <div class="ri"><span class="k">Owner può riacquisire</span>
+      <span class="v ${takeback ? 'bad' : 'ok'}">${takeback ? '☠️ Sì' : '✅ No'}</span>
+    </div>
+    <div class="ri"><span class="k">% detenuta dal creatore</span>
+      <span class="v ${ownerPct > 20 ? 'bad' : ownerPct > 10 ? 'warn' : 'ok'}">${ownerPct > 0 ? ownerPct.toFixed(1) + '%' : '—'}</span>
+    </div>
+    <div class="ri"><span class="k">Tax vendita</span>
+      <span class="v ${st > 15 ? 'bad' : st > 5 ? 'warn' : 'ok'}">${st ? st.toFixed(1) + '%' : '0%'}</span>
+    </div>
+    <div class="ri"><span class="k">Tax acquisto</span>
+      <span class="v ${bt > 15 ? 'bad' : bt > 5 ? 'warn' : 'ok'}">${bt ? bt.toFixed(1) + '%' : '0%'}</span>
+    </div>
+    ${holders ? `<div class="ri"><span class="k">Holders totali</span>
+      <span class="v ${holders > 1000 ? 'ok' : holders > 200 ? 'warn' : 'bad'}">${holders.toLocaleString()}</span>
+    </div>` : ''}
+    <div style="font-size:10px;color:var(--txt2);margin-top:8px">Fonte: GoPlus Security API</div>`;
+}
+
+/* ════════════════════════════════════════
+   RISK SCORE
+   ════════════════════════════════════════ */
+function calcRisk(hp, gp, pair) {
+  let score = 0;
+  const flags = [];
+
+  /* Honeypot.is */
+  if (hp) {
+    const sr = hp.simulationResult || {};
+    const bt = +(sr.buyTax  || hp.buyTax  || 0);
+    const st = +(sr.sellTax || hp.sellTax || 0);
+    if (hp.isHoneypot) { score += 80; flags.push({t:'HONEYPOT — vendita impossibile', s:'critical'}); }
+    else if (hp.simulationSuccess === false) { score += 50; flags.push({t:'Simulazione vendita fallita', s:'critical'}); }
+    if (st > 15) { score += 30; flags.push({t:`Tax vendita: ${st.toFixed(1)}%`, s:'high'}); }
+    else if (st > 5) { score += 12; flags.push({t:`Tax vendita: ${st.toFixed(1)}%`, s:'medium'}); }
+    if (bt > 15) { score += 15; flags.push({t:`Tax acquisto: ${bt.toFixed(1)}%`, s:'high'}); }
+    else if (bt > 5) { score += 5; flags.push({t:`Tax acquisto: ${bt.toFixed(1)}%`, s:'medium'}); }
+  } else {
+    flags.push({t:'Honeypot.is non disponibile — verifica manuale', s:'low'});
+  }
+
+  /* GoPlus */
+  if (gp) {
+    const v = x => x === '1';
+    if (!v(gp.is_open_source))         { score += 25; flags.push({t:'Contratto non verificato on chain', s:'high'}); }
+    if (v(gp.is_mintable))             { score += 20; flags.push({t:'Funzione mint attiva (supply non fisso)', s:'high'}); }
+    if (v(gp.is_blacklisted))          { score += 15; flags.push({t:'Funzione blacklist attiva', s:'high'}); }
+    if (v(gp.can_take_back_ownership)) { score += 25; flags.push({t:'Owner può riacquisire il contratto', s:'critical'}); }
+    if (v(gp.transfer_pausable))       { score += 15; flags.push({t:'Trading può essere sospeso da owner', s:'high'}); }
+    if (v(gp.is_proxy))                { score += 8;  flags.push({t:'Contratto proxy (logica aggiornabile)', s:'medium'}); }
+    const own = parseFloat(gp.creator_percent || 0) * 100;
+    if (own > 30)      { score += 25; flags.push({t:`Creatore controlla ${own.toFixed(0)}% supply`, s:'critical'}); }
+    else if (own > 10) { score += 10; flags.push({t:`Creatore detiene ${own.toFixed(0)}% supply`, s:'medium'}); }
+    const st = parseFloat(gp.sell_tax || 0) * 100;
+    if (st > 15 && !hp?.isHoneypot) { score += 15; flags.push({t:`Tax vendita GoPlus: ${st.toFixed(0)}%`, s:'high'}); }
+  } else {
+    flags.push({t:'GoPlus non disponibile — contratto non analizzato', s:'low'});
+  }
+
+  /* Liquidity */
+  const liq = pair?.liquidity?.usd || 0;
+  if (liq > 0 && liq < 3000)        { score += 45; flags.push({t:`Liquidità critica: ${usd(liq)}`, s:'critical'}); }
+  else if (liq >= 3000 && liq < 15000)  { score += 22; flags.push({t:`Liquidità bassa: ${usd(liq)}`, s:'high'}); }
+  else if (liq >= 15000 && liq < 50000) { score += 8;  flags.push({t:`Liquidità limitata: ${usd(liq)}`, s:'medium'}); }
+  else if (liq >= 50000)                 { flags.push({t:`Liquidità: ${usd(liq)}`, s:'ok'}); }
+  else                                   { score += 30; flags.push({t:'Liquidità assente o non rilevata', s:'critical'}); }
+
+  /* Pair age */
+  const age = pairAge(pair?.pairCreatedAt);
+  if (age) {
+    if (age.days < 0.5)      { score += 20; flags.push({t:'Pair creata meno di 12 ore fa', s:'critical'}); }
+    else if (age.days < 1)   { score += 15; flags.push({t:'Pair creata meno di 24 ore fa', s:'high'}); }
+    else if (age.days < 7)   { score += 8;  flags.push({t:`Pair attiva da ${age.label} — pochi dati`, s:'medium'}); }
+    else                     { flags.push({t:`Pair attiva da ${age.label}`, s:'ok'}); }
+  }
+
+  /* Buy/sell pattern */
+  const b = pair?.txns?.h24?.buys  || 0;
+  const s = pair?.txns?.h24?.sells || 0;
+  if (b + s > 20) {
+    const r = b / (b + s);
+    if (r > 0.92)      { score += 10; flags.push({t:`Buy anomali: ${(r*100).toFixed(0)}% (possibile pump artificiale)`, s:'medium'}); }
+    else if (r < 0.2)  { score += 10; flags.push({t:`Sell dominanti: ${((1-r)*100).toFixed(0)}% (possibile dump)`, s:'medium'}); }
+    else               { flags.push({t:`Buy/Sell bilanciati: ${b}/${s}`, s:'ok'}); }
+  }
+
+  score = Math.min(100, Math.round(score));
+
+  /* State — MAI COMPRA, VENDI o SICURO */
+  let state;
+  if (score >= 65 || hp?.isHoneypot === true) state = 'RISCHIO_ALTO';
+  else if (score >= 30) state = 'DA_ANALIZZARE';
+  else if (flags.filter(f => f.s === 'critical' || f.s === 'high').length === 0) state = 'INTERESSANTE';
+  else state = 'DA_ANALIZZARE';
+
+  cur.risk = {score, state, flags};
+  updateBadge(state);
+
+  /* Render score box */
+  const lvl = score >= 65 ? 'high' : score >= 30 ? 'med' : 'low';
+  document.getElementById('score-box').innerHTML = `
+    <div style="text-align:center;margin-bottom:10px">
+      <div class="score-ring ring-${lvl}">${score}</div>
+      <div class="state-badge st-${state}" style="display:inline-block">${state.replace(/_/g,' ')}</div>
+    </div>
+    <div>
+      ${flags.map(f => `<div class="flag f-${f.s}">
+        ${f.s==='critical'?'☠️':f.s==='high'?'⚠️':f.s==='medium'?'⚡':f.s==='ok'?'✅':'ℹ️'}
+        <span>${esc(f.t)}</span>
+      </div>`).join('')}
+    </div>
+    <div style="font-size:10px;color:var(--txt2);margin-top:10px;line-height:1.6;border-top:1px solid var(--border);padding-top:8px">
+      Score 0–100 basato su honeypot, sicurezza contratto, liquidità, età pair e pattern di trading.<br>
+      <b>Non è una raccomandazione finanziaria.</b>
+    </div>`;
+}
+
+/* ════════════════════════════════════════
+   STATUS + WATCHLIST
+   ════════════════════════════════════════ */
+function updateBadge(s) {
+  cur.status = s;
+  const el = document.getElementById('state-badge');
+  if (el) { el.className = `state-badge st-${s}`; el.textContent = s.replace(/_/g,' '); }
+}
+
+function setStatus(s) {
+  updateBadge(s);
+  const entry = buildEntry();
+  if (!entry) return;
+  const idx = watchlist.findIndex(x => x.address.toLowerCase() === entry.address.toLowerCase() && x.chain === entry.chain);
+  if (idx >= 0) watchlist[idx] = entry; else watchlist.unshift(entry);
+  localStorage.setItem('dgr81_wl', JSON.stringify(watchlist));
+  renderWL();
+
+  if (phpMode) {
+    const action = s === 'SCARTATO' ? 'save_log' : 'save_watchlist';
+    fetch(`api.php?action=${action}`, {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(entry)}).catch(() => {});
+  }
+}
+
+function buildEntry() {
+  if (!cur.addr) return null;
+  const p = cur.pairs[0];
+  return {
+    date:     new Date().toISOString().slice(0,16).replace('T',' '),
+    name:     p?.baseToken?.name   || '',
+    symbol:   p?.baseToken?.symbol || '',
+    address:  cur.addr,
+    chain:    cur.chain,
+    price:    p?.priceUsd          || '',
+    liq:      p?.liquidity?.usd    || 0,
+    vol24:    p?.volume?.h24       || 0,
+    score:    cur.risk?.score      ?? '',
+    state:    cur.status,
+    honeypot: cur.hp?.isHoneypot === true ? 'SÌ' : 'NO',
+    notes:    document.getElementById('notes').value,
+    dex_url:  p?.url               || '',
+  };
+}
+
+function renderWL() {
+  const wrap = document.getElementById('wl-wrap');
+  if (!watchlist.length) {
+    wrap.innerHTML = '<div class="wl-empty">Nessun token. Aggiungi con il pulsante ⭐ dopo un\'analisi.</div>';
+    return;
+  }
+  wrap.innerHTML = `<table class="wl-tbl"><thead><tr>
+    <th>Data</th><th>Token</th><th>Chain</th><th>Prezzo</th><th>Liquidità</th>
+    <th>Score</th><th>Stato</th><th>Note</th><th></th>
+  </tr></thead><tbody>
+  ${watchlist.map((e, i) => `<tr>
+    <td style="color:var(--txt2)">${e.date}</td>
+    <td><b>${esc(e.symbol)}</b><br><span style="font-size:10px;color:var(--txt2)">${esc(e.name)}</span></td>
+    <td>${e.chain}</td>
+    <td>${e.price ? '$' + fmtPrice(+e.price) : '—'}</td>
+    <td>${usd(+e.liq || 0)}</td>
+    <td>${e.score !== '' ? e.score : '—'}</td>
+    <td><span class="state-badge st-${e.state}" style="font-size:10px;padding:2px 7px">${e.state.replace(/_/g,' ')}</span></td>
+    <td style="max-width:140px;white-space:normal;font-size:10px;color:var(--txt2)">${esc(e.notes || '')}</td>
+    <td style="white-space:nowrap">
+      ${e.dex_url ? `<a href="${e.dex_url}" target="_blank" class="btn btn-ghost btn-sm" style="margin-right:4px">↗</a>` : ''}
+      <button class="btn btn-ghost btn-sm" onclick="removeWL(${i})">✕</button>
+    </td>
+  </tr>`).join('')}
+  </tbody></table>`;
+}
+
+function removeWL(i) {
+  watchlist.splice(i, 1);
+  localStorage.setItem('dgr81_wl', JSON.stringify(watchlist));
+  renderWL();
+}
+function clearWL() {
+  if (confirm('Svuotare tutta la watchlist?')) {
+    watchlist = [];
+    localStorage.setItem('dgr81_wl', '[]');
+    renderWL();
+  }
+}
+
+/* ════════════════════════════════════════
+   CSV EXPORT
+   ════════════════════════════════════════ */
+function saveLogCSV() {
+  const e = buildEntry();
+  if (!e) { alert('Analizza prima un token'); return; }
+  const hdr = 'data,name,symbol,address,chain,price,liquidity,vol24h,score,state,honeypot,notes,dex_url';
+  const row = Object.values(e).map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(',');
+  dlCSV('risk_log_' + Date.now() + '.csv', hdr + '\n' + row);
+  if (phpMode) {
+    fetch('api.php?action=save_log', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(e)}).catch(() => {});
+  }
+}
+
+function exportWL() {
+  if (!watchlist.length) { alert('Watchlist vuota'); return; }
+  const hdr = 'data,name,symbol,address,chain,price,liquidity,vol24h,score,state,honeypot,notes,dex_url';
+  const rows = watchlist.map(e => Object.values(e).map(v => `"${String(v||'').replace(/"/g,'""')}"`).join(','));
+  dlCSV('watchlist_' + Date.now() + '.csv', [hdr, ...rows].join('\n'));
+}
+
+function dlCSV(name, content) {
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(content);
+  a.download = name;
+  a.click();
+}
+
+function copyAddr() {
+  if (!cur.addr) { alert('Nessun contratto da copiare'); return; }
+  navigator.clipboard?.writeText(cur.addr).then(() => {
+    const b = event.target;
+    const old = b.textContent;
+    b.textContent = '✅ Copiato!';
+    setTimeout(() => b.textContent = old, 1500);
+  }).catch(() => prompt('Copia il contratto:', cur.addr));
+}
+
+/* ════════════════════════════════════════
+   UTILS
+   ════════════════════════════════════════ */
+function pairAge(ts) {
+  if (!ts) return null;
+  const ms   = typeof ts === 'number' ? ts : Date.parse(ts);
+  const days = (Date.now() - ms) / 86400000;
+  if (isNaN(days) || days < 0) return null;
+  if (days < 1)  return {days, label: Math.round(days * 24) + 'h'};
+  if (days < 30) return {days, label: Math.round(days) + 'g'};
+  return {days, label: Math.round(days / 30) + 'mesi'};
+}
+
+function usd(n) {
+  if (!n || n <= 0) return '—';
+  if (n >= 1e9) return '$' + (n/1e9).toFixed(1) + 'B';
+  if (n >= 1e6) return '$' + (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + (n/1e3).toFixed(0) + 'K';
+  return '$' + n.toFixed(0);
+}
+
+function fmtPrice(n) {
+  if (!n) return '0';
+  if (n >= 1)    return n.toFixed(3);
+  if (n >= 0.01) return n.toFixed(5);
+  if (n >= 1e-6) return n.toFixed(8);
+  return n.toExponential(3);
+}
+
+function esc(s) {
+  return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
