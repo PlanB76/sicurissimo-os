@@ -156,10 +156,38 @@ a{color:var(--cyan);text-decoration:none}
 </head>
 <body>
 
-<!-- FILE:// WARNING BANNER (hidden on http/https) -->
-<div id="file-warn" style="display:none;background:#FF446611;border-bottom:2px solid var(--red);color:var(--red);padding:10px 14px;font-size:12px;font-weight:700;text-align:center;line-height:1.6">
-  ⚠️ File aperto come file locale — le estensioni wallet non si attivano su file://<br>
-  <span style="font-weight:400;color:var(--txt2)">Soluzioni: carica su Hostinger oppure avvia <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;color:var(--txt)">python3 -m http.server 8080</code> e apri <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;color:var(--txt)">http://localhost:8080</code></span>
+<!-- FILE:// SETUP BANNER (hidden on http/https) -->
+<div id="file-warn" style="display:none;background:#FFD24A11;border-bottom:2px solid var(--gold);color:var(--gold);padding:10px 14px;font-size:12px;font-weight:700;text-align:center;line-height:1.8;cursor:pointer" onclick="document.getElementById('file-setup').classList.toggle('on')">
+  ⚙️ Prima configurazione wallet (tocca per vedere i passi) ▾
+</div>
+<div id="file-setup" class="modal-bg" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="modal" style="max-width:400px">
+    <div class="flex-sb" style="margin-bottom:14px">
+      <h3 style="color:var(--gold)">⚙️ Abilita wallet su file locale</h3>
+      <span onclick="document.getElementById('file-setup').classList.remove('on')" style="cursor:pointer;color:var(--txt2);font-size:18px">✕</span>
+    </div>
+    <p style="font-size:13px;color:var(--txt2);margin-bottom:14px">Fai questo <b style="color:var(--txt)">una volta sola</b> e il wallet funzionerà sempre su questo file.</p>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:10px">
+      <div style="font-size:12px;font-weight:800;color:var(--cyan);margin-bottom:10px">Chrome</div>
+      <ol style="font-size:12px;color:var(--txt);line-height:2;padding-left:18px">
+        <li>Apri <span id="ext-link-chrome" style="color:var(--cyan);cursor:pointer;text-decoration:underline" onclick="copyText('chrome://extensions')">chrome://extensions</span> <span style="font-size:10px;color:var(--txt2)">(copia e incolla nella barra)</span></li>
+        <li>Trova <b>TokenPocket</b> → clicca <b>Dettagli</b></li>
+        <li>Attiva <b>"Consenti accesso agli URL dei file"</b></li>
+        <li>Ricarica questa pagina (F5)</li>
+      </ol>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px">
+      <div style="font-size:12px;font-weight:800;color:var(--orange);margin-bottom:10px">Brave</div>
+      <ol style="font-size:12px;color:var(--txt);line-height:2;padding-left:18px">
+        <li>Apri <span style="color:var(--cyan);cursor:pointer;text-decoration:underline" onclick="copyText('brave://extensions')">brave://extensions</span> <span style="font-size:10px;color:var(--txt2)">(copia e incolla)</span></li>
+        <li>Trova <b>TokenPocket</b> → clicca <b>Dettagli</b></li>
+        <li>Attiva <b>"Consenti accesso agli URL dei file"</b></li>
+        <li>Vai su <span style="color:var(--cyan);cursor:pointer;text-decoration:underline" onclick="copyText('brave://settings/web3')">brave://settings/web3</span> → "Portafoglio predefinito" → <b>Estensioni</b></li>
+        <li>Ricarica questa pagina (F5)</li>
+      </ol>
+    </div>
+    <button class="btn btn-orange btn-block" onclick="document.getElementById('file-setup').classList.remove('on');discoverAndShow()">✅ Fatto, connetti wallet</button>
+  </div>
 </div>
 
 <!-- TOPBAR: wallet connect top-right, visible on every tab -->
@@ -590,12 +618,13 @@ async function discoverAndShow(){
     const isBrave=navigator.brave?.isBrave||/\bBrave\b/.test(navigator.userAgent);
     let msg='';
     if(isFile){
-      msg=`<b>⚠️ Aperto come file locale</b><br>
-Le estensioni wallet non si attivano su file://<br><br>
-<b>Soluzione rapida:</b> carica il file su Hostinger<br>
-<b>Oppure</b> avvia un server locale:<br>
-<code style="background:var(--bg3);padding:3px 8px;border-radius:5px;display:block;margin:7px 0;word-break:break-all;font-size:11px">python3 -m http.server 8080</code>
-poi apri <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">http://localhost:8080</code>`;
+      msg=`<b>⚙️ Devi abilitare l'accesso ai file locali</b><br><br>
+<b>Chrome</b> → copia nella barra:<br>
+<code style="background:var(--bg3);padding:2px 8px;border-radius:5px;display:block;margin:4px 0;cursor:pointer" onclick="copyText('chrome://extensions')">chrome://extensions</code>
+TokenPocket → Dettagli → <b>"Consenti accesso agli URL dei file"</b> ✓<br><br>
+<b>Brave</b> → stesso passaggio su:<br>
+<code style="background:var(--bg3);padding:2px 8px;border-radius:5px;display:block;margin:4px 0;cursor:pointer" onclick="copyText('brave://extensions')">brave://extensions</code>
+Poi ricarica questa pagina e ripremi Connetti`;
     } else if(isBrave){
       msg=`<b>⚠️ Brave blocca le estensioni wallet</b><br>
 Vai su <b>brave://settings/web3</b><br>
@@ -798,6 +827,7 @@ async function execSwap(){
 }
 
 /* ===== UTILS ===== */
+function copyText(t){navigator.clipboard?.writeText(t).then(()=>{const el=document.createElement('div');el.textContent='✅ Copiato!';Object.assign(el.style,{position:'fixed',bottom:'90px',left:'50%',transform:'translateX(-50%)',background:'var(--green)',color:'#042614',padding:'8px 18px',borderRadius:'20px',fontWeight:700,fontSize:'13px',zIndex:9999});document.body.appendChild(el);setTimeout(()=>el.remove(),1500);});}
 function usd(n){if(!n)return'$0';if(n>=1e9)return'$'+(n/1e9).toFixed(1)+'B';if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'K';return'$'+n.toFixed(0);}
 function price(n){if(!n)return'$0';if(n>=1)return'$'+n.toFixed(3);if(n>=0.01)return'$'+n.toFixed(5);return'$'+n.toExponential(2);}
 function esc(s){return String(s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
@@ -806,9 +836,12 @@ function ld(src){return new Promise((res,rej)=>{const s=document.createElement('
 /* ===== INIT ===== */
 requestProviders();
 (async()=>{
-  /* mostra banner se aperto come file locale */
-  if(location.protocol==='file:')
+  /* mostra banner setup se aperto come file locale */
+  if(location.protocol==='file:'){
     document.getElementById('file-warn').style.display='block';
+    /* se le estensioni non sono ancora configurate, apri il modale di setup automaticamente */
+    setTimeout(()=>{if(!window.ethereum&&!window.tokenpocket)document.getElementById('file-setup').classList.add('on');},1200);
+  }
 
   /* carica ethers.js con fallback CDN */
   const CDN=[
