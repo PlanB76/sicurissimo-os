@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>81+ BRAND & MARKETING OS — Documento Integrato</title>
+<style>
+  :root{
+    --blu:#1A2A4A;--arancio:#F59E0B;--verde:#065F46;--rosso:#7C2D12;
+    --azzurro:#1E40AF;--grigio:#F3F4F6;--bordo:#E5E7EB;--testo:#111827;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Segoe UI',Arial,sans-serif;color:var(--testo);background:#fff;line-height:1.6}
+  /* NAV */
+  nav{position:sticky;top:0;z-index:100;background:var(--blu);padding:10px 24px;display:flex;gap:16px;flex-wrap:wrap;border-bottom:3px solid var(--arancio)}
+  nav a{color:#CBD5E1;text-decoration:none;font-size:12px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:4px 8px;border-radius:4px;transition:all .2s}
+  nav a:hover{color:#fff;background:rgba(255,255,255,.1)}
+  /* COVER */
+  .cover{background:linear-gradient(135deg,var(--blu) 0%,#0F172A 100%);color:#fff;padding:80px 40px;text-align:center;border-bottom:4px solid var(--arancio)}
+  .cover h1{font-size:48px;font-weight:900;letter-spacing:-1px;margin-bottom:8px}
+  .cover .sub{font-size:18px;color:#94A3B8;margin-bottom:24px}
+  .cover .badge{display:inline-block;background:var(--arancio);color:#000;font-weight:700;padding:6px 20px;border-radius:20px;font-size:13px}
+  /* SEZIONI */
+  section{max-width:1100px;margin:0 auto;padding:60px 32px}
+  section + section{border-top:2px solid var(--bordo)}
+  h2{font-size:30px;font-weight:800;color:var(--blu);margin-bottom:6px;padding-bottom:12px;border-bottom:3px solid var(--arancio)}
+  h3{font-size:20px;font-weight:700;color:var(--azzurro);margin:28px 0 10px}
+  h4{font-size:16px;font-weight:700;color:var(--blu);margin:18px 0 6px}
+  p{margin-bottom:14px;color:#374151}
+  ul,ol{margin:10px 0 16px 24px}
+  li{margin-bottom:6px;color:#374151}
+  /* CARD */
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin:24px 0}
+  .card{border:1px solid var(--bordo);border-radius:10px;padding:20px;background:#FAFAFA}
+  .card h4{color:var(--blu);margin-top:0}
+  .card.verde{border-left:4px solid var(--verde);background:#F0FDF4}
+  .card.arancio{border-left:4px solid var(--arancio);background:#FFFBEB}
+  .card.blu{border-left:4px solid var(--azzurro);background:#EFF6FF}
+  .card.rosso{border-left:4px solid var(--rosso);background:#FFF7F5}
+  /* QUOTE */
+  blockquote{border-left:4px solid var(--arancio);background:var(--grigio);padding:16px 20px;margin:20px 0;border-radius:0 8px 8px 0;font-style:italic;font-size:17px;color:var(--blu)}
+  /* TABLE */
+  table{width:100%;border-collapse:collapse;margin:20px 0}
+  th{background:var(--blu);color:#fff;padding:10px 14px;text-align:left;font-size:13px}
+  td{padding:9px 14px;border-bottom:1px solid var(--bordo);font-size:13px}
+  tr:nth-child(even){background:var(--grigio)}
+  /* SCRIPT BOX */
+  .script{background:#0F172A;color:#E2E8F0;padding:20px 24px;border-radius:8px;margin:16px 0;font-family:'Courier New',monospace;font-size:13px;line-height:1.8;white-space:pre-wrap}
+  .script .time{color:var(--arancio);font-weight:700}
+  /* TAG */
+  .tag{display:inline-block;padding:3px 10px;border-radius:12px;font-size:11px;font-weight:700;margin:2px;text-transform:uppercase}
+  .tag.blu{background:#DBEAFE;color:var(--azzurro)}
+  .tag.verde{background:#D1FAE5;color:var(--verde)}
+  .tag.arancio{background:#FEF3C7;color:#92400E}
+  .tag.rosso{background:#FEE2E2;color:#991B1B}
+  /* PILL */
+  .pill-row{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+  /* TIMELINE */
+  .timeline{border-left:3px solid var(--arancio);margin:20px 0 20px 16px;padding-left:24px}
+  .timeline-item{margin-bottom:20px;position:relative}
+  .timeline-item::before{content:'';position:absolute;left:-30px;top:6px;width:12px;height:12px;background:var(--arancio);border-radius:50%}
+  /* FUNNEL */
+  .funnel-step{background:var(--grigio);border-radius:8px;padding:14px 18px;margin:8px 0;border-left:4px solid var(--azzurro);display:flex;align-items:center;gap:14px}
+  .funnel-step .num{background:var(--blu);color:#fff;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0;font-size:13px}
+  /* PRINT */
+  @media print{nav{display:none}.cover{padding:40px}section{padding:30px 20px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="#storia">Storia</a>
+  <a href="#brand">Brand DNA</a>
+  <a href="#marketing">Strategia</a>
+  <a href="#funnel">Funnel</a>
+  <a href="#call">Call Script</a>
+  <a href="#webinar">Webinar</a>
+  <a href="#content">Content</a>
+  <a href="#ads">Ads</a>
+  <a href="#email">Email</a>
+  <a href="#kpi">KPI</a>
+  <a href="#legale">Legale</a>
+</nav>
+
+<div class="cover">
+  <h1>81+ BRAND &amp; MARKETING OS</h1>
+  <div class="sub">Documento Integrato — Biografia · Strategia · Sales · Content · Funnel</div>
+  <div class="badge">Versione Integrata — Giugno 2026</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="storia">
+  <h2>01. LA STORIA DI MIRCO PREGNOLATO</h2>
+  <p><em>Fonte: Biografia Narrativa 81+ — 10 pagine</em></p>
+
+  <blockquote>"Il Delta non è dove il fiume finisce. È dove impara a diventare mare."</blockquote>
+
+  <div class="grid">
+    <div class="card blu">
+      <h4>Origini</h4>
+      <p>Nato nel 1976 ad Adria, la città che ha dato il nome al Mare Adriatico. Cresciuto nel Delta del Po: terra che non è mai ferma, non è mai solo terra, non è mai solo acqua. Una geografia interiore che insegna che la vita non scorre in linea retta.</p>
+    </div>
+    <div class="card arancio">
+      <h4>Famiglia</h4>
+      <p><strong>Radici:</strong> Graziella e Graziano (genitori) — l'origine, il punto a cui si torna.<br>
+      <strong>Futuro:</strong> Nicolas e Noemi (figli) — la responsabilità più alta, il motivo silenzioso per non mollare.</p>
+    </div>
+    <div class="card verde">
+      <h4>Numeri</h4>
+      <p>Dal 2000 in poi: <strong>oltre 225.000 persone formate</strong>.<br>
+      Oltre <strong>32.000 aziende</strong> seguite.<br>
+      Europa · America · Nord Africa · Emirati · isole tropicali.</p>
+    </div>
+  </div>
+
+  <h3>La traiettoria narrativa — 10 tappe</h3>
+  <div class="timeline">
+    <div class="timeline-item">
+      <h4>Tappa 1 — Le radici del Delta</h4>
+      <p>Nasce in un confine. Impara che la vita si divide, si rompe, si apre, cambia direzione. Due anime: quella delle radici e quella della partenza.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 2 — Le mappe di coraggio</h4>
+      <p>Da bambino colleziona oltre 2.000 fumetti. Li dona poi ai bambini del terremoto del Molise. Prima lezione: una storia che ti ha tenuto compagnia non si chiude in una scatola — la rimetti in viaggio come una torcia.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 3 — La fame di mondo</h4>
+      <p>Attraversa Europa, America, Nord Africa, Inghilterra, Germania, Olanda, Francia, Benelux, Spagna, Emirati Arabi, isole tropicali. Non colleziona fotografie: cerca il segnale, la direzione, la prossima onda.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 4 — La filosofia del surf</h4>
+      <p>"Un'onda non la comandi. La studi. La rispetti. La aspetti. La senti arrivare prima che arrivi. E quando arriva hai un istante. Solo uno. O ti alzi, o resti sotto." — metafora fondante di tutta la visione.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 5 — La formazione su scala industriale</h4>
+      <p>Dal 2000: 225.000 persone formate, 32.000 aziende seguite. Scoperta chiave: la gente non cerca informazioni. Cerca di essere vista. Cerca apprezzamento, responsabilità, rispetto, motivazione, autostima, sicurezza, direzione.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 6 — Il vento contrario</h4>
+      <p>Onde alte. Ambizione. Orgoglio. Errori. Intuizioni. Cadute. Risalite. Momenti in cui tutto sembrava possibile e notti in cui il mondo sembrava piccolo come una stanza chiusa.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 7 — La soglia</h4>
+      <p>"Ci sono cadute che ti distruggono. E ci sono cadute che ti tolgono solo quello che non eri più." Il fondo come primo pavimento solido dopo anni di illusioni. I nomi che lo tengono: Graziella, Graziano, Nicolas, Noemi.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 8 — La trasformazione</h4>
+      <p>Smette di cercare risultati, inizia a cercare direzione. Smette di voler dimostrare, inizia a costruire. Smette di inseguire approvazione, inizia a creare strumenti. Da questa trasformazione nasce 81+.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 9 — La visione 81+</h4>
+      <p>Non un sito. Non un marchio buttato online. Un ecosistema: persone, aziende, formazione, sicurezza, community, identità digitale, gamification, network, Web3 utility e crescita personale. La sicurezza come metafora: proteggere ciò che conta.</p>
+    </div>
+    <div class="timeline-item">
+      <h4>Tappa 10 — Il messaggio finale</h4>
+      <p>"Non devi essere perfetto per partire. Devi essere vero. Non devi avere tutto chiaro. Devi decidere che non vuoi più restare dove sei. Non devi controllare tutte le onde. Devi imparare ad alzarti quando arriva quella giusta."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="brand">
+  <h2>02. BRAND DNA 81+</h2>
+
+  <div class="grid">
+    <div class="card rosso">
+      <h4>Chi NON è 81+</h4>
+      <ul>
+        <li>Non è un semplice catalogo corsi</li>
+        <li>Non è un consulente che risponde a domande</li>
+        <li>Non è un sito con PDF scaricabili</li>
+        <li>Non è un marchio buttato online</li>
+      </ul>
+    </div>
+    <div class="card verde">
+      <h4>Chi È 81+</h4>
+      <ul>
+        <li>Un ecosistema di governo della compliance</li>
+        <li>Sistema operativo che agisce mentre dormi</li>
+        <li>Categoria creata: "Compliance guidata, digitale e continua"</li>
+        <li>Guida che dà piano, strumenti e supporto</li>
+      </ul>
+    </div>
+  </div>
+
+  <h3>Formula madre</h3>
+  <blockquote>Da azienda confusa, esposta e dispersa nella giungla normativa → a azienda guidata, monitorata e più tranquilla, con Sicurezza, HACCP e Privacy in un unico ecosistema.</blockquote>
+
+  <h3>Messaggio centrale</h3>
+  <blockquote>"La Sicurezza in 1 Click" — meno caos, meno rischio, meno scadenze dimenticate, più controllo.</blockquote>
+
+  <h3>Cosa vende davvero il cliente</h3>
+  <p>Il cliente non compra corsi, documenti, attestati o software. Compra:</p>
+  <div class="pill-row">
+    <span class="tag verde">Protezione</span>
+    <span class="tag verde">Controllo</span>
+    <span class="tag verde">Serenità gestionale</span>
+    <span class="tag verde">Riduzione del rischio</span>
+    <span class="tag verde">Continuità operativa</span>
+    <span class="tag verde">Reputazione</span>
+    <span class="tag verde">Dormire meglio</span>
+    <span class="tag verde">Sentirsi un titolare serio</span>
+  </div>
+
+  <h3>Posizionamento StoryBrand</h3>
+  <table>
+    <tr><th>Ruolo</th><th>Chi</th><th>Cosa fa</th></tr>
+    <tr><td><strong>Eroe</strong></td><td>Il titolare d'azienda</td><td>Vuole proteggere azienda, persone e reputazione</td></tr>
+    <tr><td><strong>Guida</strong></td><td>81+ / Mirco</td><td>Dà piano, strumenti, supporto, percorso</td></tr>
+    <tr><td><strong>Problema esterno</strong></td><td>Caos normativo</td><td>DVR mancante, corsi scaduti, scadenze dimenticate</td></tr>
+    <tr><td><strong>Problema interno</strong></td><td>Ansia del titolare</td><td>"E se arriva un ispettore? E se c'è un incidente?"</td></tr>
+    <tr><td><strong>Problema filosofico</strong></td><td>Ingiustizia percepita</td><td>"Non ho risorse per tenere tutto sotto controllo"</td></tr>
+  </table>
+
+  <h3>I 6 bisogni profondi (Maslow applicato)</h3>
+  <div class="grid">
+    <div class="card blu"><h4>Sicurezza</h4><p>Proteggere persone, evitare sanzioni, mantenere aperta l'azienda.</p></div>
+    <div class="card blu"><h4>Appartenenza</h4><p>Far parte di una community seria, network di professionisti.</p></div>
+    <div class="card blu"><h4>Stima</h4><p>Sentirsi un titolare responsabile e rispettato.</p></div>
+    <div class="card blu"><h4>Crescita</h4><p>Migliorare i processi aziendali, aggiornare il team.</p></div>
+    <div class="card blu"><h4>Libertà</h4><p>Non dover pensare continuamente alle scadenze.</p></div>
+    <div class="card blu"><h4>Significato</h4><p>Costruire qualcosa che dura, che protegge davvero.</p></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="marketing">
+  <h2>03. STRATEGIA MARKETING — MASTER 81+</h2>
+  <p><em>Fonte: MASTER Tecniche e Strategie Marketing 81+.docx — framework Neural Compliance Growth</em></p>
+
+  <h3>Strategia centrale: Neural Compliance Growth</h3>
+  <div class="pill-row">
+    <span class="tag arancio">Compliance normativa</span>
+    <span class="tag arancio">Automazione</span>
+    <span class="tag arancio">Formazione</span>
+    <span class="tag arancio">Rete</span>
+    <span class="tag arancio">Ricavi ricorrenti</span>
+    <span class="tag arancio">AI</span>
+  </div>
+
+  <h3>Metodo EPPPA — Fotografia del cliente</h3>
+  <table>
+    <tr><th>Lettera</th><th>Elemento</th><th>Applicazione 81+</th></tr>
+    <tr><td><strong>E</strong></td><td>Emozioni</td><td>Ansia controlli, paura sanzioni, stanchezza burocrazia</td></tr>
+    <tr><td><strong>P</strong></td><td>Pensieri</td><td>"Non ho tempo", "Costa troppo", "Il mio consulente ci pensa"</td></tr>
+    <tr><td><strong>P</strong></td><td>Parole</td><td>"Aspetto di rinnovare", "Lo faccio quando serve", "Siamo a posto"</td></tr>
+    <tr><td><strong>P</strong></td><td>Persone</td><td>Titolare, RSPP esterno, dipendenti, sindaci, ispettori</td></tr>
+    <tr><td><strong>A</strong></td><td>Azioni</td><td>Fare corsi solo quando scadono, affidarsi a consulenti occasionali</td></tr>
+  </table>
+
+  <h3>Metodo REPPPA — Piano strategico</h3>
+  <table>
+    <tr><th>Lettera</th><th>Elemento</th><th>Esempio 81+</th></tr>
+    <tr><td><strong>R</strong></td><td>Risultato desiderato</td><td>Azienda ordinata per controllo, cantiere o appalto</td></tr>
+    <tr><td><strong>E</strong></td><td>Emozioni collegate</td><td>Sollievo, controllo, reputazione, protezione</td></tr>
+    <tr><td><strong>P</strong></td><td>Punto di partenza</td><td>DVR, corsi, nomine, HACCP, privacy, medicina, scadenze</td></tr>
+    <tr><td><strong>P</strong></td><td>Piano strategico</td><td>Audit → priorità → documenti → corsi → ruoli → monitoraggio</td></tr>
+    <tr><td><strong>P</strong></td><td>Persone e risorse</td><td>Datore, RSPP, RLS, medico, preposti, addetti emergenza, lavoratori</td></tr>
+    <tr><td><strong>A</strong></td><td>Azioni</td><td>Oggi, entro 7 giorni, entro 30 giorni, ogni anno</td></tr>
+  </table>
+
+  <h3>Framework commerciali integrati</h3>
+  <div class="grid">
+    <div class="card arancio">
+      <h4>Hormozi Value Equation</h4>
+      <p>Non vendere "corso lavoratori". Vendi "azienda con formazione mappata, attestati tracciati e scadenze sotto controllo".</p>
+    </div>
+    <div class="card arancio">
+      <h4>Russell Brunson — Value Ladder</h4>
+      <p>Clienti diversi entrano a livelli diversi. Dal lead magnet gratuito al premium mensile, senza bloccare chi non è pronto.</p>
+    </div>
+    <div class="card arancio">
+      <h4>Sandler Selling</h4>
+      <p>Up-front contract: "Ci prendiamo 12 minuti, ti faccio 5 domande, se vedo che non serve te lo dico." Abbassa difese, aumenta controllo.</p>
+    </div>
+    <div class="card arancio">
+      <h4>Challenger Sale</h4>
+      <p>Insight: molte aziende credono di essere a posto perché hanno qualche attestato, ma non hanno un sistema. Teach → Tailor → Take control.</p>
+    </div>
+    <div class="card arancio">
+      <h4>SPIN Selling</h4>
+      <p>Domande Situazione → Problema → Implicazione → Need-Payoff. Far emergere il bisogno, non dichiararlo.</p>
+    </div>
+    <div class="card arancio">
+      <h4>Dream 100 — Chet Holmes</h4>
+      <p>100 contatti strategici per provincia: consulenti del lavoro, commercialisti, studi tecnici, imprese edili, reti horeca, broker assicurativi, medici del lavoro.</p>
+    </div>
+  </div>
+
+  <h3>Prompt AI Master per NETWORK81+</h3>
+  <div class="script">Agisci come strategist commerciale 81+ per sicurezza sul lavoro, HACCP e privacy.
+Target: [settore], rischio: [basso/medio/alto], dimensione: [n. lavoratori].
+Crea:
+1) Punto di dolore reale
+2) Hook
+3) Checklist lead magnet
+4) Script WhatsApp
+5) 5 domande SPIN
+6) Proposta in tre livelli START / PRO / FULL
+7) Follow-up a 24h, 72h e 7 giorni
+Tono pratico, etico, non aggressivo, senza promesse false.</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="funnel">
+  <h2>04. ARCHITETTURA FUNNEL — 12 PASSI</h2>
+  <p><em>Fonte: MASTER Marketing 81+ — Sezione 5</em></p>
+
+  <div class="funnel-step"><div class="num">1</div><div><strong>Target:</strong> Scegli settore ATECO, rischio, dimensione, urgenza</div></div>
+  <div class="funnel-step"><div class="num">2</div><div><strong>Traffico:</strong> Social, referral, partnership, ads, eventi, SEO</div></div>
+  <div class="funnel-step"><div class="num">3</div><div><strong>Magnete:</strong> Checklist, audit, guida, quiz, mini corso gratuito</div></div>
+  <div class="funnel-step"><div class="num">4</div><div><strong>Cattura:</strong> Form, WhatsApp, CRM, consenso privacy</div></div>
+  <div class="funnel-step"><div class="num">5</div><div><strong>Educa:</strong> Email, Telegram, contenuti, webinar</div></div>
+  <div class="funnel-step"><div class="num">6</div><div><strong>Diagnosi:</strong> Aiuta chi ha alzato la mano con risposta personalizzata</div></div>
+  <div class="funnel-step"><div class="num">7</div><div><strong>Offerta:</strong> Presenta offerta collegata al magnete, non proposta generica</div></div>
+  <div class="funnel-step"><div class="num">8</div><div><strong>Chiudi:</strong> Decisione chiara e prossimi passi</div></div>
+  <div class="funnel-step"><div class="num">9</div><div><strong>Supera:</strong> Consegna ordinata, reminder, bonus utile</div></div>
+  <div class="funnel-step"><div class="num">10</div><div><strong>Stupisci:</strong> Report, scadenziario, mini consulenza, kit</div></div>
+  <div class="funnel-step"><div class="num">11</div><div><strong>Upsell:</strong> Cross-sell, down-sell, membership</div></div>
+  <div class="funnel-step"><div class="num">12</div><div><strong>Passaparola:</strong> Referral, recensione vera, caso studio</div></div>
+
+  <h3>Struttura offerta — 3 livelli</h3>
+  <table>
+    <tr><th>Livello</th><th>Nome</th><th>Contenuto</th><th>Prezzo indicativo</th></tr>
+    <tr><td>START</td><td>Minimo</td><td>Solo gestione documentale base</td><td>€39/mese</td></tr>
+    <tr><td>PRO</td><td>Consigliato</td><td>Gestione continuativa completa</td><td>€79/mese</td></tr>
+    <tr><td>FULL</td><td>Completo</td><td>Gestione + corsi + supporto prioritario</td><td>€149/mese</td></tr>
+  </table>
+  <p><em>Il cliente non sceglie tra sì/no, ma tra livello di protezione.</em></p>
+
+  <h3>3 Flussi VA (da immagini allegate)</h3>
+  <div class="grid">
+    <div class="card blu">
+      <h4>Flusso 1 — Consulenza Gratuita</h4>
+      <p>Lead entra → prenota call → diagnosi 20 min → offerta personalizzata → chiusura o nurturing</p>
+    </div>
+    <div class="card blu">
+      <h4>Flusso 2 — Gruppo Facebook</h4>
+      <p>Contenuto educativo → click → gruppo FB → valore → offerta → WhatsApp → vendita</p>
+    </div>
+    <div class="card blu">
+      <h4>Flusso 3 — Magnete Irresistibile</h4>
+      <p>Lead magnet gratuito → opt-in → sequenza email → webinar → offerta → acquisto</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="call">
+  <h2>05. CALL STRATEGICA VENDITA — SCRIPT 15 MINUTI</h2>
+  <p><em>Fonte: CALL STRATEGICA VENDITA - SICURISSIMO.docx</em></p>
+
+  <div class="script"><span class="time">0:00 – 1:30 | APERTURA</span>
+Ciao [Nome], grazie per il tempo.
+La mia idea, il mio scopo di oggi non è venderti qualcosa al volo,
+ma capire se ha senso lavorare insieme.
+Ti faccio qualche domanda così inquadro bene la situazione.
+
+<span class="time">1:30 – 4:00 | DOMANDE (fai parlare lui)</span>
+Le aziende che segui sono tutte operative?
+La sicurezza oggi come la gestisci: qualcuno di fisso o tutto a chiamata?
+I corsi li fate quando scadono o solo quando diventano un'urgenza?
+⚠️ Ascolta. Annuisci. Prendi appunti. Qui lui deve sentire il disordine, non tu dirglielo.
+
+<span class="time">4:00 – 6:00 | FAI EMERGERE IL PROBLEMA (senza accusare)</span>
+Quello che vedo spesso è questo: i corsi si fanno, ma manca una regia
+che tenga tutto sotto controllo nel tempo.
+Scadenze, aggiornamenti normativi, nuove richieste… se non c'è qualcuno
+che segue in modo continuativo, qualcosa scappa sempre.
+(Se annuisce → sei dentro)
+
+<span class="time">6:00 – 8:00 | POSIZIONAMENTO ALTO</span>
+Io lavoro così: prima metto ordine, poi faccio i corsi solo quando servono davvero.
+Per questo non vendo solo corsi, ma una gestione sicurezza continuativa,
+che copre tutto l'anno.
+
+<span class="time">8:00 – 9:30 | PREZZO (chiaro, senza paura)</span>
+La gestione è di 79 euro al mese, ricorrenti, per azienda.
+Non è un progetto una tantum, è un presidio continuo.
+I corsi di formazione sono extra, una tantum.
+⚠️ Stop. Silenzio. Lascialo reagire.
+
+<span class="time">9:30 – 11:00 | GESTIONE OBIEZIONI</span>
+"Preferisco solo i corsi" →
+  Posso farli anche così, ma senza gestione continuativa non posso
+  garantirti che tutto resti in regola nel tempo.
+
+"Così pago di più" →
+  In realtà distribuisci i costi ed eviti interventi inutili o fatti male.
+
+<span class="time">11:00 – 12:30 | CHIUSURA SERVIZIO</span>
+Il modo più semplice è partire dalla gestione da 79 euro,
+e poi decidiamo insieme quali corsi servono davvero, senza sprechi.
+
+<span class="time">12:30 – 14:00 | PROPOSTA PROVVIGIONE (20%)</span>
+Ti dico anche questa cosa, poi valutala con calma.
+[pausa breve]
+Io lavoro spesso con professionisti che collaborano con idraulici,
+elettricisti, muratori, posatori, imprese edili.
+Se in futuro dovessi segnalarmi qualche azienda con cui già lavori
+e parte una collaborazione continuativa, riconosco sempre una percentuale mensile.
+— NON dire "passaparola" — NON dire "portami clienti"
+Se chiede: "In che senso percentuale?"
+  È una percentuale ricorrente sul canone mensile, finché l'azienda resta attiva.
+  Indicativamente un 20%.
+
+<span class="time">14:00 – 15:00 | CHIUSURA ELEGANTE</span>
+Ora ti mando una mail di riepilogo con tutto scritto nero su bianco.
+Poi con calma valuti e decidiamo come partire.</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="webinar">
+  <h2>06. WEBINAR — LA GHIGLIOTTINA</h2>
+  <p><em>Fonte: WEBINAR SICURISSIMO LA GHIGLIOTTINA.docx</em></p>
+
+  <blockquote>"Con la conversione del D.L. 159 nella Legge 198/2025, e l'integrazione del D.Lgs 213/2025, non siamo davanti a una 'nuova norma'. Siamo davanti a un cambio di paradigma totale."</blockquote>
+
+  <h3>Struttura webinar</h3>
+  <table>
+    <tr><th>Fase</th><th>Contenuto</th><th>Obiettivo</th></tr>
+    <tr><td>Apertura</td><td>Annuncio check-up privato (15 posti)</td><td>Creare urgenza e scarsità reale</td></tr>
+    <tr><td>Hook normativo</td><td>Legge 198/2025 + D.Lgs 213/2025 — vigilanza algoritmica</td><td>Paura → attenzione</td></tr>
+    <tr><td>Il problema</td><td>Badge QR/RFID, SIISL, patente a crediti</td><td>Mostrare il rischio concreto</td></tr>
+    <tr><td>La ghigliottina</td><td>Software che può revocare la licenza con un click</td><td>Senso di urgenza massimo</td></tr>
+    <tr><td>La soluzione</td><td>"Immunità Digitale" — semaforo verde automatico</td><td>Da paura a speranza</td></tr>
+    <tr><td>CTA</td><td>Email oggetto "CHECK-UP 2026" — solo 15 posti</td><td>Conversione immediata</td></tr>
+    <tr><td>Q&amp;A</td><td>Domande libere</td><td>Qualificazione lead</td></tr>
+  </table>
+
+  <h3>Frasi chiave del webinar</h3>
+  <div class="grid">
+    <div class="card rosso">
+      <h4>La ghigliottina software</h4>
+      <p>"Il nuovo decreto 213 obbliga a una tracciabilità dei 'mancati incidenti' così stretta che, se non li dichiarate, siete sospetti; se li dichiarate male, perdete punti. È una ghigliottina software che può revocare la vostra licenza di lavorare con un click."</p>
+    </div>
+    <div class="card rosso">
+      <h4>L'ultimo scudo rimosso</h4>
+      <p>"Lo Stato ha rimosso l'ultimo scudo: l'ignoranza del Titolare. Oggi, se voi come datori di lavoro non avete la vostra formazione specifica tracciata digitalmente, cade tutto il castello difensivo."</p>
+    </div>
+    <div class="card verde">
+      <h4>L'immunità digitale</h4>
+      <p>"Significa trasformare la formazione obbligatoria da un fastidio a una prova inconfutabile di diligenza. Se l'algoritmo dello Stato interroga la vostra partita IVA, la risposta sia un 'semaforo verde' automatico."</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="content">
+  <h2>07. CONTENT MACHINE — 365 GIORNI</h2>
+  <p><em>Fonte: Testi post.docx — 100 post + rotazione settimanale</em></p>
+
+  <h3>Format settimanale obbligatorio</h3>
+  <table>
+    <tr><th>Elemento</th><th>Frequenza</th><th>Canale</th></tr>
+    <tr><td>Post tema settimana</td><td>5 post/settimana</td><td>Facebook, LinkedIn, Telegram</td></tr>
+    <tr><td>Email valore</td><td>1/settimana</td><td>Newsletter</td></tr>
+    <tr><td>Email offerta</td><td>1/settimana</td><td>Newsletter</td></tr>
+    <tr><td>Contenuto Telegram</td><td>Quotidiano</td><td>Canale Telegram</td></tr>
+    <tr><td>Video breve</td><td>1/settimana</td><td>YouTube, Reels, TikTok</td></tr>
+    <tr><td>WhatsApp buongiorno</td><td>Quotidiano 05:00</td><td>Lista lead</td></tr>
+  </table>
+
+  <h3>Campionario post — Prime 5 strutture</h3>
+  <div class="grid">
+    <div class="card arancio">
+      <h4>Post 1 — 81/08</h4>
+      <p><strong>Gancio:</strong> "Ogni giorno sul lavoro possono nascere rischi invisibili."<br>
+      <strong>Norma:</strong> D.Lgs 81/08 — DPI, gestione rischi<br>
+      <strong>Beneficio:</strong> Produttività ↑, assenze ↓, responsabilità ↓<br>
+      <strong>CTA:</strong> sicurissimo.online</p>
+    </div>
+    <div class="card arancio">
+      <h4>Post 2 — HACCP</h4>
+      <p><strong>Gancio:</strong> "In cucina, un piccolo errore può avere grandi conseguenze."<br>
+      <strong>Norma:</strong> HACCP — igiene, catena del freddo<br>
+      <strong>Beneficio:</strong> Proteggere clienti e reputazione<br>
+      <strong>CTA:</strong> sicurissimo.online</p>
+    </div>
+    <div class="card arancio">
+      <h4>Post 3 — 5 Errori</h4>
+      <p><strong>Gancio:</strong> "Molti credono che gli incidenti capitino solo agli altri."<br>
+      <strong>Formato:</strong> Lista numerata 1-5<br>
+      <strong>Norma:</strong> D.Lgs 81/08<br>
+      <strong>CTA:</strong> sicurissimo.online/webinar</p>
+    </div>
+    <div class="card arancio">
+      <h4>Post 4 — HACCP 3 Passi</h4>
+      <p><strong>Gancio:</strong> "Vuoi evitare sanzioni e clienti insoddisfatti?"<br>
+      <strong>Formato:</strong> Checklist 3 punti ✅<br>
+      <strong>CTA:</strong> Prenotazione Google Meet</p>
+    </div>
+    <div class="card arancio">
+      <h4>Post 5 — Costo nascosto</h4>
+      <p><strong>Gancio:</strong> "Incidenti sul lavoro = costi nascosti"<br>
+      <strong>Angolo:</strong> Non solo multe: assenze, stress, produttività<br>
+      <strong>Norma:</strong> D.Lgs 81/08<br>
+      <strong>CTA:</strong> sicurissimo.online</p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="ads">
+  <h2>08. ADS TEMPLATES — 10 MODELLI</h2>
+  <p><em>Fonte: Testi per le Ads - Template Copy - Marketing Kit 2022-2023</em></p>
+
+  <table>
+    <tr><th>#</th><th>Tipo</th><th>Headline Formula</th><th>Obiettivo</th></tr>
+    <tr><td>1</td><td>Magnete contatti</td><td>(GRATIS) [Grande vantaggio]</td><td>Lead acquisition</td></tr>
+    <tr><td>2</td><td>Magnete contatti</td><td>[X] Modi per [beneficio] senza [ostacolo]</td><td>Lead acquisition</td></tr>
+    <tr><td>3</td><td>Pagina vendita</td><td>[Grande vantaggio] in soli [lasso di tempo]</td><td>Traffico pagina</td></tr>
+    <tr><td>4</td><td>Retargeting</td><td>[Bonus speciale] in regalo oggi con [prodotto]</td><td>Recupero abbandoni</td></tr>
+    <tr><td>5</td><td>Urgenza</td><td>ATTENZIONE: [Avvertimento + scadenza]</td><td>Urgenza reale</td></tr>
+    <tr><td>6</td><td>Social proof</td><td>[Nome cliente] ha ottenuto [risultato] in [tempo]</td><td>Fiducia</td></tr>
+    <tr><td>7</td><td>Curiosità</td><td>Il segreto che [concorrenti] non vogliono che tu sappia</td><td>Click CTR ↑</td></tr>
+    <tr><td>8</td><td>Problema→soluzione</td><td>Stanco di [problema]? Ecco come [soluzione]</td><td>Identificazione</td></tr>
+    <tr><td>9</td><td>Webinar</td><td>LIVE [data]: Come [grande beneficio] in [tempo]</td><td>Iscrizioni webinar</td></tr>
+    <tr><td>10</td><td>Testimonial video</td><td>"Ho ottenuto [risultato] grazie a [prodotto]" — [Nome]</td><td>Conversione</td></tr>
+  </table>
+
+  <h3>Struttura Ad universale 81+</h3>
+  <div class="script">HEADLINE: (GRATIS) Come mettere in regola la tua azienda senza impazzire tra scadenze e burocrazia
+
+TESTO:
+Non sarebbe fantastico se ci fosse un modo semplice per tenere
+Sicurezza, HACCP e Privacy sempre aggiornate senza doverti
+ricordare ogni scadenza?
+
+Problemi come corsi scaduti, DVR non aggiornato, sanzioni a sorpresa
+e controlli imprevedibili scomparirebbero.
+
+Ho creato una checklist gratuita con i 27 adempimenti più importanti
+che ogni azienda deve avere in regola nel 2026.
+
+Oltre 32.000 aziende seguite. Zero fanfare. Solo risultati concreti.
+
+I posti per la consulenza gratuita sono limitati.
+Clicca qui sotto per scaricarne una copia libera 👇
+
+PULSANTE: Scarica Gratis</div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="email">
+  <h2>09. EMAIL MARKETING — 25 TATTICHE + SEQUENZA</h2>
+  <p><em>Fonte: [BONUS] 25 Modi per monetizzare la tua lista contatti</em></p>
+
+  <h3>Sequenza 3 email settimanale (formato evergreen)</h3>
+  <div class="grid">
+    <div class="card blu">
+      <h4>Email 1 — Lunedì: Pianta un seme</h4>
+      <p>Parla del problema. Offri suggerimenti parziali. Cita l'offerta alla fine. Es: "7 scadenze che molti titolari dimenticano nel 2026…"</p>
+    </div>
+    <div class="card blu">
+      <h4>Email 2 — Mercoledì: Soluzione parziale</h4>
+      <p>Fornisci più informazioni ma ancora incomplete. Parla dell'offerta come soluzione al resto. Es: "Come controllare le 3 aree di rischio più critiche nel tuo settore…"</p>
+    </div>
+    <div class="card blu">
+      <h4>Email 3 — Venerdì: Vendi direttamente</h4>
+      <p>Offerta diretta, bullet benefici, social proof, CTA forte. Es: "Chi altro vuole azzerare il rischio di sanzioni entro 30 giorni?"</p>
+    </div>
+  </div>
+
+  <h3>Top 10 tattiche email selezionate per 81+</h3>
+  <ol>
+    <li><strong>Email di benvenuto con CTA immediata</strong> — "Clicca qui per attivare la tua checklist gratuita"</li>
+    <li><strong>P.S. sempre con beneficio o offerta</strong> — il post scriptum è letto da oltre il 70% dei lettori</li>
+    <li><strong>Immagine con link in fondo</strong> — meccanismo di vendita "soft" nelle email di contenuto</li>
+    <li><strong>Sequenza 3 email settimanale</strong> — seme → soluzione parziale → vendita</li>
+    <li><strong>Email lunga vs breve</strong> — lunga per prodotti ad alto prezzo, breve per azione immediata</li>
+    <li><strong>Urgenza reale</strong> — scadenza normativa, nuova legge, ispezioni in corso nella tua zona</li>
+    <li><strong>Segmentazione per settore ATECO</strong> — edile, alimentare, manifattura, ufficio</li>
+    <li><strong>Re-engagement</strong> — "Sono 30 giorni che non ti sento. Ti mando questo e poi ti saluto"</li>
+    <li><strong>Case study in email</strong> — "Come [azienda anonima] ha evitato 3.400€ di sanzioni in 48 ore"</li>
+    <li><strong>Referral via email</strong> — "Conosci un collega titolare? Mandagli questa email e guadagnate entrambi"</li>
+  </ol>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="kpi">
+  <h2>10. KPI E CONTROLLO</h2>
+  <p><em>"Ciò che non è misurato non è governato." — MASTER Marketing 81+</em></p>
+
+  <table>
+    <tr><th>Area</th><th>KPI</th><th>Target</th><th>Frequenza</th></tr>
+    <tr><td>Lead generation</td><td>Nuovi lead/settimana</td><td>&gt;50</td><td>Settimanale</td></tr>
+    <tr><td>Conversion</td><td>Lead → call prenotata</td><td>&gt;15%</td><td>Settimanale</td></tr>
+    <tr><td>Vendita</td><td>Call → cliente</td><td>&gt;30%</td><td>Mensile</td></tr>
+    <tr><td>Retention</td><td>Churn mensile</td><td>&lt;5%</td><td>Mensile</td></tr>
+    <tr><td>Content</td><td>Reach organica</td><td>+10%/mese</td><td>Mensile</td></tr>
+    <tr><td>Email</td><td>Open rate</td><td>&gt;28%</td><td>Campagna</td></tr>
+    <tr><td>Email</td><td>Click-through rate</td><td>&gt;4%</td><td>Campagna</td></tr>
+    <tr><td>Network</td><td>Nuovi networker/mese</td><td>&gt;10</td><td>Mensile</td></tr>
+    <tr><td>Ricavi</td><td>MRR (Monthly Recurring Revenue)</td><td>+15%/mese</td><td>Mensile</td></tr>
+    <tr><td>Dream 100</td><td>Partner attivati/provincia</td><td>&gt;5</td><td>Trimestrale</td></tr>
+  </table>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section id="legale">
+  <h2>11. REGOLE LEGALI ED ETICHE NON NEGOZIABILI</h2>
+  <p><em>Fonte: MASTER Marketing 81+ — Sezione 10 — Regola madre: persuasione sì, inganno mai.</em></p>
+
+  <div class="grid">
+    <div class="card rosso">
+      <h4>❌ Vietato</h4>
+      <ul>
+        <li>Promettere assenza totale di sanzioni o "azienda garantita al 100%"</li>
+        <li>Usare recensioni false, numeri gonfiati, finta scarsità</li>
+        <li>Countdown inventati o "posti limitati" non reali</li>
+        <li>Promettere guadagni ai networker (solo su vendite reali e contratto)</li>
+        <li>Presentare PV, SAF, 81X, NFT come investimento o rendimento garantito</li>
+        <li>Citare partner white label nei materiali pubblici</li>
+      </ul>
+    </div>
+    <div class="card verde">
+      <h4>✅ Obbligatorio</h4>
+      <ul>
+        <li>Urgenza reale: scadenza normativa vera, ispezioni reali</li>
+        <li>Scarsità reale: posti limitati solo se davvero limitati</li>
+        <li>Valore reale: checklist, audit, guide con contenuto utile</li>
+        <li>Raccogliere consensi chiari, informative corrette, rispettare opt-out</li>
+        <li>Ogni contenuto normativo validato da persona competente</li>
+        <li>Promessa corretta: "ti guidiamo a ridurre i rischi", non "zero problemi garantiti"</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<section>
+  <h2>12. INTEGRAZIONE — BIOGRAFIA + MARKETING</h2>
+  <p>La storia di Mirco non è un accessorio della comunicazione 81+. È il motore di credibilità di tutto il sistema.</p>
+  <div class="grid">
+    <div class="card arancio">
+      <h4>Il Delta → il caos normativo</h4>
+      <p>Come il Delta del Po non scorre in linea retta, anche la compliance non è mai lineare. 81+ è la guida che porta ordine nel caos.</p>
+    </div>
+    <div class="card arancio">
+      <h4>Il surf → la visione imprenditoriale</h4>
+      <p>"Non controllare il mercato. Impara a sentire la corrente." — Il venditore 81+ non spinge: legge l'onda e agisce nel momento giusto.</p>
+    </div>
+    <div class="card arancio">
+      <h4>225.000 persone → autorevolezza</h4>
+      <p>Non teoria: vita vissuta. Chi ha formato 225.000 persone parla con una voce diversa. Questa è la credential che non si compra.</p>
+    </div>
+    <div class="card arancio">
+      <h4>La caduta → l'empatia</h4>
+      <p>"Chi ha attraversato il caos sa quanto vale l'ordine." Mirco parla al titolare che ha paura perché lui stesso ha avuto paura. Questo crea connessione reale.</p>
+    </div>
+    <div class="card arancio">
+      <h4>Il fondo → la trasformazione del cliente</h4>
+      <p>"Il fondo non è sempre la fine. A volte è il primo pavimento solido." — È il messaggio implicito per l'azienda che ha ricevuto una sanzione: da qui si costruisce.</p>
+    </div>
+    <div class="card arancio">
+      <h4>Nicolas e Noemi → la responsabilità</h4>
+      <p>Il titolare ha anche lui figli, famiglia, dipendenti. La sicurezza non è burocrazia: è responsabilità verso chi ama. Questo risuona a livello profondo.</p>
+    </div>
+  </div>
+
+  <blockquote style="margin-top:40px;font-size:20px">"Non devi essere perfetto per partire. Devi essere vero. Non devi avere tutto chiaro. Devi decidere che non vuoi più restare dove sei."<br><small>— Mirco Pregnolato, La Storia di Mirco</small></blockquote>
+</section>
+
+<footer style="background:var(--blu);color:#94A3B8;text-align:center;padding:30px;font-size:12px;margin-top:60px">
+  <strong style="color:#fff">81+ BRAND &amp; MARKETING OS</strong> — Documento Integrato — Giugno 2026<br>
+  Fonti: La Storia di Mirco Pregnolato (PDF) · MARKETING.zip (13 file) · Elaborazione Nicolas AI<br>
+  <span style="color:var(--arancio)">RISERVATO — USO INTERNO 81+</span>
+</footer>
+
+</body>
+</html>
