@@ -156,6 +156,12 @@ a{color:var(--cyan);text-decoration:none}
 </head>
 <body>
 
+<!-- FILE:// WARNING BANNER (hidden on http/https) -->
+<div id="file-warn" style="display:none;background:#FF446611;border-bottom:2px solid var(--red);color:var(--red);padding:10px 14px;font-size:12px;font-weight:700;text-align:center;line-height:1.6">
+  ⚠️ File aperto come file locale — le estensioni wallet non si attivano su file://<br>
+  <span style="font-weight:400;color:var(--txt2)">Soluzioni: carica su Hostinger oppure avvia <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;color:var(--txt)">python3 -m http.server 8080</code> e apri <code style="background:var(--bg3);padding:1px 6px;border-radius:4px;color:var(--txt)">http://localhost:8080</code></span>
+</div>
+
 <!-- TOPBAR: wallet connect top-right, visible on every tab -->
 <div class="topbar">
   <div class="brand">💎 Sicurissimo <b>Crypto</b></div>
@@ -523,10 +529,15 @@ function showAnalysis(info,hd,addr,cid){
   document.getElementById('an-det').innerHTML=det;
 }
 
-/* ===== WALLET: EIP-6963 (rileva TUTTE le estensioni) ===== */
+/* ===== WALLET: discovery robusta (EIP-6963 + fallback totale) ===== */
 const discovered=[];
-window.addEventListener('eip6963:announceProvider',e=>{if(!discovered.find(p=>p.info.uuid===e.detail.info.uuid))discovered.push(e.detail);});
-function requestProviders(){window.dispatchEvent(new Event('eip6963:requestProvider'));}
+window.addEventListener('eip6963:announceProvider',e=>{
+  if(!discovered.find(p=>p.info?.uuid&&p.info.uuid===e.detail?.info?.uuid))
+    discovered.push(e.detail);
+});
+function requestProviders(){
+  try{window.dispatchEvent(new Event('eip6963:requestProvider'));}catch(e){}
+}
 
 function openWallet(){
   if(S.wallet){
@@ -540,42 +551,121 @@ function openWallet(){
   }
   discoverAndShow();
 }
+
 async function discoverAndShow(){
   if(typeof ethers==='undefined'){alert('Libreria in caricamento, attendi 2s e riprova');return;}
   document.getElementById('wm-title').textContent='🔗 Scegli il wallet';
   document.getElementById('wlist').innerHTML='<div class="loading"><div class="spin"></div> Cerco le estensioni...</div>';
   document.getElementById('wmodal').classList.add('on');
-  discovered.length=0;requestProviders();await sleep(400);
-  let opts=discovered.map(d=>({name:d.info.name,icon:d.info.icon,provider:d.provider}));
+
+  /* --- polling EIP-6963: 15 tentativi × 200ms = max 3s --- */
+  discovered.length=0;
+  for(let i=0;i<15;i++){
+    requestProviders();
+    await sleep(200);
+    if(discovered.length)break;
+  }
+
+  let opts=[];
+
+  /* 1. EIP-6963 (standard moderno — MetaMask, Rabby, TokenPocket ≥4.x) */
+  if(discovered.length)
+    opts=discovered.map(d=>({name:d.info?.name||wname(d.provider),icon:d.info?.icon||'',provider:d.provider}));
+
+  /* 2. window.ethereum.providers[] — Brave/MetaMask coesistenza */
   if(!opts.length&&window.ethereum?.providers?.length)
-    opts=window.ethereum.providers.map(p=>({name:wname(p),provider:p}));
-  if(!opts.length&&window.ethereum)opts=[{name:wname(window.ethereum),provider:window.ethereum}];
+    opts=window.ethereum.providers.map(p=>({name:wname(p),icon:'',provider:p}));
+
+  /* 3. TokenPocket legacy — injetta su window.tokenpocket.ethereum */
+  if(!opts.length&&window.tokenpocket?.ethereum)
+    opts=[{name:'TokenPocket',icon:'',provider:window.tokenpocket.ethereum}];
+
+  /* 4. window.ethereum generico (TokenPocket, MetaMask, qualsiasi) */
+  if(!opts.length&&window.ethereum)
+    opts=[{name:wname(window.ethereum),icon:'',provider:window.ethereum}];
+
+  /* 5. Nulla trovato: mostra istruzioni specifiche */
   if(!opts.length){
-    document.getElementById('wlist').innerHTML=`<div class="banner banner-blue" style="margin-bottom:12px"><b>Nessuna estensione trovata.</b><br>Su <b>Brave</b>: apri <b>brave://settings/web3</b> e imposta "Portafoglio Ethereum predefinito" su <b>Estensioni</b>, poi ricarica.<br>Su <b>Chrome</b>: verifica che TokenPocket sia installato e attivo.</div><button class="btn btn-out btn-block" onclick="closeWallet()">Chiudi</button>`;
+    const isFile=location.protocol==='file:';
+    const isBrave=navigator.brave?.isBrave||/\bBrave\b/.test(navigator.userAgent);
+    let msg='';
+    if(isFile){
+      msg=`<b>⚠️ Aperto come file locale</b><br>
+Le estensioni wallet non si attivano su file://<br><br>
+<b>Soluzione rapida:</b> carica il file su Hostinger<br>
+<b>Oppure</b> avvia un server locale:<br>
+<code style="background:var(--bg3);padding:3px 8px;border-radius:5px;display:block;margin:7px 0;word-break:break-all;font-size:11px">python3 -m http.server 8080</code>
+poi apri <code style="background:var(--bg3);padding:2px 6px;border-radius:4px">http://localhost:8080</code>`;
+    } else if(isBrave){
+      msg=`<b>⚠️ Brave blocca le estensioni wallet</b><br>
+Vai su <b>brave://settings/web3</b><br>
+→ "Portafoglio Ethereum predefinito" → <b>Estensioni</b><br>
+→ Ricarica questa pagina<br><br>
+<span style="color:var(--txt2)">Poi torna qui e premi Riprova</span>`;
+    } else {
+      msg=`<b>⚠️ Nessun wallet trovato</b><br>
+Verifica che TokenPocket sia:<br>
+• Installato su Chrome<br>
+• Attivo (non disabilitato)<br>
+• Con il permesso per questo sito<br><br>
+<span style="color:var(--txt2)">Poi premi Riprova qui sotto</span>`;
+    }
+    document.getElementById('wlist').innerHTML=`
+      <div class="banner" style="background:#FF446611;border:1px solid var(--red);color:var(--txt);margin-bottom:12px;line-height:1.7">${msg}</div>
+      <button class="btn btn-orange btn-block" style="margin-bottom:8px" onclick="discoverAndShow()">🔄 Riprova</button>
+      <button class="btn btn-out btn-block" onclick="closeWallet()">Chiudi</button>`;
     return;
   }
+
   window._wopts=opts;
-  document.getElementById('wlist').innerHTML=opts.map((o,i)=>`<div class="wopt" onclick="pick(${i})">${o.icon?`<img src="${o.icon}">`:'<span style="font-size:26px">👛</span>'}<span>${esc(o.name)}</span></div>`).join('');
+  document.getElementById('wlist').innerHTML=opts.map((o,i)=>`
+    <div class="wopt" onclick="pick(${i})">
+      ${o.icon?`<img src="${o.icon}" onerror="this.style.display='none'">`:'<span style="font-size:26px">👛</span>'}
+      <span>${esc(o.name)}</span>
+    </div>`).join('');
 }
-function wname(p){return p.isTokenPocket?'TokenPocket':p.isMetaMask?'MetaMask':p.isCoinbaseWallet?'Coinbase':p.isRabby?'Rabby':p.isTrust?'Trust':'Wallet';}
+
+function wname(p){
+  if(!p)return'Wallet';
+  return p.isTokenPocket?'TokenPocket':p.isMetaMask?'MetaMask':
+    p.isCoinbaseWallet?'Coinbase':p.isRabby?'Rabby':
+    p.isTrust?'Trust Wallet':p.isBraveWallet?'Brave Wallet':'Wallet';
+}
 function closeWallet(){document.getElementById('wmodal').classList.remove('on');}
 
 async function pick(i){
   const o=window._wopts[i];
+  const wl=document.getElementById('wlist');
+  wl.innerHTML='<div class="loading"><div class="spin"></div> Connessione...</div>';
   try{
     const raw=o.provider;
-    await raw.request({method:'eth_requestAccounts'});
+    const accs=await raw.request({method:'eth_requestAccounts'});
+    if(!accs||!accs.length)throw new Error('Nessun account autorizzato');
     S.rawProvider=raw;
     S.provider=new ethers.BrowserProvider(raw);
     S.signer=await S.provider.getSigner();
     S.wallet=await S.signer.getAddress();
     S.chainId=Number((await S.provider.getNetwork()).chainId);
     try{raw.removeAllListeners?.('accountsChanged');raw.removeAllListeners?.('chainChanged');}catch(e){}
-    raw.on?.('accountsChanged',acc=>{if(!acc||!acc.length){disconnect();}else{S.wallet=acc[0];renderWallet();upBal();}});
-    raw.on?.('chainChanged',async()=>{S.chainId=Number((await S.provider.getNetwork()).chainId);S.provider=new ethers.BrowserProvider(raw);S.signer=await S.provider.getSigner();renderWallet();if(S.page==='swap')syncSwapView();});
+    raw.on?.('accountsChanged',acc=>{
+      if(!acc||!acc.length)disconnect();
+      else{S.wallet=acc[0];renderWallet();upBal();}
+    });
+    raw.on?.('chainChanged',async()=>{
+      S.chainId=Number((await S.provider.getNetwork()).chainId);
+      S.provider=new ethers.BrowserProvider(raw);
+      S.signer=await S.provider.getSigner();
+      renderWallet();if(S.page==='swap')syncSwapView();
+    });
     closeWallet();renderWallet();
     if(S.page==='swap')syncSwapView();
-  }catch(e){alert('Connessione fallita: '+(e.message||e));}
+  }catch(e){
+    const msg=e.code===4001?'Hai rifiutato la connessione':(e.message||String(e));
+    wl.innerHTML=`
+      <div class="banner" style="background:#FF446611;border:1px solid var(--red);color:var(--txt);margin-bottom:12px">❌ ${esc(msg)}</div>
+      <button class="btn btn-orange btn-block" style="margin-bottom:8px" onclick="discoverAndShow()">🔄 Riprova</button>
+      <button class="btn btn-out btn-block" onclick="closeWallet()">Chiudi</button>`;
+  }
 }
 function disconnect(){S.wallet=S.provider=S.signer=S.rawProvider=null;renderWallet();if(S.page==='swap')syncSwapView();}
 function renderWallet(){
@@ -716,7 +806,20 @@ function ld(src){return new Promise((res,rej)=>{const s=document.createElement('
 /* ===== INIT ===== */
 requestProviders();
 (async()=>{
-  try{await ld('https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js');}catch(e){}
+  /* mostra banner se aperto come file locale */
+  if(location.protocol==='file:')
+    document.getElementById('file-warn').style.display='block';
+
+  /* carica ethers.js con fallback CDN */
+  const CDN=[
+    'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js',
+    'https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js',
+  ];
+  for(const src of CDN){
+    try{await ld(src);if(typeof ethers!=='undefined')break;}catch(e){}
+  }
+
+  /* re-request providers dopo il caricamento della libreria */
   requestProviders();
   renderWallet();
   loadGems();
