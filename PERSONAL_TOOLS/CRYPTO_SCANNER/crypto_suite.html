@@ -69,6 +69,7 @@ a{color:var(--cyan);text-decoration:none}
 .gem.x20::before{background:linear-gradient(90deg,var(--gold),var(--orange))}
 .gem.x10::before{background:linear-gradient(90deg,var(--orange),var(--red))}
 .gem.x5::before{background:linear-gradient(90deg,var(--green),var(--cyan))}
+.gem.x3::before{background:linear-gradient(90deg,var(--cyan),#00FFAA)}
 .gem.x2::before{background:linear-gradient(90deg,var(--cyan),var(--purple))}
 .gem.honeypot{opacity:.55;border-color:var(--red)}
 .gem-top{display:flex;align-items:flex-start;justify-content:space-between;gap:6px}
@@ -88,6 +89,7 @@ a{color:var(--cyan);text-decoration:none}
 .xpot.x20{background:linear-gradient(135deg,#FFD24A33,#E8501A33);color:var(--gold);border:1px solid var(--gold)}
 .xpot.x10{background:#E8501A33;color:var(--orange);border:1px solid var(--orange)}
 .xpot.x5{background:#3FBF6B33;color:var(--green);border:1px solid var(--green)}
+.xpot.x3{background:#00FFAA22;color:#00FFAA;border:1px solid #00FFAA}
 .xpot.x2{background:#00D9FF33;color:var(--cyan);border:1px solid var(--cyan)}
 .xpot.watch{background:#33335533;color:var(--txt2);border:1px solid var(--border)}
 .xpot.hp{background:#FF446622;color:var(--red);border:1px solid var(--red)}
@@ -217,7 +219,7 @@ a{color:var(--cyan);text-decoration:none}
     <div class="stat"><div class="val" id="s-x20" style="color:var(--gold)">-</div><div class="lbl">x20+</div></div>
     <div class="stat"><div class="val" id="s-x10" style="color:var(--orange)">-</div><div class="lbl">x10+</div></div>
     <div class="stat"><div class="val" id="s-x5" style="color:var(--green)">-</div><div class="lbl">x5+</div></div>
-    <div class="stat"><div class="val" id="s-safe" style="color:var(--cyan)">-</div><div class="lbl">SICURE</div></div>
+    <div class="stat"><div class="val" id="s-x3" style="color:#00FFAA">-</div><div class="lbl">x3+</div></div>
   </div>
   <div class="chains" id="chains">
     <div class="chain on" onclick="setChain('all',this)">🌐 TUTTE</div>
@@ -230,6 +232,7 @@ a{color:var(--cyan);text-decoration:none}
     <div class="flt on" onclick="setFlt('all',this)">Tutte</div>
     <div class="flt" onclick="setFlt('x10',this)">🚀 x10+</div>
     <div class="flt" onclick="setFlt('x5',this)">⭐ x5+</div>
+    <div class="flt" onclick="setFlt('x3',this)">💫 x3+</div>
     <div class="flt" onclick="setFlt('x2',this)">✅ x2+</div>
     <div class="flt" onclick="setFlt('safe',this)">🛡️ Solo sicure</div>
   </div>
@@ -427,24 +430,29 @@ function score(g){
   return Math.max(0,Math.min(100,Math.round(s)));
 }
 function xpot(g){if(g.sec?.hp)return'honeypot';const mc=g.mcap>0?g.mcap:999999;
-  if(g.score>=75&&mc<5e5)return'x20';if(g.score>=70&&mc<1e6)return'x10';if(g.score>=65&&mc<5e6)return'x5';if(g.score>=55&&mc<2e7)return'x2';if(g.score>=40)return'watch';return'low';}
+  if(g.score>=75&&mc<5e5)return'x20';if(g.score>=70&&mc<1e6)return'x10';if(g.score>=65&&mc<5e6)return'x5';
+  if(g.score>=58&&mc<1e7)return'x3';if(g.score>=50&&mc<2e7)return'x2';if(g.score>=38)return'watch';return'low';}
+const XPOT_RANK={x20:0,x10:1,x5:2,x3:3,x2:4,watch:5,low:6,honeypot:7};
 function stats(){const g=S.gems;
   document.getElementById('s-x20').textContent=g.filter(x=>x.xpot==='x20').length;
   document.getElementById('s-x10').textContent=g.filter(x=>x.xpot==='x10').length;
   document.getElementById('s-x5').textContent=g.filter(x=>x.xpot==='x5').length;
-  document.getElementById('s-safe').textContent=g.filter(x=>x.safe===true).length;}
+  document.getElementById('s-x3').textContent=g.filter(x=>['x20','x10','x5','x3'].includes(x.xpot)).length;}
 
 function render(){
-  let g=S.gems;
+  let g=[...S.gems];
   if(S.chain!=='all'){const n=GT_NETS.find(x=>x.id===S.chain);if(n)g=g.filter(x=>x.chainId===n.chainId);}
   if(S.flt==='x10')g=g.filter(x=>['x20','x10'].includes(x.xpot));
   else if(S.flt==='x5')g=g.filter(x=>['x20','x10','x5'].includes(x.xpot));
-  else if(S.flt==='x2')g=g.filter(x=>['x20','x10','x5','x2'].includes(x.xpot));
+  else if(S.flt==='x3')g=g.filter(x=>['x20','x10','x5','x3'].includes(x.xpot));
+  else if(S.flt==='x2')g=g.filter(x=>['x20','x10','x5','x3','x2'].includes(x.xpot));
   else if(S.flt==='safe')g=g.filter(x=>x.safe===true);
+  /* ordina: x20 → x10 → x5 → x3 → x2 → watch → low → honeypot, poi per score */
+  g.sort((a,b)=>(XPOT_RANK[a.xpot]??6)-(XPOT_RANK[b.xpot]??6)||b.score-a.score);
   const el=document.getElementById('gem-list');
   if(!g.length){el.innerHTML='<div class="empty"><div class="ic">🔍</div>Nessuna gemma con questi filtri</div>';return;}
   el.innerHTML='<div class="grid">'+g.map(x=>{
-    const lbl={x20:'🚀 x20+',x10:'🚀 x10+',x5:'⭐ x5+',x2:'✅ x2+',watch:'👀 OSSERVA',low:'📉 DEBOLE',honeypot:'☠️ HONEYPOT'}[x.xpot]||'';
+    const lbl={x20:'🚀 x20+',x10:'🚀 x10+',x5:'⭐ x5+',x3:'💫 x3+',x2:'✅ x2+',watch:'👀 OSSERVA',low:'📉 DEBOLE',honeypot:'☠️ HONEYPOT'}[x.xpot]||'';
     const ring=x.score>=75?'ring-green':x.score>=60?'ring-gold':x.score>=45?'ring-orange':'ring-red';
     const xc=x.xpot==='honeypot'?'hp':x.xpot;
     const sb=!x.sec?'<span class="badge badge-grey">⏳</span>':x.sec.hp?'<span class="badge badge-red">☠️ HP</span>':x.safe?'<span class="badge badge-green">✅ SICURO</span>':'<span class="badge badge-orange">⚠️</span>';
