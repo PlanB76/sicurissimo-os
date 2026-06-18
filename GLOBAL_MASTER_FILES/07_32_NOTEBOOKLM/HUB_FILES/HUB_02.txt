@@ -1,0 +1,32 @@
+HUB_02 — LEGALE_REGOLAMENTI
+Aggiornato: 2026-06-18
+Stato: ATTIVO
+Owner: Claude CoWork + Mirco Pregnolato
+
+MISSIONE.
+Regolamenti, contratti, policy PV, PV+, CAREER81+, EQUILIBRIUM, Scout81+, Lead Pack, DAO, SICURISSIMO POINT81+.
+
+REGOLE.
+Non usare SafePoint. Usa SICURISSIMO POINT81+.
+Non usare parole vietate del Semantic Guard.
+Ogni output deve avere data, versione, stato e owner.
+AI propone. Human valida. HUB1 registra.
+
+FONTI ATTIVE.
+Caricare in NotebookLM i file dalla cartella:
+07_32_NOTEBOOKLM/02_LEGALE_REGOLAMENTI/FONTI/
+
+TASK APERTI.
+Nessuno. Aggiornare con i task settimanali.
+
+OUTPUT PRODOTTI.
+Nessuno. Aggiornare con gli output approvati.
+
+BLOCCHI.
+Nessuno. Segnalare se qualcosa blocca l'avanzamento.
+
+PROSSIMA AZIONE.
+Caricare i file FONTI su NotebookLM.
+Configurare il PROMPT_MASTER con le istruzioni specifiche.
+Produrre il primo report settimanale.
+
