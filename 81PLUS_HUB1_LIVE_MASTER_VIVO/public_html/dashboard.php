@@ -33,6 +33,7 @@ require_once __DIR__ . '/includes/nav.php';
   <nav class="sidebar-nav">
     <ul role="list">
       <li><a href="<?= BASE_URL ?>/dashboard.php" class="active" aria-current="page">Dashboard</a></li>
+      <li><a href="<?= BASE_URL ?>/cockpit81.php">&#9650; Cockpit IMPARA</a></li>
       <li><a href="<?= BASE_URL ?>/profilo.php">Profilo</a></li>
       <li><a href="<?= BASE_URL ?>/paygate81.php">Ricarica PV</a></li>
       <li><a href="<?= BASE_URL ?>/membership.php">Membership</a></li>
