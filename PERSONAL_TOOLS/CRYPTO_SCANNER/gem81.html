@@ -678,6 +678,13 @@ const S={gems:[],chain:'bsc',pot:'all',tab:'all',size:10,timer:45,int:null,
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 S.mode='simple';S.celebrated={};
 const chartCache={};
+/* ===== PROXY PHP (CORS su host) ===== */
+let phpMode=false;
+function PX(url){return phpMode?('api.php?u='+encodeURIComponent(url)):url;}
+async function detectPhp(){
+  if(location.protocol==='file:')return;
+  try{const r=await fetch('api.php?action=ping',{signal:AbortSignal.timeout(1800)});const d=await r.json();if(d&&d.ok){phpMode=true;const e=document.getElementById('mode-pill');if(e){e.textContent='◉ Proxy PHP';e.style.color='var(--green)';e.style.borderColor='var(--green)';}}}catch(e){}
+}
 
 /* ===================== TOASTS ===================== */
 function toast(msg,type='info',icon){
@@ -732,7 +739,7 @@ async function fetchSparks(gems){
   for(const g of gems){
     if(!g.pool||!g.netId||chartCache[g.pool]!==undefined)continue;
     try{
-      const d=await (await fetch('https://api.geckoterminal.com/api/v2/networks/'+g.netId+'/pools/'+g.pool+'/ohlcv/hour?aggregate=1&limit=24')).json();
+      const d=await (await fetch(PX('https://api.geckoterminal.com/api/v2/networks/'+g.netId+'/pools/'+g.pool+'/ohlcv/hour?aggregate=1&limit=24'))).json();
       chartCache[g.pool]=(d.data?.attributes?.ohlcv_list||[]).map(x=>+x[4]).reverse();
     }catch(e){chartCache[g.pool]=[];}
     drawSparkRow(g);
@@ -841,7 +848,7 @@ async function loadGems(){
     if(S.chain==='solana'){
       // Solana: scan via GeckoTerminal but mark as non-EVM (no internal swap)
       try{
-        const r=await fetch('https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token',{headers:{Accept:'application/json'}});
+        const r=await fetch(PX('https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token'),{headers:{Accept:'application/json'}});
         if(r.ok){const d=await r.json();const tm={};(d.included||[]).forEach(t=>{if(t.type==='token')tm[t.id]=t;});
           for(const pool of (d.data||[]).slice(0,15)){
             const a=pool.attributes||{};const bid=pool.relationships?.base_token?.data?.id;const ta=(tm[bid]||{}).attributes||{};
@@ -851,7 +858,7 @@ async function loadGems(){
     } else {
       await Promise.all(nets.map(async net=>{
         try{
-          const r=await fetch(`https://api.geckoterminal.com/api/v2/networks/${net.id}/trending_pools?page=1&include=base_token`,{headers:{Accept:'application/json'}});
+          const r=await fetch(PX(`https://api.geckoterminal.com/api/v2/networks/${net.id}/trending_pools?page=1&include=base_token`),{headers:{Accept:'application/json'}});
           if(!r.ok)return;
           const d=await r.json();
           const tm={};(d.included||[]).forEach(t=>{if(t.type==='token')tm[t.id]=t;});
@@ -898,7 +905,7 @@ async function secBatch(gems){
   for(const [cid,list] of Object.entries(by)){
     const addrs=list.map(g=>g.addr).slice(0,10).join(',');if(!addrs)continue;
     try{
-      const d=await (await fetch(`https://api.gopluslabs.io/api/v1/token_security/${cid}?contract_addresses=${addrs}`)).json();
+      const d=await (await fetch(PX(`https://api.gopluslabs.io/api/v1/token_security/${cid}?contract_addresses=${addrs}`))).json();
       const res=d.result||{};
       list.forEach(g=>{const k=g.addr.toLowerCase();const i=res[k]||res[Object.keys(res).find(x=>x.toLowerCase()===k)];if(!i)return;
         g.sec={hp:i.is_honeypot==='1',sellTax:+(i.sell_tax||0)*100,buyTax:+(i.buy_tax||0)*100,owner:+(i.creator_percent||0)*100,mint:i.is_mintable==='1',os:i.is_open_source==='1',bl:i.is_blacklisted==='1',takeBack:i.can_take_back_ownership==='1',holders:+(i.holder_count||0)};
@@ -1074,9 +1081,9 @@ async function runAnalysis(addr,cid,g){
   box.innerHTML='<div class="loading" style="padding:14px"><div class="spin"></div> Analisi on-chain reale...</div>';
   let info=null,hd=null,dex=null;
   const [gp,hp,ds]=await Promise.allSettled([
-    fetch(`https://api.gopluslabs.io/api/v1/token_security/${cid}?contract_addresses=${addr}`).then(r=>r.json()),
-    fetch(`https://api.honeypot.is/v2/IsHoneypot?address=${addr}&chainID=${cid}`).then(r=>r.json()),
-    fetch(`https://api.dexscreener.com/latest/dex/tokens/${addr}`).then(r=>r.json()),
+    fetch(PX(`https://api.gopluslabs.io/api/v1/token_security/${cid}?contract_addresses=${addr}`)).then(r=>r.json()),
+    fetch(PX(`https://api.honeypot.is/v2/IsHoneypot?address=${addr}&chainID=${cid}`)).then(r=>r.json()),
+    fetch(PX(`https://api.dexscreener.com/latest/dex/tokens/${addr}`)).then(r=>r.json()),
   ]);
   const gd=gp.status==='fulfilled'?gp.value:null;
   hd=hp.status==='fulfilled'?hp.value:null;
@@ -1416,7 +1423,7 @@ async function autoTick(){
   // 2) monitor open positions via DexScreener real price
   for(const p of S.portfolio){
     try{
-      const ds=await (await fetch(`https://api.dexscreener.com/latest/dex/tokens/${p.addr}`)).json();
+      const ds=await (await fetch(PX(`https://api.dexscreener.com/latest/dex/tokens/${p.addr}`))).json();
       const pair=ds?.pairs?.find(x=>+x.chainId===p.chainId)||ds?.pairs?.[0];
       const cur=pair?+pair.priceUsd:null;
       if(cur===null||!p.entryPrice)continue;
@@ -1498,9 +1505,11 @@ maybeOnboard();
     'https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js',
   ];
   for(const src of CDN){try{await ld(src);if(typeof ethers!=='undefined')break;}catch(e){}}
+  await detectPhp();
   requestProviders();
   renderWallet();
   log('GEM81 pronto. Scanner gemme reale, security on-chain reale, trade assistito.','ok');
+  if(phpMode)log('Proxy PHP attivo: chiamate API via api.php (CORS risolto).','info');
   loadGems();
   startTimer();
 })();

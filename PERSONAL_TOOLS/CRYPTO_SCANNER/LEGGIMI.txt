@@ -1,0 +1,55 @@
+============================================================
+ GEM81 — Gem Scanner + On-Chain Security + Trade Assistito
+============================================================
+
+COSA FA
+- Scansiona gemme reali sui DEX (GeckoTerminal)
+- Controlla la sicurezza on-chain VERA (GoPlus + honeypot.is)
+- Mostra semaforo verde/giallo/rosso + score di rischio
+- Swap reale via Paraswap (compra/vendi con un tap, firmi tu)
+- Auto-trade: monitora Stop Loss / Take Profit e ti AVVISA.
+  Ogni operazione la firmi tu. Nessuna firma automatica.
+
+------------------------------------------------------------
+ USO IN LOCALE (subito, senza installare niente)
+------------------------------------------------------------
+1. Apri il file  gem81.html  con doppio clic (Chrome o Brave).
+2. Premi INIZIA, connetti il wallet (TokenPocket/MetaMask).
+   NB: su file locale le estensioni vanno abilitate una volta.
+   Se non si connette, segui la guida che appare a schermo
+   (chrome://extensions -> consenti URL dei file).
+3. Premi Scansiona. Le gemme appaiono con il semaforo.
+
+Limite locale: honeypot.is a volte blocca le chiamate da file://
+(mostra N/D). Per averlo sempre, usa l'hosting qui sotto.
+
+------------------------------------------------------------
+ USO SU HOSTINGER (consigliato — risolve ogni CORS)
+------------------------------------------------------------
+1. Entra nel File Manager di Hostinger.
+2. Vai in  public_html  (o una sottocartella, es. /gem81).
+3. Carica QUESTI file insieme:
+      gem81.html
+      api.php
+      config.json
+4. Apri nel browser:
+      https://iltuodominio.com/gem81.html
+   In alto comparira "Proxy PHP" verde: tutte le chiamate
+   passano da api.php, niente piu errori CORS.
+
+Nessuna chiave API necessaria. api.php inoltra solo verso:
+geckoterminal, gopluslabs, honeypot.is, dexscreener, paraswap.
+
+------------------------------------------------------------
+ VERITA IMPORTANTI (leggile)
+------------------------------------------------------------
+- Semaforo VERDE = passa i controlli on-chain reali.
+  NON significa guadagno garantito. Nessuno puo prometterlo.
+- Cripto = alto rischio. Investi solo quello che puoi perdere.
+- Le firme delle transazioni sono SEMPRE tue. La app non tiene
+  la tua chiave privata e non opera da sola.
+- Solana: lo swap interno non c'e (Paraswap e solo EVM).
+  La app ti manda al DEX esterno. BSC/ETH/Polygon/Arbitrum/Base
+  hanno lo swap completo dentro la app.
+
+Reti supportate per lo swap: BSC, Ethereum, Polygon, Arbitrum, Base.
