@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SFERA81+ OS — Riquadro Unico</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#04080F;color:#E8EDF7;font-family:system-ui,-apple-system,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none}
+#app{display:flex;flex-direction:column;height:100vh}
+#hdr{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:rgba(0,0,0,0.5);border-bottom:1px solid rgba(0,217,255,0.12);flex-shrink:0;gap:10px}
+#logo{font-size:0.8rem;font-weight:800;letter-spacing:.15em;color:#00D9FF;text-shadow:0 0 12px rgba(0,217,255,0.5);white-space:nowrap}
+#tabs{display:flex;gap:5px;flex:1;justify-content:center}
+.tb{padding:5px 12px;border:1px solid rgba(255,255,255,0.08);border-radius:6px;background:none;color:#4A5A72;font-size:0.68rem;font-weight:700;letter-spacing:.08em;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tb.on{border-color:#00D9FF;color:#00D9FF;background:rgba(0,217,255,0.07);box-shadow:0 0 10px rgba(0,217,255,0.15)}
+.tb:hover:not(.on){border-color:rgba(255,255,255,0.18);color:#8090A8}
+#hint{font-size:.58rem;color:#2A3A4A;white-space:nowrap}
+#wrap{flex:1;position:relative;overflow:hidden}
+canvas{display:block;width:100%;height:100%;cursor:grab}
+canvas:active{cursor:grabbing}
+/* Info panel */
+#panel{position:absolute;top:0;right:0;width:230px;height:100%;background:rgba(5,10,20,0.97);border-left:1px solid rgba(255,255,255,0.05);padding:18px 14px;display:flex;flex-direction:column;gap:9px;overflow-y:auto;transform:translateX(100%);transition:transform .25s cubic-bezier(.4,0,.2,1);z-index:20;backdrop-filter:blur(8px)}
+#panel.open{transform:translateX(0)}
+.pt{font-size:.58rem;font-weight:800;letter-spacing:.13em;text-transform:uppercase;color:#4A5A72}
+.pn{font-size:1rem;font-weight:800;line-height:1.2;margin:3px 0}
+.pm{font-size:.68rem;color:#5A6A80;font-style:italic;margin-bottom:4px}
+.pb{font-size:.74rem;line-height:1.65;color:#A0B0C0;background:rgba(0,0,0,0.35);padding:10px;border-radius:7px;border-left:3px solid var(--pc,#00D9FF)}
+.mh{font-size:.58rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#4A5A72;margin-bottom:5px}
+.mi{display:flex;align-items:center;gap:6px;padding:5px 7px;background:rgba(0,0,0,0.2);border-radius:5px;margin-bottom:3px;font-size:.69rem}
+.md{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.pr{display:flex;justify-content:space-between;align-items:center;background:rgba(0,0,0,0.3);border-radius:7px;padding:7px 11px;font-size:.72rem;color:#4A5A72;margin-top:2px}
+.pr strong{font-size:.95rem;font-weight:800}
+.pc{margin-top:auto;background:none;border:1px solid rgba(255,255,255,0.07);color:#4A5A72;padding:7px;border-radius:6px;cursor:pointer;font-size:.68rem;width:100%}
+.pc:hover{border-color:#FF4081;color:#FF4081}
+/* Legend bar */
+#legbar{position:absolute;bottom:8px;left:0;right:0;display:flex;justify-content:center;flex-wrap:wrap;gap:8px 14px;font-size:.58rem;color:#2A3A4A;letter-spacing:.06em;pointer-events:none;padding:0 8px}
+.li{display:flex;align-items:center;gap:4px}
+.ld{width:7px;height:7px;border-radius:2px;flex-shrink:0}
+/* Status badge */
+#sbadge{position:absolute;top:8px;left:10px;font-size:.58rem;background:rgba(0,217,255,0.08);border:1px solid rgba(0,217,255,0.2);color:#00D9FF;padding:2px 8px;border-radius:5px;pointer-events:none}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="hdr">
+    <div id="logo">SFERA81+ OS</div>
+    <div id="tabs">
+      <button class="tb on" id="tb-e" onclick="setView('e')">▲ ESCALATION81+</button>
+      <button class="tb" id="tb-l" onclick="setView('l')">◎ LIFEWHEEL81+</button>
+    </div>
+    <div id="hint">drag·scroll</div>
+  </div>
+  <div id="wrap">
+    <canvas id="c"></canvas>
+    <div id="sbadge" id="sbadge">MEMBER · L1</div>
+    <div id="panel">
+      <div class="pt" id="pt">—</div>
+      <div class="pn" id="pn">—</div>
+      <div class="pm" id="pm">—</div>
+      <div class="pb" id="pb" style="--pc:#00D9FF">—</div>
+      <div id="pmbox" style="display:none"><div class="mh">Missioni principali</div><div id="pml"></div></div>
+      <div class="pr" id="prbox" style="display:none"><span>Reward completamento</span><strong id="prv">+100 PV+</strong></div>
+      <button class="pc" onclick="closePanel()">Chiudi ×</button>
+    </div>
+    <div id="legbar"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const ESC=[
+  {n:1,code:'IDENTITÀ81+',maslow:'PSICO-FISIOLOGIA',color:'#3FBF6B',pvplus:100,
+   obj:'Attivare profilo, SIC-ID, accesso, dati base e presenza nel sistema.',
+   body:'Le necessità primarie del sistema. Esistere nel digitale: profilo attivo, SIC-ID assegnato, dati base inseriti, primo accesso completato.',
+   missions:['Completa il profilo','Attiva SIC-ID','Verifica email e telefono','Accetta regole e privacy','Primo accesso giornaliero']},
+  {n:2,code:'ATECO81+',maslow:'SICUREZZA',color:'#00D9FF',pvplus:200,
+   obj:'Profilare settore, ATECO, rischio, azienda, obblighi e priorità.',
+   body:'Stabilità operativa. Sapere esattamente a cosa sei esposto: codice ATECO, livello di rischio, obblighi iniziali e priorità giornaliere.',
+   missions:['Inserisci codice ATECO','Indica numero lavoratori','Specifica settore e rischio','Genera profilo rischio personalizzato']},
+  {n:3,code:'OBBLIGHI81+',maslow:'APPARTENENZA',color:'#E8501A',pvplus:350,
+   obj:'Collegare l\'utente al sistema 81+, alla rete, ai lavoratori e agli obblighi.',
+   body:'Appartenenza normativa e umana. Conoscere i propri obblighi, essere connessi alla rete 81+, gestire i lavoratori e i clienti.',
+   missions:['Check DVR','Check formazione lavoratori','Check privacy policy','Check manuale HACCP']},
+  {n:4,code:'AZIONE81+',maslow:'STIMA',color:'#8A4AE8',pvplus:600,
+   obj:'Trasformare verifiche, audit, corsi e CRM in azioni visibili con badge e PV+.',
+   body:'Riconoscimento e autostima. Ogni azione lascia traccia: audit completato, badge sbloccato, PV+ accreditato. Il sistema vede e premia.',
+   missions:['Completa audit SICURISSIMO','Microlearning sicurezza','Streak 7 giorni','Aggiorna LIFEWHEEL81+']},
+  {n:5,code:'PRESIDIO81+',maslow:'AUTOREALIZZAZIONE',color:'#FFD24A',pvplus:1000,
+   obj:'Mantenere controllo, continuità, crescita, leadership, territorio e community.',
+   body:'Espressione del pieno potenziale 81+. Presidio costante, crescita continua, leadership nel settore, community attiva, miglioramento costante.',
+   missions:['Piano 81 giorni completato','LIFEWHEEL81+ al cap status','Ciclo Academy completo','Badge presidio sbloccato']}
+];
+
+const LW=[
+  {n:1,name:'SALUTE E BENESSERE FISICO',sfera:'Sicurezza lavoro, routine, energia, benessere.',color:'#00E676',score:0},
+  {n:2,name:'CARRIERA E LAVORO',sfera:'CRM e crescita, business, Academy, obiettivi.',color:'#00D9FF',score:0},
+  {n:3,name:'FINANZE E DENARO',sfera:'Wallet e PV+, gestione, PayGate81+, benefit interni.',color:'#FFD24A',score:0},
+  {n:4,name:'CRESCITA PERSONALE',sfera:'Formazione, Academy, sicurezza, privacy, HACCP.',color:'#9B6BFF',score:0},
+  {n:5,name:'AMBIENTE E SPAZIO FISICO',sfera:'Documenti, sede, ufficio, cantiere, HACCP, sicurezza.',color:'#FF6B35',score:0},
+  {n:6,name:'RELAZIONI E AMORE',sfera:'Network e relazioni, buddy, community, comunicazione.',color:'#FF4081',score:0},
+  {n:7,name:'FAMIGLIA E AMICI',sfera:'Identità e profilo, rete, referral, community.',color:'#69F0AE',score:0},
+  {n:8,name:'SVAGO E DIVERTIMENTO',sfera:'Visione e continuità, badge, challenge, PIX81+, Wall of Fame.',color:'#40C4FF',score:0}
+];
+
+// ============================================================
+// URL PARAMS
+// ============================================================
+const QS=new URLSearchParams(location.search);
+let VIEW=QS.get('v')||'e'; // 'e'=escalation, 'l'=lifewheel
+let userLevel=Math.min(5,Math.max(1,parseInt(QS.get('level')||'1')));
+const SCAPS={MEMBER:6,NETWORKERS:7,ELITE:8,FRANCHISER:9,CLUB:10};
+let userStatus=(QS.get('status')||'MEMBER').toUpperCase().replace('81+','');
+let sCap=SCAPS[userStatus]||6;
+(QS.get('scores')||'').split(',').forEach((v,i)=>{if(LW[i])LW[i].score=Math.min(parseInt(v)||0,sCap);});
+
+// ============================================================
+// CANVAS
+// ============================================================
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H,CX,CY;
+function resize(){W=canvas.width=canvas.offsetWidth;H=canvas.height=canvas.offsetHeight;CX=W/2;CY=H/2;}
+window.addEventListener('resize',()=>{resize();});
+resize();
+
+// ============================================================
+// STATE
+// ============================================================
+let rotY=-0.25,rotX=0.12;         // pyramid rotation
+let wTilt=0.55,wRot=-Math.PI/2;   // wheel tilt (0=flat) and spin
+let zoom=1;
+let dragging=false,lastX=0,lastY=0;
+let selLevel=null,selArea=null;
+let t=0; // animation tick
+
+// ============================================================
+// 3D MATH
+// ============================================================
+function ry(x,y,z,a){return[x*Math.cos(a)+z*Math.sin(a),y,-x*Math.sin(a)+z*Math.cos(a)];}
+function rx(x,y,z,a){return[x,y*Math.cos(a)-z*Math.sin(a),y*Math.sin(a)+z*Math.cos(a)];}
+function proj(x,y,z,fov,ox,oy,sc){const s=fov/(fov+z);return[ox+x*sc*s,oy-y*sc*s,s,z];}
+function cross(a,b){return[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];}
+function sub(a,b){return[a[0]-b[0],a[1]-b[1],a[2]-b[2]];}
+function dot(a,b){return a[0]*b[0]+a[1]*b[1]+a[2]*b[2];}
+function applyRot(v){const r=ry(v[0],v[1],v[2],rotY);return rx(r[0],r[1],r[2],rotX);}
+function hex2rgb(h){return[parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];}
+function rgb2hex(r,g,b){return'#'+[r,g,b].map(v=>Math.min(255,Math.max(0,Math.round(v))).toString(16).padStart(2,'0')).join('');}
+function shadeHex(h,f){const[r,g,b]=hex2rgb(h);return rgb2hex(r*f,g*f,b*f);}
+function hexA(h,a){const[r,g,b]=hex2rgb(h);return`rgba(${r},${g},${b},${a})`;}
+
+// ============================================================
+// PYRAMID
+// ============================================================
+const BW=1.0, TW=0.13, DEPTH=0.48, LH=0.4, YBASE=-1.0;
+
+function lvlVerts(k){
+  const t0=k/5,t1=(k+1)/5;
+  const w0=BW+t0*(TW-BW), w1=BW+t1*(TW-BW);
+  const y0=YBASE+k*LH, y1=y0+LH, d=DEPTH;
+  return[
+    [-w0,y0,-d],[w0,y0,-d],[w0,y0,d],[-w0,y0,d],  // bottom ring 0-3
+    [-w1,y1,-d],[w1,y1,-d],[w1,y1,d],[-w1,y1,d]    // top ring 4-7
+  ];
+}
+// Face def: [indices, outward normal direction factor for shading]
+const FACE_DEF=[
+  {fi:[0,1,5,4],ni:[0,0,-1],shade:1.0},   // front
+  {fi:[2,3,7,6],ni:[0,0,1], shade:0.45},  // back
+  {fi:[3,0,4,7],ni:[-1,0,0],shade:0.65},  // left
+  {fi:[1,2,6,5],ni:[1,0,0], shade:0.65},  // right
+  {fi:[4,5,6,7],ni:[0,1,0], shade:0.85},  // top
+  {fi:[3,2,1,0],ni:[0,-1,0],shade:0.3},   // bottom
+];
+
+function drawPyramid(){
+  ctx.clearRect(0,0,W,H);
+  const sc=Math.min(W,H)*0.38*zoom;
+  const fov=4.5;
+  const ox=W*0.48, oy=H*0.54;
+
+  // Shadow
+  ctx.save();
+  ctx.globalAlpha=0.18;
+  const shEllW=sc*BW*0.9, shEllH=sc*BW*0.22;
+  const shY=oy+sc*Math.abs(YBASE)*0.88;
+  const sg=ctx.createRadialGradient(ox,shY,0,ox,shY,shEllW);
+  sg.addColorStop(0,'rgba(0,217,255,0.35)');sg.addColorStop(1,'transparent');
+  ctx.fillStyle=sg;
+  ctx.beginPath();ctx.ellipse(ox,shY,shEllW,shEllH,0,0,Math.PI*2);ctx.fill();
+  ctx.restore();
+
+  // Build all visible faces
+  const faces=[];
+  for(let k=0;k<5;k++){
+    const L=ESC[k];
+    const verts3=lvlVerts(k);
+    // Transform all vertices
+    const vR=verts3.map(v=>applyRot(v));
+    const vP=vR.map(v=>proj(v[0],v[1],v[2],fov,ox,oy,sc));
+
+    FACE_DEF.forEach(fd=>{
+      // Compute transformed normal
+      const n=applyRot(fd.ni);
+      // Backface cull: dot with view direction [0,0,-1] (toward viewer)
+      if(dot(n,[0,0,-1])<=0) return;
+
+      const ppts=fd.fi.map(i=>vP[i]);
+      const avgZ=fd.fi.reduce((a,i)=>a+(vR[i][2]),0)/fd.fi.length;
+      const light=Math.max(0.25, dot(normalize(n),[0.5,0.8,-0.3])*0.7+0.55);
+      const isActive=k+1===userLevel;
+      const isDone=k+1<userLevel;
+      const isLocked=k+1>userLevel;
+      const alpha=isDone?0.92:isActive?1:0.32;
+      const col=shadeHex(L.color, light*fd.shade);
+
+      faces.push({k,ppts,avgZ,col,alpha,isActive,isDone,isLocked,L,fd});
+    });
+  }
+
+  // Sort back→front
+  faces.sort((a,b)=>a.avgZ-b.avgZ);
+
+  faces.forEach(f=>{
+    ctx.save();
+    ctx.globalAlpha=f.alpha;
+    ctx.beginPath();
+    ctx.moveTo(f.ppts[0][0],f.ppts[0][1]);
+    f.ppts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));
+    ctx.closePath();
+
+    if(f.isActive){
+      // Glow effect
+      ctx.shadowColor=f.L.color;
+      ctx.shadowBlur=18+6*Math.sin(t*0.04);
+    }
+    ctx.fillStyle=f.col;
+    ctx.fill();
+    ctx.shadowBlur=0;
+
+    // Edge
+    ctx.strokeStyle=f.isActive?hexA(f.L.color,0.9):'rgba(0,0,0,0.25)';
+    ctx.lineWidth=f.isActive?1.5:0.6;
+    ctx.stroke();
+    ctx.restore();
+
+    // Checkmark on completed
+    if(f.isDone && f.fd.fi[0]===0){
+      const px=(f.ppts[1][0]+f.ppts[0][0])/2;
+      const py=(f.ppts[0][1]+f.ppts[3][1])/2;
+      ctx.save();
+      ctx.globalAlpha=0.85;
+      ctx.fillStyle='rgba(0,0,0,0.5)';
+      ctx.beginPath();ctx.arc(f.ppts[1][0]-12,py,8,0,Math.PI*2);ctx.fill();
+      ctx.strokeStyle='#fff';ctx.lineWidth=1.5;
+      ctx.beginPath();
+      ctx.moveTo(f.ppts[1][0]-17,py);
+      ctx.lineTo(f.ppts[1][0]-12,py+5);
+      ctx.lineTo(f.ppts[1][0]-7,py-5);
+      ctx.stroke();
+      ctx.restore();
+    }
+  });
+
+  // Draw labels on front faces
+  for(let k=0;k<5;k++){
+    const L=ESC[k];
+    const vR=lvlVerts(k).map(v=>applyRot(v));
+    const vP=vR.map(v=>proj(v[0],v[1],v[2],fov,ox,oy,sc));
+    // Front face center
+    const fv=[0,1,5,4].map(i=>vP[i]);
+    const mx=fv.reduce((a,p)=>a+p[0],0)/4;
+    const my=fv.reduce((a,p)=>a+p[1],0)/4;
+    const faceW=Math.abs(fv[1][0]-fv[0][0]);
+    const isLocked=k+1>userLevel;
+
+    ctx.save();
+    ctx.globalAlpha=isLocked?0.28:0.92;
+    const fs=Math.min(faceW*0.13, 13);
+    ctx.font=`bold ${fs}px system-ui`;
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    // Background pill
+    const tw=ctx.measureText(L.code).width+12;
+    ctx.fillStyle='rgba(0,0,0,0.55)';
+    roundRect(ctx,mx-tw/2,my-fs*0.75,tw,fs*1.5,4);
+    ctx.fill();
+    ctx.fillStyle='#fff';
+    ctx.fillText(L.code,mx,my);
+    // Maslow sublabel
+    const fs2=Math.min(faceW*0.09, 9.5);
+    ctx.font=`${fs2}px system-ui`;
+    ctx.fillStyle=hexA(L.color,0.8);
+    ctx.fillText(L.maslow,mx,my+fs+3);
+    ctx.restore();
+  }
+
+  // Title
+  ctx.save();
+  ctx.fillStyle='rgba(0,217,255,0.25)';
+  ctx.font='bold 10px system-ui';
+  ctx.textAlign='center';
+  ctx.fillText('ESCALATION81+ — Percorso Maslow',W/2,14);
+  ctx.restore();
+}
+
+function normalize(v){const l=Math.sqrt(v[0]**2+v[1]**2+v[2]**2);return l?[v[0]/l,v[1]/l,v[2]/l]:[0,0,1];}
+function roundRect(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.arc(x+w-r,y+r,r,-Math.PI/2,0);ctx.lineTo(x+w,y+h-r);ctx.arc(x+w-r,y+h-r,r,0,Math.PI/2);ctx.lineTo(x+r,y+h);ctx.arc(x+r,y+h-r,r,Math.PI/2,Math.PI);ctx.lineTo(x,y+r);ctx.arc(x+r,y+r,r,Math.PI,-Math.PI/2);ctx.closePath();}
+
+// Hit test for pyramid: find which level was clicked
+function hitPyramid(mx,my){
+  const sc=Math.min(W,H)*0.38*zoom;
+  const fov=4.5, ox=W*0.48, oy=H*0.54;
+  let bestK=-1, bestZ=-Infinity;
+  for(let k=4;k>=0;k--){
+    const vR=lvlVerts(k).map(v=>applyRot(v));
+    const vP=vR.map(v=>proj(v[0],v[1],v[2],fov,ox,oy,sc));
+    const front=[0,1,5,4].map(i=>vP[i]);
+    if(pointInPoly(mx,my,front)){
+      const z=vR[0][2];
+      if(z>bestZ){bestZ=z;bestK=k;}
+    }
+  }
+  return bestK>=0?bestK:-1;
+}
+function pointInPoly(px,py,poly){
+  let inside=false;
+  for(let i=0,j=poly.length-1;i<poly.length;j=i++){
+    const xi=poly[i][0],yi=poly[i][1],xj=poly[j][0],yj=poly[j][1];
+    if(((yi>py)!==(yj>py))&&(px<(xj-xi)*(py-yi)/(yj-yi)+xi)) inside=!inside;
+  }
+  return inside;
+}
+
+// ============================================================
+// LIFEWHEEL (3D RADAR DISC)
+// ============================================================
+const N=8;
+const SLICE=Math.PI*2/N;
+function w2s(r,theta){ // wheel-plane coords → screen
+  const a=theta+wRot;
+  const x=r*Math.cos(a);
+  const y=r*Math.sin(a)*Math.sin(wTilt); // y-compression for 3D tilt
+  return [CX+x*WR,CY+y*WR];
+}
+let WR=1; // wheel radius in pixels (computed in draw)
+
+function drawWheel(){
+  ctx.clearRect(0,0,W,H);
+  WR=Math.min(W,H)*0.36*zoom;
+  const weakI=LW.reduce((mi,a,i,arr)=>a.score<arr[mi].score?i:mi,0);
+
+  // --- Background disc (3D shadow at bottom) ---
+  const shadowY=CY+WR*Math.sin(wTilt)*0.05;
+  ctx.save();
+  ctx.globalAlpha=0.12;
+  const sg=ctx.createRadialGradient(CX,shadowY,0,CX,shadowY,WR*0.85);
+  sg.addColorStop(0,'rgba(0,217,255,0.4)');sg.addColorStop(1,'transparent');
+  ctx.fillStyle=sg;ctx.beginPath();
+  ctx.ellipse(CX,shadowY+WR*Math.sin(wTilt)*0.1,WR*0.85,WR*0.14*Math.abs(Math.sin(wTilt))+3,0,0,Math.PI*2);
+  ctx.fill();ctx.restore();
+
+  // Build sectors to sort by depth (painter's algorithm)
+  const sectors=[];
+  for(let i=0;i<N;i++){
+    const a=LW[i];
+    const midAngle=(i+0.5)*SLICE+wRot;
+    const midZ=Math.sin(midAngle)*Math.sin(wTilt); // depth key (negative = behind)
+    sectors.push({i,a,midZ});
+  }
+  sectors.sort((a,b)=>a.midZ-b.midZ); // back to front
+
+  // Draw ring grid (concentric)
+  for(let ring=1;ring<=10;ring++){
+    const r=ring/10;
+    const pts=[];
+    const SEGS=72;
+    for(let s=0;s<=SEGS;s++){pts.push(w2s(r,s/SEGS*Math.PI*2));}
+    ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+    pts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));
+    ctx.closePath();
+    const isCap=ring===sCap;
+    ctx.strokeStyle=isCap?'rgba(0,217,255,0.3)':'rgba(255,255,255,0.04)';
+    ctx.lineWidth=isCap?1.2:0.6;
+    ctx.stroke();
+    // Ring label at rightmost point
+    if(ring%2===0){
+      const lp=w2s(r,wRot); // 0 angle = "right" of wheel
+      ctx.fillStyle='rgba(120,140,160,0.25)';
+      ctx.font='8px monospace';
+      ctx.textAlign='left';
+      ctx.fillText(ring,lp[0]+3,lp[1]+3);
+    }
+  }
+
+  // Draw spokes
+  for(let i=0;i<N;i++){
+    const p0=w2s(0,0),p1=w2s(1,i*SLICE);
+    ctx.beginPath();ctx.moveTo(CX,CY);ctx.lineTo(p1[0],p1[1]);
+    ctx.strokeStyle='rgba(255,255,255,0.04)';ctx.lineWidth=0.6;ctx.stroke();
+  }
+
+  // Draw sectors back-to-front
+  sectors.forEach(({i,a})=>{
+    const th0=i*SLICE, th1=(i+1)*SLICE;
+    const score=a.score;
+    const r=score/10;
+    const isWeak=(i===weakI);
+    const isActive=(selArea===i);
+
+    // Filled sector (score fill)
+    if(r>0.01){
+      const SEGS=18;
+      const pts=[];
+      pts.push([CX,CY]);
+      for(let s=0;s<=SEGS;s++){
+        const theta=th0+s/SEGS*(th1-th0);
+        pts.push(w2s(r,theta));
+      }
+      ctx.beginPath();ctx.moveTo(pts[0][0],pts[0][1]);
+      pts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));
+      ctx.closePath();
+
+      if(isActive){ctx.shadowColor=a.color;ctx.shadowBlur=16;}
+      const fillAlpha=isActive?0.8:0.5;
+      const grad=ctx.createLinearGradient(CX,CY,...w2s(r,(th0+th1)/2));
+      grad.addColorStop(0,hexA(a.color,0.05));
+      grad.addColorStop(1,hexA(a.color,fillAlpha));
+      ctx.fillStyle=grad;ctx.fill();
+      ctx.shadowBlur=0;
+
+      ctx.strokeStyle=isActive?hexA(a.color,0.9):hexA(a.color,0.35);
+      ctx.lineWidth=isActive?1.5:0.7;ctx.stroke();
+    }
+
+    // Outer arc (full outline of sector to cap)
+    const capR=sCap/10;
+    const SEGS=18;
+    const arcPts=[];
+    for(let s=0;s<=SEGS;s++){arcPts.push(w2s(capR,th0+s/SEGS*(th1-th0)));}
+    ctx.beginPath();ctx.moveTo(arcPts[0][0],arcPts[0][1]);
+    arcPts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1]));
+    ctx.strokeStyle=hexA(a.color,0.12);ctx.lineWidth=0.5;ctx.stroke();
+
+    // Weakest glow pulse
+    if(isWeak&&!isActive){
+      const ga=0.25+0.15*Math.sin(t*0.05);
+      const wPts=[{x:CX,y:CY}];
+      for(let s=0;s<=18;s++){const p=w2s((score+1)/10,th0+s/18*(th1-th0));wPts.push({x:p[0],y:p[1]});}
+      ctx.beginPath();ctx.moveTo(wPts[0].x,wPts[0].y);
+      wPts.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));
+      ctx.closePath();
+      ctx.strokeStyle=`rgba(255,80,80,${ga})`;ctx.lineWidth=2.5;ctx.stroke();
+    }
+
+    // Label at outer edge
+    const labelR=1.13;
+    const midA=(th0+th1)/2;
+    const lp=w2s(labelR,midA);
+    const words=a.name.split(' ');
+    const line1=words.slice(0,Math.ceil(words.length/2)).join(' ');
+    const line2=words.slice(Math.ceil(words.length/2)).join(' ');
+    ctx.save();
+    ctx.fillStyle=isActive?a.color:isWeak?'rgba(255,130,130,0.7)':'rgba(160,175,190,0.65)';
+    ctx.font=`${isActive?'bold ':''} ${Math.max(7,Math.min(9,WR*0.055))}px system-ui`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(line1,lp[0],lp[1]-6);
+    if(line2) ctx.fillText(line2,lp[0],lp[1]+6);
+    // Score bubble
+    if(score>0){
+      const bp=w2s(Math.max(r-0.08,0.05),midA);
+      ctx.beginPath();ctx.arc(bp[0],bp[1],8,0,Math.PI*2);
+      ctx.fillStyle=hexA(a.color,0.85);ctx.fill();
+      ctx.fillStyle='#070D1A';ctx.font=`bold 8px monospace`;ctx.textAlign='center';ctx.textBaseline='middle';
+      ctx.fillText(score,bp[0],bp[1]);
+    }
+    ctx.restore();
+  });
+
+  // Center hub
+  const hg=ctx.createRadialGradient(CX,CY,0,CX,CY,WR*0.08);
+  hg.addColorStop(0,'rgba(0,217,255,0.4)');hg.addColorStop(1,'rgba(0,217,255,0.02)');
+  ctx.beginPath();ctx.arc(CX,CY,WR*0.08,0,Math.PI*2);ctx.fillStyle=hg;ctx.fill();
+  ctx.fillStyle='#E8EDF7';ctx.font='bold 9px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';
+  ctx.fillText('81+',CX,CY);
+
+  // Overall score
+  const appScores=LW.map(a=>a.score);
+  const avg=(appScores.reduce((a,b)=>a+b,0)/N).toFixed(1);
+  ctx.fillStyle='rgba(0,217,255,0.35)';ctx.font='bold 10px system-ui';ctx.textAlign='center';
+  ctx.fillText(`LIFEWHEEL81+ · media ${avg}/10 · cap ${sCap}/10`,W/2,14);
+}
+
+// Hit test for wheel: which sector was clicked?
+function hitWheel(mx,my){
+  const dx=mx-CX, dy=my-CY;
+  if(Math.hypot(dx,dy)>WR*1.1||Math.hypot(dx,dy)<WR*0.05) return -1;
+  // Un-project Y considering tilt
+  const ux=dx/WR;
+  const uy=Math.sin(wTilt)>0.05?dy/WR/Math.sin(wTilt):dy/WR;
+  let a=Math.atan2(uy,ux)-wRot;
+  while(a<0) a+=Math.PI*2;
+  while(a>=Math.PI*2) a-=Math.PI*2;
+  return Math.floor(a/SLICE)%N;
+}
+
+// ============================================================
+// INFO PANEL
+// ============================================================
+function openPanelEsc(k){
+  selLevel=k;
+  const L=ESC[k];
+  document.getElementById('pt').textContent='ESCALATION81+ · LIVELLO '+(k+1);
+  document.getElementById('pn').textContent=L.code;
+  document.getElementById('pn').style.color=L.color;
+  document.getElementById('pm').textContent=L.maslow;
+  document.getElementById('pb').textContent=L.body;
+  document.getElementById('pb').style.setProperty('--pc',L.color);
+  document.getElementById('pml').innerHTML=L.missions.map(m=>`<div class="mi"><div class="md" style="background:${L.color}"></div>${m}</div>`).join('');
+  document.getElementById('pmbox').style.display='block';
+  document.getElementById('prbox').style.display='flex';
+  document.getElementById('prv').textContent='+'+L.pvplus+' PV+';
+  document.getElementById('prv').style.color=L.color;
+  document.getElementById('panel').classList.add('open');
+}
+function openPanelLW(i){
+  selArea=i;
+  const A=LW[i];
+  const weakI=LW.reduce((mi,a,ii,arr)=>a.score<arr[mi].score?ii:mi,0);
+  document.getElementById('pt').textContent='LIFEWHEEL81+ · SPICCHIO '+(i+1)+'/8';
+  document.getElementById('pn').textContent=A.name;
+  document.getElementById('pn').style.color=A.color;
+  document.getElementById('pm').textContent=`Punteggio: ${A.score}/10 · cap ${sCap}/10${i===weakI?' · ⚠ area più debole':''}`;
+  document.getElementById('pb').textContent=A.sfera;
+  document.getElementById('pb').style.setProperty('--pc',A.color);
+  document.getElementById('pmbox').style.display='none';
+  document.getElementById('prbox').style.display='none';
+  document.getElementById('panel').classList.add('open');
+}
+function closePanel(){
+  document.getElementById('panel').classList.remove('open');
+  selLevel=null; selArea=null;
+}
+
+// ============================================================
+// VIEW SWITCHING
+// ============================================================
+function setView(v){
+  VIEW=v;
+  document.getElementById('tb-e').classList.toggle('on',v==='e');
+  document.getElementById('tb-l').classList.toggle('on',v==='l');
+  closePanel();
+  buildLegend();
+}
+
+function buildLegend(){
+  const lb=document.getElementById('legbar');
+  lb.innerHTML='';
+  const arr=VIEW==='e'?ESC.map(l=>({name:l.code,color:l.color})):LW.map(a=>({name:a.name.split(' ').slice(0,3).join(' '),color:a.color}));
+  arr.forEach(item=>{
+    const d=document.createElement('div');
+    d.className='li';
+    d.innerHTML=`<div class="ld" style="background:${item.color}"></div><span>${item.name}</span>`;
+    lb.appendChild(d);
+  });
+  // Status badge
+  document.getElementById('sbadge').textContent=`${userStatus} · L${userLevel} · cap ${sCap}`;
+}
+buildLegend();
+
+// ============================================================
+// EVENTS
+// ============================================================
+function getXY(e){
+  if(e.touches) return[e.touches[0].clientX-canvas.getBoundingClientRect().left, e.touches[0].clientY-canvas.getBoundingClientRect().top];
+  return[e.clientX-canvas.getBoundingClientRect().left, e.clientY-canvas.getBoundingClientRect().top];
+}
+
+let didMove=false;
+canvas.addEventListener('mousedown',e=>{dragging=true;didMove=false;[lastX,lastY]=getXY(e);});
+canvas.addEventListener('touchstart',e=>{e.preventDefault();dragging=true;didMove=false;[lastX,lastY]=getXY(e);},{passive:false});
+window.addEventListener('mouseup',e=>{
+  if(!didMove){
+    const[mx,my]=getXY(e);
+    if(VIEW==='e'){const k=hitPyramid(mx,my);if(k>=0)openPanelEsc(k);}
+    else{const i=hitWheel(mx,my);if(i>=0)openPanelLW(i);}
+  }
+  dragging=false;
+});
+window.addEventListener('touchend',e=>{
+  if(!didMove){
+    const t=e.changedTouches[0];
+    const mx=t.clientX-canvas.getBoundingClientRect().left;
+    const my=t.clientY-canvas.getBoundingClientRect().top;
+    if(VIEW==='e'){const k=hitPyramid(mx,my);if(k>=0)openPanelEsc(k);}
+    else{const i=hitWheel(mx,my);if(i>=0)openPanelLW(i);}
+  }
+  dragging=false;
+});
+window.addEventListener('mousemove',e=>{
+  if(!dragging)return;
+  const[cx2,cy2]=getXY(e);
+  const dx=cx2-lastX, dy=cy2-lastY;
+  if(Math.abs(dx)+Math.abs(dy)>3) didMove=true;
+  if(VIEW==='e'){
+    rotY+=dx*0.008;
+    rotX=Math.max(-0.5,Math.min(0.55,rotX-dy*0.005));
+  } else {
+    wRot+=dx*0.008;
+    wTilt=Math.max(0.05,Math.min(1.55,wTilt-dy*0.005));
+  }
+  lastX=cx2;lastY=cy2;
+});
+window.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  if(!dragging)return;
+  const[cx2,cy2]=getXY(e);
+  const dx=cx2-lastX, dy=cy2-lastY;
+  if(Math.abs(dx)+Math.abs(dy)>3) didMove=true;
+  if(VIEW==='e'){rotY+=dx*0.008;rotX=Math.max(-0.5,Math.min(0.55,rotX-dy*0.005));}
+  else{wRot+=dx*0.008;wTilt=Math.max(0.05,Math.min(1.55,wTilt-dy*0.005));}
+  lastX=cx2;lastY=cy2;
+},{passive:false});
+
+canvas.addEventListener('wheel',e=>{
+  e.preventDefault();
+  zoom=Math.max(0.4,Math.min(2.5,zoom-e.deltaY*0.001));
+},{passive:false});
+
+// Keyboard shortcuts
+window.addEventListener('keydown',e=>{
+  if(e.key==='Escape'){closePanel();}
+  if(e.key==='e'||e.key==='E') setView('e');
+  if(e.key==='l'||e.key==='L') setView('l');
+  if(e.key==='r'||e.key==='R'){rotY=-0.25;rotX=0.12;wTilt=0.55;wRot=-Math.PI/2;zoom=1;}
+});
+
+// ============================================================
+// ANIMATION LOOP
+// ============================================================
+function loop(){
+  t++;
+  resize();
+  if(VIEW==='e') drawPyramid();
+  else drawWheel();
+  requestAnimationFrame(loop);
+}
+loop();
+</script>
+</body>
+</html>
