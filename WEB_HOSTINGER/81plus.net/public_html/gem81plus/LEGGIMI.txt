@@ -1,0 +1,80 @@
+============================================================
+ GEM81+ — Gem Scanner + On-Chain Security + Trade Assistito
+ Parte del sistema MVP81+ V.0.0 — 81plus.net
+============================================================
+
+COSA FA
+- Scansiona gemme reali sui DEX (GeckoTerminal + DexScreener)
+- Controlla la sicurezza on-chain VERA (GoPlus + honeypot.is)
+- Mostra semaforo verde/giallo/rosso + score di rischio 0-100
+- Calcola potenziale: x2, x3, x5, x10, x20
+- Swap reale via Paraswap (BSC/ETH/Polygon/Arbitrum/Base)
+- Auto-monitor Stop Loss / Take Profit: ti AVVISA. Tu firmi sempre.
+
+------------------------------------------------------------
+ USO IN LOCALE — METODO 1: Doppio clic (base)
+------------------------------------------------------------
+1. Doppio clic su index.html (Chrome o Brave).
+2. Connetti wallet (MetaMask / TokenPocket).
+   Se non si connette: chrome://extensions → abilita
+   "Consenti accesso agli URL dei file".
+3. Premi Scansiona.
+
+LIMITE: honeypot.is blocca le chiamate da file:// → mostra N/D.
+Tutte le altre funzionalità funzionano normalmente.
+Per avere honeypot.is completo usa il Metodo 2 (server locale).
+
+------------------------------------------------------------
+ USO IN LOCALE — METODO 2: Server locale (completo)
+------------------------------------------------------------
+Windows:
+  Doppio clic su  server.bat
+  Apri browser su  http://localhost:8080
+
+Mac / Linux:
+  Terminale nella cartella → bash server.sh
+  Apri browser su  http://localhost:8080
+
+Con il server locale tutte le API funzionano senza errori CORS.
+Il wallet si connette normalmente su http://localhost.
+
+------------------------------------------------------------
+ USO SU HOSTINGER — 81plus.net (consigliato per il live)
+------------------------------------------------------------
+1. File Manager Hostinger → public_html/gem81plus/
+2. Carica QUESTI file:
+      index.html
+      api.php
+      config.json
+3. Apri:
+      https://81plus.net/gem81plus/
+   Comparirà pill verde "Proxy PHP attivo" in alto a destra.
+   Tutte le API passano da api.php → zero errori CORS.
+
+Nessuna chiave API necessaria. api.php inoltra solo verso:
+geckoterminal, gopluslabs, honeypot.is, dexscreener, paraswap.
+
+------------------------------------------------------------
+ VERITA IMPORTANTI
+------------------------------------------------------------
+- Semaforo VERDE = passa i controlli on-chain reali.
+  NON significa guadagno garantito. Il rischio crypto è alto.
+- Le firme delle transazioni sono SEMPRE tue.
+  La app non tiene chiavi private e non opera da sola.
+- Solana: swap non disponibile (Paraswap è solo EVM).
+  Per Solana la app apre il DEX esterno.
+- Reti swap supportate: BSC, Ethereum, Polygon, Arbitrum, Base.
+
+------------------------------------------------------------
+ STRUTTURA FILE
+------------------------------------------------------------
+index.html    → App completa GEM81+
+api.php       → Proxy PHP per Hostinger (risolve CORS)
+config.json   → Configurazione catena e importo default
+server.bat    → Server locale Windows
+server.sh     → Server locale Mac/Linux
+LEGGIMI.txt   → Questo file
+
+============================================================
+ 81plus.net — MVP81+ V.0.0 — 2026-06-19
+============================================================

@@ -1,0 +1,1518 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GEM81+ — Gem Scanner · On-Chain Security · Assisted Trading</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#04080F;--bg2:#060B16;--surface:#080F1C;--surface2:#0C1424;
+  --accent:#F0B90B;--accent2:#FCD535;
+  --green:#00E676;--red:#FF1744;--cyan:#00D9FF;--purple:#9B6BFF;
+  --txt:#EAEFF7;--txt2:#5C6B82;--border:#16203A;--card:#080F1C;
+  --sans:'Space Grotesk',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  --mono:'JetBrains Mono','SF Mono','Consolas',monospace;
+  --glow:0 0 0 1px #16203A,0 0 18px #F0B90B0E;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--txt);font-family:var(--sans);font-size:13px;min-height:100vh;overflow-x:hidden;position:relative}
+a{color:var(--cyan);text-decoration:none}
+button{font-family:var(--sans)}
+
+/* ===================== STARFIELD ===================== */
+#stars{position:fixed;inset:0;z-index:0;pointer-events:none}
+.layer{position:relative;z-index:1}
+
+/* ===================== HEADER ===================== */
+.header{position:sticky;top:0;z-index:90;background:rgba(6,11,22,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:14px;padding:9px 16px}
+.logo{display:flex;flex-direction:column}
+.logo-title{font-size:17px;font-weight:700;letter-spacing:.5px;color:var(--txt);display:flex;align-items:center;gap:7px}
+.logo-title b{color:var(--accent)}
+.logo-tag{font-size:9px;color:var(--txt2);letter-spacing:.4px;font-family:var(--mono);margin-top:1px}
+.chain-sel{display:flex;gap:5px;flex-wrap:wrap;margin-left:6px}
+.chain{padding:5px 11px;border-radius:18px;border:1px solid var(--border);background:var(--card);color:var(--txt2);font-size:10px;cursor:pointer;font-weight:700;letter-spacing:.3px;font-family:var(--mono)}
+.chain.on{border-color:var(--accent);color:var(--accent);background:#F0B90B14}
+.header-right{display:flex;align-items:center;gap:8px;margin-left:auto}
+.wbtn{background:var(--card);border:1px solid var(--border);color:var(--txt);padding:8px 14px;border-radius:22px;font-size:11px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:var(--mono)}
+.wbtn.on{border-color:var(--green);color:var(--green)}
+
+/* ===================== TICKER ===================== */
+.ticker-bar{background:var(--bg2);border-bottom:1px solid var(--border);height:30px;overflow:hidden;position:relative;display:flex;align-items:center}
+.ticker-track{display:flex;gap:0;animation:ticker 34s linear infinite;white-space:nowrap}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes ticker{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.tick-item{display:inline-flex;align-items:center;gap:6px;padding:0 18px;font-family:var(--mono);font-size:11px;border-right:1px solid var(--border)}
+.tick-item .ts{color:var(--txt2)}
+.tick-pos{color:var(--green)}.tick-neg{color:var(--red)}
+
+/* ===================== DISCLAIMER BAR ===================== */
+.disclaimer{background:#0C1424;border-bottom:1px solid var(--border);color:var(--txt2);font-size:10px;text-align:center;padding:6px 14px;font-family:var(--mono);line-height:1.5}
+.disclaimer b{color:var(--accent)}
+
+/* ===================== LAYOUT ===================== */
+.main-layout{display:grid;grid-template-columns:300px 1fr 320px;gap:0;height:calc(100vh - 158px);overflow:hidden}
+.left-panel{background:var(--bg2);border-right:1px solid var(--border);overflow-y:auto;padding:12px}
+.center-panel{overflow-y:auto;display:flex;flex-direction:column;background:var(--bg)}
+.right-panel{background:var(--bg2);border-left:1px solid var(--border);overflow-y:auto;padding:12px}
+.left-panel::-webkit-scrollbar,.center-panel::-webkit-scrollbar,.right-panel::-webkit-scrollbar{width:4px}
+.left-panel::-webkit-scrollbar-thumb,.center-panel::-webkit-scrollbar-thumb,.right-panel::-webkit-scrollbar-thumb{background:var(--border)}
+
+/* ===================== PANEL BLOCKS ===================== */
+.block{margin-bottom:16px}
+.block-title{display:flex;align-items:center;gap:7px;margin-bottom:9px}
+.block-title .bar{width:3px;height:14px;border-radius:2px;background:var(--accent)}
+.block-title span{font-size:10px;font-weight:800;letter-spacing:1px;text-transform:uppercase;font-family:var(--mono);color:var(--txt2)}
+
+/* toggle groups */
+.tg-row{display:flex;flex-wrap:wrap;gap:6px}
+.tg{padding:6px 12px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--txt2);font-size:11px;cursor:pointer;font-weight:700;font-family:var(--mono)}
+.tg.on{border-color:var(--accent);color:var(--accent);background:#F0B90B14}
+
+/* size packs */
+.pack-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.pack{padding:9px 4px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--txt2);font-size:12px;cursor:pointer;font-weight:700;font-family:var(--mono);text-align:center}
+.pack.on{border-color:var(--green);color:var(--green);background:#00E67611}
+.custom-size{width:100%;margin-top:6px;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--txt);font-size:12px;outline:none;font-family:var(--mono)}
+.custom-size:focus{border-color:var(--accent)}
+
+/* sec checks */
+.chk{display:flex;align-items:center;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border);font-size:11px;font-family:var(--mono)}
+.chk:last-child{border-bottom:none}
+.chk span{color:var(--txt)}
+.switch{width:38px;height:20px;border-radius:12px;background:var(--surface2);border:1px solid var(--border);position:relative;cursor:pointer;flex-shrink:0;transition:.15s}
+.switch::after{content:'';position:absolute;top:1px;left:1px;width:16px;height:16px;border-radius:50%;background:var(--txt2);transition:.15s}
+.switch.on{background:#00E67622;border-color:var(--green)}
+.switch.on::after{left:19px;background:var(--green)}
+
+/* advanced filters */
+.filt-row{margin-bottom:9px}
+.filt-row label{font-size:10px;color:var(--txt2);font-family:var(--mono);display:block;margin-bottom:4px;letter-spacing:.3px}
+.inp{width:100%;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:8px 10px;color:var(--txt);font-size:12px;outline:none;font-family:var(--mono)}
+.inp:focus{border-color:var(--accent)}
+
+/* buttons */
+.btn{border:none;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;transition:opacity .15s;font-family:var(--sans)}
+.btn:hover{opacity:.88}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.btn-accent{background:var(--accent);color:#1a1400}
+.btn-buy{background:var(--green);color:#042614}
+.btn-sell{background:var(--red);color:#fff}
+.btn-out{background:transparent;border:1px solid var(--border);color:var(--txt)}
+.btn-block{width:100%;padding:12px;border-radius:10px;font-size:13px}
+.btn-sm{padding:7px 12px;font-size:11px;border-radius:8px}
+.btn-xs{padding:4px 9px;font-size:10px;border-radius:7px}
+.mega-btn{width:100%;padding:14px;border-radius:12px;font-size:14px;font-weight:800;letter-spacing:.5px}
+.mega-auto{width:100%;padding:13px;border-radius:12px;font-size:13px;font-weight:800;letter-spacing:.5px;border:1px solid var(--accent);background:#F0B90B14;color:var(--accent);cursor:pointer}
+.mega-auto.on{background:var(--accent);color:#1a1400}
+
+/* ===================== STATS BAR ===================== */
+.stats-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:12px 12px 0}
+.stat{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:9px 6px;text-align:center}
+.stat .v{font-size:18px;font-weight:800;font-family:var(--mono);line-height:1}
+.stat .l{font-size:9px;color:var(--txt2);margin-top:3px;letter-spacing:.3px;font-family:var(--mono)}
+
+/* ===================== TABS ===================== */
+.tabs{display:flex;gap:6px;padding:12px;flex-wrap:wrap}
+.tab{padding:7px 14px;border-radius:18px;border:1px solid var(--border);background:var(--card);color:var(--txt2);font-size:11px;cursor:pointer;font-weight:700;font-family:var(--mono)}
+.tab.on{border-color:var(--accent);color:var(--accent);background:#F0B90B14}
+.cdown{margin-left:auto;font-size:10px;color:var(--txt2);font-family:var(--mono);display:flex;align-items:center;gap:6px}
+.cdown b{color:var(--accent)}
+.cdown .rf{color:var(--cyan);cursor:pointer;font-size:14px}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.pulse-dot{width:7px;height:7px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+
+/* ===================== GEM TABLE ===================== */
+.gem-wrap{padding:0 12px 12px;flex:1}
+.gem-table{width:100%;border-collapse:separate;border-spacing:0 6px}
+.gem-table th{font-size:9px;color:var(--txt2);font-family:var(--mono);text-transform:uppercase;letter-spacing:.5px;text-align:left;padding:0 10px 4px;font-weight:700}
+.gem-table th.r,.gem-table td.r{text-align:right}
+.gem-row{background:var(--card);cursor:pointer}
+.gem-row:hover td{background:var(--surface2)}
+.gem-row.sel td{background:#F0B90B12}
+.gem-row td{padding:10px;font-family:var(--mono);font-size:12px;border-top:1px solid var(--border);border-bottom:1px solid var(--border);vertical-align:middle}
+.gem-row td:first-child{border-left:1px solid var(--border);border-radius:10px 0 0 10px}
+.gem-row td:last-child{border-right:1px solid var(--border);border-radius:0 10px 10px 0}
+.gem-row.hp{opacity:.5}
+.gem-sym{font-weight:800;font-size:13px}
+.gem-name-sm{font-size:9px;color:var(--txt2);margin-top:1px}
+.ring{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;border:2px solid;font-family:var(--mono);margin:0 auto}
+.ring-green{border-color:var(--green);color:var(--green);background:#00E67611}
+.ring-gold{border-color:var(--accent);color:var(--accent);background:#F0B90B11}
+.ring-orange{border-color:#FF9800;color:#FF9800;background:#FF980011}
+.ring-red{border-color:var(--red);color:var(--red);background:#FF174411}
+.ring-grey{border-color:var(--border);color:var(--txt2)}
+.g-pos{color:var(--green)}.g-neg{color:var(--red)}
+
+.xtag{display:inline-block;padding:3px 8px;border-radius:7px;font-size:10px;font-weight:800;font-family:var(--mono)}
+.xtag.x50{background:linear-gradient(135deg,#FCD53533,#F0B90B33);color:var(--accent2);border:1px solid var(--accent2)}
+.xtag.x20{background:#F0B90B22;color:var(--accent);border:1px solid var(--accent)}
+.xtag.x10{background:#FF980022;color:#FF9800;border:1px solid #FF9800}
+.xtag.x5{background:#00E67622;color:var(--green);border:1px solid var(--green)}
+.xtag.x2{background:#00D9FF22;color:var(--cyan);border:1px solid var(--cyan)}
+.xtag.watch{background:#33334411;color:var(--txt2);border:1px solid var(--border)}
+.xtag.hp{background:#FF174422;color:var(--red);border:1px solid var(--red)}
+
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:14px;font-size:9px;font-weight:700;font-family:var(--mono)}
+.badge-green{background:#00E67622;color:var(--green);border:1px solid #00E67644}
+.badge-orange{background:#FF980022;color:#FF9800;border:1px solid #FF980044}
+.badge-red{background:#FF174422;color:var(--red);border:1px solid #FF174444}
+.badge-grey{background:#33334422;color:var(--txt2);border:1px solid #33334444}
+
+/* ===================== LOG ===================== */
+.log-box{margin:12px;background:#02050B;border:1px solid var(--border);border-radius:10px;padding:10px;max-height:150px;overflow-y:auto;font-family:var(--mono);font-size:10px;line-height:1.7}
+.log-box .ln{color:var(--txt2)}
+.log-box .ln .t{color:#3a4761;margin-right:6px}
+.log-box .ln.ok{color:var(--green)}
+.log-box .ln.warn{color:var(--accent)}
+.log-box .ln.bad{color:var(--red)}
+.log-box .ln.info{color:var(--cyan)}
+
+/* ===================== RIGHT: DETAIL ===================== */
+.detail-empty{text-align:center;padding:40px 16px;color:var(--txt2);font-family:var(--mono);font-size:12px}
+.detail-empty .ic{font-size:34px;margin-bottom:10px}
+.d-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.d-sym{font-size:20px;font-weight:800}
+.d-name{font-size:10px;color:var(--txt2);font-family:var(--mono);margin-top:2px}
+.d-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px}
+.d-cell{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:8px}
+.d-cell .k{font-size:8px;color:var(--txt2);font-family:var(--mono);text-transform:uppercase;letter-spacing:.3px}
+.d-cell .v{font-size:13px;font-weight:700;font-family:var(--mono);margin-top:2px}
+
+.sec-report{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:12px}
+.sec-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:1px solid var(--border);font-size:11px}
+.sec-row:last-child{border-bottom:none}
+.sec-key{color:var(--txt2);font-family:var(--mono)}
+.sec-val{font-family:var(--mono);font-weight:700}
+.ok{color:var(--green)}.warn{color:var(--accent)}.bad{color:var(--red)}.nd{color:var(--txt2)}
+
+.trade-panel{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px}
+.trade-size-row{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.trade-size-row .inp{flex:1}
+.sltp-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+.bs-row{display:flex;gap:8px;margin-bottom:10px}
+.bs-row .btn{flex:1}
+.auto-note{font-size:10px;color:var(--txt2);font-family:var(--mono);line-height:1.6;margin-top:8px;padding:8px;background:#02050B;border:1px solid var(--border);border-radius:8px}
+.auto-note b{color:var(--accent)}
+
+/* ===================== MODAL ===================== */
+.modal-bg{position:fixed;inset:0;background:#000000D0;z-index:200;display:none;align-items:center;justify-content:center;padding:14px}
+.modal-bg.on{display:flex}
+.modal{background:var(--bg2);border:1px solid var(--border);border-radius:16px;padding:18px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto}
+.modal-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.modal-hdr h3{font-family:var(--mono);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.5px}
+.modal-close{cursor:pointer;color:var(--txt2);font-size:18px;line-height:1}
+.swap-box{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px}
+.swap-box label{font-size:10px;color:var(--txt2);display:block;margin-bottom:5px;font-family:var(--mono);letter-spacing:.5px;text-transform:uppercase}
+.swap-in{display:flex;gap:8px;align-items:center}
+.swap-in input{flex:1;background:none;border:none;color:var(--txt);font-size:20px;font-weight:700;outline:none;min-width:0;font-family:var(--mono)}
+.tr-sym{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:8px 11px;color:var(--txt);font-size:12px;font-weight:700;white-space:nowrap;font-family:var(--mono)}
+.arrow{text-align:center;font-size:18px;color:var(--accent);margin:2px 0}
+.sstat{padding:10px;border-radius:8px;font-size:11px;margin:8px 0;display:none;word-break:break-word;font-family:var(--mono)}
+.sp{background:#F0B90B11;border:1px solid var(--accent);color:var(--accent);display:block}
+.sc{background:#00E67611;border:1px solid var(--green);color:var(--green);display:block}
+.se{background:#FF174411;border:1px solid var(--red);color:var(--red);display:block}
+.wopt{display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;border:1px solid var(--border);margin-bottom:8px;cursor:pointer;font-weight:700;font-size:14px}
+.wopt:hover{background:var(--surface);border-color:var(--accent)}
+.wopt img{width:28px;height:28px;border-radius:6px}
+.banner{border-radius:8px;padding:10px 12px;font-size:11px;margin-bottom:10px;line-height:1.6}
+.sel{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:9px;color:var(--txt);font-size:13px;outline:none;font-family:var(--mono)}
+.spin{display:inline-block;width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:32px;color:var(--txt2);font-family:var(--mono);font-size:12px}
+.empty{text-align:center;padding:40px 20px;color:var(--txt2);font-family:var(--mono)}
+.empty .ic{font-size:34px;margin-bottom:10px}
+.flex-sb{display:flex;justify-content:space-between;align-items:center}
+.si{background:var(--surface);border-radius:8px;padding:8px}
+.si .k{font-size:9px;color:var(--txt2);margin-bottom:2px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.3px}
+.si .v{font-size:12px;font-weight:700;font-family:var(--mono)}
+
+/* file warning */
+.file-warn-bar{display:none;background:#F0B90B11;border-bottom:2px solid var(--accent);color:var(--accent);padding:8px 14px;font-size:11px;font-weight:700;text-align:center;line-height:1.8;cursor:pointer;font-family:var(--mono)}
+
+@keyframes flashAlert{0%,100%{box-shadow:0 0 0 1px var(--border)}50%{box-shadow:0 0 0 2px var(--red),0 0 18px #FF174455}}
+.alerting{animation:flashAlert 1s infinite}
+
+/* ===================== UX++ : GLASS / GLOW / TRANSITIONS ===================== */
+.btn{transition:transform .12s,filter .15s,box-shadow .25s}
+.btn:active{transform:scale(.97)}
+.gem-row td{transition:background .15s}
+.gem-row{animation:rowIn .42s cubic-bezier(.2,.9,.3,1.05) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.left-panel,.right-panel,.modal,.trade-panel,.sec-report{backdrop-filter:blur(6px)}
+.modal{background:rgba(8,13,26,.82);backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(120,130,170,.16)}
+/* glow pulse on primary CTAs */
+.glow{position:relative}
+.glow::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 #F0B90B88;animation:glowpulse 2.6s ease-out infinite;pointer-events:none}
+@keyframes glowpulse{0%{box-shadow:0 0 0 0 #F0B90B55}70%{box-shadow:0 0 0 12px #F0B90B00}100%{box-shadow:0 0 0 0 #F0B90B00}}
+.mega-btn,.btn-accent.btn-block{position:relative}
+
+/* ===================== MODE TOGGLE ===================== */
+.mode-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:3px;font-family:var(--mono)}
+.mode-toggle button{background:none;border:none;color:var(--txt2);font-size:10px;font-weight:800;padding:7px 13px;border-radius:18px;cursor:pointer;letter-spacing:.5px;transition:.2s}
+.mode-toggle button.on{background:var(--accent);color:#1a1400;box-shadow:0 0 14px #F0B90B55}
+.mode-toggle button.on.pro{background:var(--cyan);color:#04222b;box-shadow:0 0 14px #00D9FF55}
+
+/* SIMPLE mode hides PRO surfaces */
+body.simple .pro-only{display:none !important}
+body.simple .log-box,body.simple #log-box,body.simple .log-box-title{display:none}
+body.simple .left-panel{padding-bottom:14px}
+body.simple .simple-note{display:block !important}
+body.simple .col-pro{display:none}
+body.simple .stats-bar{grid-template-columns:repeat(2,1fr)}
+body.simple .stat:nth-child(n+3){display:none}
+body.simple .tab[data-pro]{display:none}
+
+/* ===================== SAFETY SEMAPHORE ===================== */
+.sem{position:relative;display:inline-block;width:18px;height:18px;border-radius:50%;cursor:help;vertical-align:middle}
+.sem::after{content:'';position:absolute;inset:0;border-radius:50%;animation:semPulse 2.6s infinite}
+.sem-g{background:radial-gradient(circle at 35% 30%,#8effc0,#00E676)}.sem-g{color:#00E676}
+.sem-y{background:radial-gradient(circle at 35% 30%,#ffe58a,#F0B90B)}.sem-y{color:#F0B90B}
+.sem-r{background:radial-gradient(circle at 35% 30%,#ff8aa0,#FF1744)}.sem-r{color:#FF1744}
+.sem-q{background:radial-gradient(circle at 35% 30%,#9aa,#3a4761)}.sem-q::after{animation:none}
+@keyframes semPulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.sem-lg{width:26px;height:26px}
+
+/* ===================== TOOLTIP (?) ===================== */
+.tip{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1px solid var(--txt2);color:var(--txt2);font-size:9px;font-weight:800;cursor:help;font-family:var(--mono);vertical-align:middle;margin-left:3px}
+.tip .tipbox,.sem .tipbox{visibility:hidden;opacity:0;position:absolute;bottom:150%;left:50%;transform:translateX(-50%);width:210px;max-width:46vw;background:#0e1626;border:1px solid rgba(120,130,170,.22);border-radius:9px;padding:9px 11px;font-size:11px;font-weight:500;color:var(--txt);line-height:1.5;text-align:left;z-index:260;box-shadow:0 12px 32px -8px #000;transition:opacity .15s;pointer-events:none;font-family:var(--sans);letter-spacing:0;white-space:normal}
+.tip:hover .tipbox,.sem:hover .tipbox{visibility:visible;opacity:1}
+.gem-table .tip .tipbox,.gem-table .sem .tipbox{right:0;left:auto;transform:none}
+
+/* ===================== ONBOARDING ===================== */
+.onb{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(1000px 700px at 50% -10%,#F0B90B1A,transparent 65%),rgba(4,8,15,.94);backdrop-filter:blur(8px)}
+.onb.on{display:flex}
+.onb-card{max-width:430px;width:100%;padding:26px 22px;text-align:center;border-radius:18px;background:rgba(8,13,26,.9);border:1px solid rgba(120,130,170,.18);animation:cardIn .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.onb-logo{font-size:32px;font-weight:700;letter-spacing:1px;margin-bottom:4px}.onb-logo b{color:var(--accent)}
+.onb-sub{font-size:12px;color:var(--txt2);margin-bottom:22px;font-family:var(--mono)}
+.onb-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.onb-step{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+.onb-num{flex-shrink:0;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;font-family:var(--mono);border:2px solid}
+.onb-step:nth-child(1) .onb-num{color:var(--accent);border-color:var(--accent);background:#F0B90B14}
+.onb-step:nth-child(2) .onb-num{color:var(--cyan);border-color:var(--cyan);background:#00D9FF14}
+.onb-step:nth-child(3) .onb-num{color:var(--green);border-color:var(--green);background:#00E67614}
+.onb-step .ot{font-size:14px;font-weight:700}.onb-step .od{font-size:11px;color:var(--txt2);margin-top:2px}
+.onb-start{font-size:17px;font-weight:800;padding:16px;letter-spacing:1px}
+.onb-skip{display:block;margin-top:14px;font-size:11px;color:var(--txt2);cursor:pointer;font-family:var(--mono)}
+.onb-skip:hover{color:var(--txt)}
+
+/* ===================== TOASTS ===================== */
+#toaster{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:400;display:flex;flex-direction:column;gap:9px;align-items:center;pointer-events:none;width:calc(100% - 28px);max-width:380px}
+.toast{pointer-events:auto;display:flex;align-items:center;gap:10px;padding:12px 15px;border-radius:13px;font-size:12.5px;font-weight:700;background:rgba(12,18,32,.92);border:1px solid rgba(120,130,170,.18);backdrop-filter:blur(14px);box-shadow:0 12px 32px -10px #000;width:100%;animation:toastIn .35s cubic-bezier(.2,.9,.3,1.3),toastOut .4s ease 3.6s forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(10px) scale(.97)}}
+.toast .ti{font-size:18px;line-height:1;flex-shrink:0}
+.toast.t-ok{border-color:#00E67666}.toast.t-ok .ti{color:var(--green)}
+.toast.t-err{border-color:#FF174466}.toast.t-err .ti{color:var(--red)}
+.toast.t-info{border-color:#00D9FF66}.toast.t-info .ti{color:var(--cyan)}
+.toast.t-gold{border-color:#F0B90B99}.toast.t-gold .ti{color:var(--accent)}
+
+/* ===================== SPARKLINE ===================== */
+.spark{display:block;width:100%;height:40px;margin-top:8px}
+.row-spark{width:54px;height:22px;display:block}
+
+/* ===================== GEM FOUND CELEBRATION ===================== */
+.gem-row.celebrate td{animation:celebRow 1.1s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes celebRow{0%{background:transparent}25%{background:#F0B90B30;box-shadow:inset 0 0 20px #F0B90B55}100%{background:transparent}}
+
+/* ===================== SKELETON SHIMMER ===================== */
+.sk-wrap{display:flex;flex-direction:column;gap:7px;padding:4px 0}
+.sk{height:46px;border-radius:10px;background:linear-gradient(100deg,#080F1C 30%,#101a2e 50%,#080F1C 70%);background-size:200% 100%;animation:shimmer 1.3s linear infinite;border:1px solid var(--border)}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* ===================== MOBILE BOTTOM NAV ===================== */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:120;padding-bottom:env(safe-area-inset-bottom);background:rgba(6,11,22,.95);backdrop-filter:blur(14px);border-top:1px solid var(--border)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 2px;font-size:10px;color:var(--txt2);cursor:pointer;gap:3px;border:none;background:none;min-height:58px;font-weight:800;font-family:var(--mono)}
+.nav-btn .ic{font-size:21px;line-height:1}
+.nav-btn.on{color:var(--accent)}
+@media(max-width:700px){
+  .mob-nav{display:flex}
+  .gem-wrap{padding-bottom:84px}
+  .header-right .wbtn{padding:10px 14px}
+  .mega-btn{padding:16px}
+  .bs-row .btn{min-height:52px}
+  .tg,.pack,.chain,.tab{min-height:38px;display:flex;align-items:center;justify-content:center}
+  #toaster{bottom:84px}
+  .gem-table th.col-hide-m,.gem-table td.col-hide-m{display:none}
+}
+
+/* ===================== RESPONSIVE ===================== */
+@media(max-width:1100px){
+  .main-layout{grid-template-columns:280px 1fr;height:auto}
+  .right-panel{display:none}
+  .right-panel.mobile-open{display:block;position:fixed;inset:0;z-index:150;background:var(--bg2);overflow-y:auto;height:100vh}
+}
+@media(max-width:700px){
+  .main-layout{grid-template-columns:1fr;height:auto}
+  .left-panel{border-right:none;border-bottom:1px solid var(--border)}
+  .stats-bar{grid-template-columns:repeat(3,1fr)}
+  .chain-sel{display:none}
+}
+</style>
+</head>
+<body class="simple">
+<canvas id="stars"></canvas>
+
+<!-- ONBOARDING -->
+<div id="onb" class="onb">
+  <div class="onb-card">
+    <div class="onb-logo">&#128142; <b>GEM81+</b></div>
+    <div class="onb-sub">Gem Radar on-chain. Sicuro. Facile.</div>
+    <div class="onb-steps">
+      <div class="onb-step"><div class="onb-num">1</div><div><div class="ot">Connetti il wallet</div><div class="od">MetaMask, TokenPocket o Trust. Un tocco.</div></div></div>
+      <div class="onb-step"><div class="onb-num">2</div><div><div class="ot">Scegli quanto investire</div><div class="od">Decidi tu l'importo con i Size Pack. Nessuna sorpresa.</div></div></div>
+      <div class="onb-step"><div class="onb-num">3</div><div><div class="ot">Premi Scansiona</div><div class="od">Vedi solo le gemme che passano i controlli reali.</div></div></div>
+    </div>
+    <button class="btn btn-accent btn-block onb-start glow" onclick="onbStart()">INIZIA</button>
+    <span class="onb-skip" onclick="onbClose()">Guarda prima senza connettere</span>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div id="toaster"></div>
+
+<!-- FILE:// SETUP BANNER -->
+<div id="file-warn" class="file-warn-bar" onclick="document.getElementById('file-setup').classList.toggle('on')">
+  Prima configurazione wallet — tocca per vedere i passi
+</div>
+<div id="file-setup" class="modal-bg" onclick="if(event.target===this)this.classList.remove('on')">
+  <div class="modal" style="max-width:400px">
+    <div class="modal-hdr">
+      <h3 style="color:var(--accent)">Abilita wallet su file locale</h3>
+      <span class="modal-close" onclick="document.getElementById('file-setup').classList.remove('on')">&times;</span>
+    </div>
+    <p style="font-size:12px;color:var(--txt2);margin-bottom:14px">Fai questo <b style="color:var(--txt)">una volta sola</b> e il wallet funzionera sempre su questo file.</p>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:8px">
+      <div style="font-size:11px;font-weight:800;color:var(--cyan);margin-bottom:8px;font-family:var(--mono)">CHROME</div>
+      <ol style="font-size:11px;color:var(--txt);line-height:2;padding-left:16px">
+        <li>Apri <span style="color:var(--cyan);cursor:pointer;text-decoration:underline" onclick="copyText('chrome://extensions')">chrome://extensions</span></li>
+        <li>Trova il tuo wallet &rarr; clicca Dettagli</li>
+        <li>Attiva "Consenti accesso agli URL dei file"</li>
+        <li>Ricarica questa pagina (F5)</li>
+      </ol>
+    </div>
+    <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px;margin-bottom:14px">
+      <div style="font-size:11px;font-weight:800;color:var(--accent);margin-bottom:8px;font-family:var(--mono)">BRAVE</div>
+      <ol style="font-size:11px;color:var(--txt);line-height:2;padding-left:16px">
+        <li>Apri <span style="color:var(--cyan);cursor:pointer;text-decoration:underline" onclick="copyText('brave://extensions')">brave://extensions</span></li>
+        <li>Trova il wallet &rarr; Dettagli &rarr; attiva file URL</li>
+        <li>Vai su <span style="color:var(--cyan);cursor:pointer;text-decoration:underline" onclick="copyText('brave://settings/web3')">brave://settings/web3</span> &rarr; Estensioni</li>
+        <li>Ricarica questa pagina (F5)</li>
+      </ol>
+    </div>
+    <button class="btn btn-accent btn-block" onclick="document.getElementById('file-setup').classList.remove('on');discoverAndShow()">Fatto, connetti wallet</button>
+  </div>
+</div>
+
+<div class="layer">
+
+<!-- HEADER -->
+<div class="header">
+  <div class="logo">
+    <div class="logo-title">&#128142; <b>GEM81+</b></div>
+    <div class="logo-tag">Gem Scanner · On-Chain Security · Assisted Trading · 81+</div>
+  </div>
+  <div class="chain-sel" id="chain-sel">
+    <div class="chain on" onclick="setChain('bsc',this)">BSC</div>
+    <div class="chain" onclick="setChain('eth',this)">ETH</div>
+    <div class="chain" onclick="setChain('polygon_pos',this)">Polygon</div>
+    <div class="chain" onclick="setChain('arbitrum',this)">Arbitrum</div>
+    <div class="chain" onclick="setChain('base',this)">Base</div>
+    <div class="chain" onclick="setChain('solana',this)">Solana</div>
+  </div>
+  <div class="header-right">
+    <div class="mode-toggle" id="mode-toggle">
+      <button id="m-simple" class="on" onclick="setMode('simple')">SEMPLICE</button>
+      <button id="m-pro" class="pro" onclick="setMode('pro')">PRO</button>
+    </div>
+    <button class="wbtn" id="rp-toggle" onclick="toggleRightPanel()" style="display:none">&#9881; Trade</button>
+    <button id="wbtn" class="wbtn" onclick="openWallet()">&#11041; CONNETTI</button>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track" id="ticker-track">
+    <span class="tick-item"><span class="ts">CARICAMENTO...</span></span>
+  </div>
+</div>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">
+  Strumento di analisi e trading assistito. Non e consulenza finanziaria. <b>Alto rischio di perdita.</b> Le firme sono sempre tue. Nessuno conserva la tua chiave privata.
+</div>
+
+<!-- LAYOUT -->
+<div class="main-layout">
+
+  <!-- LEFT PANEL: FILTRI -->
+  <div class="left-panel">
+
+    <div class="block">
+      <div class="block-title"><div class="bar"></div><span>Cerca Token</span></div>
+      <input id="man-addr" class="inp" placeholder="0x... incolla indirizzo token" style="margin-bottom:7px">
+      <div class="btn block" style="display:flex;gap:6px">
+        <button class="btn btn-out btn-sm" style="flex:1" onclick="checkManual()">Analizza</button>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title"><div class="bar"></div><span>Potenziale X</span></div>
+      <div class="tg-row" id="pot-tg">
+        <div class="tg on" onclick="setPot('all',this)">TUTTI</div>
+        <div class="tg" onclick="setPot('x2',this)">X2</div>
+        <div class="tg" onclick="setPot('x5',this)">X5</div>
+        <div class="tg" onclick="setPot('x10',this)">X10</div>
+        <div class="tg" onclick="setPot('x20',this)">X20</div>
+        <div class="tg" onclick="setPot('x50',this)">X50</div>
+      </div>
+    </div>
+
+    <div class="block">
+      <div class="block-title"><div class="bar"></div><span>Size Pack</span></div>
+      <div class="pack-row" id="pack-row">
+        <div class="pack on" onclick="setSize(10,this)">$10</div>
+        <div class="pack" onclick="setSize(50,this)">$50</div>
+        <div class="pack" onclick="setSize(100,this)">$100</div>
+        <div class="pack" onclick="setSize(250,this)">$250</div>
+        <div class="pack" onclick="setSize(500,this)">$500</div>
+        <div class="pack" onclick="document.getElementById('custom-size').focus()">CUSTOM</div>
+      </div>
+      <input id="custom-size" class="custom-size" type="number" placeholder="Importo custom $" oninput="setSizeCustom(this.value)">
+    </div>
+
+    <div class="block pro-only">
+      <div class="block-title"><div class="bar"></div><span>Controlli Sicurezza</span></div>
+      <div class="chk"><span>Escludi honeypot <span class="tip">?<span class="tipbox">Honeypot, trappola: puoi comprare ma non rivendere. Tienilo sempre attivo.</span></span></span><div class="switch on" id="chk-hp" onclick="this.classList.toggle('on');render()"></div></div>
+      <div class="chk"><span>Escludi mintable <span class="tip">?<span class="tipbox">Mintable: il creatore puo stampare nuovi token e diluire il tuo valore.</span></span></span><div class="switch" id="chk-mint" onclick="this.classList.toggle('on');render()"></div></div>
+      <div class="chk"><span>Solo codice pubblico <span class="tip">?<span class="tipbox">Mostra solo contratti verificati, leggibili da tutti. Piu trasparenza.</span></span></span><div class="switch" id="chk-os" onclick="this.classList.toggle('on');render()"></div></div>
+      <div class="chk"><span>Sell tax max 10% <span class="tip">?<span class="tipbox">Tassa di vendita: quanto trattiene il token quando vendi. Sopra il 10% mangia i guadagni.</span></span></span><div class="switch on" id="chk-tax" onclick="this.classList.toggle('on');render()"></div></div>
+    </div>
+
+    <div class="block pro-only">
+      <div class="block-title"><div class="bar"></div><span>Filtri Avanzati</span></div>
+      <div class="filt-row"><label>Liquidita minima ($)</label><input id="flt-liq" class="inp" type="number" placeholder="es. 20000" oninput="render()"></div>
+      <div class="filt-row"><label>Market cap max ($)</label><input id="flt-mcap" class="inp" type="number" placeholder="es. 5000000" oninput="render()"></div>
+      <div class="filt-row"><label>Variazione 24h minima (%)</label><input id="flt-chg" class="inp" type="number" placeholder="es. 10" oninput="render()"></div>
+    </div>
+
+    <button class="btn btn-accent btn-block glow" onclick="loadGems()">&#128269; SCANSIONA</button>
+    <div class="simple-note" style="display:none;font-size:10px;color:var(--txt2);font-family:var(--mono);line-height:1.6;margin-top:10px;text-align:center">Modalita SEMPLICE: vedi solo le gemme che passano i controlli on-chain reali. Passa a PRO per filtri, log e dettaglio completo.</div>
+  </div>
+
+  <!-- CENTER PANEL -->
+  <div class="center-panel">
+
+    <div class="stats-bar">
+      <div class="stat"><div class="v" id="s-x50" style="color:var(--accent2)">-</div><div class="l">X50+</div></div>
+      <div class="stat"><div class="v" id="s-x20" style="color:var(--accent)">-</div><div class="l">X20+</div></div>
+      <div class="stat"><div class="v" id="s-x10" style="color:#FF9800">-</div><div class="l">X10+</div></div>
+      <div class="stat"><div class="v" id="s-x5" style="color:var(--green)">-</div><div class="l">X5+</div></div>
+      <div class="stat"><div class="v" id="s-tot" style="color:var(--cyan)">-</div><div class="l">SCAN</div></div>
+    </div>
+
+    <div class="tabs">
+      <div class="tab on" onclick="setTab('all',this)">Tutte</div>
+      <div class="tab" onclick="setTab('security',this)">Top Security</div>
+      <div class="tab" onclick="setTab('potential',this)">Top Potenziale</div>
+      <div class="tab" onclick="setTab('portfolio',this)">Portfolio</div>
+      <div class="cdown">
+        <span class="pulse-dot" id="pulse-dot"></span>
+        <span>REFRESH <b id="cd">45</b>s</span>
+        <span class="rf" onclick="loadGems()">&#8635;</span>
+      </div>
+    </div>
+
+    <div class="gem-wrap">
+      <div id="gem-list"><div class="loading"><div class="spin"></div> Scansione DEX in corso...</div></div>
+    </div>
+
+    <div class="block-title log-box-title" style="padding:0 12px"><div class="bar"></div><span>Log Sistema</span></div>
+    <div class="log-box" id="log-box"></div>
+  </div>
+
+  <!-- RIGHT PANEL: DETTAGLIO + TRADE -->
+  <div class="right-panel" id="right-panel">
+    <div id="detail-empty" class="detail-empty">
+      <div class="ic">&#128142;</div>
+      Seleziona una gemma per vedere dettaglio, security report e pannello di trade.
+    </div>
+    <div id="detail-body" style="display:none">
+      <div class="d-head">
+        <div>
+          <div class="d-sym" id="d-sym">-</div>
+          <div class="d-name" id="d-name">-</div>
+        </div>
+        <div class="ring" id="d-ring">-</div>
+      </div>
+      <div class="d-grid">
+        <div class="d-cell"><div class="k">Prezzo</div><div class="v" id="d-price">-</div></div>
+        <div class="d-cell"><div class="k">24h</div><div class="v" id="d-chg">-</div></div>
+        <div class="d-cell"><div class="k">Liquidita</div><div class="v" id="d-liq">-</div></div>
+        <div class="d-cell"><div class="k">Market Cap</div><div class="v" id="d-mcap">-</div></div>
+        <div class="d-cell"><div class="k">Volume 24h</div><div class="v" id="d-vol">-</div></div>
+        <div class="d-cell"><div class="k">Potenziale</div><div class="v" id="d-pot">-</div></div>
+      </div>
+
+      <canvas id="d-spark" class="spark"></canvas>
+
+      <div class="block-title"><div class="bar" style="background:var(--cyan)"></div><span>Security Report <span class="tip">?<span class="tipbox">Dati on-chain reali: GoPlus + honeypot.is + DexScreener. Il semaforo verde appare solo se passa tutti i controlli.</span></span></span></div>
+      <div class="sec-report" id="sec-report">
+        <div style="color:var(--txt2);font-size:11px;font-family:var(--mono)">Analisi on-chain in corso...</div>
+      </div>
+
+      <div class="block-title"><div class="bar" style="background:var(--green)"></div><span>Trade</span></div>
+      <div class="trade-panel">
+        <div class="trade-size-row">
+          <input id="trade-size" class="inp" type="number" placeholder="Size $">
+          <span style="font-size:10px;color:var(--txt2);font-family:var(--mono)" id="trade-pay-sym">USD</span>
+        </div>
+        <div class="sltp-row">
+          <div><label style="font-size:10px;color:var(--txt2);font-family:var(--mono);display:block;margin-bottom:4px">Stop Loss %</label><input id="trade-sl" class="inp" type="number" placeholder="es. 30"></div>
+          <div><label style="font-size:10px;color:var(--txt2);font-family:var(--mono);display:block;margin-bottom:4px">Take Profit %</label><input id="trade-tp" class="inp" type="number" placeholder="es. 100"></div>
+        </div>
+        <div class="bs-row">
+          <button class="btn btn-buy mega-btn" onclick="openTradeFromDetail('buy')">&#9650; BUY</button>
+          <button class="btn btn-sell mega-btn" onclick="openTradeFromDetail('sell')">&#9660; SELL</button>
+        </div>
+        <button class="mega-auto" id="auto-btn" onclick="toggleAuto()">&#9211; AUTO TRADE: OFF</button>
+        <div class="auto-note">
+          <b>Come funziona l'auto-trade:</b> monitora ogni 30s le gemme e le posizioni aperte. Se una posizione tocca lo stop loss o il take profit, suona un alert e apre il modal di conferma SELL precompilato. Per nuove gemme che superano i filtri, le evidenzia e logga, ma <b>non compra mai da solo</b>. Ogni operazione la firmi tu. Nessuno conserva la tua chiave privata.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /main-layout -->
+
+</div><!-- /layer -->
+
+<!-- WALLET MODAL -->
+<div id="wmodal" class="modal-bg" onclick="if(event.target===this)closeWallet()">
+  <div class="modal">
+    <div class="modal-hdr"><h3 id="wm-title">WALLET</h3><span class="modal-close" onclick="closeWallet()">&times;</span></div>
+    <div id="wlist"></div>
+  </div>
+</div>
+
+<!-- TRADE MODAL -->
+<div id="trmodal" class="modal-bg" onclick="if(event.target===this)closeTrade()">
+  <div class="modal">
+    <div class="modal-hdr"><h3 id="tr-title">TRADE</h3><span class="modal-close" onclick="closeTrade()">&times;</span></div>
+    <div id="tr-alert" style="display:none;background:#FF174411;border:1px solid var(--red);color:var(--red);border-radius:8px;padding:10px;font-size:11px;font-family:var(--mono);margin-bottom:10px;font-weight:700"></div>
+    <div class="swap-box">
+      <label id="tr-pay-lbl">Paghi</label>
+      <div class="swap-in"><input id="tr-amt" type="number" placeholder="0.0" oninput="trDq()"><span id="tr-pay-sym" class="tr-sym"></span></div>
+      <div style="font-size:10px;color:var(--txt2);margin-top:4px;font-family:var(--mono)">Balance: <span id="tr-bal">-</span> <span onclick="trMax()" style="color:var(--cyan);cursor:pointer;margin-left:5px">MAX</span></div>
+    </div>
+    <div class="arrow">&darr;</div>
+    <div class="swap-box">
+      <label>Ricevi (stima)</label>
+      <div class="swap-in"><input id="tr-out" type="number" placeholder="0.0" readonly><span id="tr-recv-sym" class="tr-sym"></span></div>
+    </div>
+    <div style="font-size:11px;color:var(--txt2);text-align:center;margin:7px 0;font-family:var(--mono)" id="tr-rate">Inserisci importo</div>
+    <div class="flex-sb" style="margin-bottom:6px;font-size:11px;color:var(--txt2)">
+      <span style="font-family:var(--mono)">SLIPPAGE</span>
+      <div style="display:flex;gap:5px">
+        <button class="btn btn-out btn-xs" id="trsl1" onclick="trSlip(1)">1%</button>
+        <button class="btn btn-out btn-xs" id="trsl5" onclick="trSlip(5)">5%</button>
+        <button class="btn btn-out btn-xs" id="trsl10" onclick="trSlip(10)">10%</button>
+      </div>
+    </div>
+    <div id="tr-stat" class="sstat"></div>
+    <button class="btn btn-block" id="tr-btn" onclick="trExec()">Conferma</button>
+    <a id="tr-dex" href="#" target="_blank" class="btn btn-out btn-block" style="margin-top:7px;display:none">Apri sul DEX &#8599;</a>
+  </div>
+</div>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mob-nav">
+  <button class="nav-btn on" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="ic">&#128142;</span>GEMME</button>
+  <button class="nav-btn" onclick="loadGems()"><span class="ic">&#128225;</span>SCAN</button>
+  <button class="nav-btn" onclick="setTab('portfolio',document.querySelector('.tab:nth-child(4)'))"><span class="ic">&#128188;</span>PORTAF.</button>
+  <button class="nav-btn" id="nav-w" onclick="openWallet()"><span class="ic">&#11041;</span>WALLET</button>
+</nav>
+
+<script>
+/* ===================== CONFIG ===================== */
+const GT_NETS=[
+  {id:'eth',chainId:1,name:'ETH',col:'#627EEA'},
+  {id:'bsc',chainId:56,name:'BSC',col:'#F3BA2F'},
+  {id:'polygon_pos',chainId:137,name:'MATIC',col:'#8247E5'},
+  {id:'arbitrum',chainId:42161,name:'ARB',col:'#28A0F0'},
+  {id:'base',chainId:8453,name:'BASE',col:'#0052FF'},
+];
+const SOLANA={id:'solana',name:'Solana',col:'#14F195'};
+const CHAIN_NAMES={1:'Ethereum',56:'BNB Chain',137:'Polygon',42161:'Arbitrum',8453:'Base'};
+const CHAIN_HEX={1:'0x1',56:'0x38',137:'0x89',42161:'0xa4b1',8453:'0x2105'};
+const CHAIN_META={
+  1:    {name:'Ethereum',     rpc:'https://cloudflare-eth.com',          explorer:'https://etherscan.io',    sym:'ETH',   dec:18},
+  56:   {name:'BNB Chain',    rpc:'https://bsc-dataseed.binance.org',    explorer:'https://bscscan.com',     sym:'BNB',   dec:18},
+  137:  {name:'Polygon',      rpc:'https://polygon-rpc.com',             explorer:'https://polygonscan.com', sym:'MATIC', dec:18},
+  42161:{name:'Arbitrum One', rpc:'https://arb1.arbitrum.io/rpc',        explorer:'https://arbiscan.io',     sym:'ETH',   dec:18},
+  8453: {name:'Base',         rpc:'https://mainnet.base.org',            explorer:'https://basescan.org',    sym:'ETH',   dec:18},
+};
+const EXPL={1:'https://etherscan.io/tx/',56:'https://bscscan.com/tx/',137:'https://polygonscan.com/tx/',42161:'https://arbiscan.io/tx/',8453:'https://basescan.org/tx/'};
+const DEX_URL={1:'https://app.uniswap.org/swap?chain=mainnet&outputCurrency=',56:'https://pancakeswap.finance/swap?outputCurrency=',137:'https://app.uniswap.org/swap?chain=polygon&outputCurrency=',42161:'https://app.uniswap.org/swap?chain=arbitrum&outputCurrency=',8453:'https://app.uniswap.org/swap?chain=base&outputCurrency='};
+const PS='https://apiv5.paraswap.io';
+const ERC20=['function allowance(address,address) view returns(uint256)','function approve(address,uint256) returns(bool)','function balanceOf(address) view returns(uint256)','function decimals() view returns(uint8)','function symbol() view returns(string)'];
+const NATIVE='0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE';
+const TOKS={
+  1:[{s:'ETH',a:NATIVE,d:18,nat:1},{s:'USDC',a:'0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48',d:6},{s:'USDT',a:'0xdAC17F958D2ee523a2206206994597C13D831ec7',d:6},{s:'WBTC',a:'0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599',d:8}],
+  56:[{s:'BNB',a:NATIVE,d:18,nat:1},{s:'USDT',a:'0x55d398326f99059fF775485246999027B3197955',d:18},{s:'USDC',a:'0x8AC76a51cc950d9822D68b83fE1Ad97B32Cd580d',d:18}],
+  137:[{s:'MATIC',a:NATIVE,d:18,nat:1},{s:'USDC',a:'0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174',d:6},{s:'USDT',a:'0xc2132D05D31c914a87C6611C10748AEb04B58e8F',d:6}],
+  42161:[{s:'ETH',a:NATIVE,d:18,nat:1},{s:'USDC',a:'0xaf88d065e77c8cC2239327C5EDb3A432268e5831',d:6},{s:'USDT',a:'0xFd086bC7CD5C481DCC9C85ebE478A1C0b69FCbb9',d:6}],
+  8453:[{s:'ETH',a:NATIVE,d:18,nat:1},{s:'USDC',a:'0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913',d:6}],
+};
+function stableOf(cid){const t=TOKS[cid]||TOKS[1];return t.find(x=>!x.nat)||t[0];}
+
+const PFKEY='gem81_portfolio';
+const S={gems:[],chain:'bsc',pot:'all',tab:'all',size:10,timer:45,int:null,
+  rawProvider:null,provider:null,signer:null,wallet:null,chainId:56,
+  slippage:5,trade:null,trRoute:null,selected:null,auto:false,autoInt:null,
+  portfolio:[]};
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+S.mode='simple';S.celebrated={};
+const chartCache={};
+/* ===== PROXY PHP (CORS su host) ===== */
+let phpMode=false;
+function PX(url){return phpMode?('api.php?u='+encodeURIComponent(url)):url;}
+async function detectPhp(){
+  if(location.protocol==='file:')return;
+  try{const r=await fetch('api.php?action=ping',{signal:AbortSignal.timeout(1800)});const d=await r.json();if(d&&d.ok){phpMode=true;const e=document.getElementById('mode-pill');if(e){e.textContent='◉ Proxy PHP';e.style.color='var(--green)';e.style.borderColor='var(--green)';}}}catch(e){}
+}
+
+/* ===================== TOASTS ===================== */
+function toast(msg,type='info',icon){
+  const ic={ok:'✅',err:'⚠',info:'⬡',gold:'💎'}[type]||'⬡';
+  const t=document.createElement('div');t.className='toast t-'+type;
+  t.innerHTML='<span class="ti">'+(icon||ic)+'</span><span>'+msg+'</span>';
+  const box=document.getElementById('toaster');if(!box)return;
+  box.appendChild(t);setTimeout(()=>t.remove(),4300);
+}
+
+/* ===================== SEMPLICE / PRO MODE ===================== */
+function setMode(m){
+  S.mode=m;
+  document.body.classList.toggle('pro',m==='pro');
+  document.body.classList.toggle('simple',m==='simple');
+  document.getElementById('m-simple').classList.toggle('on',m==='simple');
+  document.getElementById('m-pro').classList.toggle('on',m==='pro');
+  try{localStorage.setItem('gem81_mode',m);}catch(e){}
+  render();
+}
+
+/* ===================== ONBOARDING ===================== */
+function onbStart(){onbClose();openWallet();}
+function onbClose(){document.getElementById('onb').classList.remove('on');try{localStorage.setItem('gem81_onb','1');}catch(e){}}
+function maybeOnboard(){
+  let seen=false;try{seen=localStorage.getItem('gem81_onb')==='1';}catch(e){}
+  if(!seen&&!S.wallet)document.getElementById('onb').classList.add('on');
+}
+
+/* ===================== SAFETY SEMAPHORE =====================
+   GREEN only if sec data present AND passes all real on-chain checks.
+   Green = "passa i controlli on-chain reali", NOT "guadagno garantito". */
+function semOf(g){
+  if(g&&g.sol)return{c:'sem-q',cls:'q',t:'Solana: controlli on-chain non disponibili in questo strumento.'};
+  if(!g||!g.sec)return{c:'sem-q',cls:'q',t:'Controlli on-chain in corso. Il verde appare solo se passa tutti i test reali.'};
+  if(g.sec.hp)return{c:'sem-r',cls:'r',t:'Honeypot o rischio critico. Rosso significa pericolo reale di non poter rivendere. Non investire.'};
+  if(g.sec.sellTax>=15||g.sec.mint||g.sec.owner>20)return{c:'sem-y',cls:'y',t:'Attenzione: tassa alta, conio illimitato o creatore con troppi token. Procedi con cautela.'};
+  return{c:'sem-g',cls:'g',t:'Passa tutti i controlli on-chain reali: non honeypot, tassa bassa, niente conio. Verde significa sicuro da scambiare, NON guadagno garantito.'};
+}
+function semHTML(g,big){const s=semOf(g);return '<span class="sem '+s.c+(big?' sem-lg':'')+'"><span class="tipbox">'+s.t+'</span></span>';}
+
+/* ===================== COUNT-UP NUMBERS ===================== */
+function countUp(el,to){
+  if(!el)return;to=+to||0;const from=parseInt(el.textContent)||0;
+  if(from===to){el.textContent=to;return;}
+  const dur=420,t0=performance.now();
+  (function step(t){const k=Math.min(1,(t-t0)/dur);el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step);})(t0);
+}
+
+/* ===================== SPARKLINES (GeckoTerminal OHLCV) ===================== */
+async function fetchSparks(gems){
+  for(const g of gems){
+    if(!g.pool||!g.netId||chartCache[g.pool]!==undefined)continue;
+    try{
+      const d=await (await fetch(PX('https://api.geckoterminal.com/api/v2/networks/'+g.netId+'/pools/'+g.pool+'/ohlcv/hour?aggregate=1&limit=24'))).json();
+      chartCache[g.pool]=(d.data?.attributes?.ohlcv_list||[]).map(x=>+x[4]).reverse();
+    }catch(e){chartCache[g.pool]=[];}
+    drawSparkRow(g);
+    if(S.selected&&S.selected.pool===g.pool)drawSpark('d-spark',chartCache[g.pool]);
+    await sleep(360);
+  }
+}
+function drawSparkRow(g){const cv=document.getElementById('rs-'+g.pool);if(cv)drawSpark(cv,chartCache[g.pool]);}
+function drawSpark(cvOrId,data){
+  const cv=typeof cvOrId==='string'?document.getElementById(cvOrId):cvOrId;
+  if(!cv||!data||data.length<2)return;
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth*dpr,H=cv.clientHeight*dpr;
+  if(!W||!H)return;cv.width=W;cv.height=H;const ctx=cv.getContext('2d');ctx.clearRect(0,0,W,H);
+  const min=Math.min(...data),max=Math.max(...data),rng=max-min||1;
+  const up=data[data.length-1]>=data[0],col=up?'#00E676':'#FF1744';
+  const X=i=>i/(data.length-1)*W,Y=v=>H-((v-min)/rng)*(H*0.8)-H*0.1;
+  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,up?'#00E67633':'#FF174433');grad.addColorStop(1,'transparent');
+  ctx.beginPath();data.forEach((v,i)=>{i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v));});
+  ctx.strokeStyle=col;ctx.lineWidth=1.5*dpr;ctx.lineJoin='round';ctx.stroke();
+  ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+}
+
+/* ===================== GEM-FOUND CELEBRATION ===================== */
+function celebrateGems(gems){
+  gems.forEach(g=>{
+    if(!g.safe||g.sol)return;
+    if(!['x50','x20','x10'].includes(g.xpot))return;
+    const key=g.addr+g.chainId;if(S.celebrated[key])return;
+    S.celebrated[key]=1;
+    const row=document.querySelector('.gem-row[data-key="'+CSS.escape(key)+'"]');
+    if(row)row.classList.add('celebrate');
+    toast('Gemma trovata: '+esc(g.sym)+' '+(XPOT_LBL[g.xpot]||'')+' e sicura','gold','💎');
+    playFound();
+  });
+}
+let foundCtx=null;
+function playFound(){
+  try{foundCtx=foundCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=foundCtx.createOscillator(),g=foundCtx.createGain();o.connect(g);g.connect(foundCtx.destination);o.type='sine';
+    o.frequency.setValueAtTime(660,foundCtx.currentTime);o.frequency.exponentialRampToValueAtTime(1320,foundCtx.currentTime+.12);
+    g.gain.setValueAtTime(.0001,foundCtx.currentTime);g.gain.exponentialRampToValueAtTime(.05,foundCtx.currentTime+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,foundCtx.currentTime+.25);o.start();o.stop(foundCtx.currentTime+.26);
+  }catch(e){}
+}
+
+/* ===================== STARFIELD ===================== */
+(function(){
+  const cv=document.getElementById('stars');const ctx=cv.getContext('2d');
+  let stars=[],W,H;
+  function resize(){W=cv.width=innerWidth;H=cv.height=innerHeight;
+    const n=Math.min(140,Math.floor(W*H/14000));stars=[];
+    for(let i=0;i<n;i++)stars.push({x:Math.random()*W,y:Math.random()*H,r:Math.random()*1.4+.2,s:Math.random()*.4+.05,a:Math.random()});}
+  resize();addEventListener('resize',resize);
+  function tick(){ctx.clearRect(0,0,W,H);
+    for(const st of stars){st.y+=st.s;if(st.y>H){st.y=0;st.x=Math.random()*W;}
+      st.a+=(Math.random()-.5)*.05;st.a=Math.max(.15,Math.min(1,st.a));
+      ctx.beginPath();ctx.arc(st.x,st.y,st.r,0,7);
+      ctx.fillStyle='rgba(240,185,11,'+st.a*.55+')';ctx.fill();}
+    requestAnimationFrame(tick);}
+  tick();
+})();
+
+/* ===================== LOG ===================== */
+function log(msg,cls){
+  const box=document.getElementById('log-box');if(!box)return;
+  const t=new Date().toLocaleTimeString('it');
+  const div=document.createElement('div');div.className='ln '+(cls||'');
+  div.innerHTML='<span class="t">'+t+'</span>'+esc(msg);
+  box.insertBefore(div,box.firstChild);
+  while(box.children.length>60)box.removeChild(box.lastChild);
+}
+
+/* ===================== PORTFOLIO ===================== */
+function loadPortfolio(){try{S.portfolio=JSON.parse(localStorage.getItem(PFKEY)||'[]');}catch(e){S.portfolio=[];}}
+function savePortfolio(){try{localStorage.setItem(PFKEY,JSON.stringify(S.portfolio));}catch(e){}}
+function addPosition(p){S.portfolio.push(p);savePortfolio();}
+function removePosition(addr,cid){S.portfolio=S.portfolio.filter(p=>!(p.addr.toLowerCase()===addr.toLowerCase()&&p.chainId===cid));savePortfolio();}
+
+/* ===================== FILTERS / CHAIN ===================== */
+function setChain(c,el){
+  S.chain=c;
+  document.querySelectorAll('#chain-sel .chain').forEach(x=>x.classList.toggle('on',x===el));
+  if(c==='solana'){
+    log('Solana: scanner gemme attivo, ma lo swap interno non e supportato. Usa il DEX esterno per operare.','warn');
+  }
+  loadGems();
+}
+function setPot(p,el){S.pot=p;document.querySelectorAll('#pot-tg .tg').forEach(x=>x.classList.toggle('on',x===el));render();}
+function setSize(v,el){S.size=v;document.querySelectorAll('#pack-row .pack').forEach(x=>x.classList.remove('on'));if(el)el.classList.add('on');document.getElementById('custom-size').value='';syncTradeSize();}
+function setSizeCustom(v){if(v&&+v>0){S.size=+v;document.querySelectorAll('#pack-row .pack').forEach(x=>x.classList.remove('on'));syncTradeSize();}}
+function syncTradeSize(){const e=document.getElementById('trade-size');if(e&&!e.value)e.value=S.size;}
+function setTab(t,el){S.tab=t;document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x===el));render();}
+function chkOn(id){return document.getElementById(id).classList.contains('on');}
+
+function toggleRightPanel(){document.getElementById('right-panel').classList.toggle('mobile-open');}
+
+/* ===================== LOAD GEMS (real GeckoTerminal) ===================== */
+async function loadGems(){
+  try{
+    log('Scansione DEX avviata su '+(S.chain==='all'?'tutte le reti':S.chain),'info');
+    let nets;
+    if(S.chain==='solana')nets=[];
+    else nets=GT_NETS.filter(n=>n.id===S.chain);
+    if(!nets.length&&S.chain!=='solana')nets=GT_NETS;
+    const all=[];
+    if(S.chain==='solana'){
+      // Solana: scan via GeckoTerminal but mark as non-EVM (no internal swap)
+      try{
+        const r=await fetch(PX('https://api.geckoterminal.com/api/v2/networks/solana/trending_pools?page=1&include=base_token'),{headers:{Accept:'application/json'}});
+        if(r.ok){const d=await r.json();const tm={};(d.included||[]).forEach(t=>{if(t.type==='token')tm[t.id]=t;});
+          for(const pool of (d.data||[]).slice(0,15)){
+            const a=pool.attributes||{};const bid=pool.relationships?.base_token?.data?.id;const ta=(tm[bid]||{}).attributes||{};
+            const g=mkGem(a,ta,bid,{chainId:0,name:'SOL',col:'#14F195',id:'solana'});g.sol=true;g.score=score(g);g.xpot=xpot(g);all.push(g);
+          }}
+      }catch(e){}
+    } else {
+      await Promise.all(nets.map(async net=>{
+        try{
+          const r=await fetch(PX(`https://api.geckoterminal.com/api/v2/networks/${net.id}/trending_pools?page=1&include=base_token`),{headers:{Accept:'application/json'}});
+          if(!r.ok)return;
+          const d=await r.json();
+          const tm={};(d.included||[]).forEach(t=>{if(t.type==='token')tm[t.id]=t;});
+          for(const pool of (d.data||[]).slice(0,15)){
+            const a=pool.attributes||{};
+            const bid=pool.relationships?.base_token?.data?.id;
+            const ta=(tm[bid]||{}).attributes||{};
+            const g=mkGem(a,ta,bid,net);g.score=score(g);g.xpot=xpot(g);all.push(g);
+          }
+        }catch(e){}
+      }));
+    }
+    all.sort((x,y)=>y.score-x.score);
+    S.gems=all.slice(0,30);
+    if(!S.gems.length){
+      document.getElementById('gem-list').innerHTML='<div class="empty"><div class="ic">&#11041;</div>Nessun dato disponibile per questa rete. Riprova.</div>';
+      log('Nessuna gemma trovata o dati non disponibili.','bad');
+      return;
+    }
+    log('Trovate '+S.gems.length+' gemme. Avvio security batch reale...','ok');
+    if(S.chain!=='solana')secBatch(S.gems.slice(0,16));
+    stats();render();updateTicker();
+  }catch(e){
+    document.getElementById('gem-list').innerHTML='<div class="empty"><div class="ic">&#11041;</div>Errore connessione, riprova.</div>';
+    log('Errore scansione: '+(e.message||e),'bad');
+  }
+}
+function mkGem(a,ta,bid,net){
+  const g={name:ta.name||a.name?.split('/')[0]||'?',sym:ta.symbol||'?',
+    addr:ta.address||bid?.split('_')[1]||'',decimals:parseInt(ta.decimals)||18,
+    chainId:net.chainId,chainName:net.name,col:net.col,netId:net.id,
+    liq:+(a.reserve_in_usd||0),vol24:+(a.volume_usd?.h24||0),
+    p1h:+(a.price_change_percentage?.h1||0),p24h:+(a.price_change_percentage?.h24||0),
+    buys:+(a.transactions?.h24?.buys||0),sells:+(a.transactions?.h24?.sells||0),
+    mcap:+(a.market_cap_usd||a.fdv_usd||0),price:+(a.base_token_price_usd||0),
+    pool:a.address||'',sec:null,sol:false};
+  g.vlr=g.liq>0?g.vol24/g.liq:0;g.txs=g.buys+g.sells;
+  return g;
+}
+
+/* ===================== SECURITY BATCH (real GoPlus) ===================== */
+async function secBatch(gems){
+  const by={};gems.forEach(g=>{if(g.addr&&g.addr.length>=10&&g.chainId)(by[g.chainId]=by[g.chainId]||[]).push(g);});
+  for(const [cid,list] of Object.entries(by)){
+    const addrs=list.map(g=>g.addr).slice(0,10).join(',');if(!addrs)continue;
+    try{
+      const d=await (await fetch(PX(`https://api.gopluslabs.io/api/v1/token_security/${cid}?contract_addresses=${addrs}`))).json();
+      const res=d.result||{};
+      list.forEach(g=>{const k=g.addr.toLowerCase();const i=res[k]||res[Object.keys(res).find(x=>x.toLowerCase()===k)];if(!i)return;
+        g.sec={hp:i.is_honeypot==='1',sellTax:+(i.sell_tax||0)*100,buyTax:+(i.buy_tax||0)*100,owner:+(i.creator_percent||0)*100,mint:i.is_mintable==='1',os:i.is_open_source==='1',bl:i.is_blacklisted==='1',takeBack:i.can_take_back_ownership==='1',holders:+(i.holder_count||0)};
+        g.safe=!g.sec.hp&&g.sec.sellTax<15&&!g.sec.mint;g.score=score(g);g.xpot=xpot(g);});
+      stats();render();updateTicker();
+    }catch(e){}
+  }
+}
+
+/* ===================== SCORE / XPOT (real, from crypto_suite) ===================== */
+function score(g){
+  let s=0;
+  if(g.vlr>20)s+=25;else if(g.vlr>10)s+=20;else if(g.vlr>5)s+=15;else if(g.vlr>2)s+=10;else if(g.vlr>1)s+=5;
+  if(g.p24h>200)s+=25;else if(g.p24h>100)s+=22;else if(g.p24h>50)s+=18;else if(g.p24h>20)s+=12;else if(g.p24h>10)s+=7;else if(g.p24h>5)s+=3;else if(g.p24h<-30)s-=5;
+  if(g.p1h>20)s+=15;else if(g.p1h>10)s+=12;else if(g.p1h>5)s+=8;else if(g.p1h>2)s+=4;else if(g.p1h<-10)s-=5;
+  if(g.liq>=50000&&g.liq<=2000000)s+=10;else if(g.liq>=20000)s+=5;else if(g.liq<=1e7)s+=4;
+  if(g.txs>0){const r=g.buys/g.txs;if(r>0.7)s+=10;else if(r>0.6)s+=7;else if(r>0.5)s+=4;else if(r<0.35)s-=5;}
+  if(g.mcap>0){if(g.mcap<5e5)s+=10;else if(g.mcap<1e6)s+=8;else if(g.mcap<5e6)s+=5;else if(g.mcap<2e7)s+=2;}else s+=5;
+  if(g.txs>500)s+=5;else if(g.txs>200)s+=4;else if(g.txs>100)s+=3;else if(g.txs>50)s+=2;else if(g.txs>20)s+=1;
+  if(g.sec){if(g.sec.hp)return 0;s+=3;
+    if(g.sec.sellTax>20)s-=40;else if(g.sec.sellTax>10)s-=20;else if(g.sec.sellTax>5)s-=8;
+    if(g.sec.owner>20)s-=15;else if(g.sec.owner>10)s-=5;if(g.sec.mint)s-=10;}
+  return Math.max(0,Math.min(100,Math.round(s)));
+}
+function xpot(g){if(g.sec?.hp)return'honeypot';const mc=g.mcap>0?g.mcap:999999;
+  if(g.score>=80&&mc<3e5)return'x50';
+  if(g.score>=75&&mc<5e5)return'x20';if(g.score>=70&&mc<1e6)return'x10';if(g.score>=65&&mc<5e6)return'x5';
+  if(g.score>=50&&mc<2e7)return'x2';if(g.score>=38)return'watch';return'low';}
+const XPOT_RANK={x50:0,x20:1,x10:2,x5:3,x2:4,watch:5,low:6,honeypot:7};
+const XPOT_LBL={x50:'X50',x20:'X20',x10:'X10',x5:'X5',x2:'X2',watch:'OSSERVA',low:'DEBOLE',honeypot:'HONEYPOT'};
+
+/* ===================== STATS ===================== */
+function stats(){
+  const g=S.gems;
+  const c=p=>g.filter(x=>x.xpot===p).length;
+  countUp(document.getElementById('s-x50'),c('x50'));
+  countUp(document.getElementById('s-x20'),c('x50')+c('x20'));
+  countUp(document.getElementById('s-x10'),c('x50')+c('x20')+c('x10'));
+  countUp(document.getElementById('s-x5'),c('x50')+c('x20')+c('x10')+c('x5'));
+  countUp(document.getElementById('s-tot'),g.length);
+}
+
+/* ===================== TICKER ===================== */
+function updateTicker(){
+  const top=S.gems.filter(g=>['x50','x20','x10','x5'].includes(g.xpot)).slice(0,6);
+  if(!top.length)return;
+  const items=top.map(g=>{const up=g.p24h>=0;
+    return `<span class="tick-item"><b style="color:${g.col}">${esc(g.sym)}</b><span>${price(g.price)}</span><span class="${up?'tick-pos':'tick-neg'}">${up?'+':''}${g.p24h.toFixed(1)}%</span></span>`;});
+  document.getElementById('ticker-track').innerHTML=items.join('')+items.join('');
+}
+
+/* ===================== FILTER PIPELINE ===================== */
+function filteredGems(){
+  let g=[...S.gems];
+  // SIMPLE mode: show only gems that passed the real on-chain checks, with real upside
+  if(S.mode==='simple'){
+    g=g.filter(x=>x.safe===true&&!['low','honeypot'].includes(x.xpot));
+  }
+  // security toggles
+  if(chkOn('chk-hp'))g=g.filter(x=>!(x.sec&&x.sec.hp));
+  if(chkOn('chk-mint'))g=g.filter(x=>!(x.sec&&x.sec.mint));
+  if(chkOn('chk-os'))g=g.filter(x=>x.sec?x.sec.os:true);
+  if(chkOn('chk-tax'))g=g.filter(x=>x.sec?x.sec.sellTax<=10:true);
+  // advanced
+  const minLiq=+document.getElementById('flt-liq').value||0;
+  const maxMcap=+document.getElementById('flt-mcap').value||0;
+  const minChg=+document.getElementById('flt-chg').value;
+  if(minLiq)g=g.filter(x=>x.liq>=minLiq);
+  if(maxMcap)g=g.filter(x=>x.mcap>0&&x.mcap<=maxMcap);
+  if(!isNaN(minChg)&&document.getElementById('flt-chg').value!=='')g=g.filter(x=>x.p24h>=minChg);
+  // potential toggle
+  if(S.pot==='x2')g=g.filter(x=>['x50','x20','x10','x5','x2'].includes(x.xpot));
+  else if(S.pot==='x5')g=g.filter(x=>['x50','x20','x10','x5'].includes(x.xpot));
+  else if(S.pot==='x10')g=g.filter(x=>['x50','x20','x10'].includes(x.xpot));
+  else if(S.pot==='x20')g=g.filter(x=>['x50','x20'].includes(x.xpot));
+  else if(S.pot==='x50')g=g.filter(x=>x.xpot==='x50');
+  // tabs
+  if(S.tab==='security')g=g.filter(x=>x.safe===true).sort((a,b)=>(b.sec?100-b.sec.sellTax:0)-(a.sec?100-a.sec.sellTax:0)||b.score-a.score);
+  else if(S.tab==='potential')g.sort((a,b)=>(XPOT_RANK[a.xpot]??9)-(XPOT_RANK[b.xpot]??9)||b.score-a.score);
+  else g.sort((a,b)=>(XPOT_RANK[a.xpot]??9)-(XPOT_RANK[b.xpot]??9)||b.score-a.score);
+  return g;
+}
+
+/* ===================== RENDER ===================== */
+function render(){
+  const el=document.getElementById('gem-list');if(!el)return;
+  if(S.tab==='portfolio'){renderPortfolio(el);return;}
+  const g=filteredGems();
+  if(!g.length){
+    if(!S.gems.length){el.innerHTML='<div class="sk-wrap"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>';return;}
+    el.innerHTML='<div class="empty"><div class="ic">&#11041;</div>'+(S.mode==='simple'?'Nessuna gemma sicura adesso. Riprovo al prossimo scan, oppure passa a PRO per vedere tutto.':'Nessuna gemma con questi filtri')+'</div>';
+    return;
+  }
+  let html='<table class="gem-table"><thead><tr><th style="text-align:center">&#9210;</th><th>Token</th><th class="r">Prezzo</th><th class="r col-hide-m">24h</th><th class="r col-hide-m col-pro">Liq</th><th class="r col-hide-m col-pro">Cap</th><th class="col-hide-m col-pro">Trend</th><th style="text-align:center" class="col-pro">Score</th><th style="text-align:center">Potenziale</th><th style="text-align:center" class="col-pro">Sicurezza</th></tr></thead><tbody>';
+  for(const x of g){
+    const ring=x.score>=75?'ring-green':x.score>=60?'ring-gold':x.score>=45?'ring-orange':'ring-red';
+    const xc=x.xpot==='honeypot'?'hp':(x.xpot==='low'?'watch':x.xpot);
+    const sb=!x.sec?(x.sol?'<span class="badge badge-grey">SOL</span>':'<span class="badge badge-grey">N/D</span>'):x.sec.hp?'<span class="badge badge-red">HP</span>':x.safe?'<span class="badge badge-green">SAFE</span>':'<span class="badge badge-orange">ATT</span>';
+    const sel=S.selected&&S.selected.addr===x.addr&&S.selected.chainId===x.chainId?' sel':'';
+    const key=x.addr+x.chainId;
+    html+=`<tr class="gem-row${x.sec?.hp?' hp':''}${sel}" data-key="${esc(key)}" onclick="selectGem('${x.addr}',${x.chainId})">
+      <td style="text-align:center">${semHTML(x)}</td>
+      <td><div class="gem-sym" style="color:${x.col}">${esc(x.sym)}</div><div class="gem-name-sm">${esc(x.name)} · ${esc(x.chainName)}</div></td>
+      <td class="r">${price(x.price)}</td>
+      <td class="r col-hide-m ${x.p24h>=0?'g-pos':'g-neg'}">${x.p24h>=0?'+':''}${x.p24h.toFixed(0)}%</td>
+      <td class="r col-hide-m col-pro">${usd(x.liq)}</td>
+      <td class="r col-hide-m col-pro">${x.mcap?usd(x.mcap):'?'}</td>
+      <td class="col-hide-m"><canvas class="row-spark" id="rs-${esc(x.pool)}"></canvas></td>
+      <td style="text-align:center" class="col-pro"><div class="ring ${ring}">${x.score}</div></td>
+      <td style="text-align:center">${x.xpot==='low'?'<span class="xtag watch">-</span>':`<span class="xtag ${xc}">${XPOT_LBL[x.xpot]}</span>`}</td>
+      <td style="text-align:center" class="col-pro">${sb}</td>
+    </tr>`;
+  }
+  html+='</tbody></table>';
+  el.innerHTML=html;
+  // redraw cached sparks, fetch missing, fire celebration
+  g.forEach(x=>{if(chartCache[x.pool]!==undefined)drawSparkRow(x);});
+  fetchSparks(g);
+  celebrateGems(g);
+}
+function renderPortfolio(el){
+  if(!S.portfolio.length){el.innerHTML='<div class="empty"><div class="ic">&#128188;</div>Portfolio vuoto. Le posizioni aperte (con stop loss / take profit) appaiono qui.</div>';return;}
+  let html='<table class="gem-table"><thead><tr><th>Token</th><th class="r">Entry</th><th class="r">Ora</th><th class="r">P/L</th><th class="r">SL/TP</th><th style="text-align:center">Azione</th></tr></thead><tbody>';
+  for(const p of S.portfolio){
+    const cur=p.lastPrice||p.entryPrice;
+    const pl=p.entryPrice>0?((cur-p.entryPrice)/p.entryPrice*100):0;
+    html+=`<tr class="gem-row">
+      <td><div class="gem-sym">${esc(p.sym)}</div><div class="gem-name-sm">${CHAIN_NAMES[p.chainId]||p.chainId}</div></td>
+      <td class="r">${price(p.entryPrice)}</td>
+      <td class="r">${price(cur)}</td>
+      <td class="r ${pl>=0?'g-pos':'g-neg'}">${pl>=0?'+':''}${pl.toFixed(1)}%</td>
+      <td class="r" style="font-size:10px">${p.sl?'-'+p.sl+'%':'-'} / ${p.tp?'+'+p.tp+'%':'-'}</td>
+      <td style="text-align:center"><button class="btn btn-sell btn-xs" onclick="event.stopPropagation();openTrade('${p.addr}',${p.chainId},${p.decimals},'${esc(p.sym)}','sell')">SELL</button> <button class="btn btn-out btn-xs" onclick="event.stopPropagation();removePosition('${p.addr}',${p.chainId});render()">X</button></td>
+    </tr>`;
+  }
+  html+='</tbody></table>';
+  el.innerHTML=html;
+}
+
+/* ===================== SELECT GEM + DETAIL + REAL SECURITY ===================== */
+async function selectGem(addr,cid){
+  const g=S.gems.find(x=>x.addr===addr&&x.chainId===cid)||S.gems.find(x=>x.addr===addr);
+  if(!g)return;
+  S.selected=g;render();
+  document.getElementById('detail-empty').style.display='none';
+  document.getElementById('detail-body').style.display='block';
+  document.getElementById('d-sym').textContent=g.sym;document.getElementById('d-sym').style.color=g.col;
+  document.getElementById('d-name').textContent=g.name+' · '+g.chainName;
+  const ring=document.getElementById('d-ring');
+  ring.textContent=g.score;ring.className='ring '+(g.score>=75?'ring-green':g.score>=60?'ring-gold':g.score>=45?'ring-orange':'ring-red');
+  document.getElementById('d-price').textContent=price(g.price);
+  const chg=document.getElementById('d-chg');chg.textContent=(g.p24h>=0?'+':'')+g.p24h.toFixed(1)+'%';chg.className='v '+(g.p24h>=0?'g-pos':'g-neg');
+  document.getElementById('d-liq').textContent=usd(g.liq);
+  document.getElementById('d-mcap').textContent=g.mcap?usd(g.mcap):'?';
+  document.getElementById('d-vol').textContent=usd(g.vol24);
+  document.getElementById('d-pot').textContent=g.xpot==='low'?'-':XPOT_LBL[g.xpot];
+  if(chartCache[g.pool]!==undefined)drawSpark('d-spark',chartCache[g.pool]);else fetchSparks([g]);
+  document.getElementById('trade-pay-sym').textContent=g.sol?'SOL':'USD';
+  syncTradeSize();
+  // trade buttons enable/disable per sol
+  document.querySelectorAll('.bs-row .btn').forEach(b=>{b.disabled=!!g.sol;});
+  if(window.innerWidth<=1100){document.getElementById('rp-toggle').style.display='inline-block';document.getElementById('right-panel').classList.add('mobile-open');}
+  // run REAL security analysis
+  if(g.sol){
+    document.getElementById('sec-report').innerHTML='<div style="color:var(--txt2);font-size:11px;font-family:var(--mono)">Solana: security on-chain non disponibile in questo strumento. Verifica su <a href="https://gmgn.ai" target="_blank">gmgn.ai</a> o <a href="https://birdeye.so" target="_blank">birdeye.so</a>. Swap solo via DEX esterno.</div>';
+    return;
+  }
+  runAnalysis(addr,cid,g);
+}
+
+async function runAnalysis(addr,cid,g){
+  const box=document.getElementById('sec-report');
+  box.innerHTML='<div class="loading" style="padding:14px"><div class="spin"></div> Analisi on-chain reale...</div>';
+  let info=null,hd=null,dex=null;
+  const [gp,hp,ds]=await Promise.allSettled([
+    fetch(PX(`https://api.gopluslabs.io/api/v1/token_security/${cid}?contract_addresses=${addr}`)).then(r=>r.json()),
+    fetch(PX(`https://api.honeypot.is/v2/IsHoneypot?address=${addr}&chainID=${cid}`)).then(r=>r.json()),
+    fetch(PX(`https://api.dexscreener.com/latest/dex/tokens/${addr}`)).then(r=>r.json()),
+  ]);
+  const gd=gp.status==='fulfilled'?gp.value:null;
+  hd=hp.status==='fulfilled'?hp.value:null;
+  dex=ds.status==='fulfilled'?ds.value:null;
+  info=gd?.result?(gd.result[addr.toLowerCase()]||Object.values(gd.result)[0]):null;
+  showSecReport(info,hd,dex,addr,cid,g);
+}
+
+function showSecReport(info,hd,dex,addr,cid,g){
+  const box=document.getElementById('sec-report');
+  // honeypot: real from honeypot.is, fallback GoPlus
+  let hpVal=null;
+  if(hd&&hd.honeypotResult&&typeof hd.honeypotResult.isHoneypot==='boolean')hpVal=hd.honeypotResult.isHoneypot;
+  else if(hd&&typeof hd.isHoneypot==='boolean')hpVal=hd.isHoneypot;
+  else if(info&&info.is_honeypot!==undefined)hpVal=info.is_honeypot==='1';
+  // taxes: prefer honeypot.is then GoPlus
+  let sellTax=null,buyTax=null;
+  if(hd?.simulationResult){if(hd.simulationResult.sellTax!=null)sellTax=+hd.simulationResult.sellTax;if(hd.simulationResult.buyTax!=null)buyTax=+hd.simulationResult.buyTax;}
+  if(sellTax===null&&info&&info.sell_tax!==undefined)sellTax=+(info.sell_tax||0)*100;
+  if(buyTax===null&&info&&info.buy_tax!==undefined)buyTax=+(info.buy_tax||0)*100;
+  const os=info?info.is_open_source==='1':null;
+  const mint=info?info.is_mintable==='1':null;
+  const bl=info?info.is_blacklisted==='1':null;
+  const takeBack=info?info.can_take_back_ownership==='1':null;
+  const own=info&&info.creator_percent!==undefined?+(info.creator_percent||0)*100:null;
+  const hold=info&&info.holder_count!==undefined?+info.holder_count:null;
+  // liquidity from DexScreener (real)
+  let liqUsd=null;
+  if(dex&&dex.pairs&&dex.pairs.length){const p=dex.pairs.find(x=>+x.chainId===cid||true);liqUsd=p?.liquidity?.usd!=null?+p.liquidity.usd:null;}
+  if(liqUsd===null&&g&&g.liq)liqUsd=g.liq;
+
+  // secScore from REAL data only; if everything N/D -> show N/D
+  const haveAny=hpVal!==null||sellTax!==null||os!==null||mint!==null||liqUsd!==null;
+  let secScore=null;
+  if(haveAny){
+    let risk=0,known=0;
+    if(hpVal!==null){known++;if(hpVal)risk+=50;}
+    if(sellTax!==null){known++;if(sellTax>10)risk+=20;else if(sellTax>5)risk+=8;}
+    if(mint!==null){known++;if(mint)risk+=15;}
+    if(bl!==null){known++;if(bl)risk+=10;}
+    if(own!==null){known++;if(own>20)risk+=12;else if(own>10)risk+=5;}
+    if(os!==null){known++;if(!os)risk+=8;}
+    if(takeBack!==null){known++;if(takeBack)risk+=12;}
+    if(liqUsd!==null){known++;if(liqUsd<10000)risk+=10;}
+    risk=Math.min(100,risk);
+    secScore=Math.max(0,100-risk);
+  }
+  // store secScore on gem for auto-trade candidate logic
+  if(g){g.secScore=secScore;g.realHp=hpVal;}
+
+  const vN=(v,suf)=>v===null||v===undefined?'<span class="nd">N/D</span>':(v+(suf||''));
+  const taxC=t=>t===null?'nd':t>10?'bad':t>5?'warn':'ok';
+  let verdict='N/D',vc='nd';
+  if(secScore!==null){if(secScore>=70){verdict='SICURO';vc='ok';}else if(secScore>=40){verdict='RISCHIOSO';vc='warn';}else{verdict='PERICOLOSO';vc='bad';}}
+
+  const semCls=hpVal?'sem-r':(secScore===null?'sem-q':secScore>=70&&!mint&&!(sellTax>=15)?'sem-g':secScore>=40?'sem-y':'sem-r');
+  const semTxt=hpVal?'Honeypot o rischio critico: pericolo reale di non poter rivendere.':secScore===null?'Controlli in corso o non disponibili.':semCls==='sem-g'?'Passa i controlli on-chain reali. Verde significa sicuro da scambiare, NON guadagno garantito.':semCls==='sem-y'?'Alcuni segnali di attenzione. Procedi con cautela.':'Rischio elevato. Meglio evitare.';
+  box.innerHTML=`
+    <div class="flex-sb" style="margin-bottom:10px">
+      <span style="display:flex;align-items:center;gap:9px"><span class="sem ${semCls} sem-lg"><span class="tipbox">${semTxt}</span></span><span style="font-size:13px;font-weight:800;color:var(--${vc==='ok'?'green':vc==='warn'?'accent':vc==='bad'?'red':'txt2'})">${verdict}</span></span>
+      <span style="font-family:var(--mono);font-weight:800;font-size:18px;color:var(--${vc==='ok'?'green':vc==='warn'?'accent':vc==='bad'?'red':'txt2'})">${secScore!==null?secScore+'/100':'N/D'}</span>
+    </div>
+    <div class="sec-row"><span class="sec-key">Honeypot <span class="tip">?<span class="tipbox">Trappola: puoi comprare ma non rivendere. Mai investire qui.</span></span></span><span class="sec-val ${hpVal===null?'nd':hpVal?'bad':'ok'}">${hpVal===null?'<span class="nd">N/D</span>':hpVal?'SI — NON VENDIBILE':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Tassa vendita <span class="tip">?<span class="tipbox">Quanto trattiene il token quando vendi. Sopra il 10% mangia i guadagni.</span></span></span><span class="sec-val ${taxC(sellTax)}">${sellTax===null?'<span class="nd">N/D</span>':sellTax.toFixed(1)+'%'}</span></div>
+    <div class="sec-row"><span class="sec-key">Tassa acquisto <span class="tip">?<span class="tipbox">Quanto trattiene il token quando compri.</span></span></span><span class="sec-val ${taxC(buyTax)}">${buyTax===null?'<span class="nd">N/D</span>':buyTax.toFixed(1)+'%'}</span></div>
+    <div class="sec-row"><span class="sec-key">Codice pubblico <span class="tip">?<span class="tipbox">Contratto verificato e leggibile da tutti. Meglio se SI.</span></span></span><span class="sec-val ${os===null?'nd':os?'ok':'warn'}">${os===null?'<span class="nd">N/D</span>':os?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Conio illimitato <span class="tip">?<span class="tipbox">Il creatore puo stampare nuovi token e diluire il tuo valore.</span></span></span><span class="sec-val ${mint===null?'nd':mint?'warn':'ok'}">${mint===null?'<span class="nd">N/D</span>':mint?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Blacklist <span class="tip">?<span class="tipbox">Il creatore puo bloccare alcuni indirizzi dal vendere.</span></span></span><span class="sec-val ${bl===null?'nd':bl?'warn':'ok'}">${bl===null?'<span class="nd">N/D</span>':bl?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Reclama ownership <span class="tip">?<span class="tipbox">Il creatore puo riprendere il controllo del contratto. Rischio alto.</span></span></span><span class="sec-val ${takeBack===null?'nd':takeBack?'bad':'ok'}">${takeBack===null?'<span class="nd">N/D</span>':takeBack?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">% creatore <span class="tip">?<span class="tipbox">Quanti token tiene chi ha creato il progetto. Sopra il 20% e rischioso.</span></span></span><span class="sec-val ${own===null?'nd':own>20?'bad':own>10?'warn':'ok'}">${own===null?'<span class="nd">N/D</span>':own.toFixed(1)+'%'}</span></div>
+    <div class="sec-row"><span class="sec-key">Liquidita (DexScreener)</span><span class="sec-val ${liqUsd===null?'nd':liqUsd<10000?'warn':'ok'}">${liqUsd===null?'<span class="nd">N/D</span>':usd(liqUsd)}</span></div>
+    <div class="sec-row"><span class="sec-key">Holders</span><span class="sec-val ${hold===null?'nd':hold>500?'ok':hold>100?'warn':'bad'}">${hold===null?'<span class="nd">N/D</span>':hold.toLocaleString()}</span></div>
+    <div style="margin-top:10px"><a href="${(DEX_URL[cid]||'')+addr}" target="_blank" class="btn btn-out btn-block btn-sm">Apri su DEX &#8599;</a></div>
+    <div style="font-size:9px;color:var(--txt2);word-break:break-all;font-family:var(--mono);margin-top:6px">${addr}</div>`;
+  log('Security reale '+g.sym+': '+(secScore!==null?secScore+'/100':'N/D')+(hpVal?' HONEYPOT!':''),hpVal?'bad':secScore>=70?'ok':'warn');
+}
+
+/* ===================== MANUAL CHECK ===================== */
+function checkManual(){
+  const addr=document.getElementById('man-addr').value.trim();
+  if(!addr){alert('Incolla un indirizzo token');return;}
+  if(typeof ethers!=='undefined'&&!ethers.isAddress(addr)){alert('Indirizzo non valido (atteso 0x...)');return;}
+  const cid=S.chainId&&CHAIN_NAMES[S.chainId]?S.chainId:(GT_NETS.find(n=>n.id===S.chain)?.chainId||56);
+  // build a minimal gem object & analyze
+  const g={sym:addr.slice(0,6)+'...',name:'Token manuale',addr,chainId:cid,decimals:18,col:'#F0B90B',chainName:CHAIN_NAMES[cid]||cid,price:0,p24h:0,liq:0,mcap:0,vol24:0,score:0,xpot:'watch',pool:''};
+  S.gems.unshift(g);
+  selectGem(addr,cid);
+  log('Analisi manuale token '+addr.slice(0,10)+'...','info');
+}
+
+/* ===================== TRADE FROM DETAIL ===================== */
+function openTradeFromDetail(side){
+  if(!S.selected)return;
+  const g=S.selected;
+  if(g.sol){alert('Swap interno non supportato per Solana. Usa il DEX esterno.');return;}
+  openTrade(g.addr,g.chainId,g.decimals,g.sym,side);
+}
+
+/* ===================== WALLET: EIP-6963 discovery (real) ===================== */
+const discovered=[];
+window.addEventListener('eip6963:announceProvider',e=>{
+  if(!discovered.find(p=>p.info?.uuid&&p.info.uuid===e.detail?.info?.uuid))discovered.push(e.detail);
+});
+function requestProviders(){try{window.dispatchEvent(new Event('eip6963:requestProvider'));}catch(e){}}
+
+function openWallet(){
+  if(S.wallet){
+    document.getElementById('wm-title').textContent='WALLET CONNESSO';
+    document.getElementById('wlist').innerHTML=`
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px;margin-bottom:10px;font-family:var(--mono)">
+        <div style="font-size:9px;color:var(--txt2);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px">Indirizzo</div>
+        <div style="font-size:11px;word-break:break-all">${S.wallet}</div>
+      </div>
+      <div class="flex-sb" style="margin-bottom:12px">
+        <span style="font-size:11px;color:var(--txt2);font-family:var(--mono)">RETE</span>
+        <select class="sel" id="wm-chain" onchange="wmSwitch()">${Object.keys(TOKS).map(c=>`<option value="${c}" ${+c===S.chainId?'selected':''}>${CHAIN_NAMES[c]}</option>`).join('')}</select>
+      </div>
+      <button class="btn btn-out btn-block" onclick="disconnect();closeWallet()">Disconnetti</button>`;
+    document.getElementById('wmodal').classList.add('on');
+    return;
+  }
+  discoverAndShow();
+}
+async function discoverAndShow(){
+  if(typeof ethers==='undefined'){alert('Libreria in caricamento, attendi 2s e riprova');return;}
+  document.getElementById('wm-title').textContent='SELEZIONA WALLET';
+  document.getElementById('wlist').innerHTML='<div class="loading"><div class="spin"></div> Cerco estensioni...</div>';
+  document.getElementById('wmodal').classList.add('on');
+  discovered.length=0;
+  for(let i=0;i<15;i++){requestProviders();await sleep(200);if(discovered.length)break;}
+  let opts=[];
+  if(discovered.length)opts=discovered.map(d=>({name:d.info?.name||wname(d.provider),icon:d.info?.icon||'',provider:d.provider}));
+  if(!opts.length&&window.ethereum?.providers?.length)opts=window.ethereum.providers.map(p=>({name:wname(p),icon:'',provider:p}));
+  if(!opts.length&&window.tokenpocket?.ethereum)opts=[{name:'TokenPocket',icon:'',provider:window.tokenpocket.ethereum}];
+  if(!opts.length&&window.ethereum)opts=[{name:wname(window.ethereum),icon:'',provider:window.ethereum}];
+  if(!opts.length){
+    const isFile=location.protocol==='file:';
+    const isBrave=navigator.brave?.isBrave||/\bBrave\b/.test(navigator.userAgent);
+    let msg='';
+    if(isFile){
+      msg=`<b>Abilita accesso ai file locali</b><br><br>
+<b>Chrome</b> &rarr; copia nella barra:<br>
+<code style="background:var(--surface);padding:2px 8px;border-radius:4px;display:block;margin:3px 0;cursor:pointer;font-family:var(--mono)" onclick="copyText('chrome://extensions')">chrome://extensions</code>
+Wallet &rarr; Dettagli &rarr; "Consenti accesso URL file"<br><br>
+<b>Brave</b> &rarr; stesso passaggio su:<br>
+<code style="background:var(--surface);padding:2px 8px;border-radius:4px;display:block;margin:3px 0;cursor:pointer;font-family:var(--mono)" onclick="copyText('brave://extensions')">brave://extensions</code>
+Poi ricarica (F5) e ripremi Connetti`;
+    } else if(isBrave){
+      msg=`<b>Brave blocca le estensioni wallet</b><br>Vai su <b>brave://settings/web3</b><br>&rarr; "Portafoglio predefinito" &rarr; Estensioni<br>&rarr; Ricarica la pagina`;
+    } else {
+      msg=`<b>Nessun wallet trovato</b><br>Installa TokenPocket, MetaMask, Rabby o Brave Wallet,<br>attivalo e riprova.`;
+    }
+    document.getElementById('wlist').innerHTML=`
+      <div class="banner" style="background:#FF174411;border:1px solid var(--red);color:var(--txt);margin-bottom:10px;line-height:1.7">${msg}</div>
+      <button class="btn btn-accent btn-block" style="margin-bottom:7px" onclick="discoverAndShow()">Riprova</button>
+      <button class="btn btn-out btn-block" onclick="closeWallet()">Chiudi</button>`;
+    return;
+  }
+  window._wopts=opts;
+  document.getElementById('wlist').innerHTML=opts.map((o,i)=>`
+    <div class="wopt" onclick="pick(${i})">
+      ${o.icon?`<img src="${o.icon}" onerror="this.style.display='none'">`:'<span style="font-size:24px">&#11041;</span>'}
+      <span style="font-family:var(--mono)">${esc(o.name)}</span>
+    </div>`).join('');
+}
+function wname(p){
+  if(!p)return'Wallet';
+  return p.isTokenPocket?'TokenPocket':p.isMetaMask?'MetaMask':p.isCoinbaseWallet?'Coinbase':p.isRabby?'Rabby':p.isTrust?'Trust Wallet':p.isBraveWallet?'Brave Wallet':'Wallet';
+}
+function closeWallet(){document.getElementById('wmodal').classList.remove('on');}
+async function pick(i){
+  const o=window._wopts[i];const wl=document.getElementById('wlist');
+  wl.innerHTML='<div class="loading"><div class="spin"></div> Connessione...</div>';
+  try{
+    const raw=o.provider;
+    const accs=await raw.request({method:'eth_requestAccounts'});
+    if(!accs||!accs.length)throw new Error('Nessun account autorizzato');
+    S.rawProvider=raw;
+    S.provider=new ethers.BrowserProvider(raw);
+    S.signer=await S.provider.getSigner();
+    S.wallet=await S.signer.getAddress();
+    S.chainId=Number((await S.provider.getNetwork()).chainId);
+    try{raw.removeAllListeners?.('accountsChanged');raw.removeAllListeners?.('chainChanged');}catch(e){}
+    raw.on?.('accountsChanged',acc=>{if(!acc||!acc.length)disconnect();else{S.wallet=acc[0];renderWallet();}});
+    raw.on?.('chainChanged',async()=>{S.chainId=Number((await S.provider.getNetwork()).chainId);S.provider=new ethers.BrowserProvider(raw);S.signer=await S.provider.getSigner();renderWallet();});
+    closeWallet();renderWallet();
+    log('Wallet connesso: '+S.wallet.slice(0,6)+'...'+S.wallet.slice(-4),'ok');
+    toast('Wallet connesso · '+(CHAIN_NAMES[S.chainId]||S.chainId),'ok');
+  }catch(e){
+    const msg=e.code===4001?'Hai rifiutato la connessione':(e.message||String(e));
+    wl.innerHTML=`<div class="banner" style="background:#FF174411;border:1px solid var(--red);color:var(--txt);margin-bottom:10px">ERROR: ${esc(msg)}</div>
+      <button class="btn btn-accent btn-block" style="margin-bottom:7px" onclick="discoverAndShow()">Riprova</button>
+      <button class="btn btn-out btn-block" onclick="closeWallet()">Chiudi</button>`;
+  }
+}
+function disconnect(){S.wallet=S.provider=S.signer=S.rawProvider=null;renderWallet();log('Wallet disconnesso','warn');toast('Wallet disconnesso','info');}
+function renderWallet(){
+  const b=document.getElementById('wbtn');
+  if(S.wallet){b.innerHTML=`&#9679; ${S.wallet.slice(0,5)}..${S.wallet.slice(-3)} · ${CHAIN_NAMES[S.chainId]||S.chainId}`;b.classList.add('on');}
+  else{b.innerHTML='&#11041; CONNETTI';b.classList.remove('on');}
+  const nw=document.getElementById('nav-w');if(nw)nw.classList.toggle('on',!!S.wallet);
+}
+async function wmSwitch(){await ensureChain(+document.getElementById('wm-chain').value);}
+async function ensureChain(target){
+  if(S.chainId===target)return true;
+  const hex=CHAIN_HEX[target],meta=CHAIN_META[target];
+  try{
+    await S.rawProvider.request({method:'wallet_switchEthereumChain',params:[{chainId:hex}]});
+  }catch(sw){
+    if((sw.code===4902||sw.code===-32603||sw.message?.includes('4902'))&&meta){
+      try{
+        await S.rawProvider.request({method:'wallet_addEthereumChain',params:[{
+          chainId:hex,chainName:meta.name,rpcUrls:[meta.rpc],blockExplorerUrls:[meta.explorer],
+          nativeCurrency:{name:meta.sym,symbol:meta.sym,decimals:meta.dec}}]});
+      }catch(add){if(add.code!==4001)alert('Impossibile aggiungere la rete: '+(add.message||add));return false;}
+    }else if(sw.code===4001){return false;}
+    else{alert('Errore cambio rete: '+(sw.message||sw));return false;}
+  }
+  await sleep(800);
+  try{S.chainId=Number((await S.provider.getNetwork()).chainId);}catch(e){}
+  renderWallet();
+  return S.chainId===target;
+}
+
+/* ===================== PARASWAP ENGINE (real) ===================== */
+async function getRoute(ft,tt,amtStr){
+  const src=ethers.parseUnits(amtStr,ft.d).toString();
+  const u=`${PS}/prices?srcToken=${ft.a}&destToken=${tt.a}&srcDecimals=${ft.d}&destDecimals=${tt.d}&amount=${src}&network=${S.chainId}&side=SELL`;
+  const d=await (await fetch(u)).json();return d.priceRoute||null;
+}
+async function executeRoute(ft,tt,route,cb){
+  if(!ft.nat){
+    cb('sp','Controllo approvazione...');
+    const proxy=route.tokenTransferProxy;const tc=new ethers.Contract(ft.a,ERC20,S.signer);
+    if((await tc.allowance(S.wallet,proxy))<BigInt(route.srcAmount)){cb('sp','Approva il token nel wallet...');await (await tc.approve(proxy,ethers.MaxUint256)).wait();}
+  }
+  cb('sp','Preparo la transazione...');
+  const body={srcToken:ft.a,destToken:tt.a,srcDecimals:ft.d,destDecimals:tt.d,srcAmount:route.srcAmount,destAmount:route.destAmount,priceRoute:route,userAddress:S.wallet,slippage:Math.round(S.slippage*100)};
+  const td=await (await fetch(`${PS}/transactions/${S.chainId}?ignoreChecks=true`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})).json();
+  if(!td.to)throw new Error(td.error||'Errore preparazione');
+  cb('sp','Firma nel wallet...');
+  const tx=await S.signer.sendTransaction({to:td.to,data:td.data,value:BigInt(td.value||0),gasLimit:BigInt(Math.ceil(Number(td.gas||300000)*1.25))});
+  const ex=EXPL[S.chainId]||'';cb('sp',`Inviata! <a href="${ex}${tx.hash}" target="_blank">Vedi &#8599;</a>`);
+  const rc=await tx.wait();cb('sc',`Fatto! Blocco ${rc.blockNumber}. <a href="${ex}${tx.hash}" target="_blank">TX &#8599;</a>`);return rc;
+}
+
+/* ===================== TRADE MODAL ===================== */
+async function openTrade(addr,chainId,decimals,sym,side,opts){
+  if(!S.wallet){openWallet();return;}
+  if(S.chainId!==chainId){if(!await ensureChain(chainId))return;}
+  S.trade={gem:{s:sym,a:addr,d:decimals},side,opts:opts||null};S.trRoute=null;
+  renderTrade();
+  // alert banner for auto-trade triggered sells
+  const al=document.getElementById('tr-alert');
+  if(opts&&opts.reason){al.style.display='block';al.textContent='AUTO-TRADE: '+opts.reason+' — conferma la vendita.';playAlert();}
+  else al.style.display='none';
+  document.getElementById('trmodal').classList.add('on');
+}
+function closeTrade(){document.getElementById('trmodal').classList.remove('on');}
+function trTokens(){const g=S.trade.gem,st=stableOf(S.chainId);return S.trade.side==='buy'?{pay:st,recv:g}:{pay:g,recv:st};}
+function renderTrade(){
+  const g=S.trade.gem,side=S.trade.side,{pay,recv}=trTokens();
+  document.getElementById('tr-title').textContent=(side==='buy'?'BUY ':'SELL ')+g.s;
+  const btn=document.getElementById('tr-btn');btn.className='btn btn-block '+(side==='buy'?'btn-buy':'btn-sell');btn.textContent=side==='buy'?('Conferma BUY '+g.s):('Conferma SELL '+g.s);
+  document.getElementById('tr-pay-sym').textContent=pay.s;document.getElementById('tr-recv-sym').textContent=recv.s;
+  // prefill from detail size for BUY
+  let pre='';
+  if(side==='buy'&&S.trade.opts?.amount)pre=String(S.trade.opts.amount);
+  document.getElementById('tr-amt').value=pre;document.getElementById('tr-out').value='';
+  document.getElementById('tr-rate').textContent='Inserisci importo';
+  document.getElementById('tr-stat').style.display='none';
+  const dex=document.getElementById('tr-dex');dex.href=(DEX_URL[S.chainId]||'')+g.a;dex.style.display='none';
+  trSlip(5);trBal();
+  if(pre)trDq();
+}
+let trqt=null;function trDq(){clearTimeout(trqt);trqt=setTimeout(trQuote,500);}
+async function trQuote(){
+  const amt=document.getElementById('tr-amt').value,{pay,recv}=trTokens();
+  if(!amt||+amt<=0){document.getElementById('tr-out').value='';document.getElementById('tr-rate').textContent='Inserisci importo';return;}
+  try{
+    document.getElementById('tr-rate').textContent='Cerco prezzo...';
+    const route=await getRoute(pay,recv,amt);
+    if(!route){S.trRoute=null;document.getElementById('tr-rate').textContent='Nessuna rotta Paraswap';document.getElementById('tr-dex').style.display='block';return;}
+    S.trRoute=route;const out=ethers.formatUnits(route.destAmount,recv.d);
+    document.getElementById('tr-out').value=parseFloat(out).toFixed(6);
+    document.getElementById('tr-rate').textContent=`= ${parseFloat(out).toFixed(6)} ${recv.s} · slip ${S.slippage}%`;
+    document.getElementById('tr-dex').style.display='none';
+  }catch(e){document.getElementById('tr-rate').textContent='Prezzo non disponibile';}
+}
+async function trBal(){const {pay}=trTokens();try{const raw=pay.nat?await S.provider.getBalance(S.wallet):await new ethers.Contract(pay.a,ERC20,S.provider).balanceOf(S.wallet);document.getElementById('tr-bal').textContent=parseFloat(ethers.formatUnits(raw,pay.d)).toFixed(5)+' '+pay.s;}catch(e){document.getElementById('tr-bal').textContent='0';}}
+async function trMax(){const {pay}=trTokens();try{const raw=pay.nat?await S.provider.getBalance(S.wallet):await new ethers.Contract(pay.a,ERC20,S.provider).balanceOf(S.wallet);let v=parseFloat(ethers.formatUnits(raw,pay.d));if(pay.nat)v=Math.max(0,v-0.002);document.getElementById('tr-amt').value=v.toFixed(6);trDq();}catch(e){}}
+function trSlip(v){S.slippage=v;[['trsl1',1],['trsl5',5],['trsl10',10]].forEach(([id,val])=>{const e=document.getElementById(id);if(e){e.style.borderColor=val===v?'var(--accent)':'var(--border)';e.style.color=val===v?'var(--accent)':'var(--txt)';}});if(S.trRoute)trQuote();}
+async function trExec(){
+  if(!S.trRoute){alert('Inserisci un importo');return;}
+  const {pay,recv}=trTokens(),btn=document.getElementById('tr-btn'),old=btn.textContent,g=S.trade.gem,side=S.trade.side;
+  btn.disabled=true;btn.textContent='...';
+  try{
+    await executeRoute(pay,recv,S.trRoute,(c,h)=>{const e=document.getElementById('tr-stat');e.className='sstat '+c;e.innerHTML=h;});
+    log((side==='buy'?'BUY ':'SELL ')+g.s+' eseguito','ok');
+    // portfolio bookkeeping
+    if(side==='buy'){
+      const gem=S.gems.find(x=>x.addr===g.a&&x.chainId===S.chainId);
+      const sl=+document.getElementById('trade-sl').value||0,tp=+document.getElementById('trade-tp').value||0;
+      addPosition({sym:g.s,addr:g.a,chainId:S.chainId,decimals:g.d,entryPrice:gem?.price||0,lastPrice:gem?.price||0,sl,tp,ts:Date.now()});
+      log('Posizione aperta '+g.s+(sl?' SL -'+sl+'%':'')+(tp?' TP +'+tp+'%':''),'info');
+      toast('Comprato '+esc(g.s)+(S.auto?' · monitoraggio attivo':''),'ok','💎');
+    } else {
+      removePosition(g.a,S.chainId);
+      toast('Venduto '+esc(g.s),'ok');
+    }
+    setTimeout(loadGems,2500);
+  }
+  catch(e){const e2=document.getElementById('tr-stat');e2.className='sstat se';e2.innerHTML='ERROR: '+(e.shortMessage||e.message||e);log('Trade fallito: '+(e.shortMessage||e.message||e),'bad');toast('Transazione non riuscita','err');}
+  finally{btn.disabled=false;btn.textContent=old;}
+}
+
+/* ===================== AUTO TRADE (monitor + confirm, NEVER blind sign) ===================== */
+function toggleAuto(){
+  S.auto=!S.auto;
+  const b=document.getElementById('auto-btn');
+  b.classList.toggle('on',S.auto);
+  b.innerHTML=S.auto?'&#9211; AUTO TRADE: ON (monitora &amp; avvisa)':'&#9211; AUTO TRADE: OFF';
+  if(S.auto){
+    log('Auto-trade ATTIVO. Monitoraggio posizioni e candidati ogni 30s. Nessuna firma automatica.','warn');
+    autoTick();
+    if(S.autoInt)clearInterval(S.autoInt);
+    S.autoInt=setInterval(autoTick,30000);
+  } else {
+    log('Auto-trade disattivato.','warn');
+    if(S.autoInt){clearInterval(S.autoInt);S.autoInt=null;}
+  }
+}
+let alertedCandidates={};
+async function autoTick(){
+  if(!S.auto)return;
+  // 1) re-scan gems silently (refresh data)
+  // 2) monitor open positions via DexScreener real price
+  for(const p of S.portfolio){
+    try{
+      const ds=await (await fetch(PX(`https://api.dexscreener.com/latest/dex/tokens/${p.addr}`))).json();
+      const pair=ds?.pairs?.find(x=>+x.chainId===p.chainId)||ds?.pairs?.[0];
+      const cur=pair?+pair.priceUsd:null;
+      if(cur===null||!p.entryPrice)continue;
+      p.lastPrice=cur;savePortfolio();
+      const chg=(cur-p.entryPrice)/p.entryPrice*100;
+      if(p.tp&&chg>=p.tp){
+        log('TAKE PROFIT '+p.sym+' raggiunto (+'+chg.toFixed(1)+'%). Conferma vendita.','ok');
+        toast('TAKE PROFIT '+esc(p.sym)+' +'+chg.toFixed(0)+'% · conferma per incassare','gold','🎯');
+        triggerAutoSell(p,'Take Profit +'+chg.toFixed(1)+'%');
+        return;
+      }
+      if(p.sl&&chg<=-p.sl){
+        log('STOP LOSS '+p.sym+' raggiunto ('+chg.toFixed(1)+'%). Conferma vendita.','bad');
+        toast('STOP LOSS '+esc(p.sym)+' '+chg.toFixed(0)+'% · conferma per vendere','err','🔻');
+        triggerAutoSell(p,'Stop Loss '+chg.toFixed(1)+'%');
+        return;
+      }
+    }catch(e){}
+  }
+  // 3) detect new strong candidates among scanned gems (highlight + log, NEVER auto-buy)
+  const cands=S.gems.filter(g=>!g.sol&&g.safe&&['x50','x20','x10','x5'].includes(g.xpot)&&(g.secScore===undefined||g.secScore===null||g.secScore>=60));
+  for(const g of cands.slice(0,3)){
+    const key=g.addr+g.chainId;
+    if(!alertedCandidates[key]){
+      alertedCandidates[key]=Date.now();
+      log('CANDIDATO trovato: '+g.sym+' ('+XPOT_LBL[g.xpot]+', score '+g.score+'). Conferma tu per comprare.','warn');
+    }
+  }
+}
+function triggerAutoSell(p,reason){
+  if(document.getElementById('trmodal').classList.contains('on'))return; // already open
+  // open SELL modal precompiled, requires user signature
+  openTrade(p.addr,p.chainId,p.decimals,p.sym,'sell',{reason});
+}
+let audioCtx=null;
+function playAlert(){
+  try{
+    audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=audioCtx.createOscillator(),g=audioCtx.createGain();
+    o.connect(g);g.connect(audioCtx.destination);o.type='square';o.frequency.value=880;
+    g.gain.setValueAtTime(.0001,audioCtx.currentTime);g.gain.exponentialRampToValueAtTime(.2,audioCtx.currentTime+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,audioCtx.currentTime+.5);
+    o.start();o.stop(audioCtx.currentTime+.5);
+  }catch(e){}
+  document.querySelector('.header')?.classList.add('alerting');
+  setTimeout(()=>document.querySelector('.header')?.classList.remove('alerting'),3000);
+}
+
+/* ===================== TIMER ===================== */
+function startTimer(){
+  if(S.int)clearInterval(S.int);S.timer=45;
+  S.int=setInterval(()=>{
+    S.timer--;
+    document.getElementById('cd').textContent=S.timer;
+    document.querySelectorAll('.pulse-dot').forEach(d=>d.style.background=S.timer<=5?'var(--accent)':'var(--green)');
+    if(S.timer<=0){S.timer=45;loadGems();}
+  },1000);
+}
+
+/* ===================== UTILS ===================== */
+function copyText(t){navigator.clipboard?.writeText(t).then(()=>{const el=document.createElement('div');el.textContent='Copiato';Object.assign(el.style,{position:'fixed',bottom:'30px',left:'50%',transform:'translateX(-50%)',background:'var(--green)',color:'#042614',padding:'7px 16px',borderRadius:'16px',fontWeight:700,fontSize:'12px',zIndex:9999,fontFamily:'var(--mono)'});document.body.appendChild(el);setTimeout(()=>el.remove(),1500);});}
+function usd(n){if(!n)return'$0';if(n>=1e9)return'$'+(n/1e9).toFixed(1)+'B';if(n>=1e6)return'$'+(n/1e6).toFixed(1)+'M';if(n>=1e3)return'$'+(n/1e3).toFixed(0)+'K';return'$'+n.toFixed(0);}
+function price(n){n=+n;if(!n)return'$0';if(n>=1)return'$'+n.toFixed(3);if(n>=0.01)return'$'+n.toFixed(5);return'$'+n.toExponential(2);}
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function ld(src){return new Promise((res,rej)=>{const s=document.createElement('script');s.src=src;s.onload=res;s.onerror=rej;document.head.appendChild(s);});}
+
+/* ===================== INIT ===================== */
+requestProviders();
+loadPortfolio();
+try{const m=localStorage.getItem('gem81_mode');setMode(m==='pro'?'pro':'simple');}catch(e){setMode('simple');}
+maybeOnboard();
+(async()=>{
+  if(location.protocol==='file:'){
+    document.getElementById('file-warn').style.display='block';
+    setTimeout(()=>{if(!window.ethereum&&!window.tokenpocket)document.getElementById('file-setup').classList.add('on');},1200);
+  }
+  const CDN=[
+    'https://cdnjs.cloudflare.com/ajax/libs/ethers/6.7.0/ethers.umd.min.js',
+    'https://cdn.jsdelivr.net/npm/ethers@6.7.0/dist/ethers.umd.min.js',
+  ];
+  for(const src of CDN){try{await ld(src);if(typeof ethers!=='undefined')break;}catch(e){}}
+  await detectPhp();
+  requestProviders();
+  renderWallet();
+  log('GEM81+ pronto. Scanner gemme reale, security on-chain reale, trade assistito.','ok');
+  if(phpMode)log('Proxy PHP attivo: chiamate API via api.php (CORS risolto).','info');
+  loadGems();
+  startTimer();
+})();
+</script>
+</body>
+</html>
