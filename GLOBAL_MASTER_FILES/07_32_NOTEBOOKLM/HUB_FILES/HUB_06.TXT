@@ -1,13 +1,53 @@
 HUB 06 81PLUS
 
-NOME. MARKETING E CONTENUTI
-MISSIONE. Attrazione. Content plan, ads, social, newsletter, webinar, funnel, AIDA, EPPPA, REPPPA.
+NOME. SFERA81+ GAMIFICATION MISSIONI RETENTION
+MISSIONE. Gamification OS. ESCALATION81+, LIFEWHEEL81+, BOOSTER81+, LEADGEN81+, DAILY SPARK81+, RISK RADAR81+, missioni ATECO/RISCHIO, PV+, streak, badge, retention.
 
 PROTOCOLLO. Voce attiva. Frasi brevi. Do del tu. Prezzi finali e chiari. Solo testo. Uso solo virgole e punti.
-SEMANTIC GUARD. Vietato investimento, rendimento, ROI, APY, staking, guadagno garantito. Non uso SafePoint. Uso SICURISSIMO POINT81+.
+SEMANTIC GUARD. Vietato investimento, rendimento, ROI, APY, staking, guadagno garantito. Non uso SafePoint. Uso SICURISSIMO POINT81+. Non usare: rischio zero, zero multe, guadagno garantito. Usare: PV+ interni, credito interno, benefit, percorso guidato, missione, attivazione.
 REQUISITI. Ogni idea entra qui solo se passa scalabilita, automazione, ripetibilita e misurabilita.
 
-CONTENUTO.
-2026 06 18. File creato e pronto per NotebookLM. In attesa di contenuti operativi.
+DOPPIO ACRONIMO SFERA81+.
+Strategico. S=Stato mentale, F=Focus operativo, E=Energia ed emozione, R=Routine ripetibile, A=Automazione commerciale.
+Sistemico. S=Sistema, F=Fidelizzazione, E=Evoluzione, R=Reward, A=Azione.
 
-ULTIMO AGGIORNAMENTO. 2026 06 18
+REGOLA MADRE. Tutto l'ecosistema 81+ funziona su ATECO/RISCHIO. Target 6 milioni aziende italiane.
+
+REWARD BASE.
+Accesso giornaliero normale = 1 PV+.
+Accesso BOOSTER81+ = 50 PV+.
+Micro missione = 1-5 PV+.
+Missione normale = 6-15 PV+.
+Missione settimanale = 25 PV+.
+Audit completato = 50 PV+.
+ESCALATION81+ livelli = 100, 200, 350, 600, 1000 PV+.
+Spicchio LIFEWHEEL81+ al cap = 150 PV+.
+Streak 7 giorni = 100 PV+.
+Streak 30 giorni = 500 PV+.
+Streak 81 giorni = 1500 PV+.
+
+CAP GIORNALIERO MISSIONI.
+MEMBER81+ = 100. NETWORKERS81+ = 250. ELITE81+ = 400. FRANCHISER81+ = 600. CLUB81+ = 1000.
+
+ESCALATION81+ MASLOW.
+L1 Bisogni Fisiologici = IDENTITA81+, colore #3FBF6B, 100 PV+.
+L2 Bisogni di Sicurezza = ATECO81+, colore #00D9FF, 200 PV+.
+L3 Bisogni di Appartenenza = OBBLIGHI81+, colore #E8501A, 350 PV+.
+L4 Bisogni di Stima = AZIONE81+, colore #8A4AE8, 600 PV+.
+L5 Bisogni di Autorealizzazione = PRESIDIO81+, colore #FFD24A, 1000 PV+.
+
+LIFEWHEEL81+ CAP STATUS.
+MEMBER81+ max 6/10. NETWORKERS81+ max 7/10. ELITE81+ max 8/10. FRANCHISER81+ max 9/10. CLUB81+ max 10/10.
+
+PACCHETTO TECNICO.
+SFERA81+ WEB PACKAGE V5. Deploy su public_html/admin/sfera81/.
+Database SQL, config PHP, 19 API endpoint PHP, 2 iframe 3D, dashboard widget, admin test.
+
+BLUEPRINT COMPLETO.
+File: 2026-06-19_81PLUS_SFERA81_BLUEPRINT_V5_ESCALATION_LIFEWHEEL_BOOSTER_LEADGEN_COMPLETO.md
+Dove: GLOBAL_MASTER_FILES/06_SFERA81_GAMIFICATION/
+
+CONTENUTO.
+2026 06 19. SFERA81+ V5 Blueprint completo caricato. Pacchetto tecnico in build. Deploy target 81plus.net/admin/sfera81/.
+
+ULTIMO AGGIORNAMENTO. 2026 06 19
