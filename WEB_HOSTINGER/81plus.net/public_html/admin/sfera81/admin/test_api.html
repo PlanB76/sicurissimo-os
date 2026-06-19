@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SFERA81+ — Test API</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#070D1A; color:#E8EDF5; font-family:'Segoe UI',system-ui,sans-serif; padding:20px; }
+  h1 { color:#00D9FF; font-size:1.2rem; letter-spacing:0.15em; text-transform:uppercase; margin-bottom:4px; }
+  .subtitle { color:#8090A8; font-size:0.75rem; margin-bottom:20px; }
+  .section { background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:16px; margin-bottom:16px; }
+  .section h2 { font-size:0.8rem; color:#9B6BFF; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:12px; }
+  label { font-size:0.72rem; color:#8090A8; display:block; margin-bottom:4px; }
+  input, select {
+    width:100%; padding:8px 10px; background:rgba(255,255,255,0.05);
+    border:1px solid rgba(255,255,255,0.1); border-radius:8px;
+    color:#E8EDF5; font-size:0.8rem; margin-bottom:10px;
+  }
+  input:focus, select:focus { outline:none; border-color:rgba(0,217,255,0.4); }
+  button {
+    padding:9px 16px; border:none; border-radius:8px; cursor:pointer;
+    font-size:0.78rem; font-weight:600; letter-spacing:0.05em;
+    transition:opacity 0.15s;
+  }
+  button:hover { opacity:0.85; }
+  .btn-primary { background:linear-gradient(135deg,#00D9FF,#0099BB); color:#070D1A; }
+  .btn-admin   { background:linear-gradient(135deg,#FF6B35,#CC3300); color:#fff; }
+  .btn-danger  { background:rgba(255,80,80,0.2); border:1px solid rgba(255,80,80,0.4); color:#FF8080; }
+  .row { display:flex; gap:8px; flex-wrap:wrap; }
+  pre#output {
+    background:#040810; border:1px solid rgba(0,217,255,0.15);
+    border-radius:10px; padding:14px; font-size:0.72rem;
+    color:#69F0AE; overflow-x:auto; white-space:pre-wrap;
+    min-height:60px; margin-top:8px; max-height:320px; overflow-y:auto;
+    line-height:1.5;
+  }
+  .tag-get  { background:rgba(0,217,255,0.15); color:#00D9FF; padding:1px 7px; border-radius:5px; font-size:0.65rem; }
+  .tag-post { background:rgba(0,230,118,0.15); color:#00E676; padding:1px 7px; border-radius:5px; font-size:0.65rem; }
+  .endpoint-row { margin-bottom:6px; }
+  .endpoint-label { font-size:0.7rem; color:#8090A8; margin-bottom:3px; }
+</style>
+</head>
+<body>
+<h1>SFERA81+ — Test API</h1>
+<div class="subtitle">Pannello interno per testare tutti gli endpoint. Non esporre in produzione.</div>
+
+<!-- Config -->
+<div class="section">
+  <h2>Configurazione</h2>
+  <label>Base URL API (es: /admin/sfera81/api)</label>
+  <input type="text" id="baseUrl" value="/admin/sfera81/api" />
+  <label>user_id (demo: 1)</label>
+  <input type="number" id="userId" value="1" min="1" />
+  <label>X-Admin-Secret (per endpoint admin)</label>
+  <input type="password" id="adminSecret" placeholder="inserisci il segreto admin" />
+</div>
+
+<!-- DAILY ACCESS -->
+<div class="section">
+  <h2>Daily Access <span class="tag-post">POST</span></h2>
+  <div class="endpoint-row">
+    <div class="endpoint-label">/sfera/daily/access.php</div>
+    <label>sic_id</label>
+    <input type="text" id="da_sicid" value="SIC-DEMO-81" />
+    <label>segment</label>
+    <select id="da_segment">
+      <option>non_profilato</option><option>edilizia</option><option>horeca</option><option>manifattura</option>
+    </select>
+    <button class="btn-primary" onclick="testDailyAccess()">Chiama</button>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="section">
+  <h2>Profile <span class="tag-get">GET</span> + <span class="tag-post">POST</span></h2>
+  <div class="row">
+    <button class="btn-primary" onclick="getProfile()">GET profilo</button>
+    <button class="btn-primary" onclick="updateProfile()">POST aggiorna</button>
+  </div>
+  <label style="margin-top:8px;">Dati aggiornamento (JSON)</label>
+  <input type="text" id="profileData" value='{"ateco_code":"41.20","macro_sector":"edilizia","risk_level":"alto"}' />
+</div>
+
+<!-- ESCALATION -->
+<div class="section">
+  <h2>Escalation State <span class="tag-get">GET</span></h2>
+  <button class="btn-primary" onclick="getEscalation()">GET stato escalation</button>
+</div>
+
+<!-- LIFEWHEEL -->
+<div class="section">
+  <h2>Lifewheel State <span class="tag-get">GET</span></h2>
+  <button class="btn-primary" onclick="getLifewheel()">GET stato lifewheel</button>
+</div>
+
+<!-- RISK RADAR -->
+<div class="section">
+  <h2>Risk Radar State <span class="tag-get">GET</span></h2>
+  <button class="btn-primary" onclick="getRiskRadar()">GET risk radar</button>
+</div>
+
+<!-- MISSIONS -->
+<div class="section">
+  <h2>Missioni <span class="tag-get">GET</span> + <span class="tag-post">POST</span></h2>
+  <div class="row">
+    <button class="btn-primary" onclick="getMissions()">GET lista missioni</button>
+  </div>
+  <label style="margin-top:8px;">Completa missione — mission_code</label>
+  <input type="text" id="missionCode" value="COMPLETE_PROFILE" />
+  <button class="btn-primary" onclick="completeMission()">POST completa missione</button>
+</div>
+
+<!-- REWARDS LOG -->
+<div class="section">
+  <h2>Reward Log <span class="tag-get">GET</span></h2>
+  <label>limit</label>
+  <input type="number" id="rewardLimit" value="10" min="1" max="100" />
+  <button class="btn-primary" onclick="getRewardLog()">GET log premi</button>
+</div>
+
+<!-- PROMOS -->
+<div class="section">
+  <h2>Promos <span class="tag-get">GET</span> | ADMIN <span class="tag-post">POST</span></h2>
+  <div class="row">
+    <button class="btn-primary" onclick="getActivePromo()">GET promo attiva</button>
+    <button class="btn-admin" onclick="createPromo()">POST crea promo</button>
+    <button class="btn-danger" onclick="deactivatePromo()">POST disattiva</button>
+  </div>
+  <label style="margin-top:8px;">promo_id (per attivazione/disattivazione)</label>
+  <input type="number" id="promoId" value="1" />
+  <label>Nome promo (per creazione)</label>
+  <input type="text" id="promoName" value="BOOSTER81+ Giugno 2026" />
+  <button class="btn-admin" onclick="activatePromo()">POST attiva promo</button>
+</div>
+
+<!-- LEADGEN TRIGGER -->
+<div class="section">
+  <h2>Leadgen Trigger <span class="tag-post">POST</span></h2>
+  <label>event_type</label>
+  <select id="lg_event">
+    <option>WELCOME</option><option>SIC_ID_ACTIVATED</option><option>FIRST_MISSION</option>
+    <option>ATECO_PROFILED</option><option>AUDIT_SUGGESTED</option><option>REACTIVATION</option>
+  </select>
+  <label>segment</label>
+  <select id="lg_segment">
+    <option>non_profilato</option><option>edilizia</option><option>horeca</option><option>manifattura</option>
+  </select>
+  <button class="btn-primary" onclick="triggerLeadgen()">POST evento leadgen</button>
+</div>
+
+<!-- OUTPUT -->
+<div class="section">
+  <h2>Output</h2>
+  <div class="row" style="margin-bottom:8px;">
+    <button class="btn-danger" onclick="document.getElementById('output').textContent=''">Pulisci</button>
+  </div>
+  <pre id="output">// I risultati appariranno qui...</pre>
+</div>
+
+<script>
+function base()    { return document.getElementById('baseUrl').value.replace(/\/$/, ''); }
+function uid()     { return document.getElementById('userId').value; }
+function secret()  { return document.getElementById('adminSecret').value; }
+
+function log(label, data) {
+  const out = document.getElementById('output');
+  const ts = new Date().toLocaleTimeString('it-IT');
+  out.textContent = `[${ts}] ${label}\n${JSON.stringify(data, null, 2)}\n\n` + out.textContent;
+}
+
+async function apiGet(path) {
+  try {
+    const r = await fetch(base() + path);
+    const j = await r.json();
+    log('GET ' + path, j);
+  } catch(e) { log('ERRORE GET ' + path, { error: e.message }); }
+}
+
+async function apiPost(path, body, adminMode = false) {
+  const headers = { 'Content-Type': 'application/json' };
+  if (adminMode) headers['X-Admin-Secret'] = secret();
+  try {
+    const r = await fetch(base() + path, { method: 'POST', headers, body: JSON.stringify(body) });
+    const j = await r.json();
+    log('POST ' + path, j);
+  } catch(e) { log('ERRORE POST ' + path, { error: e.message }); }
+}
+
+function testDailyAccess() {
+  apiPost('/sfera/daily/access.php', {
+    user_id: parseInt(uid()),
+    sic_id: document.getElementById('da_sicid').value,
+    segment: document.getElementById('da_segment').value
+  });
+}
+
+function getProfile()    { apiGet('/sfera/profile/get.php?user_id=' + uid()); }
+function updateProfile() {
+  try {
+    const d = JSON.parse(document.getElementById('profileData').value);
+    apiPost('/sfera/profile/update.php', { user_id: parseInt(uid()), ...d });
+  } catch(e) { log('JSON non valido', { error: e.message }); }
+}
+
+function getEscalation() { apiGet('/sfera/escalation/state.php?user_id=' + uid()); }
+function getLifewheel()  { apiGet('/sfera/lifewheel/state.php?user_id=' + uid()); }
+function getRiskRadar()  { apiGet('/sfera/risk-radar/state.php?user_id=' + uid()); }
+function getMissions()   { apiGet('/sfera/missions/list.php?user_id=' + uid()); }
+
+function completeMission() {
+  apiPost('/sfera/missions/complete.php', {
+    user_id: parseInt(uid()),
+    mission_code: document.getElementById('missionCode').value
+  });
+}
+
+function getRewardLog() {
+  apiGet('/sfera/rewards/log.php?user_id=' + uid() + '&limit=' + document.getElementById('rewardLimit').value);
+}
+
+function getActivePromo()  { apiGet('/sfera/promos/active.php'); }
+function createPromo() {
+  const now = new Date();
+  const end = new Date(now.getFullYear(), now.getMonth()+1, 0, 23, 59, 59);
+  apiPost('/sfera/promos/create.php', {
+    promo_name: document.getElementById('promoName').value,
+    reward_type: 'BOOSTER81+',
+    reward_amount: 50,
+    start_at: now.toISOString().slice(0,19).replace('T',' '),
+    end_at: end.toISOString().slice(0,19).replace('T',' ')
+  }, true);
+}
+function activatePromo()   {
+  apiPost('/sfera/promos/activate.php', { promo_id: parseInt(document.getElementById('promoId').value) }, true);
+}
+function deactivatePromo() {
+  apiPost('/sfera/promos/deactivate.php', { promo_id: parseInt(document.getElementById('promoId').value) }, true);
+}
+
+function triggerLeadgen() {
+  apiPost('/leadgen/trigger.php', {
+    user_id: parseInt(uid()),
+    sic_id: document.getElementById('da_sicid').value || 'SIC-DEMO-81',
+    event_type: document.getElementById('lg_event').value,
+    segment: document.getElementById('lg_segment').value
+  });
+}
+</script>
+</body>
+</html>

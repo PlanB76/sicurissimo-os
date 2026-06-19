@@ -1,0 +1,57 @@
+# SFERA81+ — Security Headers
+
+# No directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "\.(sql|md|log|txt|sh|bat|bak|env|json)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Allow config.example.php to be read by PHP but not directly
+<FilesMatch "config\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Block direct access to _bootstrap.php
+<FilesMatch "^_bootstrap\.php$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Security headers
+<IfModule mod_headers.c>
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Permissions-Policy "geolocation=(), microphone=(), camera=()"
+</IfModule>
+
+# API: JSON content type for PHP responses
+<FilesMatch "\.php$">
+    <IfModule mod_headers.c>
+        Header set Cache-Control "no-store, no-cache, must-revalidate"
+    </IfModule>
+</FilesMatch>
+
+# Iframe: allow same-origin embedding
+<FilesMatch "index\.html$">
+    <IfModule mod_headers.c>
+        Header set X-Frame-Options "SAMEORIGIN"
+    </IfModule>
+</FilesMatch>
+
+# CORS for API endpoints — allow calls from 81plus.net and subdomains
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{HTTP_ORIGIN} ^https?://(www\.)?81plus\.net$ [NC]
+    RewriteRule ^ - [E=ORIGIN:%{HTTP_ORIGIN}]
+    Header always set Access-Control-Allow-Origin "%{ORIGIN}e" env=ORIGIN
+    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS"
+    Header always set Access-Control-Allow-Headers "Content-Type, X-Admin-Secret"
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^ - [R=204,L]
+</IfModule>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ESCALATION81+ — Piramide Maslow</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#04080F;color:#EAEFF7;font-family:system-ui,-apple-system,sans-serif;overflow:hidden}
+#wrap{display:flex;height:100vh;gap:0}
+#scene{flex:1;position:relative;overflow:hidden;cursor:grab}
+#scene:active{cursor:grabbing}
+canvas{display:block;width:100%;height:100%}
+#panel{width:260px;background:#080F1C;border-left:1px solid #16203A;padding:20px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;transition:.3s}
+#panel.hidden{width:0;padding:0;border:none;overflow:hidden}
+.p-badge{font-size:9px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#5C6B82}
+.p-title{font-size:17px;font-weight:700;margin:4px 0}
+.p-maslow{font-size:11px;color:#5C6B82;margin-bottom:8px}
+.p-obj{font-size:12px;line-height:1.6;color:#B0BEC5;background:#060B16;padding:10px;border-radius:8px;border-left:3px solid var(--lc,#FFF)}
+.p-missions{margin-top:8px}
+.p-missions h4{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:#5C6B82;margin-bottom:8px}
+.pm{display:flex;align-items:center;gap:8px;padding:7px 10px;background:#060B16;border-radius:6px;margin-bottom:5px;font-size:11px}
+.pm-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.p-reward{margin-top:10px;background:#060B16;border-radius:8px;padding:10px;display:flex;align-items:center;justify-content:space-between}
+.p-reward span{font-size:11px;color:#5C6B82}
+.p-reward strong{font-size:15px;font-weight:800}
+.close-btn{background:none;border:1px solid #16203A;color:#5C6B82;padding:8px;border-radius:6px;cursor:pointer;font-size:11px;margin-top:auto}
+.close-btn:hover{border-color:#F0B90B;color:#F0B90B}
+#legend{position:absolute;bottom:16px;left:16px;display:flex;flex-direction:column;gap:5px}
+.leg{display:flex;align-items:center;gap:7px;font-size:10px;color:#5C6B82}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+#title-bar{position:absolute;top:14px;left:0;right:0;text-align:center;pointer-events:none}
+#title-bar h2{font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:#5C6B82}
+</style>
+</head>
+<body>
+<div id="wrap">
+  <div id="scene">
+    <div id="title-bar"><h2>ESCALATION81+ — Percorso Maslow</h2></div>
+    <canvas id="c"></canvas>
+    <div id="legend"></div>
+  </div>
+  <div id="panel" class="hidden">
+    <span class="p-badge" id="p-badge">LIVELLO 1</span>
+    <div class="p-title" id="p-title">IDENTITÀ81+</div>
+    <div class="p-maslow" id="p-maslow">Bisogni Fisiologici</div>
+    <div class="p-obj" id="p-obj" style="--lc:#3FBF6B"></div>
+    <div class="p-missions">
+      <h4>Missioni principali</h4>
+      <div id="p-missions-list"></div>
+    </div>
+    <div class="p-reward">
+      <span>Reward completamento</span>
+      <strong id="p-reward">+100 PV+</strong>
+    </div>
+    <button class="close-btn" onclick="closePanel()">Chiudi ×</button>
+  </div>
+</div>
+<script>
+const LEVELS=[
+  {n:1,code:'IDENTITÀ81+',maslow:'Bisogni Fisiologici',color:'#3FBF6B',obj:'La tua base 81+ è attiva. Sei presente nel sistema. Il percorso inizia qui.',reward:100,
+   missions:['Completa il profilo','Verifica email e telefono','Attiva SIC-ID','Accetta regole e privacy','Fai il primo accesso giornaliero']},
+  {n:2,code:'ATECO81+',maslow:'Bisogni di Sicurezza',color:'#00D9FF',obj:'Ora sai da dove partire. Il tuo profilo ATECO/RISCHIO è definito.',reward:200,
+   missions:['Inserisci codice ATECO','Indica numero lavoratori','Specifica settore e rischio','Genera profilo rischio']},
+  {n:3,code:'OBBLIGHI81+',maslow:'Bisogni di Appartenenza',color:'#E8501A',obj:'Ora hai una mappa chiara degli obblighi. Sicurezza, HACCP e privacy presidiate.',reward:350,
+   missions:['Check DVR','Check formazione lavoratori','Check privacy policy','Check manuale HACCP (se applicabile)']},
+  {n:4,code:'AZIONE81+',maslow:'Bisogni di Stima',color:'#8A4AE8',obj:'Stai trasformando controllo in azione. Audit, microlearning e streak attivi.',reward:600,
+   missions:['Completa audit SICURISSIMO','Completa microlearning sicurezza','Aggiorna LIFEWHEEL81+','Completa streak 7 giorni']},
+  {n:5,code:'PRESIDIO81+',maslow:'Bisogni di Autorealizzazione',color:'#FFD24A',obj:'Stai presidiando il tuo sistema. Presidio continuo, crescita, impatto.',reward:1000,
+   missions:['Completa piano 81 giorni','Porta LIFEWHEEL81+ al cap status','Completa 1 ciclo Academy','Sblocca badge presidio']}
+];
+
+// URL params
+const P=new URLSearchParams(location.search);
+const USER_LEVEL=Math.min(5,Math.max(1,parseInt(P.get('level')||'1')));
+
+const canvas=document.getElementById('c');
+const ctx=canvas.getContext('2d');
+let W,H,cx,cy,baseW,stepH,rot=0,drag=false,dragX=0,lastRot=0,selLevel=null;
+
+function resize(){
+  W=canvas.width=canvas.offsetWidth;
+  H=canvas.height=canvas.offsetHeight;
+  cx=W/2; cy=H*0.55;
+  baseW=Math.min(W*0.7,320);
+  stepH=Math.min(H*0.13,70);
+  draw();
+}
+
+function getLevelW(n){return baseW*(n/5)*0.9+baseW*0.1;}
+
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  const perspective=0.28;
+  // draw bottom to top (level 5 first in array but on top visually)
+  for(let i=5;i>=1;i--){
+    const L=LEVELS[i-1];
+    const w=getLevelW(i);
+    const y=cy+(5-i)*stepH;
+    const ew=w*perspective; // ellipse width for 3D top
+    const isActive=i===USER_LEVEL;
+    const isDone=i<USER_LEVEL;
+    const isLocked=i>USER_LEVEL;
+
+    // Shadow
+    ctx.save();
+    ctx.globalAlpha=0.15;
+    ctx.beginPath();
+    ctx.ellipse(cx+10,y+stepH*0.5+6,w*0.5+4,14,0,0,Math.PI*2);
+    ctx.fillStyle='#000';
+    ctx.fill();
+    ctx.restore();
+
+    // Side face (3D effect)
+    const wTop=getLevelW(i-1)||0;
+    const yTop=y-stepH;
+    ctx.save();
+    ctx.globalAlpha=isDone?1:isActive?1:0.35;
+    const grad=ctx.createLinearGradient(cx-w/2,y,cx+w/2,y);
+    grad.addColorStop(0,shadeColor(L.color,-40));
+    grad.addColorStop(1,shadeColor(L.color,-20));
+    ctx.beginPath();
+    ctx.moveTo(cx-w/2,y+stepH);
+    ctx.lineTo(cx+w/2,y+stepH);
+    ctx.lineTo(cx+wTop/2,y);
+    ctx.lineTo(cx-wTop/2,y);
+    ctx.closePath();
+    ctx.fillStyle=grad;
+    ctx.fill();
+    ctx.restore();
+
+    // Front face
+    ctx.save();
+    ctx.globalAlpha=isDone?1:isActive?1:0.35;
+    const fgrad=ctx.createLinearGradient(cx,y,cx,y+stepH);
+    fgrad.addColorStop(0,L.color);
+    fgrad.addColorStop(1,shadeColor(L.color,-30));
+    ctx.beginPath();
+    ctx.moveTo(cx-w/2,y+stepH);
+    ctx.lineTo(cx+w/2,y+stepH);
+    ctx.lineTo(cx+w/2,y);
+    ctx.lineTo(cx-w/2,y);
+    ctx.closePath();
+    ctx.fillStyle=fgrad;
+    ctx.fill();
+
+    // Border
+    if(isActive){
+      ctx.strokeStyle='rgba(255,255,255,0.8)';
+      ctx.lineWidth=2;
+      ctx.stroke();
+    }
+    ctx.restore();
+
+    // Top ellipse (3D cap)
+    ctx.save();
+    ctx.globalAlpha=isDone?1:isActive?1:0.35;
+    ctx.beginPath();
+    ctx.ellipse(cx,y,w/2,w*perspective/2,0,0,Math.PI*2);
+    ctx.fillStyle=isActive?'rgba(255,255,255,0.15)':L.color;
+    ctx.fill();
+    if(isActive){ctx.strokeStyle='rgba(255,255,255,0.6)';ctx.lineWidth=1.5;ctx.stroke();}
+    ctx.restore();
+
+    // Glow for active level
+    if(isActive){
+      ctx.save();
+      ctx.shadowColor=L.color;
+      ctx.shadowBlur=24;
+      ctx.beginPath();
+      ctx.rect(cx-w/2,y,w,stepH);
+      ctx.strokeStyle=L.color+'88';
+      ctx.lineWidth=1;
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Level text
+    ctx.save();
+    ctx.globalAlpha=isDone||isActive?1:0.5;
+    ctx.fillStyle='rgba(0,0,0,0.55)';
+    ctx.fillRect(cx-w/2+4,y+stepH/2-12,w-8,24);
+    ctx.fillStyle='#fff';
+    ctx.font='bold '+(Math.min(w/14,13))+'px system-ui';
+    ctx.textAlign='center';
+    ctx.textBaseline='middle';
+    ctx.fillText(L.code,cx,y+stepH/2+1);
+    ctx.restore();
+
+    // Checkmark for completed
+    if(isDone){
+      ctx.save();
+      ctx.fillStyle='rgba(0,0,0,0.4)';
+      ctx.beginPath();
+      ctx.arc(cx+w/2-16,y+12,10,0,Math.PI*2);
+      ctx.fill();
+      ctx.strokeStyle='#fff';
+      ctx.lineWidth=2;
+      ctx.beginPath();
+      ctx.moveTo(cx+w/2-21,y+12);
+      ctx.lineTo(cx+w/2-16,y+17);
+      ctx.lineTo(cx+w/2-10,y+7);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  // Rotation animation (subtle tilt)
+  rot+=0.003;
+}
+
+function shadeColor(col,pct){
+  const n=parseInt(col.slice(1),16);
+  const r=Math.min(255,Math.max(0,(n>>16)+pct));
+  const g=Math.min(255,Math.max(0,((n>>8)&0xFF)+pct));
+  const b=Math.min(255,Math.max(0,(n&0xFF)+pct));
+  return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+}
+
+function hitTest(x,y){
+  for(let i=1;i<=5;i++){
+    const w=getLevelW(i);
+    const ly=cy+(5-i)*stepH;
+    if(x>=cx-w/2&&x<=cx+w/2&&y>=ly&&y<=ly+stepH) return i;
+  }
+  return null;
+}
+
+function openPanel(levelN){
+  const L=LEVELS[levelN-1];
+  selLevel=levelN;
+  document.getElementById('p-badge').textContent='LIVELLO '+levelN;
+  document.getElementById('p-title').textContent=L.code;
+  document.getElementById('p-maslow').textContent=L.maslow;
+  const obj=document.getElementById('p-obj');
+  obj.textContent=L.obj;
+  obj.style.setProperty('--lc',L.color);
+  document.getElementById('p-reward').textContent='+'+L.reward+' PV+';
+  document.getElementById('p-reward').style.color=L.color;
+  const ml=document.getElementById('p-missions-list');
+  ml.innerHTML=L.missions.map(m=>`<div class="pm"><div class="pm-dot" style="background:${L.color}"></div><span>${m}</span></div>`).join('');
+  document.getElementById('panel').classList.remove('hidden');
+}
+
+function closePanel(){
+  document.getElementById('panel').classList.add('hidden');
+  selLevel=null;
+}
+
+// Legend
+const leg=document.getElementById('legend');
+LEVELS.forEach(l=>{
+  const d=document.createElement('div');d.className='leg';
+  d.innerHTML=`<div class="leg-dot" style="background:${l.color}"></div><span>${l.n}. ${l.maslow}</span>`;
+  leg.appendChild(d);
+});
+
+// Events
+canvas.addEventListener('click',e=>{
+  const r=canvas.getBoundingClientRect();
+  const n=hitTest(e.clientX-r.left,e.clientY-r.top);
+  if(n) openPanel(n);
+});
+canvas.addEventListener('mousemove',e=>{
+  const r=canvas.getBoundingClientRect();
+  canvas.style.cursor=hitTest(e.clientX-r.left,e.clientY-r.top)?'pointer':'grab';
+});
+
+// Touch
+canvas.addEventListener('touchstart',e=>{e.preventDefault();},{passive:false});
+canvas.addEventListener('touchend',e=>{
+  const t=e.changedTouches[0];
+  const r=canvas.getBoundingClientRect();
+  const n=hitTest(t.clientX-r.left,t.clientY-r.top);
+  if(n) openPanel(n);
+},{passive:false});
+
+window.addEventListener('resize',resize);
+resize();
+
+function loop(){requestAnimationFrame(loop);draw();}
+loop();
+</script>
+</body>
+</html>
