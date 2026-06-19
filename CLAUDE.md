@@ -326,6 +326,17 @@ Quando Gemini produce un aggiornamento importante, genera un RECAP PER CLAUDE ch
 - Proponi sempre l'azione successiva logica dopo ogni risposta
 - Se rilevi una nuova norma o scadenza, segnalala come prima cosa
 
+### WORKFLOW OBBLIGATORIO PER OGNI FILE PRODOTTO (dal 2026-06-19)
+
+Ogni volta che Claude produce un file (codice, documento, SQL, HTML, MD, ZIP):
+
+1. **PRIMA** — SendUserFile: consegna immediata per download e revisione
+2. **SECONDO** — Percorso locale suggerito: indica il path esatto in C:\81PLUS_GLOBAL_MASTER\ (Mirco salva manualmente o tramite sync)
+3. **TERZO** — Google Drive: carica il file nella cartella Drive corretta (ECOSYSTEM-SICURISSIMO o sottocartella dedicata) tramite MCP Google Drive
+4. **QUARTO e ULTIMO** — GitHub commit + push su branch attivo
+
+Regola madre: Mirco vede e valida prima. Il sistema archivia dopo.
+
 ---
 
 ## 15. CHECKLIST OPERATIVA GIORNALIERA
