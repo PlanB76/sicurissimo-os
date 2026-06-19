@@ -1,0 +1,7 @@
+{
+  "_nota": "Configurazione GEM81. Nessuna chiave API richiesta per il funzionamento base.",
+  "proxy_whitelist": ["api.geckoterminal.com","api.gopluslabs.io","api.honeypot.is","api.dexscreener.com","apiv5.paraswap.io"],
+  "default_chain": "bsc",
+  "default_size_usd": 50,
+  "default_slippage": 1
+}
