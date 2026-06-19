@@ -332,7 +332,10 @@ Ogni volta che Claude produce un file (codice, documento, SQL, HTML, MD, ZIP):
 
 1. **PRIMA** — SendUserFile: consegna immediata per download e revisione
 2. **SECONDO** — Percorso locale suggerito: indica il path esatto in C:\81PLUS_GLOBAL_MASTER\ (Mirco salva manualmente o tramite sync)
-3. **TERZO** — Google Drive: carica il file nella cartella Drive corretta (ECOSYSTEM-SICURISSIMO o sottocartella dedicata) tramite MCP Google Drive
+3. **TERZO** — Google Drive: carica il file nella cartella Drive corretta tramite MCP Google Drive
+   - Cartella principale SFERA81+: https://drive.google.com/drive/folders/1-6hUUcVoMcuOw1GWLL3WCgWeR8WziS3k
+   - Folder ID: 1-6hUUcVoMcuOw1GWLL3WCgWeR8WziS3k
+   - Se MCP Drive non attivo in sessione: segnalarlo a Mirco per upload manuale
 4. **QUARTO e ULTIMO** — GitHub commit + push su branch attivo
 
 Regola madre: Mirco vede e valida prima. Il sistema archivia dopo.
