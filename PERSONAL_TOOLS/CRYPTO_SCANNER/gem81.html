@@ -236,6 +236,110 @@ button{font-family:var(--sans)}
 @keyframes flashAlert{0%,100%{box-shadow:0 0 0 1px var(--border)}50%{box-shadow:0 0 0 2px var(--red),0 0 18px #FF174455}}
 .alerting{animation:flashAlert 1s infinite}
 
+/* ===================== UX++ : GLASS / GLOW / TRANSITIONS ===================== */
+.btn{transition:transform .12s,filter .15s,box-shadow .25s}
+.btn:active{transform:scale(.97)}
+.gem-row td{transition:background .15s}
+.gem-row{animation:rowIn .42s cubic-bezier(.2,.9,.3,1.05) both}
+@keyframes rowIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.left-panel,.right-panel,.modal,.trade-panel,.sec-report{backdrop-filter:blur(6px)}
+.modal{background:rgba(8,13,26,.82);backdrop-filter:blur(20px) saturate(150%);border:1px solid rgba(120,130,170,.16)}
+/* glow pulse on primary CTAs */
+.glow{position:relative}
+.glow::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 0 0 #F0B90B88;animation:glowpulse 2.6s ease-out infinite;pointer-events:none}
+@keyframes glowpulse{0%{box-shadow:0 0 0 0 #F0B90B55}70%{box-shadow:0 0 0 12px #F0B90B00}100%{box-shadow:0 0 0 0 #F0B90B00}}
+.mega-btn,.btn-accent.btn-block{position:relative}
+
+/* ===================== MODE TOGGLE ===================== */
+.mode-toggle{display:flex;background:var(--card);border:1px solid var(--border);border-radius:22px;padding:3px;font-family:var(--mono)}
+.mode-toggle button{background:none;border:none;color:var(--txt2);font-size:10px;font-weight:800;padding:7px 13px;border-radius:18px;cursor:pointer;letter-spacing:.5px;transition:.2s}
+.mode-toggle button.on{background:var(--accent);color:#1a1400;box-shadow:0 0 14px #F0B90B55}
+.mode-toggle button.on.pro{background:var(--cyan);color:#04222b;box-shadow:0 0 14px #00D9FF55}
+
+/* SIMPLE mode hides PRO surfaces */
+body.simple .pro-only{display:none !important}
+body.simple .log-box,body.simple #log-box,body.simple .log-box-title{display:none}
+body.simple .left-panel{padding-bottom:14px}
+body.simple .simple-note{display:block !important}
+body.simple .col-pro{display:none}
+body.simple .stats-bar{grid-template-columns:repeat(2,1fr)}
+body.simple .stat:nth-child(n+3){display:none}
+body.simple .tab[data-pro]{display:none}
+
+/* ===================== SAFETY SEMAPHORE ===================== */
+.sem{position:relative;display:inline-block;width:18px;height:18px;border-radius:50%;cursor:help;vertical-align:middle}
+.sem::after{content:'';position:absolute;inset:0;border-radius:50%;animation:semPulse 2.6s infinite}
+.sem-g{background:radial-gradient(circle at 35% 30%,#8effc0,#00E676)}.sem-g{color:#00E676}
+.sem-y{background:radial-gradient(circle at 35% 30%,#ffe58a,#F0B90B)}.sem-y{color:#F0B90B}
+.sem-r{background:radial-gradient(circle at 35% 30%,#ff8aa0,#FF1744)}.sem-r{color:#FF1744}
+.sem-q{background:radial-gradient(circle at 35% 30%,#9aa,#3a4761)}.sem-q::after{animation:none}
+@keyframes semPulse{0%{box-shadow:0 0 0 0 currentColor}70%{box-shadow:0 0 0 7px transparent}100%{box-shadow:0 0 0 0 transparent}}
+.sem-lg{width:26px;height:26px}
+
+/* ===================== TOOLTIP (?) ===================== */
+.tip{position:relative;display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;border:1px solid var(--txt2);color:var(--txt2);font-size:9px;font-weight:800;cursor:help;font-family:var(--mono);vertical-align:middle;margin-left:3px}
+.tip .tipbox,.sem .tipbox{visibility:hidden;opacity:0;position:absolute;bottom:150%;left:50%;transform:translateX(-50%);width:210px;max-width:46vw;background:#0e1626;border:1px solid rgba(120,130,170,.22);border-radius:9px;padding:9px 11px;font-size:11px;font-weight:500;color:var(--txt);line-height:1.5;text-align:left;z-index:260;box-shadow:0 12px 32px -8px #000;transition:opacity .15s;pointer-events:none;font-family:var(--sans);letter-spacing:0;white-space:normal}
+.tip:hover .tipbox,.sem:hover .tipbox{visibility:visible;opacity:1}
+.gem-table .tip .tipbox,.gem-table .sem .tipbox{right:0;left:auto;transform:none}
+
+/* ===================== ONBOARDING ===================== */
+.onb{position:fixed;inset:0;z-index:300;display:none;align-items:center;justify-content:center;padding:18px;background:radial-gradient(1000px 700px at 50% -10%,#F0B90B1A,transparent 65%),rgba(4,8,15,.94);backdrop-filter:blur(8px)}
+.onb.on{display:flex}
+.onb-card{max-width:430px;width:100%;padding:26px 22px;text-align:center;border-radius:18px;background:rgba(8,13,26,.9);border:1px solid rgba(120,130,170,.18);animation:cardIn .5s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes cardIn{from{opacity:0;transform:translateY(20px) scale(.96)}to{opacity:1;transform:none}}
+.onb-logo{font-size:32px;font-weight:700;letter-spacing:1px;margin-bottom:4px}.onb-logo b{color:var(--accent)}
+.onb-sub{font-size:12px;color:var(--txt2);margin-bottom:22px;font-family:var(--mono)}
+.onb-steps{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.onb-step{display:flex;align-items:center;gap:14px;text-align:left;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px}
+.onb-num{flex-shrink:0;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;font-family:var(--mono);border:2px solid}
+.onb-step:nth-child(1) .onb-num{color:var(--accent);border-color:var(--accent);background:#F0B90B14}
+.onb-step:nth-child(2) .onb-num{color:var(--cyan);border-color:var(--cyan);background:#00D9FF14}
+.onb-step:nth-child(3) .onb-num{color:var(--green);border-color:var(--green);background:#00E67614}
+.onb-step .ot{font-size:14px;font-weight:700}.onb-step .od{font-size:11px;color:var(--txt2);margin-top:2px}
+.onb-start{font-size:17px;font-weight:800;padding:16px;letter-spacing:1px}
+.onb-skip{display:block;margin-top:14px;font-size:11px;color:var(--txt2);cursor:pointer;font-family:var(--mono)}
+.onb-skip:hover{color:var(--txt)}
+
+/* ===================== TOASTS ===================== */
+#toaster{position:fixed;left:50%;transform:translateX(-50%);bottom:24px;z-index:400;display:flex;flex-direction:column;gap:9px;align-items:center;pointer-events:none;width:calc(100% - 28px);max-width:380px}
+.toast{pointer-events:auto;display:flex;align-items:center;gap:10px;padding:12px 15px;border-radius:13px;font-size:12.5px;font-weight:700;background:rgba(12,18,32,.92);border:1px solid rgba(120,130,170,.18);backdrop-filter:blur(14px);box-shadow:0 12px 32px -10px #000;width:100%;animation:toastIn .35s cubic-bezier(.2,.9,.3,1.3),toastOut .4s ease 3.6s forwards}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px) scale(.95)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(10px) scale(.97)}}
+.toast .ti{font-size:18px;line-height:1;flex-shrink:0}
+.toast.t-ok{border-color:#00E67666}.toast.t-ok .ti{color:var(--green)}
+.toast.t-err{border-color:#FF174466}.toast.t-err .ti{color:var(--red)}
+.toast.t-info{border-color:#00D9FF66}.toast.t-info .ti{color:var(--cyan)}
+.toast.t-gold{border-color:#F0B90B99}.toast.t-gold .ti{color:var(--accent)}
+
+/* ===================== SPARKLINE ===================== */
+.spark{display:block;width:100%;height:40px;margin-top:8px}
+.row-spark{width:54px;height:22px;display:block}
+
+/* ===================== GEM FOUND CELEBRATION ===================== */
+.gem-row.celebrate td{animation:celebRow 1.1s cubic-bezier(.2,.9,.3,1.2)}
+@keyframes celebRow{0%{background:transparent}25%{background:#F0B90B30;box-shadow:inset 0 0 20px #F0B90B55}100%{background:transparent}}
+
+/* ===================== SKELETON SHIMMER ===================== */
+.sk-wrap{display:flex;flex-direction:column;gap:7px;padding:4px 0}
+.sk{height:46px;border-radius:10px;background:linear-gradient(100deg,#080F1C 30%,#101a2e 50%,#080F1C 70%);background-size:200% 100%;animation:shimmer 1.3s linear infinite;border:1px solid var(--border)}
+@keyframes shimmer{from{background-position:200% 0}to{background-position:-200% 0}}
+
+/* ===================== MOBILE BOTTOM NAV ===================== */
+.mob-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:120;padding-bottom:env(safe-area-inset-bottom);background:rgba(6,11,22,.95);backdrop-filter:blur(14px);border-top:1px solid var(--border)}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 2px;font-size:10px;color:var(--txt2);cursor:pointer;gap:3px;border:none;background:none;min-height:58px;font-weight:800;font-family:var(--mono)}
+.nav-btn .ic{font-size:21px;line-height:1}
+.nav-btn.on{color:var(--accent)}
+@media(max-width:700px){
+  .mob-nav{display:flex}
+  .gem-wrap{padding-bottom:84px}
+  .header-right .wbtn{padding:10px 14px}
+  .mega-btn{padding:16px}
+  .bs-row .btn{min-height:52px}
+  .tg,.pack,.chain,.tab{min-height:38px;display:flex;align-items:center;justify-content:center}
+  #toaster{bottom:84px}
+  .gem-table th.col-hide-m,.gem-table td.col-hide-m{display:none}
+}
+
 /* ===================== RESPONSIVE ===================== */
 @media(max-width:1100px){
   .main-layout{grid-template-columns:280px 1fr;height:auto}
@@ -250,8 +354,26 @@ button{font-family:var(--sans)}
 }
 </style>
 </head>
-<body>
+<body class="simple">
 <canvas id="stars"></canvas>
+
+<!-- ONBOARDING -->
+<div id="onb" class="onb">
+  <div class="onb-card">
+    <div class="onb-logo">&#128142; <b>GEM81</b></div>
+    <div class="onb-sub">Gem Radar on-chain. Sicuro. Facile.</div>
+    <div class="onb-steps">
+      <div class="onb-step"><div class="onb-num">1</div><div><div class="ot">Connetti il wallet</div><div class="od">MetaMask, TokenPocket o Trust. Un tocco.</div></div></div>
+      <div class="onb-step"><div class="onb-num">2</div><div><div class="ot">Scegli quanto investire</div><div class="od">Decidi tu l'importo con i Size Pack. Nessuna sorpresa.</div></div></div>
+      <div class="onb-step"><div class="onb-num">3</div><div><div class="ot">Premi Scansiona</div><div class="od">Vedi solo le gemme che passano i controlli reali.</div></div></div>
+    </div>
+    <button class="btn btn-accent btn-block onb-start glow" onclick="onbStart()">INIZIA</button>
+    <span class="onb-skip" onclick="onbClose()">Guarda prima senza connettere</span>
+  </div>
+</div>
+
+<!-- TOASTS -->
+<div id="toaster"></div>
 
 <!-- FILE:// SETUP BANNER -->
 <div id="file-warn" class="file-warn-bar" onclick="document.getElementById('file-setup').classList.toggle('on')">
@@ -303,6 +425,10 @@ button{font-family:var(--sans)}
     <div class="chain" onclick="setChain('solana',this)">Solana</div>
   </div>
   <div class="header-right">
+    <div class="mode-toggle" id="mode-toggle">
+      <button id="m-simple" class="on" onclick="setMode('simple')">SEMPLICE</button>
+      <button id="m-pro" class="pro" onclick="setMode('pro')">PRO</button>
+    </div>
     <button class="wbtn" id="rp-toggle" onclick="toggleRightPanel()" style="display:none">&#9881; Trade</button>
     <button id="wbtn" class="wbtn" onclick="openWallet()">&#11041; CONNETTI</button>
   </div>
@@ -359,22 +485,23 @@ button{font-family:var(--sans)}
       <input id="custom-size" class="custom-size" type="number" placeholder="Importo custom $" oninput="setSizeCustom(this.value)">
     </div>
 
-    <div class="block">
+    <div class="block pro-only">
       <div class="block-title"><div class="bar"></div><span>Controlli Sicurezza</span></div>
-      <div class="chk"><span>Escludi honeypot</span><div class="switch on" id="chk-hp" onclick="this.classList.toggle('on');render()"></div></div>
-      <div class="chk"><span>Escludi mintable</span><div class="switch" id="chk-mint" onclick="this.classList.toggle('on');render()"></div></div>
-      <div class="chk"><span>Solo codice pubblico</span><div class="switch" id="chk-os" onclick="this.classList.toggle('on');render()"></div></div>
-      <div class="chk"><span>Sell tax max 10%</span><div class="switch on" id="chk-tax" onclick="this.classList.toggle('on');render()"></div></div>
+      <div class="chk"><span>Escludi honeypot <span class="tip">?<span class="tipbox">Honeypot, trappola: puoi comprare ma non rivendere. Tienilo sempre attivo.</span></span></span><div class="switch on" id="chk-hp" onclick="this.classList.toggle('on');render()"></div></div>
+      <div class="chk"><span>Escludi mintable <span class="tip">?<span class="tipbox">Mintable: il creatore puo stampare nuovi token e diluire il tuo valore.</span></span></span><div class="switch" id="chk-mint" onclick="this.classList.toggle('on');render()"></div></div>
+      <div class="chk"><span>Solo codice pubblico <span class="tip">?<span class="tipbox">Mostra solo contratti verificati, leggibili da tutti. Piu trasparenza.</span></span></span><div class="switch" id="chk-os" onclick="this.classList.toggle('on');render()"></div></div>
+      <div class="chk"><span>Sell tax max 10% <span class="tip">?<span class="tipbox">Tassa di vendita: quanto trattiene il token quando vendi. Sopra il 10% mangia i guadagni.</span></span></span><div class="switch on" id="chk-tax" onclick="this.classList.toggle('on');render()"></div></div>
     </div>
 
-    <div class="block">
+    <div class="block pro-only">
       <div class="block-title"><div class="bar"></div><span>Filtri Avanzati</span></div>
       <div class="filt-row"><label>Liquidita minima ($)</label><input id="flt-liq" class="inp" type="number" placeholder="es. 20000" oninput="render()"></div>
       <div class="filt-row"><label>Market cap max ($)</label><input id="flt-mcap" class="inp" type="number" placeholder="es. 5000000" oninput="render()"></div>
       <div class="filt-row"><label>Variazione 24h minima (%)</label><input id="flt-chg" class="inp" type="number" placeholder="es. 10" oninput="render()"></div>
     </div>
 
-    <button class="btn btn-accent btn-block" onclick="loadGems()">&#128269; SCANSIONA</button>
+    <button class="btn btn-accent btn-block glow" onclick="loadGems()">&#128269; SCANSIONA</button>
+    <div class="simple-note" style="display:none;font-size:10px;color:var(--txt2);font-family:var(--mono);line-height:1.6;margin-top:10px;text-align:center">Modalita SEMPLICE: vedi solo le gemme che passano i controlli on-chain reali. Passa a PRO per filtri, log e dettaglio completo.</div>
   </div>
 
   <!-- CENTER PANEL -->
@@ -404,7 +531,7 @@ button{font-family:var(--sans)}
       <div id="gem-list"><div class="loading"><div class="spin"></div> Scansione DEX in corso...</div></div>
     </div>
 
-    <div class="block-title" style="padding:0 12px"><div class="bar"></div><span>Log Sistema</span></div>
+    <div class="block-title log-box-title" style="padding:0 12px"><div class="bar"></div><span>Log Sistema</span></div>
     <div class="log-box" id="log-box"></div>
   </div>
 
@@ -431,7 +558,9 @@ button{font-family:var(--sans)}
         <div class="d-cell"><div class="k">Potenziale</div><div class="v" id="d-pot">-</div></div>
       </div>
 
-      <div class="block-title"><div class="bar" style="background:var(--cyan)"></div><span>Security Report</span></div>
+      <canvas id="d-spark" class="spark"></canvas>
+
+      <div class="block-title"><div class="bar" style="background:var(--cyan)"></div><span>Security Report <span class="tip">?<span class="tipbox">Dati on-chain reali: GoPlus + honeypot.is + DexScreener. Il semaforo verde appare solo se passa tutti i controlli.</span></span></span></div>
       <div class="sec-report" id="sec-report">
         <div style="color:var(--txt2);font-size:11px;font-family:var(--mono)">Analisi on-chain in corso...</div>
       </div>
@@ -500,6 +629,14 @@ button{font-family:var(--sans)}
   </div>
 </div>
 
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mob-nav">
+  <button class="nav-btn on" onclick="window.scrollTo({top:0,behavior:'smooth'})"><span class="ic">&#128142;</span>GEMME</button>
+  <button class="nav-btn" onclick="loadGems()"><span class="ic">&#128225;</span>SCAN</button>
+  <button class="nav-btn" onclick="setTab('portfolio',document.querySelector('.tab:nth-child(4)'))"><span class="ic">&#128188;</span>PORTAF.</button>
+  <button class="nav-btn" id="nav-w" onclick="openWallet()"><span class="ic">&#11041;</span>WALLET</button>
+</nav>
+
 <script>
 /* ===================== CONFIG ===================== */
 const GT_NETS=[
@@ -539,6 +676,107 @@ const S={gems:[],chain:'bsc',pot:'all',tab:'all',size:10,timer:45,int:null,
   slippage:5,trade:null,trRoute:null,selected:null,auto:false,autoInt:null,
   portfolio:[]};
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+S.mode='simple';S.celebrated={};
+const chartCache={};
+
+/* ===================== TOASTS ===================== */
+function toast(msg,type='info',icon){
+  const ic={ok:'✅',err:'⚠',info:'⬡',gold:'💎'}[type]||'⬡';
+  const t=document.createElement('div');t.className='toast t-'+type;
+  t.innerHTML='<span class="ti">'+(icon||ic)+'</span><span>'+msg+'</span>';
+  const box=document.getElementById('toaster');if(!box)return;
+  box.appendChild(t);setTimeout(()=>t.remove(),4300);
+}
+
+/* ===================== SEMPLICE / PRO MODE ===================== */
+function setMode(m){
+  S.mode=m;
+  document.body.classList.toggle('pro',m==='pro');
+  document.body.classList.toggle('simple',m==='simple');
+  document.getElementById('m-simple').classList.toggle('on',m==='simple');
+  document.getElementById('m-pro').classList.toggle('on',m==='pro');
+  try{localStorage.setItem('gem81_mode',m);}catch(e){}
+  render();
+}
+
+/* ===================== ONBOARDING ===================== */
+function onbStart(){onbClose();openWallet();}
+function onbClose(){document.getElementById('onb').classList.remove('on');try{localStorage.setItem('gem81_onb','1');}catch(e){}}
+function maybeOnboard(){
+  let seen=false;try{seen=localStorage.getItem('gem81_onb')==='1';}catch(e){}
+  if(!seen&&!S.wallet)document.getElementById('onb').classList.add('on');
+}
+
+/* ===================== SAFETY SEMAPHORE =====================
+   GREEN only if sec data present AND passes all real on-chain checks.
+   Green = "passa i controlli on-chain reali", NOT "guadagno garantito". */
+function semOf(g){
+  if(g&&g.sol)return{c:'sem-q',cls:'q',t:'Solana: controlli on-chain non disponibili in questo strumento.'};
+  if(!g||!g.sec)return{c:'sem-q',cls:'q',t:'Controlli on-chain in corso. Il verde appare solo se passa tutti i test reali.'};
+  if(g.sec.hp)return{c:'sem-r',cls:'r',t:'Honeypot o rischio critico. Rosso significa pericolo reale di non poter rivendere. Non investire.'};
+  if(g.sec.sellTax>=15||g.sec.mint||g.sec.owner>20)return{c:'sem-y',cls:'y',t:'Attenzione: tassa alta, conio illimitato o creatore con troppi token. Procedi con cautela.'};
+  return{c:'sem-g',cls:'g',t:'Passa tutti i controlli on-chain reali: non honeypot, tassa bassa, niente conio. Verde significa sicuro da scambiare, NON guadagno garantito.'};
+}
+function semHTML(g,big){const s=semOf(g);return '<span class="sem '+s.c+(big?' sem-lg':'')+'"><span class="tipbox">'+s.t+'</span></span>';}
+
+/* ===================== COUNT-UP NUMBERS ===================== */
+function countUp(el,to){
+  if(!el)return;to=+to||0;const from=parseInt(el.textContent)||0;
+  if(from===to){el.textContent=to;return;}
+  const dur=420,t0=performance.now();
+  (function step(t){const k=Math.min(1,(t-t0)/dur);el.textContent=Math.round(from+(to-from)*(1-Math.pow(1-k,3)));if(k<1)requestAnimationFrame(step);})(t0);
+}
+
+/* ===================== SPARKLINES (GeckoTerminal OHLCV) ===================== */
+async function fetchSparks(gems){
+  for(const g of gems){
+    if(!g.pool||!g.netId||chartCache[g.pool]!==undefined)continue;
+    try{
+      const d=await (await fetch('https://api.geckoterminal.com/api/v2/networks/'+g.netId+'/pools/'+g.pool+'/ohlcv/hour?aggregate=1&limit=24')).json();
+      chartCache[g.pool]=(d.data?.attributes?.ohlcv_list||[]).map(x=>+x[4]).reverse();
+    }catch(e){chartCache[g.pool]=[];}
+    drawSparkRow(g);
+    if(S.selected&&S.selected.pool===g.pool)drawSpark('d-spark',chartCache[g.pool]);
+    await sleep(360);
+  }
+}
+function drawSparkRow(g){const cv=document.getElementById('rs-'+g.pool);if(cv)drawSpark(cv,chartCache[g.pool]);}
+function drawSpark(cvOrId,data){
+  const cv=typeof cvOrId==='string'?document.getElementById(cvOrId):cvOrId;
+  if(!cv||!data||data.length<2)return;
+  const dpr=window.devicePixelRatio||1,W=cv.clientWidth*dpr,H=cv.clientHeight*dpr;
+  if(!W||!H)return;cv.width=W;cv.height=H;const ctx=cv.getContext('2d');ctx.clearRect(0,0,W,H);
+  const min=Math.min(...data),max=Math.max(...data),rng=max-min||1;
+  const up=data[data.length-1]>=data[0],col=up?'#00E676':'#FF1744';
+  const X=i=>i/(data.length-1)*W,Y=v=>H-((v-min)/rng)*(H*0.8)-H*0.1;
+  const grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,up?'#00E67633':'#FF174433');grad.addColorStop(1,'transparent');
+  ctx.beginPath();data.forEach((v,i)=>{i?ctx.lineTo(X(i),Y(v)):ctx.moveTo(X(i),Y(v));});
+  ctx.strokeStyle=col;ctx.lineWidth=1.5*dpr;ctx.lineJoin='round';ctx.stroke();
+  ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fillStyle=grad;ctx.fill();
+}
+
+/* ===================== GEM-FOUND CELEBRATION ===================== */
+function celebrateGems(gems){
+  gems.forEach(g=>{
+    if(!g.safe||g.sol)return;
+    if(!['x50','x20','x10'].includes(g.xpot))return;
+    const key=g.addr+g.chainId;if(S.celebrated[key])return;
+    S.celebrated[key]=1;
+    const row=document.querySelector('.gem-row[data-key="'+CSS.escape(key)+'"]');
+    if(row)row.classList.add('celebrate');
+    toast('Gemma trovata: '+esc(g.sym)+' '+(XPOT_LBL[g.xpot]||'')+' e sicura','gold','💎');
+    playFound();
+  });
+}
+let foundCtx=null;
+function playFound(){
+  try{foundCtx=foundCtx||new (window.AudioContext||window.webkitAudioContext)();
+    const o=foundCtx.createOscillator(),g=foundCtx.createGain();o.connect(g);g.connect(foundCtx.destination);o.type='sine';
+    o.frequency.setValueAtTime(660,foundCtx.currentTime);o.frequency.exponentialRampToValueAtTime(1320,foundCtx.currentTime+.12);
+    g.gain.setValueAtTime(.0001,foundCtx.currentTime);g.gain.exponentialRampToValueAtTime(.05,foundCtx.currentTime+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,foundCtx.currentTime+.25);o.start();o.stop(foundCtx.currentTime+.26);
+  }catch(e){}
+}
 
 /* ===================== STARFIELD ===================== */
 (function(){
@@ -696,11 +934,11 @@ const XPOT_LBL={x50:'X50',x20:'X20',x10:'X10',x5:'X5',x2:'X2',watch:'OSSERVA',lo
 function stats(){
   const g=S.gems;
   const c=p=>g.filter(x=>x.xpot===p).length;
-  document.getElementById('s-x50').textContent=c('x50');
-  document.getElementById('s-x20').textContent=c('x50')+c('x20');
-  document.getElementById('s-x10').textContent=c('x50')+c('x20')+c('x10');
-  document.getElementById('s-x5').textContent=c('x50')+c('x20')+c('x10')+c('x5');
-  document.getElementById('s-tot').textContent=g.length;
+  countUp(document.getElementById('s-x50'),c('x50'));
+  countUp(document.getElementById('s-x20'),c('x50')+c('x20'));
+  countUp(document.getElementById('s-x10'),c('x50')+c('x20')+c('x10'));
+  countUp(document.getElementById('s-x5'),c('x50')+c('x20')+c('x10')+c('x5'));
+  countUp(document.getElementById('s-tot'),g.length);
 }
 
 /* ===================== TICKER ===================== */
@@ -715,6 +953,10 @@ function updateTicker(){
 /* ===================== FILTER PIPELINE ===================== */
 function filteredGems(){
   let g=[...S.gems];
+  // SIMPLE mode: show only gems that passed the real on-chain checks, with real upside
+  if(S.mode==='simple'){
+    g=g.filter(x=>x.safe===true&&!['low','honeypot'].includes(x.xpot));
+  }
   // security toggles
   if(chkOn('chk-hp'))g=g.filter(x=>!(x.sec&&x.sec.hp));
   if(chkOn('chk-mint'))g=g.filter(x=>!(x.sec&&x.sec.mint));
@@ -745,26 +987,37 @@ function render(){
   const el=document.getElementById('gem-list');if(!el)return;
   if(S.tab==='portfolio'){renderPortfolio(el);return;}
   const g=filteredGems();
-  if(!g.length){el.innerHTML='<div class="empty"><div class="ic">&#11041;</div>Nessuna gemma con questi filtri</div>';return;}
-  let html='<table class="gem-table"><thead><tr><th>Token</th><th class="r">Prezzo</th><th class="r">24h</th><th class="r">Liq</th><th class="r">Cap</th><th style="text-align:center">Score</th><th style="text-align:center">Potenziale</th><th style="text-align:center">Sicurezza</th></tr></thead><tbody>';
+  if(!g.length){
+    if(!S.gems.length){el.innerHTML='<div class="sk-wrap"><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>';return;}
+    el.innerHTML='<div class="empty"><div class="ic">&#11041;</div>'+(S.mode==='simple'?'Nessuna gemma sicura adesso. Riprovo al prossimo scan, oppure passa a PRO per vedere tutto.':'Nessuna gemma con questi filtri')+'</div>';
+    return;
+  }
+  let html='<table class="gem-table"><thead><tr><th style="text-align:center">&#9210;</th><th>Token</th><th class="r">Prezzo</th><th class="r col-hide-m">24h</th><th class="r col-hide-m col-pro">Liq</th><th class="r col-hide-m col-pro">Cap</th><th class="col-hide-m col-pro">Trend</th><th style="text-align:center" class="col-pro">Score</th><th style="text-align:center">Potenziale</th><th style="text-align:center" class="col-pro">Sicurezza</th></tr></thead><tbody>';
   for(const x of g){
     const ring=x.score>=75?'ring-green':x.score>=60?'ring-gold':x.score>=45?'ring-orange':'ring-red';
     const xc=x.xpot==='honeypot'?'hp':(x.xpot==='low'?'watch':x.xpot);
     const sb=!x.sec?(x.sol?'<span class="badge badge-grey">SOL</span>':'<span class="badge badge-grey">N/D</span>'):x.sec.hp?'<span class="badge badge-red">HP</span>':x.safe?'<span class="badge badge-green">SAFE</span>':'<span class="badge badge-orange">ATT</span>';
     const sel=S.selected&&S.selected.addr===x.addr&&S.selected.chainId===x.chainId?' sel':'';
-    html+=`<tr class="gem-row${x.sec?.hp?' hp':''}${sel}" onclick="selectGem('${x.addr}',${x.chainId})">
+    const key=x.addr+x.chainId;
+    html+=`<tr class="gem-row${x.sec?.hp?' hp':''}${sel}" data-key="${esc(key)}" onclick="selectGem('${x.addr}',${x.chainId})">
+      <td style="text-align:center">${semHTML(x)}</td>
       <td><div class="gem-sym" style="color:${x.col}">${esc(x.sym)}</div><div class="gem-name-sm">${esc(x.name)} · ${esc(x.chainName)}</div></td>
       <td class="r">${price(x.price)}</td>
-      <td class="r ${x.p24h>=0?'g-pos':'g-neg'}">${x.p24h>=0?'+':''}${x.p24h.toFixed(0)}%</td>
-      <td class="r">${usd(x.liq)}</td>
-      <td class="r">${x.mcap?usd(x.mcap):'?'}</td>
-      <td style="text-align:center"><div class="ring ${ring}">${x.score}</div></td>
+      <td class="r col-hide-m ${x.p24h>=0?'g-pos':'g-neg'}">${x.p24h>=0?'+':''}${x.p24h.toFixed(0)}%</td>
+      <td class="r col-hide-m col-pro">${usd(x.liq)}</td>
+      <td class="r col-hide-m col-pro">${x.mcap?usd(x.mcap):'?'}</td>
+      <td class="col-hide-m"><canvas class="row-spark" id="rs-${esc(x.pool)}"></canvas></td>
+      <td style="text-align:center" class="col-pro"><div class="ring ${ring}">${x.score}</div></td>
       <td style="text-align:center">${x.xpot==='low'?'<span class="xtag watch">-</span>':`<span class="xtag ${xc}">${XPOT_LBL[x.xpot]}</span>`}</td>
-      <td style="text-align:center">${sb}</td>
+      <td style="text-align:center" class="col-pro">${sb}</td>
     </tr>`;
   }
   html+='</tbody></table>';
   el.innerHTML=html;
+  // redraw cached sparks, fetch missing, fire celebration
+  g.forEach(x=>{if(chartCache[x.pool]!==undefined)drawSparkRow(x);});
+  fetchSparks(g);
+  celebrateGems(g);
 }
 function renderPortfolio(el){
   if(!S.portfolio.length){el.innerHTML='<div class="empty"><div class="ic">&#128188;</div>Portfolio vuoto. Le posizioni aperte (con stop loss / take profit) appaiono qui.</div>';return;}
@@ -802,6 +1055,7 @@ async function selectGem(addr,cid){
   document.getElementById('d-mcap').textContent=g.mcap?usd(g.mcap):'?';
   document.getElementById('d-vol').textContent=usd(g.vol24);
   document.getElementById('d-pot').textContent=g.xpot==='low'?'-':XPOT_LBL[g.xpot];
+  if(chartCache[g.pool]!==undefined)drawSpark('d-spark',chartCache[g.pool]);else fetchSparks([g]);
   document.getElementById('trade-pay-sym').textContent=g.sol?'SOL':'USD';
   syncTradeSize();
   // trade buttons enable/disable per sol
@@ -878,19 +1132,21 @@ function showSecReport(info,hd,dex,addr,cid,g){
   let verdict='N/D',vc='nd';
   if(secScore!==null){if(secScore>=70){verdict='SICURO';vc='ok';}else if(secScore>=40){verdict='RISCHIOSO';vc='warn';}else{verdict='PERICOLOSO';vc='bad';}}
 
+  const semCls=hpVal?'sem-r':(secScore===null?'sem-q':secScore>=70&&!mint&&!(sellTax>=15)?'sem-g':secScore>=40?'sem-y':'sem-r');
+  const semTxt=hpVal?'Honeypot o rischio critico: pericolo reale di non poter rivendere.':secScore===null?'Controlli in corso o non disponibili.':semCls==='sem-g'?'Passa i controlli on-chain reali. Verde significa sicuro da scambiare, NON guadagno garantito.':semCls==='sem-y'?'Alcuni segnali di attenzione. Procedi con cautela.':'Rischio elevato. Meglio evitare.';
   box.innerHTML=`
     <div class="flex-sb" style="margin-bottom:10px">
-      <span style="font-size:13px;font-weight:800;color:var(--${vc==='ok'?'green':vc==='warn'?'accent':vc==='bad'?'red':'txt2'})">${verdict}</span>
+      <span style="display:flex;align-items:center;gap:9px"><span class="sem ${semCls} sem-lg"><span class="tipbox">${semTxt}</span></span><span style="font-size:13px;font-weight:800;color:var(--${vc==='ok'?'green':vc==='warn'?'accent':vc==='bad'?'red':'txt2'})">${verdict}</span></span>
       <span style="font-family:var(--mono);font-weight:800;font-size:18px;color:var(--${vc==='ok'?'green':vc==='warn'?'accent':vc==='bad'?'red':'txt2'})">${secScore!==null?secScore+'/100':'N/D'}</span>
     </div>
-    <div class="sec-row"><span class="sec-key">Honeypot</span><span class="sec-val ${hpVal===null?'nd':hpVal?'bad':'ok'}">${hpVal===null?'<span class="nd">N/D</span>':hpVal?'SI — NON VENDIBILE':'NO'}</span></div>
-    <div class="sec-row"><span class="sec-key">Tassa vendita</span><span class="sec-val ${taxC(sellTax)}">${sellTax===null?'<span class="nd">N/D</span>':sellTax.toFixed(1)+'%'}</span></div>
-    <div class="sec-row"><span class="sec-key">Tassa acquisto</span><span class="sec-val ${taxC(buyTax)}">${buyTax===null?'<span class="nd">N/D</span>':buyTax.toFixed(1)+'%'}</span></div>
-    <div class="sec-row"><span class="sec-key">Codice pubblico</span><span class="sec-val ${os===null?'nd':os?'ok':'warn'}">${os===null?'<span class="nd">N/D</span>':os?'SI':'NO'}</span></div>
-    <div class="sec-row"><span class="sec-key">Conio illimitato</span><span class="sec-val ${mint===null?'nd':mint?'warn':'ok'}">${mint===null?'<span class="nd">N/D</span>':mint?'SI':'NO'}</span></div>
-    <div class="sec-row"><span class="sec-key">Blacklist</span><span class="sec-val ${bl===null?'nd':bl?'warn':'ok'}">${bl===null?'<span class="nd">N/D</span>':bl?'SI':'NO'}</span></div>
-    <div class="sec-row"><span class="sec-key">Reclama ownership</span><span class="sec-val ${takeBack===null?'nd':takeBack?'bad':'ok'}">${takeBack===null?'<span class="nd">N/D</span>':takeBack?'SI':'NO'}</span></div>
-    <div class="sec-row"><span class="sec-key">% creatore</span><span class="sec-val ${own===null?'nd':own>20?'bad':own>10?'warn':'ok'}">${own===null?'<span class="nd">N/D</span>':own.toFixed(1)+'%'}</span></div>
+    <div class="sec-row"><span class="sec-key">Honeypot <span class="tip">?<span class="tipbox">Trappola: puoi comprare ma non rivendere. Mai investire qui.</span></span></span><span class="sec-val ${hpVal===null?'nd':hpVal?'bad':'ok'}">${hpVal===null?'<span class="nd">N/D</span>':hpVal?'SI — NON VENDIBILE':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Tassa vendita <span class="tip">?<span class="tipbox">Quanto trattiene il token quando vendi. Sopra il 10% mangia i guadagni.</span></span></span><span class="sec-val ${taxC(sellTax)}">${sellTax===null?'<span class="nd">N/D</span>':sellTax.toFixed(1)+'%'}</span></div>
+    <div class="sec-row"><span class="sec-key">Tassa acquisto <span class="tip">?<span class="tipbox">Quanto trattiene il token quando compri.</span></span></span><span class="sec-val ${taxC(buyTax)}">${buyTax===null?'<span class="nd">N/D</span>':buyTax.toFixed(1)+'%'}</span></div>
+    <div class="sec-row"><span class="sec-key">Codice pubblico <span class="tip">?<span class="tipbox">Contratto verificato e leggibile da tutti. Meglio se SI.</span></span></span><span class="sec-val ${os===null?'nd':os?'ok':'warn'}">${os===null?'<span class="nd">N/D</span>':os?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Conio illimitato <span class="tip">?<span class="tipbox">Il creatore puo stampare nuovi token e diluire il tuo valore.</span></span></span><span class="sec-val ${mint===null?'nd':mint?'warn':'ok'}">${mint===null?'<span class="nd">N/D</span>':mint?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Blacklist <span class="tip">?<span class="tipbox">Il creatore puo bloccare alcuni indirizzi dal vendere.</span></span></span><span class="sec-val ${bl===null?'nd':bl?'warn':'ok'}">${bl===null?'<span class="nd">N/D</span>':bl?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">Reclama ownership <span class="tip">?<span class="tipbox">Il creatore puo riprendere il controllo del contratto. Rischio alto.</span></span></span><span class="sec-val ${takeBack===null?'nd':takeBack?'bad':'ok'}">${takeBack===null?'<span class="nd">N/D</span>':takeBack?'SI':'NO'}</span></div>
+    <div class="sec-row"><span class="sec-key">% creatore <span class="tip">?<span class="tipbox">Quanti token tiene chi ha creato il progetto. Sopra il 20% e rischioso.</span></span></span><span class="sec-val ${own===null?'nd':own>20?'bad':own>10?'warn':'ok'}">${own===null?'<span class="nd">N/D</span>':own.toFixed(1)+'%'}</span></div>
     <div class="sec-row"><span class="sec-key">Liquidita (DexScreener)</span><span class="sec-val ${liqUsd===null?'nd':liqUsd<10000?'warn':'ok'}">${liqUsd===null?'<span class="nd">N/D</span>':usd(liqUsd)}</span></div>
     <div class="sec-row"><span class="sec-key">Holders</span><span class="sec-val ${hold===null?'nd':hold>500?'ok':hold>100?'warn':'bad'}">${hold===null?'<span class="nd">N/D</span>':hold.toLocaleString()}</span></div>
     <div style="margin-top:10px"><a href="${(DEX_URL[cid]||'')+addr}" target="_blank" class="btn btn-out btn-block btn-sm">Apri su DEX &#8599;</a></div>
@@ -1008,6 +1264,7 @@ async function pick(i){
     raw.on?.('chainChanged',async()=>{S.chainId=Number((await S.provider.getNetwork()).chainId);S.provider=new ethers.BrowserProvider(raw);S.signer=await S.provider.getSigner();renderWallet();});
     closeWallet();renderWallet();
     log('Wallet connesso: '+S.wallet.slice(0,6)+'...'+S.wallet.slice(-4),'ok');
+    toast('Wallet connesso · '+(CHAIN_NAMES[S.chainId]||S.chainId),'ok');
   }catch(e){
     const msg=e.code===4001?'Hai rifiutato la connessione':(e.message||String(e));
     wl.innerHTML=`<div class="banner" style="background:#FF174411;border:1px solid var(--red);color:var(--txt);margin-bottom:10px">ERROR: ${esc(msg)}</div>
@@ -1015,11 +1272,12 @@ async function pick(i){
       <button class="btn btn-out btn-block" onclick="closeWallet()">Chiudi</button>`;
   }
 }
-function disconnect(){S.wallet=S.provider=S.signer=S.rawProvider=null;renderWallet();log('Wallet disconnesso','warn');}
+function disconnect(){S.wallet=S.provider=S.signer=S.rawProvider=null;renderWallet();log('Wallet disconnesso','warn');toast('Wallet disconnesso','info');}
 function renderWallet(){
   const b=document.getElementById('wbtn');
   if(S.wallet){b.innerHTML=`&#9679; ${S.wallet.slice(0,5)}..${S.wallet.slice(-3)} · ${CHAIN_NAMES[S.chainId]||S.chainId}`;b.classList.add('on');}
   else{b.innerHTML='&#11041; CONNETTI';b.classList.remove('on');}
+  const nw=document.getElementById('nav-w');if(nw)nw.classList.toggle('on',!!S.wallet);
 }
 async function wmSwitch(){await ensureChain(+document.getElementById('wm-chain').value);}
 async function ensureChain(target){
@@ -1124,12 +1382,14 @@ async function trExec(){
       const sl=+document.getElementById('trade-sl').value||0,tp=+document.getElementById('trade-tp').value||0;
       addPosition({sym:g.s,addr:g.a,chainId:S.chainId,decimals:g.d,entryPrice:gem?.price||0,lastPrice:gem?.price||0,sl,tp,ts:Date.now()});
       log('Posizione aperta '+g.s+(sl?' SL -'+sl+'%':'')+(tp?' TP +'+tp+'%':''),'info');
+      toast('Comprato '+esc(g.s)+(S.auto?' · monitoraggio attivo':''),'ok','💎');
     } else {
       removePosition(g.a,S.chainId);
+      toast('Venduto '+esc(g.s),'ok');
     }
     setTimeout(loadGems,2500);
   }
-  catch(e){const e2=document.getElementById('tr-stat');e2.className='sstat se';e2.innerHTML='ERROR: '+(e.shortMessage||e.message||e);log('Trade fallito: '+(e.shortMessage||e.message||e),'bad');}
+  catch(e){const e2=document.getElementById('tr-stat');e2.className='sstat se';e2.innerHTML='ERROR: '+(e.shortMessage||e.message||e);log('Trade fallito: '+(e.shortMessage||e.message||e),'bad');toast('Transazione non riuscita','err');}
   finally{btn.disabled=false;btn.textContent=old;}
 }
 
@@ -1164,11 +1424,13 @@ async function autoTick(){
       const chg=(cur-p.entryPrice)/p.entryPrice*100;
       if(p.tp&&chg>=p.tp){
         log('TAKE PROFIT '+p.sym+' raggiunto (+'+chg.toFixed(1)+'%). Conferma vendita.','ok');
+        toast('TAKE PROFIT '+esc(p.sym)+' +'+chg.toFixed(0)+'% · conferma per incassare','gold','🎯');
         triggerAutoSell(p,'Take Profit +'+chg.toFixed(1)+'%');
         return;
       }
       if(p.sl&&chg<=-p.sl){
         log('STOP LOSS '+p.sym+' raggiunto ('+chg.toFixed(1)+'%). Conferma vendita.','bad');
+        toast('STOP LOSS '+esc(p.sym)+' '+chg.toFixed(0)+'% · conferma per vendere','err','🔻');
         triggerAutoSell(p,'Stop Loss '+chg.toFixed(1)+'%');
         return;
       }
@@ -1224,6 +1486,8 @@ function ld(src){return new Promise((res,rej)=>{const s=document.createElement('
 /* ===================== INIT ===================== */
 requestProviders();
 loadPortfolio();
+try{const m=localStorage.getItem('gem81_mode');setMode(m==='pro'?'pro':'simple');}catch(e){setMode('simple');}
+maybeOnboard();
 (async()=>{
   if(location.protocol==='file:'){
     document.getElementById('file-warn').style.display='block';
