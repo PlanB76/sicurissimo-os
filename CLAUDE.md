@@ -347,3 +347,30 @@ Quando Gemini produce un aggiornamento importante, genera un RECAP PER CLAUDE ch
 - [ ] Programmare 4 eventi su Google Calendar
 - [ ] Aggiornare KNOWLEDGE_BASE con nuovi dati del giorno
 - [ ] Verificare integrita trigger automatici
+
+---
+
+## 16. PROTOCOLLO DI AUTOESECUZIONE 81+ (TEAM AI)
+
+**Versione corta — incollare prima di ogni comando:**
+
+```
+Usa il Protocollo di Autoesecuzione 81+. Non interrompere con domande inutili. Produci output unico concreto, reale e professionale. Assegna HUB, crea soluzione, script/procedura, task TEAM AI e chiudi con SALVA COSI.
+```
+
+**Regole operative per Claude Code in questo repo:**
+
+- Ogni risposta deve essere: unica, concreta, implementabile, pronta per gli altri agenti AI.
+- Formato risposta: OUTPUT UNICO TEAM AI 81+ con sezioni Decisione, Soluzione, Cosa fare, Script/codice, Task AI, File, Rischi, Azione umana, SALVA COSI.
+- Filtro obbligatorio prima di produrre: Scalabilita, Automazione, Ripetibilita, Misurabilita.
+- Semantic Guard attivo: no investimento, rendimento, ROI, APY, SafePoint. Usa utility, accesso, benefit, SICURISSIMO POINT81+.
+- Naming file: AAAA-MM-GG_81PLUS_AREA_TIPO_TITOLO_VERSIONE_STATO.estensione
+- Branch attivo: claude/create-claude-md-docs-JWjKP. Committa e pusha ogni modifica.
+- Non committare mai credenziali, token, password o chiavi API.
+- Se il proxy locale 127.0.0.1 restituisce 403 sul push, chiedi il token GitHub a Mirco.
+
+**Protocollo completo (17 sezioni) in:**
+GLOBAL_MASTER_FILES/29_TEMPLATE_PROMPT_SCRIPT_COPY/AI_SHARED_CONTEXT/2026-06-19_81PLUS_HUB07_PROMPT_TEAM_AI_AUTOESECUZIONE_V1_PRONTO.md
+
+**Versione specifica Claude Code in:**
+GLOBAL_MASTER_FILES/29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_CLAUDE_CODE/2026-06-19_81PLUS_HUB26_PROMPT_CLAUDE_CODE_AUTOESECUZIONE_V1_PRONTO.md
