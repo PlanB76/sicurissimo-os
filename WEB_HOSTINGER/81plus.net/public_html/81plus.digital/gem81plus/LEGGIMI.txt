@@ -41,13 +41,14 @@ Il wallet si connette normalmente su http://localhost.
 ------------------------------------------------------------
  USO SU HOSTINGER — 81plus.net (consigliato per il live)
 ------------------------------------------------------------
-1. File Manager Hostinger → public_html/gem81plus/
+1. File Manager Hostinger → public_html/81plus.digital/gem81plus/
+   (crea le cartelle se non esistono)
 2. Carica QUESTI file:
       index.html
       api.php
       config.json
 3. Apri:
-      https://81plus.net/gem81plus/
+      https://81plus.net/81plus.digital/gem81plus/
    Comparirà pill verde "Proxy PHP attivo" in alto a destra.
    Tutte le API passano da api.php → zero errori CORS.
 
