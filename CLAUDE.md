@@ -485,3 +485,44 @@ Regola HUB3 parcheggio: usare solo dopo validazione tecnica, legale e fiscale. Z
 ### REGOLA DI AGGIORNAMENTO
 
 Ogni volta che durante lo sviluppo emerge una nuova decisione architettonica, un nuovo dominio validato, o una modifica alla struttura dei moduli, Claude aggiorna questa sezione 17 nel CLAUDE.md e committa immediatamente.
+
+---
+
+## 18. FASE ZERO81+ — MVP0 GO-LIVE (2026-06-20)
+
+**Dichiarata da Mirco il 2026-06-20. Questa fase e fissa e permanente.**
+
+FASE ZERO81+ e il punto di partenza ufficiale del sistema operativo 81+. Tutto cio che esiste prima di questa data e contesto storico. Tutto cio che viene costruito dopo si appoggia su questa fondazione.
+
+### Cosa e pronto in MVP0
+
+| Componente | Stato | Posizione |
+|-----------|-------|-----------|
+| PHP API LEX81+ (5 endpoint) | PRONTO | WEB_HOSTINGER/81plus.net/.../api/lex81/ |
+| PHP API LEADGEN81+ (12 endpoint) | PRONTO | WEB_HOSTINGER/81plus.net/.../api/leadgen81/ |
+| DB MySQL (17 tabelle + seed) | PRONTO | database/lex81_leadgen81_mysql.sql |
+| Admin test panel | PRONTO | admin/test_api.html |
+| MASTERBLASTER (11 file .gs) | PRONTO — da installare | GLOBAL_MASTER_FILES/GENESYS81_MVP0/SCRIPT/ |
+| Blueprint e documentazione | PRONTO | GLOBAL_MASTER_FILES/GENESYS81_MVP0/ |
+| CLAUDE.md (questo file) | AGGIORNATO | radice repo |
+
+### Regole di FASE ZERO81+ (vincolanti per tutti gli agenti AI)
+
+1. Il DB u173050672_81plusglobal e la fonte di verita. Nessun modulo la bypassa.
+2. MASTERBLASTER (Google Sheet + Apps Script) e il cervello condiviso di tutti gli agenti AI.
+3. La registrazione avviene solo su HUB1 (81plus.net). SIC-ID generato li.
+4. Nessuna email inviata senza double opt-in (leadgen81_consents.granted = 1).
+5. GEM81 e solo informativo. Zero trade execution senza firma utente.
+6. LOCK81+ non e staking. PV/PV+ non sono denaro. Semantic Guard sempre attiva.
+7. HUMAN_APPROVAL list bloccante: SEND_EMAIL, PUBLISH, PAYOUT, SETTLEMENT, CONTRACT, LEGAL_CLAIM, MEMBERSHIP_CHANGE, ROLE_CHANGE.
+8. Branch attivo per tutto lo sviluppo: claude/create-claude-md-docs-JWjKP.
+9. Mai committare credenziali, token, password o chiavi API.
+10. config.php mai committato — solo config.example.php nel repo.
+
+### File di riferimento FASE ZERO81+
+
+```
+GLOBAL_MASTER_FILES/GENESYS81_MVP0/2026-06-20_81PLUS_HUB01_FASE_ZERO81_MVP0_V1_PRONTO.md
+```
+
+Questo file contiene la comunicazione ufficiale a tutto il TEAM AI 81+ HOLDING con task assegnati, rischi, guardrail e azioni umane richieste a Mirco.
