@@ -1,0 +1,70 @@
+# ===========================================================================
+# 81PLUS Global OS — Apache .htaccess
+# Directory : /admin/81global/
+# Project   : 81PLUS Global OS — Sicurissimo OS
+# ===========================================================================
+
+# ---------------------------------------------------------------------------
+# 1. REWRITE ENGINE
+# ---------------------------------------------------------------------------
+RewriteEngine On
+
+# ---------------------------------------------------------------------------
+# 2. CORS — Cross-Origin Resource Sharing
+#    Only 81plus.net and 81plus.christmas are allowed origins.
+#    The matching origin is stored in CORS_ORIGIN and echoed back so that
+#    the browser accepts the response.
+# ---------------------------------------------------------------------------
+
+# Match exact origins and store in environment variable
+SetEnvIf Origin "^https://(www\.)?81plus\.net$"        CORS_ORIGIN=$0
+SetEnvIf Origin "^https://(www\.)?81plus\.christmas$"  CORS_ORIGIN=$0
+
+# Reflect the matched origin in the response header (only when env is set)
+Header always set Access-Control-Allow-Origin    "%{CORS_ORIGIN}e" env=CORS_ORIGIN
+Header always set Access-Control-Allow-Methods   "GET, POST, OPTIONS"
+Header always set Access-Control-Allow-Headers   "Content-Type, X-Requested-With, Authorization"
+Header always set Access-Control-Allow-Credentials "true"
+
+# Handle OPTIONS preflight requests: return 204 No Content immediately
+RewriteCond %{REQUEST_METHOD} OPTIONS
+RewriteRule ^ - [R=204,L]
+
+# ---------------------------------------------------------------------------
+# 3. BLOCK DIRECT ACCESS TO SENSITIVE PHP FILES
+#    _bootstrap.php bootstraps the application; config.php holds secrets.
+#    Neither should ever be served directly to a browser or HTTP client.
+# ---------------------------------------------------------------------------
+<FilesMatch "(_bootstrap\.php|config\.php)$">
+    Require all denied
+</FilesMatch>
+
+# ---------------------------------------------------------------------------
+# 4. DISABLE DIRECTORY LISTING
+#    Prevents Apache from exposing a file index when no index file exists.
+# ---------------------------------------------------------------------------
+Options -Indexes
+
+# ---------------------------------------------------------------------------
+# 5. BLOCK ACCESS TO THE database/ DIRECTORY
+#    Any request whose URL contains /database/ receives a 403 Forbidden.
+# ---------------------------------------------------------------------------
+RewriteRule ^database(/.*)?$ - [F,L]
+
+# ---------------------------------------------------------------------------
+# 6. DEFAULT CHARACTER SET
+# ---------------------------------------------------------------------------
+AddDefaultCharset UTF-8
+
+# ---------------------------------------------------------------------------
+# 7. PHP SETTINGS (applied when mod_php / PHP CGI honours .htaccess)
+# ---------------------------------------------------------------------------
+<IfModule mod_php.c>
+    php_value default_charset "UTF-8"
+</IfModule>
+<IfModule mod_php8.c>
+    php_value default_charset "UTF-8"
+</IfModule>
+<IfModule mod_php7.c>
+    php_value default_charset "UTF-8"
+</IfModule>

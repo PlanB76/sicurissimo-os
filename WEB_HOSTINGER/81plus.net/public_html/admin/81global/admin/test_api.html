@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>81PLUS Global OS — Test API Panel</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d1117;
+    --panel: #161b22;
+    --border: #30363d;
+    --accent: #58a6ff;
+    --success: #3fb950;
+    --error: #f85149;
+    --text: #c9d1d9;
+    --text-muted: #8b949e;
+    --text-bright: #f0f6fc;
+    --hover: #1f2937;
+    --tag-bg: #21262d;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    min-height: 100vh;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+
+  /* HEADER */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 24px;
+    margin-bottom: 28px;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .header-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: -0.3px;
+  }
+
+  .version-badge {
+    background: var(--tag-bg);
+    border: 1px solid var(--border);
+    color: var(--accent);
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+  }
+
+  .status-dot {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-left: auto;
+  }
+
+  .status-dot::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-muted);
+    transition: background 0.3s;
+  }
+
+  .status-dot.connected::before { background: var(--success); }
+  .status-dot.error::before { background: var(--error); }
+
+  .header-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  @media (max-width: 600px) {
+    .header-fields { grid-template-columns: 1fr; }
+  }
+
+  .field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .field-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+  }
+
+  input[type="text"], input[type="password"], input[type="number"],
+  input[type="email"], select, textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text-bright);
+    font-family: inherit;
+    font-size: 13px;
+    padding: 7px 10px;
+    width: 100%;
+    transition: border-color 0.15s;
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.1);
+  }
+
+  select option { background: var(--panel); }
+
+  textarea { resize: vertical; min-height: 70px; }
+
+  /* SECTIONS */
+  .section {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+  }
+
+  .section-header:hover { background: var(--hover); }
+
+  .section-tag {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    white-space: nowrap;
+  }
+
+  .tag-lex { background: rgba(88, 166, 255, 0.15); color: #79c0ff; border: 1px solid rgba(88, 166, 255, 0.3); }
+  .tag-lead { background: rgba(63, 185, 80, 0.15); color: #56d364; border: 1px solid rgba(63, 185, 80, 0.3); }
+  .tag-admin { background: rgba(248, 81, 73, 0.15); color: #ffa198; border: 1px solid rgba(248, 81, 73, 0.3); }
+
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-bright);
+    flex: 1;
+  }
+
+  .section-method {
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    padding: 1px 6px;
+    border-radius: 3px;
+    white-space: nowrap;
+  }
+
+  .method-get { background: rgba(63, 185, 80, 0.2); color: var(--success); }
+  .method-post { background: rgba(248, 148, 6, 0.2); color: #e3b341; }
+
+  .section-chevron {
+    color: var(--text-muted);
+    font-size: 12px;
+    transition: transform 0.2s;
+  }
+
+  .section.open .section-chevron { transform: rotate(180deg); }
+
+  .section-body {
+    display: none;
+    padding: 16px;
+    border-top: 1px solid var(--border);
+  }
+
+  .section.open .section-body { display: block; }
+
+  .endpoint-url {
+    font-family: 'SF Mono', 'Fira Code', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 5px 10px;
+    margin-bottom: 16px;
+    word-break: break-all;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 600px) {
+    .form-grid { grid-template-columns: 1fr; }
+  }
+
+  .form-grid .full { grid-column: 1 / -1; }
+
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+  }
+
+  .checkbox-row input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: var(--accent);
+  }
+
+  .checkbox-row label { cursor: pointer; color: var(--text); font-size: 13px; }
+
+  .consents-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .consents-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    margin-bottom: 4px;
+  }
+
+  /* BUTTON */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--accent);
+    color: #0d1117;
+    border: none;
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 8px 18px;
+    cursor: pointer;
+    transition: opacity 0.15s, transform 0.1s;
+  }
+
+  .btn:hover { opacity: 0.85; }
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* SPINNER */
+  .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(13, 17, 23, 0.3);
+    border-top-color: #0d1117;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+    display: none;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* RESPONSE PANEL */
+  .response-panel {
+    margin-top: 14px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+    display: none;
+  }
+
+  .response-panel.visible { display: block; }
+  .response-panel.success { border-color: var(--success); }
+  .response-panel.failure { border-color: var(--error); }
+
+  .response-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--bg);
+    font-size: 11px;
+  }
+
+  .response-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+  }
+
+  .response-status.ok { color: var(--success); }
+  .response-status.err { color: var(--error); }
+
+  .response-time { color: var(--text-muted); font-family: 'SF Mono', 'Fira Code', monospace; }
+
+  .response-body {
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    padding: 12px;
+    overflow-x: auto;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+
+  .response-body pre {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+  }
+
+  /* JSON syntax highlight */
+  .json-key { color: #79c0ff; }
+  .json-string { color: #a5d6ff; }
+  .json-number { color: #f2cc60; }
+  .json-bool { color: #ff7b72; }
+  .json-null { color: #8b949e; }
+
+  /* FOOTER */
+  .footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 12px;
+  }
+
+  .footer a { color: var(--accent); text-decoration: none; }
+  .footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-top">
+      <span class="header-title">81PLUS Global OS — Test API Panel</span>
+      <span class="version-badge">v1.0.0</span>
+      <span class="status-dot" id="statusDot">Non verificato</span>
+    </div>
+    <div class="header-fields">
+      <div class="field-group">
+        <span class="field-label">Base URL</span>
+        <input type="text" id="baseUrl" value="/admin/81global" placeholder="/admin/81global">
+      </div>
+      <div class="field-group">
+        <span class="field-label">Admin Secret</span>
+        <input type="password" id="adminSecret" placeholder="Inserisci admin secret...">
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 1: LEX81+ Risk Profile -->
+  <div class="section" id="sec1">
+    <div class="section-header" onclick="toggleSection('sec1')">
+      <span class="section-tag tag-lex">LEX81+</span>
+      <span class="section-title">Profilo Rischio</span>
+      <span class="section-method method-post">POST</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/lex81/risk-profile.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Codice ATECO</span>
+          <input type="text" id="s1_ateco_code" placeholder="es. 10.11">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Numero Lavoratori</span>
+          <input type="number" id="s1_workers_count" placeholder="es. 15" min="1">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Opzioni</span>
+          <div class="checkbox-row">
+            <input type="checkbox" id="s1_haccp">
+            <label for="s1_haccp">HACCP applicabile</label>
+          </div>
+          <div class="checkbox-row">
+            <input type="checkbox" id="s1_edilizia">
+            <label for="s1_edilizia">Edilizia applicabile</label>
+          </div>
+        </div>
+      </div>
+      <button class="btn" onclick="callSection1()">
+        <span class="spinner" id="sp1"></span>
+        Calcola Profilo Rischio
+      </button>
+      <div class="response-panel" id="rp1">
+        <div class="response-header">
+          <span class="response-status" id="rs1"></span>
+          <span class="response-time" id="rt1"></span>
+        </div>
+        <div class="response-body"><pre id="rb1"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2: LEX81+ Norme -->
+  <div class="section" id="sec2">
+    <div class="section-header" onclick="toggleSection('sec2')">
+      <span class="section-tag tag-lex">LEX81+</span>
+      <span class="section-title">Norme</span>
+      <span class="section-method method-get">GET</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/lex81/norms/list.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Codice ATECO</span>
+          <input type="text" id="s2_ateco_code" placeholder="es. 10.11">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Categoria</span>
+          <select id="s2_category_code">
+            <option value="">-- Tutte --</option>
+            <option value="SICUREZZA_GENERALE">SICUREZZA_GENERALE</option>
+            <option value="RISCHIO_CHIMICO">RISCHIO_CHIMICO</option>
+            <option value="HACCP">HACCP</option>
+            <option value="ANTINCENDIO">ANTINCENDIO</option>
+            <option value="FORMAZIONE">FORMAZIONE</option>
+            <option value="ISO_SISTEMI">ISO_SISTEMI</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Priorita</span>
+          <select id="s2_priority">
+            <option value="">-- Tutte --</option>
+            <option value="CRITICA">CRITICA</option>
+            <option value="ALTA">ALTA</option>
+            <option value="MEDIA">MEDIA</option>
+            <option value="BASSA">BASSA</option>
+          </select>
+        </div>
+        <div class="field-group">
+          <span class="field-label">Numero Lavoratori</span>
+          <input type="number" id="s2_workers_count" placeholder="es. 15" min="1">
+        </div>
+      </div>
+      <button class="btn" onclick="callSection2()">
+        <span class="spinner" id="sp2"></span>
+        Cerca Norme
+      </button>
+      <div class="response-panel" id="rp2">
+        <div class="response-header">
+          <span class="response-status" id="rs2"></span>
+          <span class="response-time" id="rt2"></span>
+        </div>
+        <div class="response-body"><pre id="rb2"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: LEX81+ Obblighi -->
+  <div class="section" id="sec3">
+    <div class="section-header" onclick="toggleSection('sec3')">
+      <span class="section-tag tag-lex">LEX81+</span>
+      <span class="section-title">Obblighi</span>
+      <span class="section-method method-get">GET</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/lex81/obligations/list.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Codice Norma</span>
+          <input type="text" id="s3_norm_code" placeholder="es. DLG81_ART_17">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Codice ATECO</span>
+          <input type="text" id="s3_ateco_code" placeholder="es. 10.11">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Tipo Scadenza</span>
+          <select id="s3_deadline_type">
+            <option value="">-- Tutti --</option>
+            <option value="IMMEDIATO">IMMEDIATO</option>
+            <option value="ANNUALE">ANNUALE</option>
+            <option value="BIENNALE">BIENNALE</option>
+            <option value="QUINQUENNALE">QUINQUENNALE</option>
+            <option value="UNICO">UNICO</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="callSection3()">
+        <span class="spinner" id="sp3"></span>
+        Cerca Obblighi
+      </button>
+      <div class="response-panel" id="rp3">
+        <div class="response-header">
+          <span class="response-status" id="rs3"></span>
+          <span class="response-time" id="rt3"></span>
+        </div>
+        <div class="response-body"><pre id="rb3"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: LEX81+ Sanzioni -->
+  <div class="section" id="sec4">
+    <div class="section-header" onclick="toggleSection('sec4')">
+      <span class="section-tag tag-lex">LEX81+</span>
+      <span class="section-title">Sanzioni</span>
+      <span class="section-method method-get">GET</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/lex81/sanctions/list.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Codice Norma</span>
+          <input type="text" id="s4_norm_code" placeholder="es. DLG81_ART_17">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Importo Minimo (EUR)</span>
+          <input type="number" id="s4_min_amount" placeholder="es. 500" min="0">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Opzioni</span>
+          <div class="checkbox-row">
+            <input type="checkbox" id="s4_validated">
+            <label for="s4_validated">Solo validate</label>
+          </div>
+        </div>
+      </div>
+      <button class="btn" onclick="callSection4()">
+        <span class="spinner" id="sp4"></span>
+        Cerca Sanzioni
+      </button>
+      <div class="response-panel" id="rp4">
+        <div class="response-header">
+          <span class="response-status" id="rs4"></span>
+          <span class="response-time" id="rt4"></span>
+        </div>
+        <div class="response-body"><pre id="rb4"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5: LEADGEN81+ Registra Contatto -->
+  <div class="section" id="sec5">
+    <div class="section-header" onclick="toggleSection('sec5')">
+      <span class="section-tag tag-lead">LEADGEN81+</span>
+      <span class="section-title">Registra Contatto</span>
+      <span class="section-method method-post">POST</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/contact/register.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Email *</span>
+          <input type="email" id="s5_email" placeholder="nome@azienda.it">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Nome *</span>
+          <input type="text" id="s5_nome" placeholder="Mario">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Cognome</span>
+          <input type="text" id="s5_cognome" placeholder="Rossi">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Azienda</span>
+          <input type="text" id="s5_azienda" placeholder="Rossi Srl">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Codice ATECO</span>
+          <input type="text" id="s5_ateco_code" placeholder="es. 10.11">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Numero Lavoratori</span>
+          <input type="number" id="s5_workers_count" placeholder="es. 15" min="1">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Telefono</span>
+          <input type="text" id="s5_phone" placeholder="+39 338 8771737">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Citta</span>
+          <input type="text" id="s5_city" placeholder="Milano">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Provincia</span>
+          <input type="text" id="s5_province" placeholder="MI">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Sorgente</span>
+          <input type="text" id="s5_source" placeholder="es. landing_page">
+        </div>
+      </div>
+      <div class="consents-group">
+        <span class="consents-label">Consensi</span>
+        <div class="checkbox-row">
+          <input type="checkbox" id="s5_consent_marketing">
+          <label for="s5_consent_marketing">MARKETING</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="s5_consent_newsletter">
+          <label for="s5_consent_newsletter">NEWSLETTER</label>
+        </div>
+        <div class="checkbox-row">
+          <input type="checkbox" id="s5_consent_profiling">
+          <label for="s5_consent_profiling">PROFILING</label>
+        </div>
+      </div>
+      <button class="btn" onclick="callSection5()">
+        <span class="spinner" id="sp5"></span>
+        Registra Contatto
+      </button>
+      <div class="response-panel" id="rp5">
+        <div class="response-header">
+          <span class="response-status" id="rs5"></span>
+          <span class="response-time" id="rt5"></span>
+        </div>
+        <div class="response-body"><pre id="rb5"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 6: LEADGEN81+ Profilo Contatto -->
+  <div class="section" id="sec6">
+    <div class="section-header" onclick="toggleSection('sec6')">
+      <span class="section-tag tag-lead">LEADGEN81+</span>
+      <span class="section-title">Profilo Contatto</span>
+      <span class="section-method method-get">GET</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/contact/profile.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Contact ID</span>
+          <input type="text" id="s6_contact_id" placeholder="UUID o ID numerico">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Email (alternativa)</span>
+          <input type="email" id="s6_email" placeholder="nome@azienda.it">
+        </div>
+      </div>
+      <button class="btn" onclick="callSection6()">
+        <span class="spinner" id="sp6"></span>
+        Carica Profilo
+      </button>
+      <div class="response-panel" id="rp6">
+        <div class="response-header">
+          <span class="response-status" id="rs6"></span>
+          <span class="response-time" id="rt6"></span>
+        </div>
+        <div class="response-body"><pre id="rb6"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 7: LEADGEN81+ Disiscrivi -->
+  <div class="section" id="sec7">
+    <div class="section-header" onclick="toggleSection('sec7')">
+      <span class="section-tag tag-lead">LEADGEN81+</span>
+      <span class="section-title">Disiscrivi Contatto</span>
+      <span class="section-method method-post">POST</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/contact/unsubscribe.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Email</span>
+          <input type="email" id="s7_email" placeholder="nome@azienda.it">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Tipo Disiscrizione</span>
+          <select id="s7_unsubscribe_type">
+            <option value="">-- Seleziona --</option>
+            <option value="MARKETING">MARKETING</option>
+            <option value="NEWSLETTER">NEWSLETTER</option>
+            <option value="ALL">TUTTO</option>
+          </select>
+        </div>
+        <div class="field-group full">
+          <span class="field-label">Motivo</span>
+          <input type="text" id="s7_reason" placeholder="es. Richiesta dell'utente">
+        </div>
+      </div>
+      <button class="btn" onclick="callSection7()">
+        <span class="spinner" id="sp7"></span>
+        Disiscrivi
+      </button>
+      <div class="response-panel" id="rp7">
+        <div class="response-header">
+          <span class="response-status" id="rs7"></span>
+          <span class="response-time" id="rt7"></span>
+        </div>
+        <div class="response-body"><pre id="rb7"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 8: LEADGEN81+ Calcola Segmento -->
+  <div class="section" id="sec8">
+    <div class="section-header" onclick="toggleSection('sec8')">
+      <span class="section-tag tag-lead">LEADGEN81+</span>
+      <span class="section-title">Calcola Segmento</span>
+      <span class="section-method method-post">POST</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/segment/calculate.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Contact ID</span>
+          <input type="text" id="s8_contact_id" placeholder="UUID o ID numerico">
+        </div>
+      </div>
+      <button class="btn" onclick="callSection8()">
+        <span class="spinner" id="sp8"></span>
+        Calcola Segmento
+      </button>
+      <div class="response-panel" id="rp8">
+        <div class="response-header">
+          <span class="response-status" id="rs8"></span>
+          <span class="response-time" id="rt8"></span>
+        </div>
+        <div class="response-body"><pre id="rb8"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 9: LEADGEN81+ Trigger Flow -->
+  <div class="section" id="sec9">
+    <div class="section-header" onclick="toggleSection('sec9')">
+      <span class="section-tag tag-lead">LEADGEN81+</span>
+      <span class="section-title">Trigger Flow</span>
+      <span class="section-method method-post">POST</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/flow/trigger.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Contact ID</span>
+          <input type="text" id="s9_contact_id" placeholder="UUID o ID numerico">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Codice Flow</span>
+          <select id="s9_flow_code">
+            <option value="">-- Seleziona --</option>
+            <option value="WELCOME">WELCOME</option>
+            <option value="NURTURE_WARM">NURTURE_WARM</option>
+            <option value="NURTURE_HOT">NURTURE_HOT</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn" onclick="callSection9()">
+        <span class="spinner" id="sp9"></span>
+        Trigger Flow
+      </button>
+      <div class="response-panel" id="rp9">
+        <div class="response-header">
+          <span class="response-status" id="rs9"></span>
+          <span class="response-time" id="rt9"></span>
+        </div>
+        <div class="response-body"><pre id="rb9"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 10: LEADGEN81+ Lista Flow (Admin) -->
+  <div class="section" id="sec10">
+    <div class="section-header" onclick="toggleSection('sec10')">
+      <span class="section-tag tag-admin">ADMIN</span>
+      <span class="section-title">Lista Flow</span>
+      <span class="section-method method-get">GET</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/flow/list.php</div>
+      <p style="color: var(--text-muted); font-size: 12px; margin-bottom: 14px;">Endpoint amministrativo. Aggiunge automaticamente l'header X-Admin-Secret dal campo in alto.</p>
+      <button class="btn" onclick="callSection10()">
+        <span class="spinner" id="sp10"></span>
+        Carica Flow
+      </button>
+      <div class="response-panel" id="rp10">
+        <div class="response-header">
+          <span class="response-status" id="rs10"></span>
+          <span class="response-time" id="rt10"></span>
+        </div>
+        <div class="response-body"><pre id="rb10"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 11: LEADGEN81+ Processa Coda Email (Admin) -->
+  <div class="section" id="sec11">
+    <div class="section-header" onclick="toggleSection('sec11')">
+      <span class="section-tag tag-admin">ADMIN</span>
+      <span class="section-title">Processa Coda Email</span>
+      <span class="section-method method-get">GET</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/email-queue/process.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Limite (default: 50)</span>
+          <input type="number" id="s11_limit" value="50" min="1" max="500">
+        </div>
+      </div>
+      <button class="btn" onclick="callSection11()">
+        <span class="spinner" id="sp11"></span>
+        Processa Coda
+      </button>
+      <div class="response-panel" id="rp11">
+        <div class="response-header">
+          <span class="response-status" id="rs11"></span>
+          <span class="response-time" id="rt11"></span>
+        </div>
+        <div class="response-body"><pre id="rb11"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 12: LEADGEN81+ Segna Email Come Inviata (Admin) -->
+  <div class="section" id="sec12">
+    <div class="section-header" onclick="toggleSection('sec12')">
+      <span class="section-tag tag-admin">ADMIN</span>
+      <span class="section-title">Segna Email Come Inviata</span>
+      <span class="section-method method-post">POST</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/email-queue/mark-sent.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Queue ID</span>
+          <input type="text" id="s12_queue_id" placeholder="ID della coda email">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Stato</span>
+          <select id="s12_status" onchange="toggleErrorMsg()">
+            <option value="">-- Seleziona --</option>
+            <option value="SENT">SENT</option>
+            <option value="FAILED">FAILED</option>
+          </select>
+        </div>
+        <div class="field-group full" id="errorMsgGroup" style="display:none;">
+          <span class="field-label">Messaggio di Errore</span>
+          <textarea id="s12_error_msg" placeholder="Descrivi l'errore verificatosi..."></textarea>
+        </div>
+      </div>
+      <button class="btn" onclick="callSection12()">
+        <span class="spinner" id="sp12"></span>
+        Aggiorna Stato
+      </button>
+      <div class="response-panel" id="rp12">
+        <div class="response-header">
+          <span class="response-status" id="rs12"></span>
+          <span class="response-time" id="rt12"></span>
+        </div>
+        <div class="response-body"><pre id="rb12"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 13: LEADGEN81+ Avvento 81PLUS -->
+  <div class="section" id="sec13">
+    <div class="section-header" onclick="toggleSection('sec13')">
+      <span class="section-tag tag-lead">LEADGEN81+</span>
+      <span class="section-title">Avvento 81PLUS</span>
+      <span class="section-method method-get">GET</span>
+      <span class="section-chevron">&#9660;</span>
+    </div>
+    <div class="section-body">
+      <div class="endpoint-url">/api/leadgen81/xmas/unlock.php</div>
+      <div class="form-grid">
+        <div class="field-group">
+          <span class="field-label">Contact ID</span>
+          <input type="text" id="s13_contact_id" placeholder="UUID o ID numerico">
+        </div>
+        <div class="field-group">
+          <span class="field-label">Giorno (1-81)</span>
+          <input type="number" id="s13_day" placeholder="es. 1" min="1" max="81">
+        </div>
+      </div>
+      <button class="btn" onclick="callSection13()">
+        <span class="spinner" id="sp13"></span>
+        Sblocca Porta
+      </button>
+      <div class="response-panel" id="rp13">
+        <div class="response-header">
+          <span class="response-status" id="rs13"></span>
+          <span class="response-time" id="rt13"></span>
+        </div>
+        <div class="response-body"><pre id="rb13"></pre></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>81PLUS Global OS v1.0.0 &mdash; Sicurissimo OS | Nicolas AI Agent</p>
+    <p style="margin-top: 6px;"><a href="https://www.sicurissimo.online" target="_blank" rel="noopener">www.sicurissimo.online</a></p>
+  </div>
+
+</div>
+
+<script>
+  /* ─── Utilities ─── */
+
+  function getBaseUrl() {
+    return document.getElementById('baseUrl').value.replace(/\/$/, '');
+  }
+
+  function getAdminSecret() {
+    return document.getElementById('adminSecret').value;
+  }
+
+  function toggleSection(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function toggleErrorMsg() {
+    var status = document.getElementById('s12_status').value;
+    document.getElementById('errorMsgGroup').style.display = (status === 'FAILED') ? 'block' : 'none';
+  }
+
+  function val(id) {
+    var el = document.getElementById(id);
+    return el ? el.value.trim() : '';
+  }
+
+  function checked(id) {
+    var el = document.getElementById(id);
+    return el ? el.checked : false;
+  }
+
+  function buildQueryString(params) {
+    var parts = [];
+    for (var k in params) {
+      if (params.hasOwnProperty(k) && params[k] !== '' && params[k] !== null && params[k] !== undefined) {
+        parts.push(encodeURIComponent(k) + '=' + encodeURIComponent(params[k]));
+      }
+    }
+    return parts.length ? '?' + parts.join('&') : '';
+  }
+
+  function setLoading(n, state) {
+    var spinner = document.getElementById('sp' + n);
+    var btn = spinner.closest('button');
+    spinner.style.display = state ? 'inline-block' : 'none';
+    btn.disabled = state;
+  }
+
+  /* ─── JSON Syntax Highlight ─── */
+
+  function colorizeJson(json) {
+    var escaped = json
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+
+    return escaped.replace(
+      /("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g,
+      function (match) {
+        var cls = 'json-number';
+        if (/^"/.test(match)) {
+          cls = (/:$/.test(match)) ? 'json-key' : 'json-string';
+        } else if (/true|false/.test(match)) {
+          cls = 'json-bool';
+        } else if (/null/.test(match)) {
+          cls = 'json-null';
+        }
+        return '<span class="' + cls + '">' + match + '</span>';
+      }
+    );
+  }
+
+  /* ─── Response Renderer ─── */
+
+  function showResponse(n, ok, data, ms) {
+    var panel = document.getElementById('rp' + n);
+    var statusEl = document.getElementById('rs' + n);
+    var timeEl = document.getElementById('rt' + n);
+    var bodyEl = document.getElementById('rb' + n);
+
+    panel.classList.add('visible');
+    panel.classList.remove('success', 'failure');
+    panel.classList.add(ok ? 'success' : 'failure');
+
+    statusEl.className = 'response-status ' + (ok ? 'ok' : 'err');
+    statusEl.textContent = ok ? '200 OK' : 'ERRORE';
+
+    timeEl.textContent = ms + ' ms';
+
+    var pretty;
+    try {
+      pretty = JSON.stringify(typeof data === 'string' ? JSON.parse(data) : data, null, 2);
+    } catch (e) {
+      pretty = String(data);
+    }
+    bodyEl.innerHTML = colorizeJson(pretty);
+
+    var dot = document.getElementById('statusDot');
+    dot.className = 'status-dot ' + (ok ? 'connected' : 'error');
+    dot.textContent = ok ? 'Connesso' : 'Errore';
+  }
+
+  function showNetworkError(n, err, ms) {
+    showResponse(n, false, { error: true, message: String(err), type: 'network_error' }, ms);
+  }
+
+  /* ─── Core Fetch Wrappers ─── */
+
+  async function doGet(n, path, params, adminRequired) {
+    var qs = buildQueryString(params);
+    var url = getBaseUrl() + path + qs;
+    var headers = { 'Accept': 'application/json' };
+    if (adminRequired) headers['X-Admin-Secret'] = getAdminSecret();
+
+    setLoading(n, true);
+    var t0 = Date.now();
+    try {
+      var res = await fetch(url, { method: 'GET', headers: headers });
+      var ms = Date.now() - t0;
+      var text = await res.text();
+      var parsed;
+      try { parsed = JSON.parse(text); } catch (e) { parsed = { raw: text }; }
+      var ok = res.ok && parsed.success !== false;
+      showResponse(n, ok, parsed, ms);
+    } catch (err) {
+      showNetworkError(n, err, Date.now() - t0);
+    } finally {
+      setLoading(n, false);
+    }
+  }
+
+  async function doPost(n, path, body, adminRequired) {
+    var url = getBaseUrl() + path;
+    var headers = { 'Content-Type': 'application/json', 'Accept': 'application/json' };
+    if (adminRequired) headers['X-Admin-Secret'] = getAdminSecret();
+
+    setLoading(n, true);
+    var t0 = Date.now();
+    try {
+      var res = await fetch(url, { method: 'POST', headers: headers, body: JSON.stringify(body) });
+      var ms = Date.now() - t0;
+      var text = await res.text();
+      var parsed;
+      try { parsed = JSON.parse(text); } catch (e) { parsed = { raw: text }; }
+      var ok = res.ok && parsed.success !== false;
+      showResponse(n, ok, parsed, ms);
+    } catch (err) {
+      showNetworkError(n, err, Date.now() - t0);
+    } finally {
+      setLoading(n, false);
+    }
+  }
+
+  /* ─── Section Handlers ─── */
+
+  async function callSection1() {
+    var body = {};
+    if (val('s1_ateco_code')) body.ateco_code = val('s1_ateco_code');
+    if (val('s1_workers_count')) body.workers_count = parseInt(val('s1_workers_count'), 10);
+    if (checked('s1_haccp')) body.haccp_applicable = true;
+    if (checked('s1_edilizia')) body.edilizia_applicable = true;
+    await doPost(1, '/api/lex81/risk-profile.php', body, false);
+  }
+
+  async function callSection2() {
+    var params = {};
+    if (val('s2_ateco_code')) params.ateco_code = val('s2_ateco_code');
+    if (val('s2_category_code')) params.category_code = val('s2_category_code');
+    if (val('s2_priority')) params.priority = val('s2_priority');
+    if (val('s2_workers_count')) params.workers_count = val('s2_workers_count');
+    await doGet(2, '/api/lex81/norms/list.php', params, false);
+  }
+
+  async function callSection3() {
+    var params = {};
+    if (val('s3_norm_code')) params.norm_code = val('s3_norm_code');
+    if (val('s3_ateco_code')) params.ateco_code = val('s3_ateco_code');
+    if (val('s3_deadline_type')) params.deadline_type = val('s3_deadline_type');
+    await doGet(3, '/api/lex81/obligations/list.php', params, false);
+  }
+
+  async function callSection4() {
+    var params = {};
+    if (val('s4_norm_code')) params.norm_code = val('s4_norm_code');
+    if (checked('s4_validated')) params.validated_only = 'true';
+    if (val('s4_min_amount')) params.min_amount = val('s4_min_amount');
+    await doGet(4, '/api/lex81/sanctions/list.php', params, false);
+  }
+
+  async function callSection5() {
+    var email = val('s5_email');
+    var nome = val('s5_nome');
+    if (!email || !nome) { alert('Email e Nome sono obbligatori.'); return; }
+    var body = { email: email, nome: nome };
+    if (val('s5_cognome')) body.cognome = val('s5_cognome');
+    if (val('s5_azienda')) body.azienda = val('s5_azienda');
+    if (val('s5_ateco_code')) body.ateco_code = val('s5_ateco_code');
+    if (val('s5_workers_count')) body.workers_count = parseInt(val('s5_workers_count'), 10);
+    if (val('s5_phone')) body.phone = val('s5_phone');
+    if (val('s5_city')) body.city = val('s5_city');
+    if (val('s5_province')) body.province = val('s5_province');
+    if (val('s5_source')) body.source = val('s5_source');
+    var consents = [];
+    if (checked('s5_consent_marketing')) consents.push('MARKETING');
+    if (checked('s5_consent_newsletter')) consents.push('NEWSLETTER');
+    if (checked('s5_consent_profiling')) consents.push('PROFILING');
+    if (consents.length) body.consents = consents;
+    await doPost(5, '/api/leadgen81/contact/register.php', body, false);
+  }
+
+  async function callSection6() {
+    var params = {};
+    if (val('s6_contact_id')) params.contact_id = val('s6_contact_id');
+    else if (val('s6_email')) params.email = val('s6_email');
+    await doGet(6, '/api/leadgen81/contact/profile.php', params, false);
+  }
+
+  async function callSection7() {
+    var body = {};
+    if (val('s7_email')) body.email = val('s7_email');
+    if (val('s7_unsubscribe_type')) body.unsubscribe_type = val('s7_unsubscribe_type');
+    if (val('s7_reason')) body.reason = val('s7_reason');
+    await doPost(7, '/api/leadgen81/contact/unsubscribe.php', body, false);
+  }
+
+  async function callSection8() {
+    var body = {};
+    if (val('s8_contact_id')) body.contact_id = val('s8_contact_id');
+    await doPost(8, '/api/leadgen81/segment/calculate.php', body, false);
+  }
+
+  async function callSection9() {
+    var body = {};
+    if (val('s9_contact_id')) body.contact_id = val('s9_contact_id');
+    if (val('s9_flow_code')) body.flow_code = val('s9_flow_code');
+    await doPost(9, '/api/leadgen81/flow/trigger.php', body, false);
+  }
+
+  async function callSection10() {
+    await doGet(10, '/api/leadgen81/flow/list.php', {}, true);
+  }
+
+  async function callSection11() {
+    var params = {};
+    if (val('s11_limit')) params.limit = val('s11_limit');
+    await doGet(11, '/api/leadgen81/email-queue/process.php', params, true);
+  }
+
+  async function callSection12() {
+    var body = {};
+    if (val('s12_queue_id')) body.queue_id = val('s12_queue_id');
+    if (val('s12_status')) body.status = val('s12_status');
+    if (val('s12_status') === 'FAILED' && val('s12_error_msg')) body.error_msg = val('s12_error_msg');
+    await doPost(12, '/api/leadgen81/email-queue/mark-sent.php', body, true);
+  }
+
+  async function callSection13() {
+    var params = {};
+    if (val('s13_contact_id')) params.contact_id = val('s13_contact_id');
+    if (val('s13_day')) params.day = val('s13_day');
+    await doGet(13, '/api/leadgen81/xmas/unlock.php', params, false);
+  }
+</script>
+</body>
+</html>
