@@ -388,3 +388,100 @@ GLOBAL_MASTER_FILES/29_TEMPLATE_PROMPT_SCRIPT_COPY/AI_SHARED_CONTEXT/2026-06-19_
 
 **Versione specifica Claude Code in:**
 GLOBAL_MASTER_FILES/29_TEMPLATE_PROMPT_SCRIPT_COPY/PROMPT_CLAUDE_CODE/2026-06-19_81PLUS_HUB26_PROMPT_CLAUDE_CODE_AUTOESECUZIONE_V1_PRONTO.md
+
+---
+
+## 17. ORGANIGRAMMA OPERATIVO DOMINI 81+ ECOSISTEMA (v3 — 2026-06-20)
+
+Fonte: 81PLUS_ORGANIGRAMMA_OPERATIVO_DOMINI_v3.pdf (validato da Mirco)
+Questa mappa e la base logica funzionale di tutto lo sviluppo. Aggiornare questa sezione ogni volta che emergono nuove idee o decisioni architetturali.
+
+### STRUTTURA AD ALBERO
+
+```
+81plus.online  [BRIDGE — Community, prodotti, servizi, passaggio tra HUB]
+├── HUB1: 81plus.net      [Core e Orchestrazione — App centrale, login, dashboard, wallet, membership]
+├── HUB2: sicurissimo.online  [Web2 e Compliance — Sicurezza, HACCP, privacy, audit]
+└── HUB3: sicurissimo.io  [Web3 ed Espansione]
+```
+
+### MODULI TRASVERSALI (NON domini — vivono dentro 81plus.net / wallet / dashboard / database MySQL)
+
+| Modulo | Funzione | Regola |
+|--------|----------|--------|
+| LEX81+ | Pilastro normativo e legale. Fonte unica per Sicurezza, HACCP, Privacy. Decide missioni, alert, audit, risk radar, preventivatore e risposte AI. | Non e solo archivio. E il motore che alimenta tutto il sistema normativo. |
+| SFERA81+ | Gamification e retention. Profilazione ATECO/RISCHIO, missioni, ESCALATION81+, LIFEWHEEL81+, PV+. | Trasforma profilo ATECO/RISCHIO in missioni, progressi, PV+, retention, conversione. |
+| LEADGEN81+ | Flussi automatici per trasformare prospect in member, cliente, networker, elite, franchiser e club. | 81 flow annuali, segmentazione, coda email, consensi GDPR. |
+| BOOSTER81+ | Promo admin mensile. Alza il Daily Spark da 1 PV+ a 50 PV+ una sola volta al giorno. Anti-duplicato attivo. | Max 1 attivazione al mese per utente. |
+| LOCK81+ | Modulo interno wallet/loyalty. Blocca volontariamente PV/PV+ per sbloccare benefit, accessi, badge, missioni e regole. | NON e staking. NON e investimento. NON promette rendimento. NON e un sito. |
+| PAYGATE81+ | Pagamenti, ricariche PV, membership, ordini, ricevute/fatture, log e collegamento wallet. | Collegato a 81plus.net MySQL centrale. |
+
+### HUB1 — 81plus.net (Core e Orchestrazione)
+
+**REALI:**
+- 81plus.net — Casa madre. Login, SIC-ID, dashboard, wallet, membership, AI, CRM. SSO + MySQL centrale + tutti i moduli trasversali.
+- 81plus.cloud — Archivio operativo. Storage documenti e file utente/azienda.
+- 81plus.cards — Identita visibile. Card digitale/fisica, QR, SIC-ID, badge.
+
+**IDENTITA (proposti/satelliti):** 81plus.id, sic-id.com, 81plus.pass, 81plus.badge
+
+**CORE (proposti/satelliti):** 81plus.app (PWA), 81plus.ai (TEAM AI), 81plus.global (vetrina), 81plus.systems (API/docs), 81plus.team, 81plus.pro
+
+**SUPPORTO (proposti/satelliti):** 81plus.support, 81plus.help, 81plus.crm, 81plus.dev, 81plus.status, 81plus.security
+
+**MEDIA (proposti/satelliti):** 81plus.news, 81plus.blog, 81plus.media, 81plus.press, 81plus.social, 81plus.email
+
+**BUSINESS (proposti/satelliti):** 81plus.partners, 81plus.agency, 81plus.marketing, 81plus.ads
+
+Regola HUB1: preferire sottodominio o redirect per i proposti. Non attivare dominio autonomo senza necessita reale.
+
+### HUB2 — sicurissimo.online (Web2 e Compliance)
+
+**REALI Web2:**
+- sicurissimo.online — Motore soldi reali e compliance. Sicurezza, HACCP, privacy, audit, preventivatore, corsi, documenti. Profilazione ATECO + LEX81+.
+- 81plus.it — Istituzionale italiano. Member81+, trust, presentazione ecosystem.
+- 81plus.network — Rete vendita. Networker, carriera, referral, materiali.
+- 81plus.academy — Formazione. Corsi compliance, business, crescita, leadership. Percorsi IMPARA/IMPRENDI/IMPERA.
+- 81plus.club — Status premium. Executive club, eventi, benefit, percorsi elite.
+
+**REALI Business:**
+- 81plus.shop — Prodotti fisici e kit. Wear, gadget, workwear.
+- 81plus.zone — Territorio e franchising. SICURISSIMO POINT81+, aree, province.
+- 81plus.christmas — Promo stagionale. Campagne natalizie. FLOW_XMAS_AVVENTO_365.
+
+**PROPOSTI/SATELLITI Web2:** 81plus.franchise, 81plus.member, 81plus.vip, 81plus.elite, 81plus.school, 81plus.training, 81plus.education, impara81.it, imprendi81.it, impera81.it, 81plus.events, 81plus.live, 81plus.tv, 81plus.market, 81plus.tools, 81plus.docs
+
+### HUB3 — sicurissimo.io (Web3 ed Espansione)
+
+**REALI Web3:**
+- sicurissimo.io — Ponte Web3 tecnico. HUB3, domini Web3, utility.
+- 81plus.digital — DApp e utility. SAF, wallet, utility, bridge controllato.
+- 81plus.exchange — Scambio utility futuro. DEX/liquidity. PARCHEGGIO finche non validato legalmente.
+- 81plus.world — Metaverso 81+. Distretti, showroom, eventi.
+- 81plus.org — Community/DAO/manifesto. Governance consultiva, impatto, foresta, valori.
+- 81plus.place — Casa di PIX81+. Mappa pixel, scheda azienda, QR, ref link, metaverso.
+- 81plus.store — Marketplace digitale. NFT, RWA, land, asset metaverso.
+- 81plus.credit — PARCHEGGIO. Solo informativo fino a validazione legale/fiscale.
+- 81plus.bond — PARCHEGGIO. Area assicurativa/bond. Non comunicare promessa finanziaria.
+- 81plus.space — Spazio pubblicitario. Fondere operativamente dentro 81plus.place.
+
+**PROPOSTI/PARCHEGGIO Web3:** genesys81.*, pix81.*, 81plus.wallet, 81plus.token, 81plus.nft, 81plus.dao, 81plus.land, 81plus.city, 81plus.meta, 81plus.finance, 81plus.defi, 81plus.foundation, 81plus.green, 81plus.life, 81plus.human, 81plus.trust, lock81.it/.plus
+
+Regola HUB3 parcheggio: usare solo dopo validazione tecnica, legale e fiscale. Zero promesse finanziarie.
+
+### DECISIONI OPERATIVE PERMANENTI
+
+| Tema | Decisione vincolante |
+|------|---------------------|
+| PIX81+ | Vive su 81plus.place. pix81.it/.com/.plus = solo redirect o landing satellite. |
+| LOCK81+ | NON e un sito. E un modulo interno wallet/loyalty di 81plus.net. Blocca PV/PV+ per regole, benefit, accessi, missioni, badge. Non staking, non investimento, non rendimento. |
+| Siti superflui | Quando un dominio ripete una funzione gia coperta, va trasformato in sottodominio, redirect o cartella. Pochi siti forti, non troppi siti deboli. |
+| Web3 prudente | exchange, finance, defi, bond, credit restano parcheggiati o informativi finche non validati con legale/commercialista. |
+| LEX81+ | E il pilastro normativo. Non solo archivio. Decide missioni, alert, audit, risk radar, preventivatore e risposte AI su sicurezza, HACCP e privacy. |
+| SFERA81+ | E il motore che trasforma profilo ATECO/RISCHIO in missioni, progressi, PV+, retention e conversione. |
+| Registrazione | Sempre su HUB1 (81plus.net). Mai su HUB2 o altri hub. SIC-ID generato al momento della registrazione in HUB1. |
+| Semantic Guard | Vietato: investimento, rendimento, ROI, APY, staking, SafePoint. Usare: utility, accesso, benefit, SICURISSIMO POINT81+. |
+
+### REGOLA DI AGGIORNAMENTO
+
+Ogni volta che durante lo sviluppo emerge una nuova decisione architettonica, un nuovo dominio validato, o una modifica alla struttura dei moduli, Claude aggiorna questa sezione 17 nel CLAUDE.md e committa immediatamente.
