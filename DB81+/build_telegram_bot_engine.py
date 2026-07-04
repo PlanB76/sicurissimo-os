@@ -3,8 +3,12 @@
 """
 BOT AUTOMATION ENGINE 81+ — Motore parametrico 24 azioni/giorno
 Crea: telegram_action_taxonomy (24 categorie), telegram_chat_profile (fill-rate per chat),
-telegram_value_ladder (scala valore da LISTINO81+ ufficiale), telegram_gating_rules,
+telegram_value_ladder (scala valore da LISTINO81+ ufficiale), telegram_bot_ruoli (4 bot
+verificati via getMe 2026-07-04), telegram_gating_rules (regola precisa per livello,
+confermata da Mirco 2026-07-04: baseline pubblica mai persa, ogni gruppo status richiede
+un AND indipendente di requisiti, la decadenza di uno rimuove solo dal gruppo corrispondente),
 telegram_accessi_log (schema vuoto, si popola runtime).
+NOTA: nessun token/invite link privato vive qui. Solo in telegram_config.local.json (gitignored).
 """
 import os
 import sqlite3
@@ -75,10 +79,50 @@ VALUE_LADDER = [
     (18, "VERTICE",               "Percorso Socio Holding (valutazione diretta)",0,   "PRESIDENT81+"),
 ]
 
+BOT_RUOLI = [
+    ("@sicurissimo81_bot", "sicurissimo81+",
+     "Orchestratore principale: gating status/membership/SDP, welcome, palinsesto, funnel/conversione", "VERIFICATO_LIVE"),
+    ("@SicurissimoAI_bot", "SicurissimoAI_bot",
+     "CORTEX81+ AI conversazionale: FAQ, Q&A libere, spiegazioni normative on-demand", "VERIFICATO_LIVE"),
+    ("@ottantuno_bot", "81+ Assistenza",
+     "Assistenza/Problem solving: support desk, escalation umana, gestione dubbi operativi", "VERIFICATO_LIVE"),
+    ("@sicurissimonewbot", "sicurissimoonline",
+     "Moderazione + Gamification: anti-spam, Semantic Guard, missioni, quiz, badge, leaderboard", "VERIFICATO_LIVE"),
+]
+
+# Regola confermata da Mirco 2026-07-04: la baseline (canali pubblici + 81+ ECOSYSTEM) non si
+# perde MAI. Ogni gruppo status ha un proprio AND di requisiti indipendente dagli altri:
+# la decadenza di un requisito rimuove SOLO dal gruppo corrispondente, mai dagli altri gia attivi.
 GATING_RULES = [
-    ("PUBBLICO",      "Nessuna verifica", "Sempre aperto"),
-    ("MEMBERSHIP",    "user81.membership_tier + membership_scadenza", "Tier attivo AND scadenza > oggi"),
-    ("STATUS_RETE",   "user81.network_rank + sdk_attivo + sdp_scadenza + membership_scadenza", "SDK acquistato AND SDP Pass rank attivo AND Membership attiva"),
+    ("USER81+ (baseline)", "Nessuno - solo canali pubblici + 81+ ECOSYSTEM",
+     "Nessuno - SIC-ID sufficiente", "N/A - baseline sempre garantita, mai revocata"),
+    ("MEMBER81+ Basic+", "81+ BASIC",
+     "Membership Basic+ attiva (ricorrente)",
+     "Rimosso da 81+ BASIC, torna a baseline (canali pubblici + Ecosystem)"),
+    ("MEMBER81+ Pro+", "81+PRO",
+     "Membership Pro+ attiva (ricorrente)",
+     "Rimosso da 81+PRO, torna a baseline"),
+    ("MEMBER81+ Elite+", "81+ ELITE",
+     "Membership Elite+ attiva (ricorrente)",
+     "Rimosso da 81+ ELITE, torna a baseline"),
+    ("NETWORKER81+", "81+ NETWORK",
+     "Membership attiva (Basic/Pro/Elite, qualunque tier) AND SDK acquistato AND SDP Pass del rank corrente attivo",
+     "Rimosso da 81+ NETWORK. Se la membership resta attiva, mantiene comunque il gruppo membership corrispondente"),
+    ("ELITE81+ (status rete)", "81+ ELITE GROUP",
+     "Membership attiva AND rank 6 SUMMIT raggiunto AND SDP Royal Pass attivo",
+     "Rimosso da 81+ ELITE GROUP. Mantiene 81+ NETWORK e gruppo membership se ancora attivi"),
+    ("VIP81+", "81+ VIP",
+     "Membership attiva AND rank 3 interno Elite raggiunto AND SDP Diamond Pass attivo",
+     "Rimosso da 81+ VIP. Mantiene i gruppi di livello inferiore se ancora attivi"),
+    ("FRANCHISEE81+", "81+ FRANCHISING",
+     "Membership attiva AND contratto POINT81+ attivo (canone pagato)",
+     "Rimosso da 81+ FRANCHISING. Mantiene gli altri gruppi se ancora attivi"),
+    ("CLUB81+", "81+ CLUB",
+     "Membership attiva AND canone Club attivo (Palladium/Iridium/Rhodium)",
+     "Rimosso da 81+ CLUB. Mantiene gli altri gruppi se ancora attivi"),
+    ("PRESIDENT81+", "Topic dentro 81+ CLUB",
+     "Invito diretto e manuale di Mirco - MAI automatico",
+     "Solo Mirco puo rimuovere l'accesso, mai automatico"),
 ]
 
 
@@ -105,11 +149,18 @@ def main():
         stadio_riferimento VARCHAR(30) NOT NULL)""")
     cur.executemany("INSERT INTO telegram_value_ladder VALUES (?,?,?,?,?)", VALUE_LADDER)
 
+    cur.execute("DROP TABLE IF EXISTS telegram_bot_ruoli")
+    cur.execute("""CREATE TABLE telegram_bot_ruoli (
+        username VARCHAR(30) PRIMARY KEY, nome_verificato VARCHAR(60) NOT NULL,
+        ruolo VARCHAR(300) NOT NULL, stato VARCHAR(20) NOT NULL)""")
+    cur.executemany("INSERT INTO telegram_bot_ruoli VALUES (?,?,?,?)", BOT_RUOLI)
+
     cur.execute("DROP TABLE IF EXISTS telegram_gating_rules")
     cur.execute("""CREATE TABLE telegram_gating_rules (
-        asse VARCHAR(20) PRIMARY KEY, campo_verifica VARCHAR(200) NOT NULL,
-        condizione VARCHAR(200) NOT NULL)""")
-    cur.executemany("INSERT INTO telegram_gating_rules VALUES (?,?,?)", GATING_RULES)
+        id INTEGER PRIMARY KEY AUTOINCREMENT, livello VARCHAR(30) NOT NULL,
+        gruppo_dedicato VARCHAR(30) NOT NULL, requisiti_and VARCHAR(250) NOT NULL,
+        su_decadenza VARCHAR(250) NOT NULL)""")
+    cur.executemany("INSERT INTO telegram_gating_rules (livello, gruppo_dedicato, requisiti_and, su_decadenza) VALUES (?,?,?,?)", GATING_RULES)
 
     cur.execute("DROP TABLE IF EXISTS telegram_accessi_log")
     cur.execute("""CREATE TABLE telegram_accessi_log (
@@ -118,7 +169,7 @@ def main():
 
     con.commit()
     for t in ("telegram_action_taxonomy", "telegram_chat_profile", "telegram_value_ladder",
-              "telegram_gating_rules", "telegram_accessi_log"):
+              "telegram_bot_ruoli", "telegram_gating_rules", "telegram_accessi_log"):
         print(f"  {t}: {cur.execute('SELECT COUNT(*) FROM ' + t).fetchone()[0]} righe")
     print("  integrity:", cur.execute("PRAGMA integrity_check").fetchone()[0])
     con.close()

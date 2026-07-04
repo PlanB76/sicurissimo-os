@@ -65,13 +65,8 @@ INFRA = [
      "Topic riservato PRESIDENT81+ da creare dentro questo gruppo"),
 ]
 
-BOT_RUOLI = [
-    ("@sicurissimo81_bot", "Bot orchestratore principale: gating status/membership/SDP, welcome, gamification, comandi utente, pubblicazione palinsesto, funnel/conversione", "DA_ATTIVARE"),
-    ("@SicurissimoAI_bot", "Bot AI/CORTEX81+: motore conversazionale, FAQ, assistenza, problem solving, Q&A in tempo reale", "DA_VERIFICARE"),
-    ("@sicurissimonewbot", "Bot moderazione/community: anti-spam, controllo regole, escalation, gestione conflitti, ambassador", "DA_VERIFICARE"),
-    ("@ottantuno_bot", "Bot gamification/engagement: missioni, quiz, sondaggi, badge, leaderboard, intrattenimento segmentato per status", "DA_VERIFICARE"),
-]
-
+# NOTA: i ruoli bot verificati (getMe) e la tabella telegram_gating_rules dettagliata
+# vivono in build_telegram_bot_engine.py, che va eseguito DOPO questo script.
 
 def main():
     con = sqlite3.connect(DB)
@@ -94,16 +89,8 @@ def main():
         (nome_reale, tipo, iscritti_rilevati, stadio_pipeline, asse, bio_confermata, stato, gating_requisito, note)
         VALUES (?,?,?,?,?,?,?,?,?)""", INFRA)
 
-    cur.execute("DROP TABLE IF EXISTS telegram_bot_ruoli")
-    cur.execute("""CREATE TABLE telegram_bot_ruoli (
-        username VARCHAR(30) PRIMARY KEY,
-        ruolo VARCHAR(300) NOT NULL,
-        stato VARCHAR(20) NOT NULL
-    )""")
-    cur.executemany("INSERT INTO telegram_bot_ruoli VALUES (?,?,?)", BOT_RUOLI)
-
     con.commit()
-    for t in ("telegram_infrastruttura", "telegram_bot_ruoli"):
+    for t in ("telegram_infrastruttura",):
         print(f"  {t}: {cur.execute('SELECT COUNT(*) FROM ' + t).fetchone()[0]} righe")
     print("  integrity:", cur.execute("PRAGMA integrity_check").fetchone()[0])
     con.close()
