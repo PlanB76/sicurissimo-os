@@ -104,14 +104,14 @@ STATUS_LEVELS = [
 ]
 
 GRUPPI = [
-    (0, "SICURISSIMO TG Public",        "Tutti",                             "Attirare con news, video, sondaggi"),
-    (1, "USER81+ Start",                "Curiosi, microimprese, lavoratori", "Checklist, quiz, mini-guide gratuite"),
-    (2, "MEMBER81+ Club",               "Aziende e professionisti caldi",    "Scadenze, corsi, documenti, audit"),
-    (3, "NETWORKER81+ Lab",             "Segnalatori",                       "Referral etico, script, lead"),
-    (4, "ELITE81+ Business",            "Consulenti, formatori, RSPP",       "Strategie, pacchetti, vendita consulenziale"),
-    (5, "VIP81+ Advisory",              "Clienti premium",                   "Accesso prioritario, webinar, casi studio"),
-    (6, "FRANCHISER81+ Point",          "Chi apre punto 81+",                "Modello operativo, territorio"),
-    (7, "GENESYS81+ / SICURISSIMO CLUB","Vertice",                           "Visione, partnership, ecosistema"),
+    (0, "SICURISSIMO TG 81+",  "CANALE PUBBLICO — tutti",                        "News, palinsesto, quiz, ingresso funnel"),
+    (1, "NETWORKER81+",        "SDK81+ + Pass PRO+ (rank 1-8)",                  "Network marketing etico: script, lead, rank"),
+    (2, "MEMBER81+ BASIC",     "Membership Basic+ attiva",                       "Scadenze, corsi base, documenti, metodo"),
+    (3, "MEMBER81+ PRO",       "Membership Pro+ attiva",                         "Audit, strumenti avanzati, priorita"),
+    (4, "MEMBER81+ ELITE",     "Membership Elite+ attiva",                       "Advisory, casi studio, accesso prioritario"),
+    (5, "MEMBER81+ VIP",       "Clienti VIP / multi-sede",                       "Regia unica, servizi premium, eventi"),
+    (6, "FRANCHISEE81+",       "Titolari POINT81+ / franchising attivo",         "Territorio, modello operativo, presidio"),
+    (7, "CLUB81+",             "SDK ROYAL + Pass ROYAL+ / invito diretto",       "Vertice: visione, partnership, ecosistema"),
 ]
 
 
