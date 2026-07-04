@@ -1,0 +1,66 @@
+# 81+ GLOBAL UNIVERSAL — DB UNICO SQLite
+
+Database unico portabile per tutto l'ecosistema 81+. Gira su qualsiasi host senza server MySQL.
+Consolida in un solo file tutti gli schemi SQL sparsi nel progetto (HUB1 core, LEX81+, LEADGEN81+, SFERA81+, auth, dashboard, academy, gamification, pagamenti, web3).
+
+## File
+
+| File | Cosa e |
+|------|--------|
+| `81PLUS_GLOBAL_UNIVERSAL.db` | Il database SQLite pronto all'uso (209 tabelle, 4 view, 372 indici) |
+| `81PLUS_GLOBAL_UNIVERSAL.schema.sql` | Schema consolidato leggibile (rigenerabile) |
+| `81PLUS_GLOBAL_UNIVERSAL.report.txt` | Report build: tabelle, righe seed, origine, statement saltati |
+| `build_sqlite_universal.py` | Script che rigenera il DB dai sorgenti MySQL |
+
+## Contenuto verificato
+
+- 209 tabelle, integrity_check = ok
+- 4179 lead reali importati (tabella `leads`, SIC-ID-X-00000001 → 00004179)
+- LEX81+ completo: 24 norme, 12 obblighi, 9 sanzioni, 10 categorie, 28 mappe ATECO, 18 corsi, 12 documenti, 10 servizi
+- LEADGEN81+: 25 flow, 8 step email, 10 segmenti
+- SFERA81+: 22 missioni, 8 aree LIFEWHEEL, 5 livelli ESCALATION
+- system_config, knowledge_base, dashboard, x81, membership seed inclusi
+
+## Uso
+
+### Da riga di comando (se hai sqlite3)
+```
+sqlite3 81PLUS_GLOBAL_UNIVERSAL.db "SELECT sic_id, nome FROM leads LIMIT 5;"
+```
+
+### Da Python
+```python
+import sqlite3
+con = sqlite3.connect("81PLUS_GLOBAL_UNIVERSAL.db")
+for r in con.execute("SELECT sic_id, nome, stato FROM leads LIMIT 10"):
+    print(r)
+```
+
+### Da PHP (host senza MySQL)
+```php
+$db = new PDO('sqlite:81PLUS_GLOBAL_UNIVERSAL.db');
+$stmt = $db->query("SELECT nome FROM lex81_norms LIMIT 5");
+```
+
+## Rigenerare il DB
+
+```
+python3 build_sqlite_universal.py
+```
+
+Lo script legge i sorgenti MySQL nell'ordine di priorita definito in `SOURCES`, deduplica le tabelle per nome (vince la prima definizione) e converte la sintassi MySQL in SQLite.
+
+## Note tecniche di conversione
+
+- `AUTO_INCREMENT` → `INTEGER PRIMARY KEY AUTOINCREMENT`
+- `ENUM(...)` / `SET(...)` → `TEXT`
+- `UNSIGNED`, `ON UPDATE CURRENT_TIMESTAMP`, opzioni `ENGINE`/`CHARSET`/`COMMENT` rimossi
+- `KEY` / `INDEX` / `UNIQUE KEY` inline → `CREATE INDEX` separati
+- `NOW()` → `CURRENT_TIMESTAMP`
+- I TRIGGER MySQL sono logica applicativa e vengono gestiti a livello codice, non nel DB portabile
+- Le FOREIGN KEY sono mantenute ma l'enforcement e disattivato in build (PRAGMA foreign_keys=OFF)
+
+## Relazione con la produzione
+
+Il DB MySQL `u173050672_81plusglobal` su Hostinger resta la fonte di verita in produzione (FASE ZERO81+, regola 1).
+Questo SQLite universale e il mirror portabile per sviluppo, test locale, backup a file singolo e host senza MySQL.
