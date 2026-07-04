@@ -1,6 +1,17 @@
 # PROGRAMMA EDITORIALE — GRUPPI TELEGRAM MEMBER81+ (BASIC · PRO · ELITE)
 ## Documento standalone per i 3 gruppi privati a pagamento ricorrente dell'ecosistema 81+
 
+> ## ⚠️ ERRATA 2026-07-04 (dati reali da 81plus.net/membership.html)
+> I prezzi citati in questo documento (49/99/149€) sono **superati**. I prezzi reali verificati sul sito:
+> **Basic+ 69€/mese · Pro+ 139€/mese · Elite+ 209€/mese** (scarsita reale: posti limitati a 100 per tier,
+> es. Basic+ 78/100 gia attivati). Esistono inoltre **altri 3 livelli membership sopra Elite+** non coperti
+> in questo documento: **Vip+ 349€/mese, Royal+ 559€/mese, GENESYS81+ 1399€/mese (non ancora disponibile)**.
+> Ogni tier include tutto il precedente + benefit aggiuntivi + badge NFT progressivo
+> (Bronze+ → Silver+ → Gold+ → Platinum+ → Diamond+ → Special Rare+).
+> Dati completi: tabella DB `membership_tiers81` e documento
+> `2026-07-04_81PLUS_HUB02_MEMBERSHIP_TIERS_REALI_V1_PRONTO.md`.
+> La logica editoriale/gamification di questo documento resta valida: applicala aggiornando i numeri.
+
 **Data:** 2026-07-04 | **Stato:** PRONTO | **HUB:** HUB2 (sicurissimo.online) | **Modulo:** SOCIAL GROWTH81+ / COMMUNITY81+
 **Autore:** Claude (Agente di Esecuzione) | **Ambito:** SOLO i 3 gruppi Membership (Basic/Pro/Elite). Non tratta i gruppi status di rete (Networker, Elite81+ rete, VIP, Franchising, Club), coperti da altri autori del programma.
 **Percorso locale Mirco:** `C:\81PLUS_GLOBAL_MASTER\81plus.net\0-81PLUS.NET\MARKETING81+\SOCIAL_GROWTH81+\2026-07-04_81PLUS_HUB02_PROGRAMMA_EDITORIALE_MEMBER81_GRUPPI_BASIC_PRO_ELITE_V1_PRONTO.md`
