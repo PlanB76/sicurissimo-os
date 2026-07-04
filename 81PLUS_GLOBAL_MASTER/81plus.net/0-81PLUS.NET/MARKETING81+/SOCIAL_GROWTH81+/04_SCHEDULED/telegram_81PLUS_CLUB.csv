@@ -1,0 +1,13 @@
+ora;categoria;ruolo_slot;testo;motore_ai;stato
+00:00;RECAP;Buonanotte community - recap soft, mai commerciale;Buonanotte community. Oggi riflettiamo sulla sicurezza sul lavoro in ottica D.Lgs 81/08. La cultura della prevenzione è un valore essenziale. Ogni passo verso la sicurezza è un passo verso un ambiente di lavoro migliore. Ricorda l'importanza di rimanere aggiornati. Chi desidera esplorare il nostro Audit Express gratuito può farlo senza impegno. Rimanete sempre consapevoli e coinvolti, il vostro benessere conta.;OPENAI;BOZZA
+01:00;ENTERTAINMENT;Contenuto leggero notturno per fusi orari/insonni;La sicurezza D.Lgs 81/08 non è solo un obbligo, è un modo per vivere meglio. Ogni passo verso un ambiente sicuro è un passo verso il benessere. Ricorda, essere parte dell'81+ CLUB significa appartenere a qualcosa di unico. Rinnova la tua consapevolezza, esplora il nostro Audit Express gratuito. Condividi esperienze, costruisci insieme. Ti aspetto per un dialogo esclusivo.;OPENAI;BOZZA
+04:00;DAO_UPDATE;Slot di servizio, solo se contenuto reale;Oggi riflettiamo sull’importanza della sicurezza nei luoghi di lavoro. Il D.Lgs 81/08 non è solo una norma, ma uno stile di vita che protegge il tuo ambiente. Investire nella sicurezza significa prendersi cura di chi lavora con noi. Scopri l'Audit Express gratuito per avere un'analisi accurata della tua situazione. La preparazione è un’arte, non un compito. Sii parte di questo percorso di crescita e consapevolezza. Condividi la tua esperienza e arricchisci la nostra comunità.;OPENAI;REVISIONE_SEMANTIC_GUARD
+22:00;EVENT_REMINDER;Promemoria eventi/webinar/live prossimi;"Carissimi membri di 81+ CLUB, 
+
+Vi ricordiamo il prossimo incontro dedicato alla sicurezza secondo il D.Lgs 81/08. Sarà un'opportunità esclusiva per approfondire tematiche chiave e condividere esperienze. 
+
+Preparatevi a vivere un momento di crescita e confronto. 
+
+Segnate in agenda: data e ora verranno comunicati presto. La sicurezza è un impegno collettivo. 
+
+Insieme, costruiamo un ambiente migliore.";OPENAI;BOZZA
