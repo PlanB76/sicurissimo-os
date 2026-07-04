@@ -481,6 +481,8 @@ Regola HUB3 parcheggio: usare solo dopo validazione tecnica, legale e fiscale. Z
 | SFERA81+ | E il motore che trasforma profilo ATECO/RISCHIO in missioni, progressi, PV+, retention e conversione. |
 | Registrazione | Sempre su HUB1 (81plus.net). Mai su HUB2 o altri hub. SIC-ID generato al momento della registrazione in HUB1. |
 | Semantic Guard | Vietato: investimento, rendimento, ROI, APY, staking, SafePoint. Usare: utility, accesso, benefit, SICURISSIMO POINT81+. |
+| SOCIAL GROWTH81+ | Macchina editoriale/funnel social (2026-07-04). Vive in HUB2 come evoluzione Skill 30+40. Cartella: 81PLUS_GLOBAL_MASTER/MARKETING81+/SOCIAL_GROWTH81+. Fonte CTA universale: LISTINO81+. Palinsesto 48 slot x 6 social (YT, TG, WA, FB, IG, TT). Gerarchia gruppi = piramide status (USER->MEMBER->NETWORKER->ELITE->VIP->FRANCHISER->GENESYS->CLUB). Tabelle DB: socialgrowth81_palinsesto, socialgrowth81_cta_bank, socialgrowth81_status_levels, socialgrowth81_gruppi. Contatti da user81 (LISTA1 email+WA, POOL email). Regia: Claude revisiona/pubblica, ChatGPT genera, n8n distribuisce. WhatsApp/email solo double opt-in. PUBLISH e SEND_EMAIL restano HUMAN_APPROVAL. |
+| DB UNICO | Dal 2026-07-04 il DB SQLite universale (81PLUS_GLOBAL_UNIVERSAL.db) vive in 81PLUS_GLOBAL_MASTER/81plus.net/0-81PLUS.NET/ insieme alla lista unica contatti USER81+ in MD. I 53 file .sql sorgente sono stati consolidati e rimossi. |
 
 ### REGOLA DI AGGIORNAMENTO
 
