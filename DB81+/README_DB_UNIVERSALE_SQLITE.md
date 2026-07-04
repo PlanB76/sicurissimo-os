@@ -1,5 +1,10 @@
 # 81+ GLOBAL UNIVERSAL — DB UNICO SQLite
 
+**POSIZIONE ATTUALE DEL DB (dal 2026-07-04):**
+`81PLUS_GLOBAL_MASTER/81plus.net/0-81PLUS.NET/81PLUS_GLOBAL_UNIVERSAL.db`
+Percorso locale Mirco: `C:\81PLUS_GLOBAL_MASTER\81plus.net\0-81PLUS.NET\`
+Insieme al DB vive la lista unica contatti USER81+ in formato MD.
+
 Database unico portabile per tutto l'ecosistema 81+. Gira su qualsiasi host senza server MySQL.
 Consolida in un solo file tutti gli schemi SQL sparsi nel progetto (HUB1 core, LEX81+, LEADGEN81+, SFERA81+, auth, dashboard, academy, gamification, pagamenti, web3).
 
