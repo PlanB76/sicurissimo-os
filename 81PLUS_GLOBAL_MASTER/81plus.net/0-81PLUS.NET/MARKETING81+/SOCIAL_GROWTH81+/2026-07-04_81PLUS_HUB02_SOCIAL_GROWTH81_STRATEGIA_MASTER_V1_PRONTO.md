@@ -2,7 +2,7 @@
 ## Macchina editoriale e funnel social dell'ecosistema 81+
 
 **Data:** 2026-07-04 | **Stato:** ATTIVO | **HUB:** HUB2 (sicurissimo.online — motore contenuti)
-**Percorso locale Mirco:** `C:\81PLUS_GLOBAL_MASTER\MARKETING81+\SOCIAL_GROWTH81+\`
+**Percorso locale Mirco:** `C:\81PLUS_GLOBAL_MASTER\81plus.net\0-81PLUS.NET\MARKETING81+\SOCIAL_GROWTH81+\`
 
 ---
 
@@ -15,7 +15,7 @@
 | Fonte CTA universale | LISTINO81+ (81plus.net) — ogni azione punta a una voce del listino |
 | Fonte contatti | Tabella `user81` del DB unico: LISTA1 (email+WA) per campagne, POOL per nurturing email |
 | DB | Tabelle `socialgrowth81_*` nel DB unico 81PLUS_GLOBAL_UNIVERSAL.db |
-| Regia | Claude = regista operativo (revisione, compliance, pubblicazione). ChatGPT = motore creativo. n8n = distribuzione |
+| Regia | Claude = regista operativo (revisione, compliance, pubblicazione). ChatGPT = motore creativo. GitHub Actions = distribuzione (niente n8n) |
 | Guardrail | Semantic Guard FASE ZERO81+: PV/PV+ = utility, mai denaro. WhatsApp/email solo double opt-in. HUMAN_APPROVAL su PUBLISH e SEND_EMAIL |
 
 ---
@@ -235,8 +235,8 @@ che ti dice cosa manca, cosa fare prima e quale percorso scegliere."*
 ```
 HUB: HUB2 / MARKETING81+ / SOCIAL GROWTH81+
 FILE: 2026-07-04_81PLUS_HUB02_SOCIAL_GROWTH81_STRATEGIA_MASTER_V1_PRONTO.md
-REPO: 81PLUS_GLOBAL_MASTER/MARKETING81+/SOCIAL_GROWTH81+/
-LOCALE: C:\81PLUS_GLOBAL_MASTER\MARKETING81+\SOCIAL_GROWTH81+\
+REPO: 81PLUS_GLOBAL_MASTER/81plus.net/0-81PLUS.NET/MARKETING81+/SOCIAL_GROWTH81+/
+LOCALE: C:\81PLUS_GLOBAL_MASTER\81plus.net\0-81PLUS.NET\MARKETING81+\SOCIAL_GROWTH81+\
 DB: tabelle socialgrowth81_palinsesto, socialgrowth81_cta_bank, socialgrowth81_status_levels, socialgrowth81_gruppi
 STATO: ATTIVO
 AZIONE UMANA: creare fisicamente canale madre e gruppi privati sulle piattaforme, approvare pubblicazioni (HUMAN_APPROVAL)

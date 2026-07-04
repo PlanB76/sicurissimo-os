@@ -228,4 +228,4 @@ Cerca Franchising81+ su 81plus.net.
 - Creare fisicamente canale madre e gruppi status sulle piattaforme
 - Approvare i contenuti pubblici principali prima della pubblicazione
 - Caricare i prompt immagine/video nei tool esterni (Gemini/Veo/Canva/CapCut)
-- Collegare n8n per la distribuzione automatica
+- La distribuzione automatica gira su GitHub Actions (workflow socialgrowth81-*)

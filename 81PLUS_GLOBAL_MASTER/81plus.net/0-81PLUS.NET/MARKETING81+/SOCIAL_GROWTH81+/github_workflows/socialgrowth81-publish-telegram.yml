@@ -1,0 +1,41 @@
+# SOCIAL GROWTH81+ — Pubblicazione Telegram
+# SOLO MANUALE (workflow_dispatch): il lancio manuale di Mirco E' la HUMAN_APPROVAL.
+# Pubblica solo le righe di 04_SCHEDULED/telegram.csv con stato=APPROVATO e testo compilato.
+# Secrets richiesti (Settings -> Secrets and variables -> Actions):
+#   TELEGRAM_BOT_TOKEN  (da @BotFather)
+#   TELEGRAM_CHAT_ID    (es. @sicurissimo oppure -100xxxxxxxxxx)
+name: socialgrowth81-publish-telegram
+
+on:
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: claude/create-claude-md-docs-JWjKP
+
+      - name: Pubblica su Telegram (solo APPROVATO)
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        run: |
+          python3 "81PLUS_GLOBAL_MASTER/81plus.net/0-81PLUS.NET/MARKETING81+/SOCIAL_GROWTH81+/scripts/publish_telegram.py"
+
+      - name: Commit log e stati aggiornati
+        run: |
+          git config user.name "socialgrowth81-bot"
+          git config user.email "bot@81plus.net"
+          git add "81PLUS_GLOBAL_MASTER/81plus.net/0-81PLUS.NET/MARKETING81+/SOCIAL_GROWTH81+/"
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da committare."
+          else
+            git commit -m "SOCIAL GROWTH81+: log pubblicazione Telegram $(date -u +%F)"
+            git push origin claude/create-claude-md-docs-JWjKP
+          fi

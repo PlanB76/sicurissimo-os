@@ -1,0 +1,38 @@
+# SOCIAL GROWTH81+ — Generazione pacchetto giornaliero
+# Gira ogni mattina alle 04:30 UTC (06:30 Roma in estate).
+# Genera lo skeleton del giorno dal palinsesto nel DB unico e la coda Telegram in BOZZA.
+# NON pubblica nulla: la pubblicazione e un workflow separato e MANUALE (HUMAN_APPROVAL).
+name: socialgrowth81-daily
+
+on:
+  schedule:
+    - cron: "30 4 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: claude/create-claude-md-docs-JWjKP
+
+      - name: Genera pacchetto del giorno
+        run: |
+          python3 "81PLUS_GLOBAL_MASTER/81plus.net/0-81PLUS.NET/MARKETING81+/SOCIAL_GROWTH81+/scripts/generate_daily.py"
+
+      - name: Commit e push
+        run: |
+          git config user.name "socialgrowth81-bot"
+          git config user.email "bot@81plus.net"
+          git add "81PLUS_GLOBAL_MASTER/81plus.net/0-81PLUS.NET/MARKETING81+/SOCIAL_GROWTH81+/"
+          if git diff --cached --quiet; then
+            echo "Nessuna modifica da committare."
+          else
+            git commit -m "SOCIAL GROWTH81+: pacchetto giornaliero auto $(date -u +%F)"
+            git push origin claude/create-claude-md-docs-JWjKP
+          fi
