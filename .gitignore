@@ -20,3 +20,6 @@ live/.env.production
 live/uploads/*
 !live/uploads/.gitkeep
 live/installer.php
+
+# Telegram — invite link privati e token: mai nel repo
+**/telegram_config.local.json

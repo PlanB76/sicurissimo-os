@@ -1,0 +1,84 @@
+{
+  "_comment": "Template. Copia in telegram_config.local.json (gitignored) e compila con i link/token reali. Non committare mai il file .local.json.",
+  "bot_principale": "@sicurissimo81_bot",
+  "bot_ruoli": {
+    "@sicurissimo81_bot": "Bot Sicurissimo81Bot — orchestratore principale: gating, welcome, gamification, comandi utente",
+    "@ottantuno_bot": "Bot legacy/secondario — da verificare se attivo, valutare merge nel principale",
+    "@SicurissimoAI_bot": "Bot AI/CORTEX81+ — risposte automatiche, FAQ, chiedi-all-AI",
+    "@sicurissimonewbot": "Bot in test/sviluppo — verificare stato prima del lancio"
+  },
+  "canali_pubblici": {
+    "sicurissimo_online": {
+      "nome": "Sicurissimo.Online",
+      "url": "https://t.me/sicurissimoonline",
+      "iscritti_rilevati": 188,
+      "ruolo_pipeline": "CANALE MADRE — usare come principale, piu iscritti"
+    },
+    "81plus_sicurezza_lavoro": {
+      "nome": "81+ Sicurezza sul Lavoro",
+      "url": "https://t.me/ottantunoplus",
+      "iscritti_rilevati": 41,
+      "ruolo_pipeline": "CANALE SECONDARIO — valutare merge/redirect verso Sicurissimo.Online per non disperdere audience"
+    }
+  },
+  "gruppo_pubblico_ingresso": {
+    "nome": "81+ ECOSYSTEM",
+    "url": "https://t.me/sicurissimi",
+    "iscritti_rilevati": 170,
+    "ruolo_pipeline": "GRUPPO PUBBLICO — punto di ingresso community, FOLLOWER/USER"
+  },
+  "gruppi_status_privati": {
+    "networker": {
+      "nome": "81+ NETWORK",
+      "invite_link": "INCOLLA_QUI_IL_LINK_REALE",
+      "iscritti_rilevati": 2,
+      "stadio_pipeline": "NETWORKER81+",
+      "note": "Da popolare — attivare modalita Forum con 8 topic IGNITE->CROWN"
+    },
+    "member_basic": {
+      "nome": "81+ BASIC",
+      "invite_link": "INCOLLA_QUI_IL_LINK_REALE",
+      "iscritti_rilevati": 5,
+      "stadio_pipeline": "MEMBER81+ BASIC"
+    },
+    "member_pro": {
+      "nome": "81+PRO",
+      "invite_link": "INCOLLA_QUI_IL_LINK_REALE",
+      "iscritti_rilevati": 5,
+      "stadio_pipeline": "MEMBER81+ PRO"
+    },
+    "elite": {
+      "nome": "81+ ELITE",
+      "invite_link": "INCOLLA_QUI_IL_LINK_REALE",
+      "iscritti_rilevati": 5,
+      "stadio_pipeline": "ELITE81+",
+      "note": "Bio conferma badge oro + HUB operativi + automazione - coerente con Scudo Elite (oro) del Brand System"
+    },
+    "vip": {
+      "nome": "81+ VIP",
+      "invite_link": "INCOLLA_QUI_IL_LINK_REALE",
+      "iscritti_rilevati": 5,
+      "stadio_pipeline": "VIP81+",
+      "note": "Bio conferma diamante nero/ossidiana - coerente con SDK Diamond. VIP e status separato da Elite, confermato da Mirco"
+    },
+    "club": {
+      "nome": "81+ CLUB",
+      "invite_link": "INCOLLA_QUI_IL_LINK_REALE",
+      "iscritti_rilevati": 5,
+      "stadio_pipeline": "CLUB81+",
+      "note": "Bio conferma lifestyle/olimpo/networking di prestigio - aggiungere qui topic riservato PRESIDENT81+"
+    },
+    "franchising": {
+      "nome": "81+ FRANCHISING",
+      "invite_link": "INCOLLA_QUI_IL_LINK_REALE",
+      "iscritti_rilevati": 5,
+      "stadio_pipeline": "FRANCHISEE81+",
+      "note": "Bio conferma vertice/comando assoluto/impero"
+    }
+  },
+  "gruppi_da_creare": [
+    "MEMBER81+ ELITE (se si vuole separare da Basic/Pro come da vecchia proposta - da riconciliare con struttura reale gia esistente)",
+    "STAFF81+ REGIA (interno, solo Mirco + bot, log e approvazioni)",
+    "ACADEMY81+ LIVE (trasversale, opzionale)"
+  ]
+}
