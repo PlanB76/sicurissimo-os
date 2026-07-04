@@ -42,13 +42,15 @@ $db = new PDO('sqlite:81PLUS_GLOBAL_UNIVERSAL.db');
 $stmt = $db->query("SELECT nome FROM lex81_norms LIMIT 5");
 ```
 
-## Rigenerare il DB
+## Fonte unica
 
-```
-python3 build_sqlite_universal.py
-```
+Dal 2026-07-04 questo `.db` e la FONTE UNICA del database 81+ nel repo.
+Tutti i 53 file `.sql` sparsi (schemi MySQL, patch, delta, install) sono stati consolidati qui dentro e rimossi.
+Il file `.db` contiene sia lo schema sia i dati (4179 lead + tutti i seed). La cronologia dei sorgenti resta recuperabile da git.
 
-Lo script legge i sorgenti MySQL nell'ordine di priorita definito in `SOURCES`, deduplica le tabelle per nome (vince la prima definizione) e converte la sintassi MySQL in SQLite.
+`build_sqlite_universal.py` e conservato come documentazione della provenienza (mostra come e stato generato e da quali fonti). I percorsi in `SOURCES` puntano a file ora rimossi, quindi lo script non rigenera piu dai sorgenti: il `.db` e gia il risultato finale.
+
+Per ispezionare o modificare lo schema, usa `81PLUS_GLOBAL_UNIVERSAL.schema.sql` (DDL leggibile) oppure opera direttamente sul `.db`.
 
 ## Note tecniche di conversione
 

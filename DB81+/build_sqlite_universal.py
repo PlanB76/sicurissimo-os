@@ -6,6 +6,12 @@
 Converte tutti gli schemi MySQL sparsi nel progetto in un unico
 database SQLite portabile, che gira su qualsiasi host senza server MySQL.
 
+NOTA (2026-07-04): i 53 file .sql sorgente elencati in SOURCES sono stati
+consolidati nel DB unico e RIMOSSI dal repo. Questo script resta come
+documentazione della provenienza del database. Il risultato finale e gia
+il file 81PLUS_GLOBAL_UNIVERSAL.db (schema + dati). Per rieseguirlo servono
+i sorgenti originali, recuperabili dalla cronologia git.
+
 Uso:
     python3 build_sqlite_universal.py
 
