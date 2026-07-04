@@ -1,0 +1,18 @@
+================================================================
+USER81+ — REPORT CONSOLIDAMENTO PROSPECT
+================================================================
+
+Righe grezze lette da 8 fonti:    19571
+Rimossi da blacklist:                76
+Scartati senza canale contatto:      12
+Contatti unici dopo dedup:         4312
+
+LISTA 1 (Nome+Email+Tel/WA):       1852  -> USER81_LISTA1_EMAIL_WA.csv
+LISTA 2 (Nome+Tel/WA, no email):      0  -> USER81_LISTA2_WA.csv
+POOL email-only (nurturing):       2460  -> PROSPECT81_POOL_EMAIL.csv
+
+SIC-ID assegnati: SIC-ID-000000000001 -> SIC-ID-000000004312
+DB: tabella user81 + view v_user81_lista1 / v_user81_lista2 / v_prospect81_pool
+
+NOTA GDPR: consenso_email/consenso_wa = 0 per tutti.
+Nessun invio massivo senza double opt-in (regola FASE ZERO81+ n.4).
